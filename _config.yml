@@ -1,7 +1,7 @@
 # -----------------------------------------------------------------------------
 # Site settings
 # -----------------------------------------------------------------------------
-name: Ex Post Facto Obvious
+name: Will Rosenbaum
 email: wrosenbaum@mpi-inf.mpg.de
 description: > # this means to ignore newlines until "url:"
   A blog about mathematics, computer science, etc.
