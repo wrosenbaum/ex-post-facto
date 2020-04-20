@@ -44,8 +44,8 @@ google_analytics: UA-XXXXXXXXX # out your google-analytics code
 # -----------------------------------------------------------------------------
 # Blog
 # -----------------------------------------------------------------------------
-blog_name: al-folio
-blog_description: a simple whitespace theme for academics
+blog_name: Ex Post Facto Obvious
+blog_description: a blog about math, computer science, and whatnot
 
 # Pagination
 paginate: 4
@@ -58,7 +58,7 @@ text:
     older: 'Older'
 
 # Comments
-disqus_shortname: al-folio # put your disqus shortname
+disqus_shortname: ex-post-facto # put your disqus shortname
 
 # Optional features
 show_social_icons:  false
@@ -102,7 +102,7 @@ plugins:
 # Jekyll-Scholar
 scholar:
 
-  last_name: Einstein
+  last_name: Rosenbaum
 
   style: apa
   locale: en
