@@ -104,7 +104,7 @@ scholar:
 
   last_name: Rosenbaum
 
-  style: apa
+  style: acm-sig-proceedings
   locale: en
 
   sort_by: year
