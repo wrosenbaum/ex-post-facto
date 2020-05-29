@@ -12,7 +12,9 @@
 .site-title {
     font-size: 20px;
     line-height: $nav-height;
-    letter-spacing: -1px;
+    // letter-spacing: -1px;
+    font-family:$heading-font-family;
+    font-weight:normal;
     margin-bottom: 0;
 }
 .site-nav {
@@ -108,5 +110,6 @@
     }
     h2{
         font-size:25px;
+	
     }
 }
