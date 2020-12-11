@@ -1,5 +1,5 @@
 ---
-layout: home
+layout: about
 permalink: /
 title: Will Rosenbaum
 description: Department of Computer Science, Amherst College
