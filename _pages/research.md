@@ -5,7 +5,7 @@ title: research
 description: think deeply of simple things
 ---
 
-## overview
+### overview
 
 It is a common theme in algorithm design---as in everyday life---that we must make decisions based on incomplete, inaccurate, or ambiguous information. Uncertainty may arise as a result of locality (relevant information is located far away), congestion (data can only be moved at a fixed rate), variability in the outcomes of concurrent and future events, or the behavior of noisy, self-interested, or malicious elements. Even if information can be obtained reliably, there may simply be too much data to disseminate before we must make a decision.
 
