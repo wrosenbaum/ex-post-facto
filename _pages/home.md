@@ -1,19 +1,19 @@
 ---
-layout: about
+layout: home
 permalink: /
 title: Will Rosenbaum
-description: Max Planck Institute for Informatics
+description: Department of Computer Science, Amherst College
 
 profile:
   align: right
   image: square-medium.png
   address: >
-    <p>Room 319</p>
-    <p>Campus E1 4</p>
-    <p>Saarbrücken, Germany</p>
+    <p>Science Center C216</p>
+    <p>Amherst College</p>
+    <p>Amherst, MA 01002</p>
 
-news: true
-social: true
+news: false
+social: false
 ---
 
 
