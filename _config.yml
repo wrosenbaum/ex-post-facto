@@ -86,7 +86,7 @@ markdown: kramdown
 highlighter: pygments
 
 # Includes & excludes
-include: ['_pages']
+include: ['_pages', '_courses']
 exclude: [vendor]
 
 # Plug-ins
