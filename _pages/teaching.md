@@ -7,7 +7,7 @@ description: Information about current and past courses.
 
 ### Current Courses (Spring 2021)
 
-- COSC 112: Introduction to Computer Science II
+- [COSC 112: Introduction to Computer Science II](/courses/2021s-cosc-112/)
 - COSC 273: Parallel and Distributed Computing
 
 ### Previous Courses @Amherst
