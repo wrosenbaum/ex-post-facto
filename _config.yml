@@ -74,9 +74,6 @@ collections:
   projects:
     output: true
     permalink: /projects/:path/
-  courses:
-    output: true
-    premalink: /courses/:path/
 
 news_limit: 5
 
