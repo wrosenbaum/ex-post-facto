@@ -74,6 +74,9 @@ collections:
   projects:
     output: true
     permalink: /projects/:path/
+  courses:
+    output: true
+    premalink: /courses/:path/
 
 news_limit: 5
 
@@ -86,7 +89,7 @@ markdown: kramdown
 highlighter: pygments
 
 # Includes & excludes
-include: ['_pages', '_courses']
+include: ['_pages']
 exclude: [vendor]
 
 # Plug-ins
