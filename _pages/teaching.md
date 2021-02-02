@@ -18,6 +18,10 @@ description: Information about current and past courses.
 
 ### Before Amherst
 
+<details>
+
+<summary>test</summary>
+  
 #### Fall/Winter 2018 (MPI/University of Saarland)
 
 - Advanced Seminar: Algorithms on Digraphs
@@ -33,4 +37,6 @@ description: Information about current and past courses.
 #### Fall 2014 (UCLA)
 
 - Math 32AH: Calculus of Several Variables (Honors)
+
+</details>
 
