@@ -80,7 +80,7 @@ https://www.dropbox.com/s/1h6wdp6jxhdqsbn/HelloGraphics.java?dl=0
 
 You should get output that looks something like this:
 
-![](https://paper-attachments.dropbox.com/s_70E6949737C05F2CBE60E7BD5AB2A5DF64E1777C2692BA2361C7F7B34B4C7D7B_1597857324823_hello-graphics.png =400x)
+![](https://paper-attachments.dropbox.com/s_70E6949737C05F2CBE60E7BD5AB2A5DF64E1777C2692BA2361C7F7B34B4C7D7B_1597857324823_hello-graphics.png)
 
 ### Check out the documentation
 
