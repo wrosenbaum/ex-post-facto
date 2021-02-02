@@ -80,7 +80,7 @@ https://www.dropbox.com/s/1h6wdp6jxhdqsbn/HelloGraphics.java?dl=0
 
 You should get output that looks something like this:
 
-![](https://paper-attachments.dropbox.com/s_70E6949737C05F2CBE60E7BD5AB2A5DF64E1777C2692BA2361C7F7B34B4C7D7B_1597857324823_hello-graphics.png) <!-- .element height="25%" width="25%" -->
+![](https://paper-attachments.dropbox.com/s_70E6949737C05F2CBE60E7BD5AB2A5DF64E1777C2692BA2361C7F7B34B4C7D7B_1597857324823_hello-graphics.png){: width="100%"} 
 
 ### Check out the documentation
 
@@ -115,7 +115,7 @@ To complete this lab you should:
 
 **Extension.** To challenge yourself (and get some extra credit), make it so that the images in the grid are not identical, for example by distorting the image or changing its color based on its position in the grid. Below is an example that I put together while procrastinating from doing more productive work. Note that there is a grid of 25 dogs of varying shapes and sizes! 
 
-![](https://paper-attachments.dropbox.com/s_70E6949737C05F2CBE60E7BD5AB2A5DF64E1777C2692BA2361C7F7B34B4C7D7B_1597857181853_dog-grid.png)
+![](https://paper-attachments.dropbox.com/s_70E6949737C05F2CBE60E7BD5AB2A5DF64E1777C2692BA2361C7F7B34B4C7D7B_1597857181853_dog-grid.png){: width="100%"} 
 
 ----------
 ## What to submit
