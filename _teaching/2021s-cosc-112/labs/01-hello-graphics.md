@@ -7,10 +7,10 @@ description: an introduction to graphical programs in Java
 **DUE** Friday, August 28, 23:59 [AOE](https://time.is/Anywhere_on_Earth)
 
 ----------
-#### Prerequisites
+### Prerequisites
 + Get Java up and running on your machine
 
-#### Look at the graphics!
+### Look at the graphics!
 
 Download, compile, and run the file `HelloGraphics.java`:
 
