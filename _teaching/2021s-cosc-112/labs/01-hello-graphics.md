@@ -4,7 +4,9 @@ title: "Lab 01: Hello Graphics!"
 description: an introduction to graphical programs in Java
 ---
 
-**DUE** Friday, February 19, 23:59 [AOE](https://time.is/Anywhere_on_Earth)
+----------
+
+**DUE:** Friday, February 19, 23:59 [AOE](https://time.is/Anywhere_on_Earth)
 
 ----------
 ### Prerequisites
@@ -80,7 +82,7 @@ You should get output that looks something like this:
 
 ![](https://paper-attachments.dropbox.com/s_70E6949737C05F2CBE60E7BD5AB2A5DF64E1777C2692BA2361C7F7B34B4C7D7B_1597857324823_hello-graphics.png)
 
-## Check out the documentation
+### Check out the documentation
 
 Now that we've seen what the program does, it is time to figure out *how*. Look at the code, and reference it against the documentation for the the various objects we've used. In particular, you'll want to look at
 
@@ -101,7 +103,7 @@ but you don't need to worry too much about these for now.
 **IYI:** the colors `MAMMOTH_PURPLE` and `SPRING_LEAF` come from Amherst College's [Visual Identity Toolkit](https://www.amherst.edu/news/communications/visual-identity-toolkit). There you can find resources to make things look Amherst-y.
 
 ----------
-## Your assignment
+### Your assignment
 
 To complete this lab you should:
 
@@ -119,18 +121,5 @@ To complete this lab you should:
 ## What to submit
 
 Please turn in your version of `HelloGraphics.java` as well as the following survey, saved as `lab01-survey.txt` filled out appropriately (replace the text surrounded by <angle brackets> with your response):
-
-
-    Resources used:
-      <List all resources you used here (e.g., specific websites, the textbook, who you talked to in the class>
-    Time spent on assignment: <put roughly how long you spent on the assignment here>
-    On a scale from -2 to 2:
-      How hard was the assignment? 
-      <-2 being super easy, 2 being super hard, 0 being just right.>
-      How much did you learn from the assignment? 
-      <-2 being learned nothing, 2 being leared far more than you expected, 0 being what you would expect from an assignment of this magnitude>
-      How much did you enjoy the assignment? 
-      <-2 being you hated having to do it, 2 being you would have done it even if it was not assigned, 0 being that in the middle.>
-    Additional notes: <Anything else you'd like me to know when grading it>
 
 Note that you get credit for filling out the survey, but your responses to the questions in the survey have no effect on your grade. Your responses will help me calibrate the difficulty and amend the content of future labs so that this course can continue to improve.
