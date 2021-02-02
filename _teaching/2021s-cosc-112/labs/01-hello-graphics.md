@@ -4,7 +4,7 @@ title: "Lab 01: Hello Graphics!"
 description: an introduction to graphical programs in Java
 ---
 
-**DUE** Friday, August 28, 23:59 [AOE](https://time.is/Anywhere_on_Earth)
+**DUE** Friday, February 19, 23:59 [AOE](https://time.is/Anywhere_on_Earth)
 
 ----------
 ### Prerequisites
@@ -18,6 +18,7 @@ https://www.dropbox.com/s/1h6wdp6jxhdqsbn/HelloGraphics.java?dl=0
 
 
 ```java
+
     import java.awt.Color;
     import java.awt.Font;
     import java.awt.Graphics;
