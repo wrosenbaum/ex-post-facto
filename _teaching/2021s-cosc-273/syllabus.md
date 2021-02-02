@@ -1,7 +1,7 @@
 ---
 layout: page
 title: "Course Syllabus"
-description: "COSC 273: Parallel and Distributed Computing"
+description: "COSC 273: Parallel and Distributed Computing, Spring 2021"
 ---
 
 ### Coordinates
