@@ -1,7 +1,7 @@
 ---
 layout: page
 title: "Course Syllabus"
-description: COSC 112: Introduction to Computer Science II, Spring 2021
+description: "COSC 112: Introduction to Computer Science II, Spring 2021"
 ---
 
 ### Basic Information
@@ -18,9 +18,12 @@ description: COSC 112: Introduction to Computer Science II, Spring 2021
 
 **Resources**
 
-- Main text: *Java Programming* by McGeoch (PDF only, available on the Moodle site)
-- Java documentation: [Java SE 8 complete documentation](https://docs.oracle.com/javase/8/docs/), [Java SE 8 API specification](https://docs.oracle.com/javase/8/docs/api/index.html)
-- Other readings, videos, etc., will be posted to the Moodle site
++ Main text: *Java Programming* by McGeoch (PDF only, available on the Moodle site)
+
++ Java documentation: [Java SE 8 complete documentation](https://docs.oracle.com/javase/8/docs/), [Java SE 8 API specification](https://docs.oracle.com/javase/8/docs/api/index.html)
+
++ Other readings, videos, etc., will be posted to the Moodle site
+
 ----------
 
 ### Official Course Description
@@ -28,6 +31,7 @@ description: COSC 112: Introduction to Computer Science II, Spring 2021
 A continuation of COSC 111. This course will emphasize more complicated problems and their algorithmic solutions. The object-oriented programming paradigm will be discussed in detail, including data abstraction, inheritance, and polymorphism. Other topics will include stacks, queues, linked lists, programming for graphical user interfaces, and basic topics in probability. A laboratory section will meet once a week to give students practice with programming constructs.
 
 ----------
+
 ### Unofficial Course Description
 
 In your first computer science course, you probably acquired some familiarity with the syntax and conventions of a programming language. Using this knowledge, you learned to write programs of a fairly limited nature that solve well-specified tasks in a prescribed manner. The goal of this second course is for you to progress toward what I call *algorithmic fluency*: the ability to formally specify a problem, devise a conceptual solution to the problem, design the structure of a solution, and implement the solution in code. In order to move towards algorithmic fluency, we will discuss general design principles and problem solving strategies. We will learn to implement solutions in the Java language.
@@ -35,6 +39,7 @@ In your first computer science course, you probably acquired some familiarity wi
 In working toward tackling large-scale problems, we will discuss general design principles to structure our code---and our approach to reasoning about problems. We focus on the *object-oriented paradigm*. The object-oriented paradigm gives a framework to break a complicated task into smaller interacting parts---*objects*---that perform simpler tasks. By learning the art of object-oriented design, we will learn to break seemingly insurmountable problems into manageable pieces. Moreover, well-designed objects can be repurposed and modified. Thus, the code we write to solve one problem can be readily applied to solve other problems as well. In addition to general design principles, we will examine some specific data structures (linked lists, stacks, and queues) and algorithmic techniques (recursion and randomization) that are employed throughout computer science.
 
 ----------
+
 ### List of Topics Covered
 - Course introduction and review of Java
 - Defining and creating object classes
@@ -49,6 +54,7 @@ In working toward tackling large-scale problems, we will discuss general design 
 - Generics and container classes
 
 ----------
+
 ### Course Structure
 
 This course will be taught remotely. The main content will be a mixture of asynchronous content (videos, readings, etc.) and synchronous virtual meetings through Zoom. The synchronous meetings will typically consist of a brief "lecture" followed by informal and group discussion.
@@ -68,6 +74,7 @@ The course will rely upon three shared communication channels:
 Links to all of the Zoom lectures and instructions to get set up with Slack will be posted to the Moodle site.
 
 ----------
+
 ### Coursework and Evaluation
 
 The graded coursework will consist of weekly lab assignments, individual projects, quizzes and exams, and class participation.
@@ -100,6 +107,7 @@ It is expected that you will spend approximately 12 hours per week on this cours
 - lab assignments 1--3 hr/week
 - projects 2--3 hr/week
 - self study 1--3 hr/week
+
 ----------
 
 ### Collaboration
@@ -107,6 +115,7 @@ It is expected that you will spend approximately 12 hours per week on this cours
 You are encouraged to collaborate with your peers, but all submitted work (labs, projects, quizzes, and exams) is expected to be yours and and yours alone. For labs and projects, this means you should talk about your work with your peers, but *you should not share your code (for assignments) with anyone,* nor should you ask anyone else---currently taking the class or otherwise---to show you their code or to directly help you write code. As a heuristic for what constitutes encouraged collaboration, if it is something you can discuss without sharing your computer screen or writing Java syntax, then you are probably alright.
 
 ----------
+
 ### Getting Help
 
 If you are stuck on an assignment or are struggling with the material, there are many opportunities for help:
