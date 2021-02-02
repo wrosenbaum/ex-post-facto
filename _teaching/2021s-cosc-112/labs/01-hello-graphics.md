@@ -7,15 +7,17 @@ description: an introduction to graphical programs in Java
 **DUE** Friday, August 28, 23:59 [AOE](https://time.is/Anywhere_on_Earth)
 
 ----------
-## Prerequisites
-- Get Java up and running on your machine (or figure out how to use Romulus and Remus). 
-## Look at the graphics!
+#### Prerequisites
++ Get Java up and running on your machine
+
+#### Look at the graphics!
 
 Download, compile, and run the file `HelloGraphics.java`:
 
 https://www.dropbox.com/s/1h6wdp6jxhdqsbn/HelloGraphics.java?dl=0
 
-----------
+
+```java
     import java.awt.Color;
     import java.awt.Font;
     import java.awt.Graphics;
@@ -71,6 +73,7 @@ https://www.dropbox.com/s/1h6wdp6jxhdqsbn/HelloGraphics.java?dl=0
             frame.setVisible(true);
         }
     }
+```
 
 You should get output that looks something like this:
 
