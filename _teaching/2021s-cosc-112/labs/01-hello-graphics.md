@@ -120,6 +120,4 @@ To complete this lab you should:
 ----------
 ## What to submit
 
-Please turn in your version of `HelloGraphics.java` as well as the following survey, saved as `lab01-survey.txt` filled out appropriately (replace the text surrounded by <angle brackets> with your response):
-
-Note that you get credit for filling out the survey, but your responses to the questions in the survey have no effect on your grade. Your responses will help me calibrate the difficulty and amend the content of future labs so that this course can continue to improve.
+Please turn in your version of `HelloGraphics.java` as well as the following survey, saved as `lab01-survey.txt` filled out appropriately (replace the text surrounded by <angle brackets> with your response).
