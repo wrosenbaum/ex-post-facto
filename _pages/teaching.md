@@ -30,7 +30,7 @@ description: Information about current and past courses.
 
 - Math 475: Teaching College Mathematics
 
-### Fall 2014 (UCLA)
+#### Fall 2014 (UCLA)
 
 - Math 32AH: Calculus of Several Variables (Honors)
 
