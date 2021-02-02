@@ -12,16 +12,25 @@ description: Information about current and past courses.
 
 ### Previous Courses at Amherst
 
-##### Fall 2020
+#### Fall 2020
 
 - COSC 112: Introduction to Computer Science II
 
-### Courses by University
+### Before Amherst
 
-#### MPI/University of Saarland
+#### Fall/Winter 2018 (MPI/University of Saarland)
 
-#### UCLA
+- Advanced Seminar: Algorithms on Digraphs
 
-For now, this page is assumed to be a static description of your courses. You can convert it to a collection similar to `_projects/` so that you can have a dedicated page for each course.
+#### Spring 2016 (UCLA)
 
-Organize your courses by years, topics, or universities, however you like!
+- PIC10B: Intermediate Programming
+
+#### Fall 2015 (UCLA)
+
+- Math 475: Teaching College Mathematics
+
+### Fall 2014 (UCLA)
+
+- Math 32AH: Calculus of Several Variables (Honors)
+
