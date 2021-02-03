@@ -14,10 +14,10 @@ description: an introduction to graphical programs in Java
 
 ### Look at the graphics!
 
-Download, compile, and run the file `HelloGraphics.java`:
+To get started download the file `HelloGraphics.java`, or copy and paste the code below into a new file.
 
-https://www.dropbox.com/s/1h6wdp6jxhdqsbn/HelloGraphics.java?dl=0
-
+<details markdown=1>
+<summary>click to view code</summary>
 
 ```java
 
@@ -77,6 +77,8 @@ https://www.dropbox.com/s/1h6wdp6jxhdqsbn/HelloGraphics.java?dl=0
         }
     }
 ```
+</details>
+<br/>
 
 You should get output that looks something like this:
 
