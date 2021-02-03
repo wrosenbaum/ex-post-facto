@@ -17,10 +17,6 @@ description: Information about current and past courses.
 - COSC 112: Introduction to Computer Science II
 
 ### Before Amherst
-
-<details>
-
-<summary>test</summary>
   
 #### Fall/Winter 2018 (MPI/University of Saarland)
 
@@ -37,6 +33,4 @@ description: Information about current and past courses.
 #### Fall 2014 (UCLA)
 
 - Math 32AH: Calculus of Several Variables (Honors)
-
-</details>
 
