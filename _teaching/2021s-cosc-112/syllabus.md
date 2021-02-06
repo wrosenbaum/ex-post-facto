@@ -7,12 +7,16 @@ description: "COSC 112: Introduction to Computer Science II, Spring 2021"
 ### Basic Information
 
 - Instructor: Will Rosenbaum
-- TAs (TBD)
 - Email: wrosenbaum@amherst.edu
 - Office Hours: Virtually (TBD)
 - Lecture 1: WF 10:10--11:00
 - Lab 1: M 10:10--11:00
+    + TAs: Quentin Jeyaretnam & Hasham Warrich
 - Lab 2: M 11:20--12:10
+    + TAs: Sarah Park & Naya Burshan
+- Evening TA Sessions: MW 7:00--9:00 pm 
+    + Monday TAs: Nico Ardila & Hasham Warrich
+	+ Wednesday TAs: Nico Ardila & Faith Merritt
 
 ----------
 
@@ -63,7 +67,7 @@ Each week will begin with a lab session on Monday, followed by lecture sessions 
 
 The asynchronous material (short videos and activities) will typically focus on the technical material, for example, describing details of how to implement things in code. Lecture sessions will focus on more conceptual material. Both components are intended to be highly interactive. Regular participation in the synchronous sessions is essential to the course, and your participation determines part of your grade in the class. If you cannot attend a scheduled lecture, please contact me in advance (if at all possible).
 
-Finally, you will be assigned into small "accountability groups." You will be expected to meet with your accountability group weekly and submit a brief report of what your group discussed. 
+Finally, you will be assigned to small "accountability groups." You will be expected to meet with your accountability group weekly and submit a brief report of what your group discussed. 
 
 ----------
 
@@ -89,7 +93,7 @@ Weekly lab assignments will be posted each Friday and due the following Friday. 
 
 Lab assignments will include two opportunities for extra credit:
 
-- Each assignment will suggest extensions to the "basic" task you'll be expected to perform. The extensions will often be more open-ended, so this is one opportunity to express your creativity in the class and get credit for doing so! (See the "extension portfolio" section below to see how the exctensions are factored into your grade.)
+- Each assignment will suggest extensions to the "basic" task you'll be expected to perform. The extensions will often be more open-ended, so this is one opportunity to express your creativity in the class and get credit for doing so! (See the "extension portfolio" section below to see how the extensions are factored into your grade.)
 
 - Lab assignments may be turned in up to 4 days early for extra credit. You will receive 1% extra credit for the assignment per day early. For example, an assignment turned in on Thursday will receive 1% extra credit, Wednesday 2%, etc. up to Monday.
 
@@ -108,7 +112,7 @@ You will be expected to engage in both the synchronous and asynchronous portions
 
 #### Extension Portfolio 
 
-At the end of the course, you may submit a compilation of (highlights from) the open-ended work you have completed throughout the semester. This work may consist of extensions from the labs and/or projects, or any other programs you've written during the semester that are relevant to the course. **In order to receive a grade of "A" for the course, you must submit an extension portfolio.** For a base-line of what is required for an "A" grade, the total amount of open-ended work should be the equivalent of 2 lab assignments, e.g., 4 small extensions to lab assignments, or 2 more elaborate extensions, or a larger scale project of your own divising. Any work above this base-line will be treated as extra credit, and there is no limit to how much extra credit you can receive for the extension portfolio.
+At the end of the course, you may submit a compilation of (highlights from) the open-ended work you have completed throughout the semester. This work may consist of extensions from the labs and/or projects, or any other programs you've written during the semester that are relevant to the course. **In order to receive a grade of "A" for the course, you must submit an extension portfolio.** For a base-line of what is required for an "A" grade, the total amount of open-ended work should be the equivalent of 2 lab assignments, e.g., 4 small extensions to lab assignments, or 2 more elaborate extensions, or a larger scale project of your own devising. Any work above this base-line will be treated as extra credit, and there is no limit to how much extra credit you can receive for the extension portfolio.
 
 ----------
 
@@ -157,13 +161,15 @@ All students will be expected to uphold the Amherst College Honor Code summarize
 
 - share your code for assignments with other students in the class or ask others to share their code with you;
 - discuss material appearing on a quiz before you or others have submitted the quiz;
-- submit code written by someone else or derivative of someone else's code without crediting the orignal author/source. 
+- submit code written by someone else or derivative of someone else's code without crediting the original author/source. 
 
 Failure to comply with these terms may result in loss of credit for the assignment or course, as well as possible disciplinary action by the college. 
 
 If you would like to use code that you did not write, be sure to attribute the source of the code in the comments of your code. Attribution is required even if you modify the original code.
 
-**UA.** 
+**UA.** Your letter grade for the course is unlikely to have any long-term impact on your life. However, mastery of the skills and concepts covered in this course will be invaluable in almost any technical field you might pursue. Thus, I believe it is never in your interest to cheat in this (or really any) course. The long-term benefits of a good grade in this class are negligible, while the cost of not making a good-faith effort to master the material is potentially huge (independent of the ramifications of getting caught cheating). The course is designed to be challenging, but if you find yourself struggling to keep up, please reach out to the instructor. 
+
+
 
 ----------
 
