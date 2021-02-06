@@ -55,12 +55,12 @@ The next lines define a multi-line comment, explaining what the program/Class do
 
 The next lines define the name of the class implemented in this program:
 
-
+```java
     public class Typesetter extends JPanel {
-    
         ...
-    
     }
+```
+
 - `public class Typesetter` tells the compiler that we are defining a new class (object) called a `Typesetter`
 - don't worry about `extends JPanel` for now... we will discuss what `extends` means later
 - note that `public class <ClassName>` must *always* be in a file called `<ClassName>.java`
@@ -185,6 +185,7 @@ Vocabulary to remember:
 - argument (to a method)
 - return type
 - `main`
+
 ----------
 
 Note on `Graphics` coordinates:
