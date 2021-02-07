@@ -23,10 +23,11 @@
 
       <div class="trigger">
         <!-- home -->
-        <a class="page-link" href="{{ site.baseurl | prepend: site.url }}/">home</a>
+        <a class="page-link" href="{{ site.baseurl | prepend: site.url }}/">about</a>
 
         <!-- Pages -->
-        {% for page in site.pages %}
+	{% assign sorted_pages = site.pages | sort:"order" %}
+        {% for page in sorted_pages %}
           {% if page.title and page.url != "/" %}
             <a class="page-link" href="{{ page.url | prepend: site.baseurl | prepend: site.url }}">{{ page.title }}</a>
           {% endif %}
