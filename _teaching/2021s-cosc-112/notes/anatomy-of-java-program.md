@@ -8,7 +8,7 @@ description: a guide to your first graphical program
 
 These notes will walk you through the basics of our first graphical Java program, and review the structure of all Java programs. To get started, download `Typesetter.java`. Open the file and follow along!
 
-https://www.dropbox.com/s/zxxgogi51zostq3/Typesetter.java?dl=0
+- Download [`Typesetter.java`](/assets/java-examples/typesetter/Typesetter.java)
 
 ----------
 
@@ -25,8 +25,8 @@ https://www.dropbox.com/s/zxxgogi51zostq3/Typesetter.java?dl=0
 
 Each of these statements tells the Java compiler the name of a resource our program will use (and where to find it).
 
-- awt stands for "Abstract Window Toolkit." This package contains a bunch of tools for all things graphical in Java. See [the documentation](https://docs.oracle.com/javase/8/docs/api/java/awt/package-summary.html#package.description) for a full description.
-- swing is the name of a Java package for GUIs (graphical user interfaces). Read more in [the swing documentation](https://docs.oracle.com/javase/8/docs/api/javax/swing/package-summary.html).
+- awt stands for "Abstract Window Toolkit." This package contains a bunch of tools for all things graphical in Java. See [the documentation](https://docs.oracle.com/en/java/javase/11/docs/api/java.desktop/java/awt/package-summary.html) for a full description.
+- swing is the name of a Java package for GUIs (graphical user interfaces). Read more in [the swing documentation](https://docs.oracle.com/en/java/javase/11/docs/api/java.desktop/javax/swing/package-summary.html).
 
 ----------
 
@@ -36,7 +36,7 @@ The `import` statements are necessary for Java to compile the program...
 
 - they tell you where to look to find documentation on the resources used
 - `import java.awt.Color` tells you to familiarize yourself with the `Color` class defined in the `awt` package
-- see the [Color documentation here](https://docs.oracle.com/javase/8/docs/api/java/awt/Color.html)
+- see the [Color documentation here](https://docs.oracle.com/en/java/javase/11/docs/api/java.desktop/java/awt/Color.html)
 - now... find the documentation for the other classes this program uses!
 
 ----------
@@ -173,7 +173,7 @@ This is the code that actually runs when we execute `java ClassName`.
 
 ----------
 
-See the [JFrame documentation](https://docs.oracle.com/javase/8/docs/api/javax/swing/JFrame.html) if you want to understand what all of these statements mean. (No need to understand it all now!)
+See the [JFrame documentation](https://docs.oracle.com/en/java/javase/11/docs/api/java.desktop/javax/swing/JFrame.html) if you want to understand what all of these statements mean. (No need to understand it all now!)
 
 ----------
 
