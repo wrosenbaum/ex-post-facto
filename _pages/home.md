@@ -16,10 +16,8 @@ news: false
 social: false
 ---
 
+Hello, and welcome! I am an assistant professor of computer science at Amherst College. My main research interests are in theoretical computer science, particularly distributed computing, the design and analysis of efficient algorithms, and computational complexity.
 
+Before coming to Amherst, I had postdoctoral positions in the [Algorithms and Complexity group](https://www.mpi-inf.mpg.de/departments/algorithms-complexity) at [Max Planck Institute for Informatics](https://www.mpi-inf.mpg.de/home/) in Saarbrücken, Germany, and in the School of Electrical Engineering at [Tel Aviv University](https://english.tau.ac.il/). I completed my PhD in the [mathematics department](https://ww3.math.ucla.edu/) at UCLA, and I did my undergrad at [Reed College](https://www.reed.edu/).
 
-Write your biography here. Tell the world about yourself. Link to your favorite [subreddit](http://reddit.com){:target="\_blank"}. You can put a picture in, too. The code is already in, just name your picture `prof_pic.jpg` and put it in the `img/` folder.
-
-Put your address / P.O. box / other info right below your picture. You can also disable any these elements by editing `profile` property of the YAML header of your `_pages/about.md`. Edit `_bibliography/papers.bib` and Jekyll will render your [publications page](/al-folio/publications/) automatically.
-
-Link to your social media connections, too. This theme is set up to use [Font Awesome icons](http://fortawesome.github.io/Font-Awesome/){:target="\_blank"} and [Academicons](https://jpswalsh.github.io/academicons/){:target="\_blank"}, like the ones below. Add your Facebook, Twitter, LinkedIn, Google Scholar, or just disable all of them.
+When I am not exploring the theoretical boundaries of computation, I enjoy cooking, playing piano, hiking, taking pictures, snowboarding, and brewing beer. I currently live in Amherst with my wife Alivia, our daughter Ione, dog Finnegan, and two cats, Pip and Posy.
