@@ -17,7 +17,10 @@
   doi       = {10.1109/ASYNC49171.2020.00013},
   timestamp = {Thu, 10 Sep 2020 16:38:24 +0200},
   biburl    = {https://dblp.org/rec/conf/async/BundFLMR20.bib},
-  bibsource = {dblp computer science bibliography, https://dblp.org}
+  bibsource = {dblp computer science bibliography, https://dblp.org},
+  abstract  = {Consider an arbitrary network of communicating modules on a chip, each requiring a local signal telling it when to execute a computational step. There are three common solutions to generating such a local clock signal: (i) by deriving it from a single, central clock source, (ii) by local, free-running oscillators, or (iii) by handshaking between neighboring modules. Conceptually, each of these solutions is the result of a perceived dichotomy in which (sub)systems are either clocked or fully asynchronous, suggesting that the designer's choice is limited to deciding where to draw the line between synchronous and asynchronous design. In contrast, we take the view that the better question to ask is how synchronous the system can and should be. Based on a distributed clock synchronization algorithm, we present a novel design providing modules with local clocks whose frequency bounds are almost as good as those of corresponding free-running oscillators, yet neighboring modules are guaranteed to have a phase offset substantially smaller than one clock cycle. Concretely, parameters obtained from a 15nm ASIC implementation running at 2GHz yield mathematical worst-case bounds of 30ps on phase offset for a 32x32 node grid network.},
+  html      = {https://doi.org/10.1109/ASYNC49171.2020.00013},
+  arxiv     = {2003.05542}
 }
 
 @inproceedings{Rosenbaum2020-seeing,
@@ -35,7 +38,28 @@
   doi       = {10.1145/3382734.3405721},
   timestamp = {Tue, 29 Dec 2020 18:28:12 +0100},
   biburl    = {https://dblp.org/rec/conf/podc/RosenbaumS20.bib},
-  bibsource = {dblp computer science bibliography, https://dblp.org}
+  bibsource = {dblp computer science bibliography, https://dblp.org},
+  arxiv     = {1907.08160},
+  abstract  = {Consider a graph problem that is locally checkable but not locally solvable:
+given a solution we can check that it is feasible by verifying all
+constant-radius neighborhoods, but to find a solution each node needs to
+explore the input graph at least up to distance $\Omega(\log n)$ in order to
+produce its output. We consider the complexity of such problems from the
+perspective of volume: how large a subgraph does a node need to see in order to
+produce its output. We study locally checkable graph problems on bounded-degree
+graphs. We give a number of constructions that exhibit tradeoffs between
+deterministic distance, randomized distance, deterministic volume, and
+randomized volume: (1) If the deterministic distance is linear, it is also known that randomized distance is near-linear. In contrast, we show that there are problems with linear deterministic volume but only logarithmic randomized volume. (2) We prove a volume hierarchy theorem for randomized complexity: among
+problems with linear deterministic volume complexity, there are infinitely many
+distinct randomized volume complexity classes between $\Omega(\log n)$ and
+$O(n)$. This hierarchy persists even when restricting to problems whose
+randomized and deterministic distance complexities are $\Theta(\log n)$. (3) Similar hierarchies exist for polynomial distance complexities: for any $k,
+\ell \in N$ with $k \leq \ell$, there are problems whose randomized and
+deterministic distance complexities are $\Theta(n^{1/\ell})$, randomized volume
+complexities are $\Theta(n^{1/k})$, and whose deterministic volume complexities
+are $\Theta(n)$. Additionally, we consider connections between our volume model and massively parallel computation (MPC). We give a general simulation argument that any volume-efficient algorithm can be transformed into a space-efficient MPC algorithm.},
+  html      = {https://doi.org/10.1145/3382734.3405721}
+  
 }
 
 @article{Gonczarowski2019-stable,
@@ -48,7 +72,8 @@
 	abstract  = {In 1976, Knuth asked whether the worst-case running-time of the Gale-Shapley algorithm for the Stable Marriage Problem can be improved when non-sequential access to the input is allowed. Partial negative answers were given by Ng and Hirschberg and as part of Segal's general communication-complexity analysis. We give a far simpler, yet significantly more powerful, argument showing that $\Omega(n^2)$ Boolean queries of any type are required for finding a stable --- or even approximately stable --- marriage. Unlike Segal's lower bound, our lower bound generalizes additionally to (A)~randomized algorithms, (B)~allowing arbitrary separate preprocessing of the women's and men's respective preferences profiles, (C)~related problems, e.g., whether a given pair is married in every/some stable marriage, (D)~whether a proposed marriage is stable or far from stable. To analyze ``approximately stable'' marriages,  we introduce the notion of ``distance to stability'' and provide an efficient algorithm for its computation.},
 	author = {Gonczarowski, Yannai A. and Nisan, Noam and Ostrovsky, Rafail and Rosenbaum, Will},
 	year = 2019,
-	keywords = {Approximately stable, Communication complexity, Distance to stability, Stable marriage, Stable matching}
+	keywords = {Approximately stable, Communication complexity, Distance to stability, Stable marriage, Stable matching},
+	arxiv = {1405.7709}
 }
 
 @inproceedings{Eden2019-arboricity,
@@ -193,6 +218,16 @@
   timestamp = {Tue, 06 Nov 2018 11:07:19 +0100},
   biburl    = {https://dblp.org/rec/bib/conf/podc/BaruchOR16},
   bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+@phdthesis{Rosenbaum2016-distributed,
+  author       = {William Bailey Rosenbaum}, 
+  title        = {Distributed Almost Stable Matchings (PhD Thesis)},
+  school       = {University of California, Los Angeles},
+  year         = 2016,
+  address      = {Los Angeles},
+  month        = 3,
+  note         = {PhD Thesis}
 }
 
 @inproceedings{Ostrovsky2015-fast,
