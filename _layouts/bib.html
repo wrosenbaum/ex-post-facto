@@ -20,7 +20,7 @@
           {% if author.last == site.scholar.last_name %}
             <em>{{author.last}}, {{author.first}}</em>
           {% else %}
-            {{author.last}}, {{author.first}}
+            {{author.first}} {{author.last}}
           {% endif %}
         {% else %}
           {% unless forloop.last %}
