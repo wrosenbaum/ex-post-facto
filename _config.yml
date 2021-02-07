@@ -36,7 +36,7 @@ blogger_url: # your blogger URL
 contact_note: >
   You can even add a little note about which of these is the best way to reach you.
 
-google_analytics: UA-XXXXXXXXX # out your google-analytics code
+google_analytics: #UA-XXXXXXXXX  out your google-analytics code
 
 # -----------------------------------------------------------------------------
 # Blog
@@ -71,9 +71,9 @@ collections:
       layout: post
     output: true
     permalink: /news/:path/
-  projects:
-    output: true
-    permalink: /projects/:path/
+  # projects:
+  #   output: true
+  #   permalink: /projects/:path/
   teaching:
     output: true
     permalink: /teaching/:path/
