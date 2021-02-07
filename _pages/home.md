@@ -8,9 +8,9 @@ profile:
   align: right
   image: square-medium.png
   address: >
-    <p>Science Center C216</p>
-    <p>Amherst College</p>
-    <p>Amherst, MA 01002</p>
+    <p>Science Center C216<br>
+    Amherst College<br>
+    Amherst, MA 01002</p>
 
 news: false
 social: false
