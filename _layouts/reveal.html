@@ -10,6 +10,8 @@
 
 		<!-- Theme used for syntax highlighting of code -->
 		<link rel="stylesheet" href="/assets/reveal.js-master/plugin/highlight/monokai.css" id="highlight-theme">
+		<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700" rel="stylesheet">
+
 	</head>
 
 	<body>
@@ -30,13 +32,24 @@
 	    // Also available as an ES module, see:
 	    // https://revealjs.com/initialization/
 	    Reveal.initialize({
-		controls: true,
+		controls: false,
 		progress: true,
 		center: true,
 		hash: true,
+		transition: 'none',
+		math: {
+		    config: 'TeX-AMS_HTML-full',
+		    TeX: {
+			Macros: {
+			    R: '\\mathbb{R}',
+			    set: [ '\\left\\{#1 \\; ; \\; #2\\right\\}', 2 ]
+			}
+		    }
+		},
+
 
 		// Learn about plugins: https://revealjs.com/plugins/
-		plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight ]
+		plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath ]
 	    });
 
 	  </script>
