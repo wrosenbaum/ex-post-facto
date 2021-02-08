@@ -16,7 +16,7 @@ news: false
 social: false
 ---
 
-Hello, and welcome! I am an assistant professor of computer science at Amherst College. My main research interests are in theoretical computer science, particularly distributed computing, the design and analysis of efficient algorithms, and computational complexity.
+Hello, and welcome! I am an assistant professor of [computer science](https://www.amherst.edu/academiclife/departments/computer_science) at [Amherst College](https://www.amherst.edu/). My main research interests are in theoretical computer science, particularly distributed computing, the design and analysis of efficient algorithms, and computational complexity.
 
 Before coming to Amherst, I had postdoctoral positions in the [Algorithms and Complexity group](https://www.mpi-inf.mpg.de/departments/algorithms-complexity) at [Max Planck Institute for Informatics](https://www.mpi-inf.mpg.de/home/) in Saarbrücken, Germany hosted by [Christoph Lenzen](https://people.mpi-inf.mpg.de/~clenzen/), and in the School of Electrical Engineering at [Tel Aviv University](https://english.tau.ac.il/) hosted by [Boaz Patt-Shamir](https://www.eng.tau.ac.il/~boaz/). I completed my PhD in the [mathematics department](https://ww3.math.ucla.edu/) at UCLA under the supervision of [Rafail Ostrovsky](https://web.cs.ucla.edu/~rafail/), and I did my undergrad at [Reed College](https://www.reed.edu/).
 
