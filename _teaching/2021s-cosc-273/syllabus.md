@@ -20,7 +20,7 @@ Computers are becoming increasingly parallel, with many cores or processors work
 
 ### Expected Background
 
-You are expected to be comfortable writing programs in the Java programming language. In particular, we will readily use object oriented design, the class hierarchy (keyword `extends`), interfaces (keyword `implements`), exception handling, and generics (i.e., the main topics covered in COSC 112). You should be familiar with basic data structures---linked lists, stacks, queues, balanced trees---know their supported operations as well as the efficiency of these operations. 
+You are expected to be comfortable writing programs in the Java programming language. In particular, we will readily use object oriented design, the class hierarchy (keyword `extends`), interfaces (keyword `implements`), exception handling, and generics (i.e., the main topics covered in COSC 112). You should be familiar with basic data structures---linked lists, stacks, queues, balanced trees---and know their supported operations as well as the efficiency of these operations. 
 
 ### Text and Topics
 
@@ -66,7 +66,7 @@ You will be expected to regularly participate in class discussion during the syn
 
 #### Final Project (~30%)
 
-You will have an open-eded group final project for the course. You may work in groups of up to 4, and the topic of the project is entirely up to your group. The only requirement is that your project must employ parallel programming and analyze effect of parallelism on your program's performance. In addition to the program itself, you will submit a project proposal (around mid-way through the term), a proof of concept (a few weeks before the end of the term), and a detailed report that describes your program and indicates how parallelism was employed.
+You will have an open-ended group final project for the course. You may work in groups of up to 4, and the topic of the project is entirely up to your group. The only requirement is that your project must employ parallel programming and analyze effect of parallelism on your program's performance. In addition to the program itself, you will submit a project proposal (around mid-way through the term), a proof of concept (a few weeks before the end of the term), and a detailed report that describes your program and indicates how parallelism was employed.
 
 ### Collaboration
 
@@ -93,6 +93,9 @@ You are expected to uphold the Amherst College Honor Code [summarized here](http
 Failure to comply with these terms may result in loss of credit for the assignment or course, as well as possible disciplinary action by the college. 
 
 If you would like to use code that you did not write, be sure to attribute the source of the code in the comments of your code. Attribution is required even if you modify the original code.
+
+**UA.** Your letter grade for the course is unlikely to have any long-term impact on your life. However, mastery of the skills and concepts covered in this course will be invaluable in almost any technical field you might pursue. Thus, I believe it is never in your interest to cheat in this (or really any) course. The long-term benefits of a good grade in this class are negligible, while the cost of not making a good-faith effort to master the material is potentially huge (independent of the ramifications of getting caught cheating). The course is designed to be challenging, but if you find yourself struggling to keep up, please reach out to the instructor. 
+
 
 
 ### Remark on Remarks
