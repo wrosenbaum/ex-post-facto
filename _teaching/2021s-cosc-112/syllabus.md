@@ -40,7 +40,7 @@ A continuation of COSC 111. This course will emphasize more complicated problems
 
 In your first computer science course, you probably acquired some familiarity with the syntax and conventions of a programming language. Using this knowledge, you learned to write programs of a fairly limited nature that solve well-specified tasks in a prescribed manner. The goal of this second course is for you to progress toward what I call *algorithmic fluency*: the ability to formally specify a problem, devise a conceptual solution to the problem, design the structure of a solution, and implement the solution in code. In order to move towards algorithmic fluency, we will discuss general design principles and problem solving strategies. We will learn to implement solutions in the Java language.
 
-In working toward tackling large-scale problems, we will discuss general design principles to structure our code---and our approach to reasoning about problems. We focus on the *object-oriented paradigm*. The object-oriented paradigm gives a framework to break a complicated task into smaller interacting parts---*objects*---that perform simpler tasks. By learning the art of object-oriented design, we will learn to break seemingly insurmountable problems into manageable pieces. Moreover, well-designed objects can be repurposed and modified. Thus, the code we write to solve one problem can be readily applied to solve other problems as well. In addition to general design principles, we will examine some specific data structures (linked lists, stacks, and queues) and algorithmic techniques (recursion and randomization) that are employed throughout computer science.
+In working towards tackling large-scale problems, we will discuss general design principles to structure our code---and our approach to reasoning about problems. We focus on the *object-oriented paradigm*. The object-oriented paradigm gives a framework to break a complicated task into smaller interacting parts---*objects*---that perform simpler tasks. By learning the art of object-oriented design, we will learn to break seemingly insurmountable problems into manageable pieces. Moreover, well-designed objects can be repurposed and modified. Thus, the code we write to solve one problem can be readily applied to solve other problems as well. In addition to general design principles, we will examine some specific data structures (linked lists, stacks, and queues) and algorithmic techniques (recursion and randomization) that are employed throughout computer science.
 
 ----------
 
@@ -107,7 +107,7 @@ There will be regular weekly short quizzes (~ 10--20 minutes). The quizzes serve
 
 #### Class Participation (~20%)
 
-You will be expected to engage in both the synchronous and asynchronous portions of the course. Asynchronous interactions will be primarily in the form of contributing to discussion forums on Moodle, and your responses 
+You will be expected to engage in both the synchronous and asynchronous portions of the course. Asynchronous interactions will be primarily in the form of contributing to discussion forums on Moodle, and your responses to prompts in lecture/accountability group meetings.
 
 
 #### Extension Portfolio 
