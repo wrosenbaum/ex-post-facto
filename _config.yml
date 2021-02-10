@@ -2,7 +2,10 @@
 # Site settings
 # -----------------------------------------------------------------------------
 
-name: Will Rosenbaum
+title: 
+first_name: Will
+middle_name:
+last_name: Rosenbaum
 email: wrosenbaum@amherst.edu
 description: > # this means to ignore newlines until "url:"
   A blog about mathematics, computer science, etc.
@@ -61,9 +64,6 @@ panelbear_analytics: XXXXXXXXX # panelbear analytics site ID
 # -----------------------------------------------------------------------------
 blog_name: Ex Post Facto Obvious
 blog_description: a blog about math, computer science, and whatnot
-
-blog_name: al-folio  # your blog must have a name for it to show up in the nav bar
-blog_description: a simple whitespace theme for academics
 permalink: /blog/:year/:title/
 
 # Pagination
