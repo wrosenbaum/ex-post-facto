@@ -5,11 +5,11 @@ layout: page
 
 In this note, we briefly describe the method of Mote Carlo simulation for computing mathematical values. Monte Carlo simulation is a powerful and flexible tool for estimating values that might be difficult to compute otherwise. The basic idea is to set up a randomized experiment whose success probability is related to the value we wish to compute. By running the experiment many times, we can then estimate the success probability, from which we can compute an estimate of the value we're looking for. 
 
-## Example: Computing $\pi$
+### Example: Computing $\pi$
 
-The number $\pi = 3.14159\cdots$ is one of the most imporant (and well-studied) mathematicals constants. Its value has been computed to incredible accuracy. You can get representation of $\pi$ as a `double` in Java using `Math.PI`. But what if we didn't know that? How could we compute---or estimate---the value of $\pi$?
+The number $$\pi = 3.14159\cdots$$ is one of the most imporant (and well-studied) mathematicals constants. Its value has been computed to incredible accuracy. You can get representation of $$\pi$$ as a `double` in Java using `Math.PI`. But what if we didn't know that? How could we compute---or estimate---the value of $$\pi$$?
 
-One way of estimating $\pi$ is to use the formula for the area of disk (i.e., the region bounded by a circle): $A = \pi r^2$, where $A$ is the disk's area, and $r$ its radius. Imagine a circular dartboard inside a square frame, where the diameter of the dartboard is equal to side length of the frame:
+One way of estimating $$\pi$$ is to use the formula for the area of disk (i.e., the region bounded by a circle): $A = \pi r^2$, where $A$ is the disk's area, and $r$ its radius. Imagine a circular dartboard inside a square frame, where the diameter of the dartboard is equal to side length of the frame:
 
 [picture]
 
