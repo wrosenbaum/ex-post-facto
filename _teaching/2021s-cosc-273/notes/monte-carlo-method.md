@@ -14,15 +14,19 @@ One way of estimating $$\pi$$ is to use the formula for the area of disk (i.e., 
 [picture]
 
 If the dartboard has a radius $r$, then its area is $A_{d} = \pi r^2$. Meanwhile, the side length of the frame is $2 r$, so its area is $A_f = (2 r)^2 = 4 r^2$. Suppose I throw a dart at the frame. Now, I'm not very good at throwing darts, so the dart is equally likely to land anywhere inside the frame (and if it misses the frame entirely, I'll keep throwing until it hits inside the frame). Given that (1) the dart lands within the frame, and (2) the dart is equally likely to land anywhere within the frame, the probability, $p$, that the dart hits the dartboard is the ratio of areas of the dartboard and the frame 
+
 $$
 p = \frac{A_d}{A_f} = \frac{\pi r^2}{4 r^2} = \frac{\pi}{4}.
 $$
+
 We can solve this expression for $\pi$ to get $\pi = 4 p$.
 
 The crucial observation is that we can estimate $p$ by throwing (many) darts at the frame and counting the number of times they hit the dartboard:
+
 $$
 p \approx \frac{\#\text{times dartboard hit}}{\#\text{darts thrown}}.
 $$
+
 So in order to estimate $\pi = 4 p$, it suffices to throw enough darts at our darboard, and count the number of hits.
 
 **IYI.** The fact that $p$ is approximated by the expression above is mathematically guaranteed by the [law of large numbers](https://en.wikipedia.org/wiki/Law_of_large_numbers). In fact, a more careful analysis can tell us how many experiments (i.e. darts) we need to run in order to approximate $\pi$ to a desired accuracy. Such an analysis shows that the standard devation of our estimate---i.e., the expected amount by which the estimate differs from $\pi$---is proportional to $1 / \sqrt{n}$, where $n$ is the number of experiments performed. Therefore if we want to double the accuracy of our estimate, we need to run 4 times as many experiments; for each extra digit of precision (i.e., tenfold increase in accuracy) we need to do 100 times as many experiments!
@@ -31,7 +35,7 @@ Thankfully, we don't need a real dartboard (and endless time) to perform the exp
 
 Here is a table of outputs for a program that uses the Monte Carlo simulation procedure described above to estimate $\pi$.
 
-| number of points | $\pi$ estimate |
+| number of points    | $\pi$ estimate |
 |------------------|----------------|
 |10 | **3**.2|
 |20 | **3**.4|
