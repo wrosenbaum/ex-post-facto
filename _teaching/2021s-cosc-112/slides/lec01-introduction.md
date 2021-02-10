@@ -2,6 +2,7 @@
 title: "Introduction & Recursion"
 layout: reveal
 ---
+{::options syntax_highlighter="nil" /}
 
 # Introduction & Recursion
 
