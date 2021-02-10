@@ -2,8 +2,9 @@
 layout: page
 permalink: /teaching/
 title: teaching
-description: Information about current and past courses.
+description: information about current and past courses
 order: 1
+nav: true
 ---
 
 ### Current Courses (Spring 2021)

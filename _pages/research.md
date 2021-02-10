@@ -4,6 +4,7 @@ permalink: /research/
 title: research
 description: think deeply of simple things
 order: 2
+nav: true
 ---
 
 ### overview
