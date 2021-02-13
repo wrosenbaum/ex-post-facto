@@ -129,7 +129,7 @@ Your basic assignment will be graded on a 3 point scale as follows:
 
 - **3 points.** Submission produces the desired output in the manner specified by the assignment. Code is clearly organized with comments describing what different components of the code (e.g., methods) do.
 
-- **2 points.** Submission produces more-or-less the desired output, but diverges from the program description in the assignment. Code is not clearly organized and/or lacking comments.
+- **2 points.** Submission produces more-or-less the desired output, but may diverge from the program description in the assignment. Code is not clearly organized and/or lacking helpful comments.
 
 - **1 point.** Submission compiles, but does not produce the desired output. Code is confusingly written without useful comments.
 
