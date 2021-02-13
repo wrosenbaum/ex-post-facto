@@ -10,9 +10,7 @@ These notes will walk you through the basics of our first graphical Java program
 
 - Download [`Typesetter.java`](/assets/java-examples/typesetter/Typesetter.java)
 
-----------
-
-`Typesetter.java` begins with the following lines:
+`Typesetter.java` begins with the following statements:
 
 ```java
     import java.awt.Color;
@@ -28,7 +26,6 @@ Each of these statements tells the Java compiler the name of a resource our prog
 - awt stands for "Abstract Window Toolkit." This package contains a bunch of tools for all things graphical in Java. See [the documentation](https://docs.oracle.com/en/java/javase/11/docs/api/java.desktop/java/awt/package-summary.html) for a full description.
 - swing is the name of a Java package for GUIs (graphical user interfaces). Read more in [the swing documentation](https://docs.oracle.com/en/java/javase/11/docs/api/java.desktop/javax/swing/package-summary.html).
 
-----------
 
 The `import` statements are necessary for Java to compile the program...
 ...but they also help you, the programmer.
@@ -39,7 +36,6 @@ The `import` statements are necessary for Java to compile the program...
 - see the [Color documentation here](https://docs.oracle.com/en/java/javase/11/docs/api/java.desktop/java/awt/Color.html)
 - now... find the documentation for the other classes this program uses!
 
-----------
 
 The next lines define a multi-line comment, explaining what the program/Class does:
 
@@ -51,7 +47,6 @@ The next lines define a multi-line comment, explaining what the program/Class do
      */
 ```
 
-----------
 
 The next lines define the name of the class implemented in this program:
 
@@ -61,13 +56,11 @@ The next lines define the name of the class implemented in this program:
     }
 ```
 
-- `public class Typesetter` tells the compiler that we are defining a new class (object) called a `Typesetter`
+- `public class Typesetter` tells the compiler that we are defining a new class called a `Typesetter`
 - don't worry about `extends JPanel` for now... we will discuss what `extends` means later
 - note that `public class <ClassName>` must *always* be in a file called `<ClassName>.java`
 
-----------
-
-Inside the `Typesetter` class, we define some constant values that will determine the behavior of our object:
+Inside the `Typesetter` class, we define some (constant) values that will determine the behavior of our program:
 
 ```java
         public static final int BOX_WIDTH = 1024;
@@ -84,9 +77,9 @@ Don't worry about the keywords `public static final` and `private` for now. But 
     <modifier(s)> <type> <name> (= <value>);
 ```
 
-----------
+The variables declared `public static final` are constants whose values will not change after our program is compiled. Modifying the assigned values in the code will change the look of our program.
 
-Next up, we see
+Next up, we see:
 
 ```java
         public Typesetter(){
@@ -104,7 +97,6 @@ This defines a *constructor* for the `Typesetter` class.
 - don't worry about keyword `this` for now
 - we'll talk about constructors more later
 
-----------
 
 Next, our code defines a *method* (or *function*) called `printMessage`:
 
@@ -126,7 +118,7 @@ Recall the pattern for defining a method:
 }
 ```
 
-----------
+The method `printMessage` takes an *argument* `Graphics g`, which is the graphics object on which we want to pint the message.
 
 Next we see:
 
@@ -149,8 +141,6 @@ The `@Override` directive tells us that we are re-defining a method already defi
 - we are drawing a `MAMMOTH_PURPLE` box
 - then calling `printMessage(g)`, which prints our message
 
-----------
-
 Finally, we see:
 
 ```java
@@ -163,19 +153,13 @@ Finally, we see:
         }
 ```
 
-Every `public class ClassName` must contain
+The `main` method in a `public class` is the method that will be executed when we run our program. If you want to use your `class` to run a program, the class definition must include:
 
 ```java
     public static void main(String args[]) {...}
 ```
 
-This is the code that actually runs when we execute `java ClassName`.
-
-----------
-
 See the [JFrame documentation](https://docs.oracle.com/en/java/javase/11/docs/api/java.desktop/javax/swing/JFrame.html) if you want to understand what all of these statements mean. (No need to understand it all now!)
-
-----------
 
 Vocabulary to remember:
 
@@ -186,8 +170,6 @@ Vocabulary to remember:
 - return type
 - `main`
 
-----------
-
 Note on `Graphics` coordinates:
 
 - units are pixels (type `int`)
@@ -195,6 +177,4 @@ Note on `Graphics` coordinates:
 - x-coordinates increase *to the right*
 - y-coordinates increase *downward*
 
-----------
-
-Modify the code to print the message multiple times!
+**Exercise.** Modify the code to print the message multiple times in different locations.

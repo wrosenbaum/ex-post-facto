@@ -10,11 +10,14 @@ description: an introduction to graphical programs in Java
 
 ----------
 ### Prerequisites
-+ Get Java up and running on your machine
+
+-  Read [Getting Started with Java](/teaching/2021s-cosc-112/notes/getting-started-java/)
+- Read [Anatomy of a Java Program](/teaching/2021s-cosc-112/notes/anatomy-of-java-program/)	
+    
 
 ### Look at the graphics!
 
-To get started download the file `HelloGraphics.java`, or copy and paste the code below into a new file.
+To get started download the [file `HelloGraphics.java`](/assets/java/2021s-cosc-112/lab01-hello-graphics/HelloGraphics.java), or copy and paste the code below into a new file.
 
 <details markdown=1>
 <summary>click to view code</summary>
@@ -82,7 +85,7 @@ To get started download the file `HelloGraphics.java`, or copy and paste the cod
 
 You should get output that looks something like this:
 
-![](https://paper-attachments.dropbox.com/s_70E6949737C05F2CBE60E7BD5AB2A5DF64E1777C2692BA2361C7F7B34B4C7D7B_1597857324823_hello-graphics.png){: width="100%"} 
+![](/assets/teaching/2021s-cosc-112/lab01-hello-graphics/hello-graphics.png){: width="100%"} 
 
 ### Check out the documentation
 
@@ -100,26 +103,26 @@ since these classes will be especially helpful in your assignment. You can glanc
 
 but you don't need to worry too much about these for now.
 
-----------
-
 **IYI:** the colors `MAMMOTH_PURPLE` and `SPRING_LEAF` come from Amherst College's [Visual Identity Toolkit](https://www.amherst.edu/news/communications/visual-identity-toolkit). There you can find resources to make things look Amherst-y.
 
-----------
 ### Your assignment
 
 To complete this lab you should:
 
 
 1. Draw an object of your choosing. This can be a stick figure, a building, a mammoth, or whatever you want, but it needs to contain at least 5 base shapes (ovals, rectangles, etc).
+
 2. Draw 25 copies of your object in a 5 x 5 grid.
 
 **Note.** Making 25 copies in a grid naively is a painful process of busywork. I suggest defining a method that draws one copy of your object, and using (nested) loops to draw the grid of objects.
 
 **Extension.** To challenge yourself (and get some extra credit), make it so that the images in the grid are not identical, for example by distorting the image or changing its color based on its position in the grid. Below is an example that I put together while procrastinating from doing more productive work. Note that there is a grid of 25 dogs of varying shapes and sizes! 
 
-![](https://paper-attachments.dropbox.com/s_70E6949737C05F2CBE60E7BD5AB2A5DF64E1777C2692BA2361C7F7B34B4C7D7B_1597857181853_dog-grid.png){: width="100%"} 
+![](/assets/teaching/2021s-cosc-112/lab01-hello-graphics/dog-grid.png){: width="100%"} 
 
-----------
-## What to submit
+### What to submit
 
-Please turn in your version of `HelloGraphics.java` as well as the following survey, saved as `lab01-survey.txt` filled out appropriately (replace the text surrounded by <angle brackets> with your response).
+Please turn in your version of `HelloGraphics.java` to the Moodle submission site. Additionally, complete [this survey/self-assessment](https://forms.gle/RNa2DSy6iYKpPgJ56) for the assignment.
+
+### Grading
+

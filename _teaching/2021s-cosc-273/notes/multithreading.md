@@ -5,7 +5,7 @@ layout: page
 
 ## Sequential and Multithreaded Programs
 
-Typically, when learning how to program for the first time, we write programs that are **sequential.** That is, a program executes a sequence of operations in some prescribed order. For example, consider the following program ([source code here](/assets/java-examples/multithreading/HelloThreads.java)):
+Typically, when learning how to program for the first time, we write programs that are **sequential.** That is, a program executes a sequence of operations in some prescribed order. For example, consider the following program ([source code here](/assets/java/multithreading/HelloThreads.java)):
 
 ```java
 public class HelloWorld {
