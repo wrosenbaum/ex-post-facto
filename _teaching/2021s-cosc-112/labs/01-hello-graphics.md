@@ -9,13 +9,13 @@ description: an introduction to graphical programs in Java
 **DUE:** Friday, February 19, 23:59 [AOE](https://time.is/Anywhere_on_Earth)
 
 ----------
-### Prerequisites
+#### Prerequisites
 
 -  Read [Getting Started with Java](/teaching/2021s-cosc-112/notes/getting-started-java/)
 - Read [Anatomy of a Java Program](/teaching/2021s-cosc-112/notes/anatomy-of-java-program/)	
     
 
-### Look at the graphics!
+#### Look at the graphics!
 
 To get started download the [file `HelloGraphics.java`](/assets/java/2021s-cosc-112/lab01-hello-graphics/HelloGraphics.java), or copy and paste the code below into a new file.
 
@@ -87,7 +87,7 @@ You should get output that looks something like this:
 
 ![](/assets/img/2021s-cosc-112/lab01-hello-graphics/hello-graphics.png){: width="100%"} 
 
-### Check out the documentation
+#### Check out the documentation
 
 Now that we've seen what the program does, it is time to figure out *how*. Look at the code, and reference it against the documentation for the the various objects we've used. In particular, you'll want to look at
 
@@ -105,24 +105,36 @@ but you don't need to worry too much about these for now.
 
 **IYI:** the colors `MAMMOTH_PURPLE` and `SPRING_LEAF` come from Amherst College's [Visual Identity Toolkit](https://www.amherst.edu/news/communications/visual-identity-toolkit). There you can find resources to make things look Amherst-y.
 
-### Your assignment
+#### Your assignment
 
 To complete this lab you should:
 
+1. Write a method that draws some object in a specified location. This can be a stick figure, a building, a mammoth, or whatever you want, but it needs to contain at least 5 base shapes (ovals, rectangles, etc). Your method should take as arguments the location of where to draw the object (in addition to any other information you want to pass to the method). If your figure is complicated, it might even make sense to have multiple methods that draw the different parts of the figure.
 
-1. Draw an object of your choosing. This can be a stick figure, a building, a mammoth, or whatever you want, but it needs to contain at least 5 base shapes (ovals, rectangles, etc).
+2. Draw 25 copies of your object in a 5 x 5 grid. 
 
-2. Draw 25 copies of your object in a 5 x 5 grid.
+**Note.** Making 25 copies in a grid naively is a painful process of busywork. I suggest using (nested) loops to draw the grid of objects.
 
-**Note.** Making 25 copies in a grid naively is a painful process of busywork. I suggest defining a method that draws one copy of your object, and using (nested) loops to draw the grid of objects.
-
-**Extension.** To challenge yourself (and get some extra credit), make it so that the images in the grid are not identical, for example by distorting the image or changing its color based on its position in the grid. Below is an example that I put together while procrastinating from doing more productive work. Note that there is a grid of 25 dogs of varying shapes and sizes! 
+**Extension.** To challenge yourself (and get some extra credit), make it so that the images in the grid are not identical, for example by distorting the image or changing its color based on its position in the grid. Also, you can make a cool background for your grid of objects. Below is an example that I put together while procrastinating from doing more productive work. Note that there is a grid of 25 dogs of varying shapes and sizes! 
 
 ![](/assets/img/2021s-cosc-112/lab01-hello-graphics/dog-grid.png){: width="100%"} 
 
-### What to submit
+#### What to submit
 
-Please turn in your version of `HelloGraphics.java` to the Moodle submission site. Additionally, complete [this survey/self-assessment](https://forms.gle/RNa2DSy6iYKpPgJ56) for the assignment.
+Please turn in your version of `HelloGraphics.java` to the Moodle submission site. Be sure to fill out the comments at the beginning of the file with your name and a description of your program. Additionally, complete [this survey/self-assessment](https://forms.gle/RNa2DSy6iYKpPgJ56) for the assignment.
 
-### Grading
+#### Grading
+
+Your basic assignment will be graded on a 3 point scale as follows:
+
+- **3 points.** Submission produces the desired output in the manner specified by the assignment. Code is clearly organized with comments describing what different components of the code (e.g., methods) do.
+
+- **2 points.** Submission produces more-or-less the desired output, but diverges from the program description in the assignment. Code is not clearly organized and/or lacking comments.
+
+- **1 point.** Submission compiles, but does not produce the desired output. Code is confusingly written without useful comments.
+
+- **0 points.** Submission does not compile. 
+
+In addition to the points above, you will receive credit for any extenion(s) as specified in the [course syllabus](/teaching/2021s-cosc-112/syllabus/#extension-portfolio).
+
 

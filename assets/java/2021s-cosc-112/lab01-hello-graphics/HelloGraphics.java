@@ -1,3 +1,24 @@
+/**
+ * Lab 01: HelloGraphics
+ * 
+ * Description: Describe what your program does. 
+ * 
+ * Extensions: Describe the extensions you implemented, if any.
+ *
+ * @author Your Name Here
+ *
+ ***********************************************************
+ * (to be completed by the grader)
+ * 
+ * Grade (out of 3):
+ * 
+ * Extension grade: 
+ * 
+ * Grader Comments: 
+ * 
+ */
+ 
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -15,7 +36,7 @@ public class HelloGraphics extends JPanel{
         this.setPreferredSize(new Dimension(BOX_WIDTH, BOX_HEIGHT));
     }
     
-    //Your code here, if you want to define additional methods.
+    //Your drawing method(s) here
         
     @Override
     public void paintComponent(Graphics g) {
