@@ -6,9 +6,7 @@ description: a guide to your first graphical program
 
 
 
-These notes will walk you through the basics of our first graphical Java program, and review the structure of all Java programs. To get started, download `Typesetter.java`. Open the file and follow along!
-
-- Download [`Typesetter.java`](/assets/java-examples/typesetter/Typesetter.java)
+These notes will walk you through the basics of our first graphical Java program, and review the structure of all Java programs. To get started, [download `Typesetter.java`](/assets/java/typesetter/Typesetter.java). Open the file and follow along!
 
 `Typesetter.java` begins with the following statements:
 

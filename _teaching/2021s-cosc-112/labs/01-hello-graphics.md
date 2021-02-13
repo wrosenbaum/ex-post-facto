@@ -85,7 +85,7 @@ To get started download the [file `HelloGraphics.java`](/assets/java/2021s-cosc-
 
 You should get output that looks something like this:
 
-![](/assets/teaching/2021s-cosc-112/lab01-hello-graphics/hello-graphics.png){: width="100%"} 
+![](/assets/img/2021s-cosc-112/lab01-hello-graphics/hello-graphics.png){: width="100%"} 
 
 ### Check out the documentation
 
@@ -118,7 +118,7 @@ To complete this lab you should:
 
 **Extension.** To challenge yourself (and get some extra credit), make it so that the images in the grid are not identical, for example by distorting the image or changing its color based on its position in the grid. Below is an example that I put together while procrastinating from doing more productive work. Note that there is a grid of 25 dogs of varying shapes and sizes! 
 
-![](/assets/teaching/2021s-cosc-112/lab01-hello-graphics/dog-grid.png){: width="100%"} 
+![](/assets/img/2021s-cosc-112/lab01-hello-graphics/dog-grid.png){: width="100%"} 
 
 ### What to submit
 
