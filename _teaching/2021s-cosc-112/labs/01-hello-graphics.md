@@ -9,9 +9,11 @@ description: an introduction to graphical programs in Java
 **DUE:** Friday, February 19, 23:59 [AOE](https://time.is/Anywhere_on_Earth)
 
 ----------
+
 #### Prerequisites
 
 -  Read [Getting Started with Java](/teaching/2021s-cosc-112/notes/getting-started-java/)
+
 - Read [Anatomy of a Java Program](/teaching/2021s-cosc-112/notes/anatomy-of-java-program/)	
     
 

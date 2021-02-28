@@ -1,0 +1,127 @@
+# Depth and Efficiency of Recursion
+In class, we saw (some variant of) the following code for generating a solution to the Tower of Hanoi problem (see [+03. Recursion, Again](https://paper.dropbox.com/doc/03.-Recursion-Again-wEv7gyuZ4TYQZG93OzFVg)) :
+
+
+    // print instructions for moving "num" disks from peg "from" to 
+    // peg "to", where "other" is the third peg.
+    private void move(int num, int from, int to, int other) {
+      if (num <= 0) return;
+    
+      move(num - 1, from, other, to);
+      System.out.println("Move disk from " + from + " to " + to);
+      move(num - 1, other, to, from);
+    }
+
+This code is perhaps as confusing as it is short. Yet it seems to generate the intended output when we call `move(num, 1, 3, 2)` .For `num = 1`  we get
+
+
+    Move disk from 1 to 3
+
+which is clearly correct. Setting `num = 2` gives
+
+
+    Move disk from 1 to 2
+    Move disk from 1 to 3
+    Move disk from 2 to 3
+
+Again, this will solve the puzzle. And for `num = 3`, the program computes 
+
+
+    Move disk from 1 to 3
+    Move disk from 1 to 2
+    Move disk from 3 to 2
+    Move disk from 1 to 3
+    Move disk from 2 to 1
+    Move disk from 2 to 3
+    Move disk from 1 to 3
+
+which solves the puzzle. 
+
+To understand what is going on, let’s follow the execution of `move(2, 1, 3, 2)` by hand. We can draw the recursion tree for the execution as follows:
+
+
+![](https://paper-attachments.dropbox.com/s_B30281FA9A31B83DC978ED08EEBBD87FAF2B4D8E5124FC323FA85FFAA4801F32_1599066569874_ToHRecursionTree.png)
+
+
+Note that there are 6 recursive calls made in total (the “root” call to `move(2, 1, 3, 2)` does not count because presumably, we called `move(2, 1, 3, 2)` from the `main` method). The **depth of recursion** is 2, because the longest path from the root to any leaf (a call to the base case `move(0, …)` ) has length 2. 
+
+Finally, we observe how this program actually solves the ToH problem. Each call to `move(n, …)` with `n > 0` makes two recursive calls to `move(n-1, …)`  and prints one line of instructions. *The order in which these operations take place is important!* Specifically, the operations are performed in the following order:
+
+
+1. Perform `move(n - 1, from, other, to)`. Assuming our method works as claimed, after this step, all instructions for moving `n-1` disks from peg `from` to peg `other` will be printed on the screen when this method completes.
+2. Print the message to move a disk from `from` to `to`. After following this step, the `n`-th largest disk previously on peg `from` is now on peg `to`, while all smaller disks are on peg `other`.
+3. Perform `move(n - 1, other, to, from)`. Again, assuming everything works as claimed after this method finishes its execution, the instructions will have been printed to move `n` disks from `from` to `to`.
+
+In order to be convinced that the steps listed above actually work, it seems we need to have some faith—faith that the recursive functions calls to `move(n-1,…)` actually do what we want them to do. It is possible to mathematically prove that the procedure will always work using [mathematical induction](https://en.wikipedia.org/wiki/Mathematical_induction), but such a proof is out of the scope of the current class.
+
+## How many steps does the solution take?
+
+If we run the code above for a few values of `n` and count the number of instructions printed, we’ll see the following sequence:
+
+| n  | number of steps |
+| -- | --------------- |
+| 1  | 1               |
+| 2  | 3               |
+| 3  | 7               |
+| 4  | 15              |
+| 5  | 31              |
+| 6  | 63              |
+| 7  | 127             |
+| 8  | 255             |
+| 9  | 511             |
+| 10 | 1023            |
+
+Okay. So I didn’t print the instructions and count the lines myself. Instead, it is a good idea to modify the `move` function to return the number of individual moves printed by an invocation of `move`. 
+
+**Exercise.** Modify the `move` function above to return the number of instructions printed by an invocation of the method. Use your modified version of `move`  to produce the table above.
+
+The pattern illustrated above is troubling… Observe that the number of steps used to solve the puzzle for `n+1` is *more than double* the number of steps used to solve the puzzle with `n` disks. In fact (again, using mathematical induction) one can prove that the method `move` as we defined it will print $$2^n - 1$$ instructions for `n` disks. This is bad news if we actually want to do the Tower of Hanoi puzzle for a reasonably large number of disks. Moving 10 disks takes over 1,000 instructions; moving 20 will take over 1,000,000 instructions. Even generating the instructions on a computer becomes infeasible once the number of disks grows much beyond 30.  Once we get to around 265 disks, the number of steps would be greater than the number of atoms in the observable universe! 
+
+## Could we find a shorter solution?
+
+Given the inefficiency of the solution to Tower of Hanoi generated by `move`, we might wonder if a more efficient solution could be found using another method. After all, our recursive solution to computing the Fibonacci numbers turned out to needlessly inefficient compared to the iterative solution.
+
+In fact, for Tower of Hanoi, our recursive solution turns out to generate *the shortest possible solution!*  Thus, the `move` function we defined is inefficient, but not wasteful. It just happens that the Tower of Hanoi problem doesn’t admit any efficient solution.
+
+Suppose $$f(n)$$ denotes the minimum number of steps needed to solve Tower of Hanoi with $$n$$ disks. Evidently, we have $$f(1) = 1$$ because we have to move a disk to solve the problem with a single disk. Now consider the case where $$n\geq 2$$. Observe that:
+
+1. In order to move the bottom (largest) disk from peg 1 to peg 3, we must first move the top $$n-1$$ disks from peg 1 to peg 2. This requires $$f(n-1)$$ steps.
+2. Moving the largest disk form peg 1 to 3 requires another step. 
+3. To complete the puzzle, the $$n-1$$ disks must be moved from peg 2 to peg 3. This requires another $$f(n-1)$$ steps! 
+
+Adding it up, we *must* make $$f(n-1) + 1 + f(n-1) = 2 f(n-1) + 1$$ steps to solve the puzzle with $$n$$ disks. Thus $$f(n) = 2 f(n-1) + 1$$. Together with the condition $$f(1) = 1$$, this recursive formula has a solution $$f(n) = 2^n - 1$$, which happens to be the number of steps required by our `move`  method. So `move` may take a while, but it gives the best solution possible, and with so few lines of code!
+
+
+## Factorial, Fibonacci, Tower of Hanoi
+
+In the last couple lectures we saw three recursive methods:
+
+
+    int factorial (int n) {
+      if (n == 1) return 1;
+      return n * factorial(n - 1);
+    }
+
+
+    int fibonacci (int n) {
+       if (n == 1 || n == 2) return 1;
+       return fibonacci(n - 1) + fibonacci(n - 2);
+    }
+
+
+    void move (int num, int from, int to, int other) {
+      if (num <= 0) return;
+    
+      move(num - 1, from, other, to);
+      System.out.println("Move disk from " + from + " to " + to);
+      move(num - 1, other, to, from);
+    }
+
+All three of these functions are succinct, yet they show how subtle recursion can be. The behavior  of `factorial` is relatively simple, and the program is efficient (comparable to an iterative method for computing the factorial function). 
+
+The function `fibonacci` seems like it could be similarly efficient to `factorial`, but as we saw, this recursive method for computing the fibonacci sequence is needlessly wasteful. Even for a fairly modest input of `45`, the recursive `fibonacci` method above was thousands of times slower than the iterative version of the function. The reason for this inefficiency comes from the two recursive calls to `fibonacci` in line 3 (whereas `factorial` only makes a single recursive call in line 3). Because of these two recursive calls in `fibonacci`, the method ends doing a lot of redundant (and wasteful) calculations. 
+
+Finally, the `move` method for solving the Tower of Hanoi problem is probably the most mysterious of the three pieces of code above. The method’s behavior is subtle, and its output seems miraculous, if lengthy. Yet it not only gives *a* solution to the Tower of Hanoi problem—it gives the most efficient possible solution!
+
+To summarize, recursion is a powerful yet subtle tool. Recursive solutions to problems often require very little code. Yet understanding (and debugging!) the behavior of recursively defined methods can be tricky. 
+

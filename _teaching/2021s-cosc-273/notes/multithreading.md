@@ -80,7 +80,7 @@ In either case, we must define a method `void run()`. This is the method that wi
 
 ### Hello, Threads!
 
-We are now ready to introduce our first multithreaded program: `HelloThreads` (source code here). Here is a basic version:
+We are now ready to introduce our first multithreaded program: `HelloThreads` ([source code here](/assets/java/multithreading/HelloThreads.java)). Here is a basic version:
 
 ```java
 public class HelloThreads implements Runnable {
@@ -134,7 +134,7 @@ Goodbye, threads!
 Hello from thread 3
 ```
 
-Already, we can see something strange is going on. Threads 0, 1, and 2 printed their message before the final line, but then `Goodbye, threads!` is printed *before* thread 3 prints its greeting. Unlike our sequential `HelloWorld` program **statements in the multithreaded program are not executed in the same order that were written.** We have no control over the relative order that different threads perform their operations. By setting `NUM_THREADS` to 8, I get the following output:
+Already, we can see something strange is going on. Threads 0, 1, and 2 printed their message before the final line, but then `Goodbye, threads!` is printed *before* thread 3 prints its greeting. Unlike our sequential `HelloWorld` program **statements in the multithreaded program may not be executed in the same order in which they appear in the control flow of the program.** We have no control over the relative order that different threads perform their operations (though *within each thread*, the statements will be executed in the order prescribed by the program). By setting `NUM_THREADS` to 8, I get the following output:
 
 ```text
 Say hello, threads!
@@ -233,7 +233,7 @@ We are still not guaranteed anything about the relative order of the messages pr
 
 We run threads using the `start()` method, and we can wait until a thread finishes by using the `join()` method. However, these methods neither take any arguments, nor return any values. So how can we get output from a thread, or get a thread to modify data that we will use later in our program?
 
-In order to access data produced by a thread, we need to create an object *before* starting the thread. We can then pass (a reference to) the object to the constructor for our thread's class. The following program `SharedArray.java` illustrates how multiple threads can access the same array ([source code here](/assets/java-examples/multithreading/SharedArray.java)).
+In order to access data produced by a thread, we need to create an object *before* starting the thread. We can then pass (a reference to) the object to the constructor for our thread's class. The following program `SharedArray.java` illustrates how multiple threads can access the same array ([source code here](/assets/java/multithreading/SharedArray.java)).
 
 ```java
 import java.util.Arrays;
@@ -299,5 +299,5 @@ Note that a *single* `int[] shared` is created in the `main` method. This same a
 
 In each `SharedArray` instance created, the local variable `array` references the `int[] shared` created in `main`. Therefore, when `run()` is invoked for each thread, all threads modify `shared` from the main method.
 
-**Caution.** It is potentially dangerous to have multiple threads modifying the same object (in this case `shared`)! There is nothing stopping different threads from accessing the same entry in the array, thereby leading to unpredictable/unintended behavior. 
+**Caution.** It is potentially dangerous to have multiple threads modifying the same object (in this case `shared`)! There is nothing stopping different threads from accessing the same entry in the array, thereby leading to unpredictable/unintended behavior. We will spend a significant a significant amount of time understanding how to create objects that are "thread-safe," meaning that they behave predictably when accessed by mutiple threads concurrently.
 

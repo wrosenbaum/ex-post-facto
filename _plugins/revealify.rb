@@ -13,9 +13,6 @@ module Jekyll
 
     def revealify(html)
 
-      # a test
-      puts "running revealify..."
-
       # parse content (wrapped in the reveal > slides divs)
       reveal_div = Nokogiri::HTML.fragment("<div class=\"reveal\"><div class=\"slides\">#{html}</div></div>", 'UTF-8')
       slides_div = reveal_div.search('.slides').first

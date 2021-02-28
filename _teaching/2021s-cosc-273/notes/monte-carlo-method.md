@@ -11,15 +11,18 @@ The number $$\pi = 3.14159\cdots$$ is one of the most important (and well-studie
 
 One way of estimating $$\pi$$ is to use the formula for the area of disk (i.e., the region bounded by a circle): $$A = \pi r^2$$, where $$A$$ is the disk's area, and $$r$$ its radius. Imagine a circular dartboard inside a square frame, where the diameter of the dartboard is equal to side length of the frame:
 
-[picture]
 
-If the dartboard has a radius $$r$$, then its area is $$A_{d} = \pi r^2$$. Meanwhile, the side length of the frame is $$2 r$$, so its area is $$A_f = (2 r)^2 = 4 r^2$$. Suppose I throw a dart at the frame. Now, I'm not very good at throwing darts, so the dart is equally likely to land anywhere inside the frame (and if it misses the frame entirely, I'll keep throwing until it hits inside the frame). Given that (1) the dart lands within the frame, and (2) the dart is equally likely to land anywhere within the frame, the probability, $$p$$, that the dart hits the dartboard is the ratio of areas of the dartboard and the frame 
+{:refdef: style="text-align: center;"}
+![dartboard](/assets/img/monte-carlo-method/dartboard.svg){: width="50%"}
+{: refdef}
+
+If the dartboard has a radius $$r $$, then its area is $$A_{d} = \pi r^2$$. Meanwhile, the inner side length of the frame is $$2 r$$, so the framed region (i.e., white and blue regions above) have an area of $$A_f = (2 r)^2 = 4 r^2$$. Suppose I throw a dart at the frame. Now, I'm not very good at throwing darts, so the dart is equally likely to land anywhere inside the frame (and if it misses the frame entirely, I'll keep throwing until it hits inside the frame). Given that (1) the dart lands within the frame, and (2) the dart is equally likely to land anywhere within the frame, the probability, $$p $$, that the dart hits the dartboard is the ratio of areas of the dartboard and the framed region:
 
 $$
 p = \frac{A_d}{A_f} = \frac{\pi r^2}{4 r^2} = \frac{\pi}{4}.
 $$
 
-We can solve this expression for $$\pi$$ to get $$\pi = 4 p$$.
+We can solve this expression for $$\pi $$ to get $$\pi = 4 p$$.
 
 The crucial observation is that we can estimate $$p$$ by throwing (many) darts at the frame and counting the number of times they hit the dartboard:
 
@@ -35,7 +38,9 @@ Thankfully, we don't need a real dartboard (and endless time) to perform the exp
 
 Here is a table of outputs for a program that uses the Monte Carlo simulation procedure described above to estimate $$\pi$$.
 
-| number of points    | $$ \pi$$ estimate |
+--------------------
+
+| number of points &nbsp;&nbsp;| $$ \pi$$ estimate |
 |------------------|----------------|
 |10 | **3**.2|
 |20 | **3**.4|
@@ -51,8 +56,9 @@ Here is a table of outputs for a program that uses the Monte Carlo simulation pr
 |100000000| **3.141**45256|
 |1000000000| **3.1415**67368|
 
+--------------------
 
-The the correct digits in the table are indicated in boldface. Notice that as the number of samples increases, so does the accuracy of our approximation of $$ \pi$$ (albeit, slowly: we have to increase the number of samples by a factor of about 100 in order to gain a single digit of accuracy). 
+The the correct digits in the table are indicated in boldface. Notice that as the number of samples increases, so does the accuracy of our approximation of $$ \pi$$, albeit, slowly: we have to increase the number of samples by a factor of about 100 in order to gain a single digit of accuracy. 
 
 There are much more efficient ways of computing $$\pi $$, but the Monte Carlo method has two main advantages. First, the method is conceptually simple (relying only on a fact from high-school level geometry) and straightforward to program (my solution is only 8 lines of code). The second advantage is that the method is **[embarrassingly parallel](https://en.wikipedia.org/wiki/Embarrassingly_parallel)**. That is, if we have multiple processors/computers/people generating samples independently, the outcomes of those experiments can be combined to provide a more accurate estimate. Thus, even though this method is inefficient for a single processor, the computation can easily be sped up if multiple processors are used.
 
