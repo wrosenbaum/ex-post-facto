@@ -4,8 +4,6 @@ description: ""
 layout: page
 ---
 
-You can [download a PDF of this assignment here](/assets/pdf/2021s-cosc-273/homework-01.pdf).
-
 ## Instructions
 
 You may work in groups of up to 4 and submit a single assignment for the group. For computational problems, please show your work; for conceptual questions, please explain your reasoning. Solutions may be neatly hand-written and scanned or typeset. Please submit your solution to Moodle **in PDF format**. 
@@ -14,7 +12,7 @@ You may work in groups of up to 4 and submit a single assignment for the group. 
 
 ## Exercises
 
-**Exercise 1** (scheduling with different processor speeds). Suppose a task $$T $$ is composed of four (purely sequential) sub-tasks $$T_1, T_2, T_3, T_4$$ which require 360, 210, 210, and 180 elementary operations (respectively) to complete. We have three processors at our disposal $$P_1, P_2, P_3$$, which can perform 480, 320, and 320 operations per second (respectively).
+**Exercise 1** (scheduling with different processor speeds). Suppose a task $T$ is composed of four (purely sequential) sub-tasks $T_1, T_2, T_3, T_4$ which require 360, 210, 210, and 180 elementary operations (respectively) to complete. We have three processors at our disposal $P_1, P_2, P_3$, which can perform 480, 320, and 320 operations per second (respectively).
 
 - Find an optimal schedule for the subtasks on the three processors. What is the latency of the computation?
 
@@ -66,9 +64,9 @@ Does this code ensure that multiple threads cannot simultaneously increment a `L
 
 - If `M` accounts for 20% of the program's total execution time, what is the maximum possible overall speedup on a 2 processor machine? A 3 processor machine? An 8 processor machine? 
 
-- What is the maximum possible speedup for *any* number of parallel processors (i.e., as the number $$n $$ of processors becomes arbitrarily large)?
+- What is the maximum possible speedup for *any* number of parallel processors (i.e., as the number $n$ of processors becomes arbitrarily large)?
 
-- Now suppose `M` is replaced by a method `N` that accomplishes the same task but in half the time. How much faster is the new program than the old program on a 2 processor machine? A 3 processor machine? An 8 processor machine? An $$n $$ processor machine (as a function of $$n $$)?
+- Now suppose `M` is replaced by a method `N` that accomplishes the same task but in half the time. How much faster is the new program than the old program on a 2 processor machine? A 3 processor machine? An 8 processor machine? An $n$ processor machine (as a function of $n$)?
 
 **Exercise 4** (mutual exclusion). Consider the following modified `lock()` method for the Peterson lock (cf. Section 2.3.3 in *The Art of Multiprocessor Programming*):
 
@@ -86,4 +84,4 @@ The only difference with the original method is that the statements `victim = i`
 
 **Exercise 5** (a challenge). A computer science professor offers the following challenge to their class: The students are lined up in a single file line, so that each student can see all of the students in front of them and none of the students behind them. The professor places a hat on each student's head; some hats are red while others are blue. Each student can see the colors of the hats of the students in front of them in line, but not their own hat color nor the colors of hats behind them. Starting from the back of the line, the professor asks each student in turn to shout a guess of their hat color (which they cannot themselves see). All other students can hear the guesses. If a student guesses their hat color correctly, they get an 'A' for the course. 
 
-The students are informed of this procedure and given a chance to dicuss their strategy to maximize the possible number of 'A' grades awarded. In a class of $$N $$ students, what is the largest number of students that can be guaranteed to get an 'A' by correctly guessing their hat color? What procedure should they follow to achieve this result?
+The students are informed of this procedure and given a chance to dicuss their strategy to maximize the possible number of 'A' grades awarded. In a class of $N$ students, what is the largest number of students that can be guaranteed to get an 'A' by correctly guessing their hat color? What procedure should they follow to achieve this result?

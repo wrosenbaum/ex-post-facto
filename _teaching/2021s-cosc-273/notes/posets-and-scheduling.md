@@ -78,7 +78,7 @@ In a poset, it may be the case that two elements $$x $$ and $$y $$ satisfy $$x \
 	
 Given two elements $$x $$ and $$y $$ in $$X $$, we say that $$y $$ **covers** $$x $$  if $$x \prec y$$ and there is no element $$z $$ satisfying $$x \prec z \prec y$$. That is, there is no element "between" $$x$$ and $$y$$ in the poset. In our clothing example, $$\text{sweater }$$ covers $$\text{shirt }$$ because there is no item of clothing that must be put on between a shirt and a sweater. However, $$\text{L shoe}$$ does not cover $$\text{underwear} $$, because $$\text{pants} $$ should be put on after $$\text{underwear} $$ and before $$\text{L shoe}$$. 
 
-Often, we can represent posets in a visually appealing way by drawing all of its elements as well as arrows from each $$x $$ to $$y $$ whenever $$x $$ covers $$y $$. Such a diagram is called a **Hasse diagram**. At the beginning of this note, we have drawn the Hasse diagram for the "getting dressed" poset. 
+Often, we can represent posets in a visually appealing way by drawing all of its elements as well as arrows from each $$x $$ to $$y $$ whenever $$y $$ covers $$x $$. Such a diagram is called a **Hasse diagram**. At the beginning of this note, we have drawn the Hasse diagram for the "getting dressed" poset. 
 
 If $$x \prec y$$, then there may not be an arrow directly from $$x $$ to $$y $$ in the Hasse diagram. However, there will be a directed path---i.e., a sequence of arrows---going from $$x $$ to $$y $$. On the other hand, if $$x $$ and $$y $$ are incomparable, then there is neither a directed path from $$x $$ to $$y $$ nor a directed path from $$y $$ to $$x $$. 
 

@@ -411,126 +411,126 @@ class Peterson implements Lock {
 }
 ```
 
-## Proof of Mutual Exclusion I
+<!-- ## Proof of Mutual Exclusion I -->
 
-Suppose not... 
+<!-- Suppose not...  -->
 
-- $$A $$ and $$B $$ both in critical section (CS) at same time
+<!-- - $$A $$ and $$B $$ both in critical section (CS) at same time -->
 
-## Proof of Mutual Exclusion II
+<!-- ## Proof of Mutual Exclusion II -->
 
-- Actions of $$A $$:
-    + $$(A.1)$$ writes `flag[A] = true`
-	+ $$(A.2)$$ writes `victim = A`
-	+ $$(A.3)$$ reads `flag[B]`
-	+ $$(A.4)$$ reads `victim`
+<!-- - Actions of $$A $$: -->
+<!--     + $$(A.1)$$ writes `flag[A] = true` -->
+<!-- 	+ $$(A.2)$$ writes `victim = A` -->
+<!-- 	+ $$(A.3)$$ reads `flag[B]` -->
+<!-- 	+ $$(A.4)$$ reads `victim` -->
 
-- Actions of $$B $$:
-    + $$(B.1)$$ writes `flag[B] = true`
-    + $$(B.2)$$ writes `victim = B`
-	+ $$(B.3)$$ reads `flag[A]`
-	+ $$(B.4)$$ reads `victim`
+<!-- - Actions of $$B $$: -->
+<!--     + $$(B.1)$$ writes `flag[B] = true` -->
+<!--     + $$(B.2)$$ writes `victim = B` -->
+<!-- 	+ $$(B.3)$$ reads `flag[A]` -->
+<!-- 	+ $$(B.4)$$ reads `victim` -->
 	
-## Proof of Mutual Exclusion III
+<!-- ## Proof of Mutual Exclusion III -->
 
-Suppose $$(B.2) \to (A.2)$$:
+<!-- Suppose $$(B.2) \to (A.2)$$: -->
 
-- i.e., $$A $$ wrote to `victim` last
+<!-- - i.e., $$A $$ wrote to `victim` last -->
 
-- if not, continue argument with roles of $$A $$ and $$B $$ reversed
+<!-- - if not, continue argument with roles of $$A $$ and $$B $$ reversed -->
 
-## Timelines
+<!-- ## Timelines -->
 
-<div style="margin-bottom: 18em"></div>
+<!-- <div style="margin-bottom: 18em"></div> -->
 
 
-## Conclusion
+<!-- ## Conclusion -->
 
-The Peterson lock satisfies mutual exclusion
+<!-- The Peterson lock satisfies mutual exclusion -->
 
-## Proof of Starvation-Freedom I
+<!-- ## Proof of Starvation-Freedom I -->
 
-Suppose not:
+<!-- Suppose not: -->
 
-- Some thread runs forever in `lock()` method
-- Assume it is thread $$A $$
+<!-- - Some thread runs forever in `lock()` method -->
+<!-- - Assume it is thread $$A $$ -->
 
-```java
-	public void lock () {
-	   int i = ThreadID.get(); // get my ID, 0 or 1
-	   int j = 1 - i;          // other thread's ID
+<!-- ```java -->
+<!-- 	public void lock () { -->
+<!-- 	   int i = ThreadID.get(); // get my ID, 0 or 1 -->
+<!-- 	   int j = 1 - i;          // other thread's ID -->
 	   
-	   flag[i] = true;         // set my flag
-	   victim = i;             // set myself to be victim
-	   while (flag[j] && victim == i) {
-	       // wait
-	   }
-	}
-```
+<!-- 	   flag[i] = true;         // set my flag -->
+<!-- 	   victim = i;             // set myself to be victim -->
+<!-- 	   while (flag[j] && victim == i) { -->
+<!-- 	       // wait -->
+<!-- 	   } -->
+<!-- 	} -->
+<!-- ``` -->
 
-- $$A $$ is stuck in `while` loop
+<!-- - $$A $$ is stuck in `while` loop -->
 
-## Proof of Starvation-Freedom II
+<!-- ## Proof of Starvation-Freedom II -->
 
-$$A $$ stuck in:
+<!-- $$A $$ stuck in: -->
 
-```java
-	   while (flag[B] && victim == A) {
-	       // wait
-	   }
-```
+<!-- ```java -->
+<!-- 	   while (flag[B] && victim == A) { -->
+<!-- 	       // wait -->
+<!-- 	   } -->
+<!-- ``` -->
 
-- If $$B $$ leaves CS, $$B $$ sets `flag[B] = false`
-- If $$B $$ calls `lock()` again, sets `victim = B` 
-- In in either case, $$A $$ eventually breaks out of loop
+<!-- - If $$B $$ leaves CS, $$B $$ sets `flag[B] = false` -->
+<!-- - If $$B $$ calls `lock()` again, sets `victim = B`  -->
+<!-- - In in either case, $$A $$ eventually breaks out of loop -->
 
-So
+<!-- So -->
 
-- Must be that $$B $$ also stuck in `lock()` call
+<!-- - Must be that $$B $$ also stuck in `lock()` call -->
 
-## Proof of Starvation-Freedom III
+<!-- ## Proof of Starvation-Freedom III -->
 
-- Must be that $$B $$ also stuck in `lock()` call
-- But then:
-    + `flag[B] && victim == A` is true ($$A $$ in `while` loop)
-	+ `flag[A] && victim == B` is true ($$B $$ in `while` loop)
-- This is a contradiction!
-    + `victim` cannot be both `A` and `B`
+<!-- - Must be that $$B $$ also stuck in `lock()` call -->
+<!-- - But then: -->
+<!--     + `flag[B] && victim == A` is true ($$A $$ in `while` loop) -->
+<!-- 	+ `flag[A] && victim == B` is true ($$B $$ in `while` loop) -->
+<!-- - This is a contradiction! -->
+<!--     + `victim` cannot be both `A` and `B` -->
 	
-## Conclusion
+<!-- ## Conclusion -->
 
-- Peterson lock satisfies
-    + mutual exclusion
-	+ starvation-freedom
+<!-- - Peterson lock satisfies -->
+<!--     + mutual exclusion -->
+<!-- 	+ starvation-freedom -->
 	
-- Therefore
-    + Peterson lock also satisfies deadlock-freedom
+<!-- - Therefore -->
+<!--     + Peterson lock also satisfies deadlock-freedom -->
 	
-Nice!
+<!-- Nice! -->
 
-## For Your Consideration I
+<!-- ## For Your Consideration I -->
 
-How can we deal with more than two threads?
+<!-- How can we deal with more than two threads? -->
 
-- Can the Peterson lock be generalized to multiple threads?
-- Is there a better way?
+<!-- - Can the Peterson lock be generalized to multiple threads? -->
+<!-- - Is there a better way? -->
 
-## Some Things to Consider II
+<!-- ## Some Things to Consider II -->
 
-- Might want more than one lock
-    + e.g., multiple distinct critical sections that *can* be executed concurrently
-	+ object with two counters, could have one lock for each counter
-	+ different counters incremented at same time is fine
+<!-- - Might want more than one lock -->
+<!--     + e.g., multiple distinct critical sections that *can* be executed concurrently -->
+<!-- 	+ object with two counters, could have one lock for each counter -->
+<!-- 	+ different counters incremented at same time is fine -->
 	
-## Some Things to Consider III
-Interdependencies between locked objects can cause trouble
+<!-- ## Some Things to Consider III -->
+<!-- Interdependencies between locked objects can cause trouble -->
 
-- individual locks well-behaved
-- contention between *different* locks still cause deadlock
-- e.g., task requires two locks to be acquired:
-     + one thread acquires one lock
-	 + other thread acquires other lock
-	 + both waiting on each other to finish
+<!-- - individual locks well-behaved -->
+<!-- - contention between *different* locks still cause deadlock -->
+<!-- - e.g., task requires two locks to be acquired: -->
+<!--      + one thread acquires one lock -->
+<!-- 	 + other thread acquires other lock -->
+<!-- 	 + both waiting on each other to finish -->
 
 
 

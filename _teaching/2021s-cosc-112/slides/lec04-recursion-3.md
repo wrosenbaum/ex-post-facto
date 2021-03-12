@@ -222,92 +222,130 @@ public static long collatz (long n) {
 
 # Up Next: Defining New Objects
 
-## Coding So Far
+<!-- ## Coding So Far -->
 
-1. Statements, blocks, control flow (conditionals and iteration)
-2. Methods: **procedural programming**
-    + encapsulate code in methods
-	+ methods recieve input (arguments), perform operations, (maybe) produduce output (`return`)
-	+ when a method returns, all its resources (local variables) go away
+<!-- 1. Statements, blocks, control flow (conditionals and iteration) -->
+<!-- 2. Methods: **procedural programming** -->
+<!--     + encapsulate code in methods -->
+<!-- 	+ methods recieve input (arguments), perform operations, (maybe) produduce output (`return`) -->
+<!-- 	+ when a method returns, all its resources (local variables) go away -->
 	
 
-## Procedural Programming
+<!-- ## Procedural Programming -->
 
-Design Principle:
+<!-- Design Principle: -->
 
-- Break a large task into smaller sub-tasks
-    + write a method for each sub-task
+<!-- - Break a large task into smaller sub-tasks -->
+<!--     + write a method for each sub-task -->
 	
-- Makes code better:
-    + shows *intent*
-	+ easier to maintain (one error, one bug)
-	+ makes code easier to read/understand
+<!-- - Makes code better: -->
+<!--     + shows *intent* -->
+<!-- 	+ easier to maintain (one error, one bug) -->
+<!-- 	+ makes code easier to read/understand -->
 	
-Methods allow for **encapsulation**: write a single piece of code that can be used by many parts of a program.
+<!-- Methods allow for **encapsulation**: write a single piece of code that can be used by many parts of a program. -->
 
 	
-## Object Orientation
+<!-- ## Object Orientation -->
 
-Idea: encapsulate code in **objects**
+<!-- Idea: encapsulate code in **objects** -->
 
-1. Create object **instances**
-    + each instance is like its own program
-2. Instances are **persistent**
-    + once an instance is created, it remains indefinitely
-3. Instances have internal **state**
-    + *instance variables* 
-4. Instances can change internal state
-    + *instance methods* are specific to each instance
-5. Instances can interact
-    + call methods on an instance 
+<!-- 1. Create object **instances** -->
+<!--     + each instance is like its own program -->
+<!-- 2. Instances are **persistent** -->
+<!--     + once an instance is created, it remains indefinitely -->
+<!-- 3. Instances have internal **state** -->
+<!--     + *instance variables*  -->
+<!-- 4. Instances can change internal state -->
+<!--     + *instance methods* are specific to each instance -->
+<!-- 5. Instances can interact -->
+<!--     + call methods on an instance  -->
 	
-## Object Oriented Design
+<!-- ## Object Oriented Design -->
 
-A different way to conceptualize a program:
+<!-- A different way to conceptualize a program: -->
 
-- Think in terms of interacting objects
+<!-- - Think in terms of interacting objects -->
 
-Advantages:
+<!-- Advantages: -->
 
-- More conceptual structure
-- Better encapsulation
-- Separate **interface** from **implementation**
-    + don't need to understand how an object works (internally) to use the object
+<!-- - More conceptual structure -->
+<!-- - Better encapsulation -->
+<!-- - Separate **interface** from **implementation** -->
+<!--     + don't need to understand how an object works (internally) to use the object -->
 	
 	
-## An Object
+<!-- ## An Object -->
 
-Forget about programming for a moment
+<!-- Forget about programming for a moment -->
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/RyCnHyUKt5M" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<!-- <iframe width="560" height="315" src="https://www.youtube.com/embed/RyCnHyUKt5M" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> -->
 
-## Describe the Object
+<!-- ## Describe the Object -->
 
-## What is it?
+<!-- ## What is it? -->
 
-<div style="margin-bottom: 12em"></div>
+<!-- <div style="margin-bottom: 12em"></div> -->
 
 
-## How do You *Interact* With it?
+<!-- ## How do You *Interact* With it? -->
 
-<div style="margin-bottom: 12em"></div>
+<!-- <div style="margin-bottom: 12em"></div> -->
 
-## What Functionality Does it Offer?
+<!-- ## What Functionality Does it Offer? -->
 
-<div style="margin-bottom: 12em"></div>
+<!-- <div style="margin-bottom: 12em"></div> -->
 
-## What is its Internal State?
+<!-- ## What is its Internal State? -->
 
-<div style="margin-bottom: 12em"></div>
+<!-- <div style="margin-bottom: 12em"></div> -->
 
-## What *Limitations* Does it Have?
+<!-- ## What *Limitations* Does it Have? -->
 
-<div style="margin-bottom: 12em"></div>
+<!-- <div style="margin-bottom: 12em"></div> -->
 
-## How Might You Use it?
+<!-- ## How Can We Represent it in Code? -->
 
-<div style="margin-bottom: 12em"></div>
+<!-- We will define a `Counter` object! -->
 
-## How Can We Represent it in Code?
+<!-- - Internal state: -->
+<!--     + store count as an `int` -->
+	
+<!-- - Instance methods: -->
+<!--     + get count -->
+<!-- 	+ increment counter -->
+<!-- 	+ reset -->
+	
+<!-- - Constructor -->
 
-We will define a `Counter` object!
+<!-- Code it together! -->
+	
+<!-- ## The Completed Object -->
+
+<!-- ```java -->
+<!-- public class Counter { -->
+<!--     private int count; -->
+    
+<!-- 	// constructor defines how to initialize instance -->
+<!--     public Counter () { -->
+<!-- 	    count = 0; -->
+<!-- 	} -->
+	
+<!-- 	// getter method for count -->
+<!-- 	public int getCount () { -->
+<!-- 	    return count; -->
+<!-- 	} -->
+	
+<!-- 	// increment the counter -->
+<!-- 	public void increment () { -->
+<!-- 	    count++; -->
+<!-- 	} -->
+	
+<!-- 	// reset the counter -->
+<!-- 	public void reset () { -->
+<!-- 	    count = 0; -->
+<!-- 	} -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- ## sdf -->
