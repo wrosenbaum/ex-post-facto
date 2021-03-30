@@ -1,0 +1,57 @@
+---
+title: "Lab Week 07: Substitution Cipher"
+layout: reveal
+---
+{::options syntax_highlighter="nil" /}
+
+# Project 02: Substitution Cipher
+
+## Outline
+
+1. Substitution Ciphers
+2. Project Demo
+3. Getting Started
+
+# Substitution Ciphers
+
+## Secrecy
+
+Since ancient times, people have relied on secret storing and transmission of sensitive information:
+
+- Military secrets
+    + coordination
+	+ battle plans
+- Secret diary
+- Secure payments (e.g., debit/credit card transactions)
+- ...
+
+## Setup
+
+- start with **cleartext** message
+    + message that contains sensitive info
+- want to generate a **ciphertext**
+    + obscures sensitive info in cleartext
+	+ cleartext can be recovered from ciphertext
+	    - but only if you know how!
+    + **key** is secret that allows one to recover cleartext
+	    - key might be e.g., password
+
+## Ciphers and Keys
+
+A **cipher** is a method of generating ciphertext from cleartext and vice versa
+
+More formally, a cipher has two methods:
+
+1. `encrypt : (cleartext, key) -> ciphertext`
+2. `decrypt : (ciphertext, key) -> cleartext`
+
+We require
+
+- if cleartext encrypted and decrypted with same key, get the same message back
+
+We hope
+
+- without key, it is hard recover cleartext from ciphertext
+
+
+## Example: Caesar Cipher

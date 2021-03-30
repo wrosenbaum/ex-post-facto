@@ -4,13 +4,13 @@ description: ""
 layout: page
 ---
 
-You can [download a PDF of this assignment here](/assets/pdf/2021s-cosc-273/homework-01.pdf).
+You can [download a PDF of this assignment here](/assets/pdf/2021s-cosc-273/homework-02.pdf).
 
 ## Instructions
 
 You may work in groups of up to 4 and submit a single assignment for the group. For computational problems, please show your work; for conceptual questions, please explain your reasoning. Solutions may be neatly hand-written and scanned or typeset. Please submit your solution to Moodle **in PDF format**. 
 
-**Due: Friday, March 5th, 23:59 AoE**
+**Due: Friday, March 19th, 23:59 AoE**
 
 ## Exercises
 
