@@ -79,7 +79,7 @@ For this project, you will need to implement a method that constructs a substitu
 
 First, download the source code for the project:
 
-- [`SubstitutionCipher.zip`](/assets/java/2021s-cosc-112/project02-substitution-cipher/CaesarCipher.java)
+- [`SubstitutionCipher.zip`](/assets/java/2021s-cosc-112/project02-substitution-cipher/SubstitutionCipher.zip)
 
 Professor Kaplan was nice enough to donate the code for this project (though it has been modified to use the `ArrayList`  class). I recommend you start early, as there is a lot of code to read through. You will be creating a new class in a new file. You should not change any code in the java files above, except to un-comment line 108 of `Cipher.java` (`cipher = new SubstitutionCipher(key)`) in order to test your substitution cipher. (If you implement another cipher as an extension, you’ll want to add that cipher to if-else block here too.) **You should not make any other changes to the java files above.**
 

@@ -110,90 +110,90 @@ Write subclasses for [`BouncingShape`](/assets/java/abstract-bouncing-shapes/Bou
 
 ## Test Your `BouncingShapes`
 
-## Advantage of Inheritance
+<!-- ## Advantage of Inheritance -->
 
-Encapsulation!
+<!-- Encapsulation! -->
 
-- Write a (super) class with common features of many classes
-- Write sub classes that inherit from super class
-    + only implement the *differences* with the super-class
-- Do not re-implement/duplicate common code
+<!-- - Write a (super) class with common features of many classes -->
+<!-- - Write sub classes that inherit from super class -->
+<!--     + only implement the *differences* with the super-class -->
+<!-- - Do not re-implement/duplicate common code -->
 	
-## When to use Inheritance
+<!-- ## When to use Inheritance -->
 
-The "is a" rule:
+<!-- The "is a" rule: -->
 
-- Two object types: `Object1`, `Object2`
-- If `Object2` is a `Object1`, then it might make sense to define `Object2` as a subclass of `Object1`
-    + e.g. `Apple` is a `Fruit`, so maybe define `class Apple extends Fruit`
+<!-- - Two object types: `Object1`, `Object2` -->
+<!-- - If `Object2` is a `Object1`, then it might make sense to define `Object2` as a subclass of `Object1` -->
+<!--     + e.g. `Apple` is a `Fruit`, so maybe define `class Apple extends Fruit` -->
 	
-## Going Farther
+<!-- ## Going Farther -->
 
-- A class can have at most one **parent** class
-    + cannot have `class MyClass extends SomeClass, AnotherClass {...}`
-	+ *no multiple inheritance*
-	+ (we'll return to this later)
-- But the parent class can itself 
+<!-- - A class can have at most one **parent** class -->
+<!--     + cannot have `class MyClass extends SomeClass, AnotherClass {...}` -->
+<!-- 	+ *no multiple inheritance* -->
+<!-- 	+ (we'll return to this later) -->
+<!-- - But the parent class can itself  -->
 
-## Inheritance Diagrams
+<!-- ## Inheritance Diagrams -->
 
-How to depict relationship between `Shape`, `Circle`, `Rectangle`, `Ellipse`, `Square`, `Quadrilateral`, `Triangle`?
+<!-- How to depict relationship between `Shape`, `Circle`, `Rectangle`, `Ellipse`, `Square`, `Quadrilateral`, `Triangle`? -->
 
-<div style="margin-bottom: 18em"></div>
+<!-- <div style="margin-bottom: 18em"></div> -->
 
-## `Object`: The Mother of all Classes
+<!-- ## `Object`: The Mother of all Classes -->
 
-Every class in Java is automatically a subclass of `Object`
+<!-- Every class in Java is automatically a subclass of `Object` -->
 
-- every class inherits methods from `Object`:
-    + `boolean equals(Object obj)`
-	+ `String toString()`
-	+ ...
+<!-- - every class inherits methods from `Object`: -->
+<!--     + `boolean equals(Object obj)` -->
+<!-- 	+ `String toString()` -->
+<!-- 	+ ... -->
 	
-Why is this good?
+<!-- Why is this good? -->
 
-<div style="margin-bottom: 8em"></div>
+<!-- <div style="margin-bottom: 8em"></div> -->
 
-## Why is `Object` Inheritance Good?
+<!-- ## Why is `Object` Inheritance Good? -->
 
-*Every* class in Java has methods
+<!-- *Every* class in Java has methods -->
 
--  `boolean equals(Object obj)`
--  `String toString()`
--  ...
+<!-- -  `boolean equals(Object obj)` -->
+<!-- -  `String toString()` -->
+<!-- -  ... -->
 
-You can always *assume* these methods are there
+<!-- You can always *assume* these methods are there -->
 
-## Example of Usefulness
+<!-- ## Example of Usefulness -->
 
-This following code is *guaranteed* to compile
+<!-- This following code is *guaranteed* to compile -->
 
-```java
-MyClass a = new MyClass();
-MyClass b = new MyClass();
+<!-- ```java -->
+<!-- MyClass a = new MyClass(); -->
+<!-- MyClass b = new MyClass(); -->
 
-if (a.equals(b)) {
-    // do something
-}
+<!-- if (a.equals(b)) { -->
+<!--     // do something -->
+<!-- } -->
 
-System.out.println("a = " + a); // prints a.toString()
-```
+<!-- System.out.println("a = " + a); // prints a.toString() -->
+<!-- ``` -->
 
-But you might want to override default behavior here!
+<!-- But you might want to override default behavior here! -->
 
-- default `a.equals(b)` is equivalent to `a == b`
-- default `a.toString()` prints address (not meaningful)
+<!-- - default `a.equals(b)` is equivalent to `a == b` -->
+<!-- - default `a.toString()` prints address (not meaningful) -->
 
-## Example with Shapes
+<!-- ## Example with Shapes -->
 
-Printing shape messages
+<!-- Printing shape messages -->
 
-## Next Up
+<!-- ## Next Up -->
 
-Polymorphism:
+<!-- Polymorphism: -->
 
-- How to deal with collections of related datatypes
-- How to exploit the full power of `abstract`ion 
+<!-- - How to deal with collections of related datatypes -->
+<!-- - How to exploit the full power of `abstract`ion  -->
 
 
 

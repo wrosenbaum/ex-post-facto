@@ -177,283 +177,283 @@ public class TwoCounter {
 
 
 
-## An Atomic Primitive
+<!-- ## An Atomic Primitive -->
 
-`AtomicInteger` class:
+<!-- `AtomicInteger` class: -->
 
-```java
-boolean compareAndSet(int expectedValue, int newValue);
-```
+<!-- ```java -->
+<!-- boolean compareAndSet(int expectedValue, int newValue); -->
+<!-- ``` -->
 
-Specification:
+<!-- Specification: -->
 
-- if `ai`'s value is `expectedValue`, then
-    + after call, `ai`'s value is `newValue`
-	+ method returns `true`
-- if `ai`'s value is not `expectedValue`, then
-    + after call, `ai`'s value is unchanged
-	+ method returns `false`
+<!-- - if `ai`'s value is `expectedValue`, then -->
+<!--     + after call, `ai`'s value is `newValue` -->
+<!-- 	+ method returns `true` -->
+<!-- - if `ai`'s value is not `expectedValue`, then -->
+<!--     + after call, `ai`'s value is unchanged -->
+<!-- 	+ method returns `false` -->
 
-## A Silly Counter
+<!-- ## A Silly Counter -->
 
-```java
-public class SillyCounter {
+<!-- ```java -->
+<!-- public class SillyCounter { -->
 
-    AtomicInteger ai = new AtomicInteger(0);
+<!--     AtomicInteger ai = new AtomicInteger(0); -->
 	
-    public void increment (int amt) {
-        int val = ai.get();
-        while (!ai.compareAndSet(val, val + amt)) {
-            val = ai.get();
-        }
-    }
+<!--     public void increment (int amt) { -->
+<!--         int val = ai.get(); -->
+<!--         while (!ai.compareAndSet(val, val + amt)) { -->
+<!--             val = ai.get(); -->
+<!--         } -->
+<!--     } -->
 	
-    public int read () {
-        return ai.get();
-    }
+<!--     public int read () { -->
+<!--         return ai.get(); -->
+<!--     } -->
 	
-}
-```
+<!-- } -->
+<!-- ``` -->
 
-## Does `SillyCounter` Work?
+<!-- ## Does `SillyCounter` Work? -->
 
-```java
-public class SillyCounter {
+<!-- ```java -->
+<!-- public class SillyCounter { -->
 
-    AtomicInteger ai = new AtomicInteger(0);
+<!--     AtomicInteger ai = new AtomicInteger(0); -->
 	
-    public void increment (int amt) {
-        int val = ai.get();
-        while (!ai.compareAndSet(val, val + amt)) {
-            val = ai.get();
-        }
-    }
+<!--     public void increment (int amt) { -->
+<!--         int val = ai.get(); -->
+<!--         while (!ai.compareAndSet(val, val + amt)) { -->
+<!--             val = ai.get(); -->
+<!--         } -->
+<!--     } -->
 	
-    public int read () {
-        return ai.get();
-    }
+<!--     public int read () { -->
+<!--         return ai.get(); -->
+<!--     } -->
 	
-}
-```
+<!-- } -->
+<!-- ``` -->
 
-<div style="margin-bottom: 8em"></div>
+<!-- <div style="margin-bottom: 8em"></div> -->
 
-## Is `SillyCounter` Lock-free?
+<!-- ## Is `SillyCounter` Lock-free? -->
 
-```java
-    public void increment (int amt) {
-        int val = ai.get();
-        while (!ai.compareAndSet(val, val + amt)) {
-            val = ai.get();
-        }
-    }
-```
+<!-- ```java -->
+<!--     public void increment (int amt) { -->
+<!--         int val = ai.get(); -->
+<!--         while (!ai.compareAndSet(val, val + amt)) { -->
+<!--             val = ai.get(); -->
+<!--         } -->
+<!--     } -->
+<!-- ``` -->
 
-<div style="margin-bottom: 12em"></div>
+<!-- <div style="margin-bottom: 12em"></div> -->
 
-## Is `SillyCounter` Wait-free?
+<!-- ## Is `SillyCounter` Wait-free? -->
 
-```java
-    public void increment (int amt) {
-        int val = ai.get();
-        while (!ai.compareAndSet(val, val + amt)) {
-            val = ai.get();
-        }
-    }
-```
+<!-- ```java -->
+<!--     public void increment (int amt) { -->
+<!--         int val = ai.get(); -->
+<!--         while (!ai.compareAndSet(val, val + amt)) { -->
+<!--             val = ai.get(); -->
+<!--         } -->
+<!--     } -->
+<!-- ``` -->
 
-<div style="margin-bottom: 12em"></div>
+<!-- <div style="margin-bottom: 12em"></div> -->
 
 
-## Properties of Nonblocking Progress
+<!-- ## Properties of Nonblocking Progress -->
 
-- Progress is guaranteed even if some thread stalls
-    + e.g., scheduler stops scheduling a thread's method call
-- Wait-freedom gives *maximal progress*
-- Lock-freedom gives *minimal progress*
-    + starvation can still occur
-- Actual progress depends on *scheduler*
-    + determines which threads make steps
+<!-- - Progress is guaranteed even if some thread stalls -->
+<!--     + e.g., scheduler stops scheduling a thread's method call -->
+<!-- - Wait-freedom gives *maximal progress* -->
+<!-- - Lock-freedom gives *minimal progress* -->
+<!--     + starvation can still occur -->
+<!-- - Actual progress depends on *scheduler* -->
+<!--     + determines which threads make steps -->
 	
-<div style="margin-bottom: 4em"></div>
+<!-- <div style="margin-bottom: 4em"></div> -->
 
 
-## Blocking Progress Conditions
+<!-- ## Blocking Progress Conditions -->
 
-- **starvation-free**: whenever *all* pending methods take steps, *every* method call completes in a finite number of steps
-    + maximal (blocking) progress
+<!-- - **starvation-free**: whenever *all* pending methods take steps, *every* method call completes in a finite number of steps -->
+<!--     + maximal (blocking) progress -->
 
-<div style="margin-bottom: 4em"></div>
+<!-- <div style="margin-bottom: 4em"></div> -->
 
-- **deadlock-free**: whenever *all* pending method calls take steps, *some* method call completes in a finite number of steps
-    + minimal (blocking) progress
+<!-- - **deadlock-free**: whenever *all* pending method calls take steps, *some* method call completes in a finite number of steps -->
+<!--     + minimal (blocking) progress -->
 
-<div style="margin-bottom: 4em"></div>
+<!-- <div style="margin-bottom: 4em"></div> -->
 
-## Blocking vs Nonblocking Progess
+<!-- ## Blocking vs Nonblocking Progess -->
 
-Nonblocking progress
+<!-- Nonblocking progress -->
 
-- guarantees progress for *any* scheduler
-- valid even if a process crashes
+<!-- - guarantees progress for *any* scheduler -->
+<!-- - valid even if a process crashes -->
 
-<div style="margin-bottom: 4em"></div>
+<!-- <div style="margin-bottom: 4em"></div> -->
 
-Blocking progress
+<!-- Blocking progress -->
 
-- progress only guaranteed for *fair* schedulers
-- if a process crashes, progress not guaranteed
+<!-- - progress only guaranteed for *fair* schedulers -->
+<!-- - if a process crashes, progress not guaranteed -->
 
-<div style="margin-bottom: 4em"></div>
+<!-- <div style="margin-bottom: 4em"></div> -->
 
-## Which is Better?
-
-
-
-```java
-public class SillyCounter {
-    private AtomicInteger ai = new AtomicInteger(0);
-    public void increment (int amt) {
-        int val = ai.get();
-        while (!ai.compareAndSet(val, val + amt)) {
-            val = ai.get();
-        }
-    }
-}
-```
-
-Or
-
-```java
-public class LockedCounter {
-    private Lock lock = new StarvationFreeLock();
-    int count = 0;
-    public void increment (int amt) {
-        lock.lock()
-        try {
-            count += amt;
-        } finally {
-            lock.unlock();
-        }
-    }
-}
-```
-
-## Scheduling w/ 2 Threads
-
-```java
-public class SillyCounter {
-    private AtomicInteger ai = new AtomicInteger(0);
-    public void increment (int amt) {
-        int val = ai.get();
-        while (!ai.compareAndSet(val, val + amt)) {
-            val = ai.get();
-        }
-    }
-}
-```
-
-What happens to thread 1 if scheduler stops scheduling steps of thread 2?
-
-<div style="margin-bottom: 6em"></div>
-
-
-## Scheduling w/ 2 Threads
-
-```java
-public class LockedCounter {
-    private Lock lock = new StarvationFreeLock();
-    int count = 0;
-    public void increment (int amt) {
-        lock.lock()
-        try {
-            count += amt;
-        } finally {
-            lock.unlock();
-        }
-    }
-}
-```
-
-What happens to thread 1 if scheduler stops scheduling steps of thread 2?
+<!-- ## Which is Better? -->
 
 
 
-<div style="margin-bottom: 6em"></div>
+<!-- ```java -->
+<!-- public class SillyCounter { -->
+<!--     private AtomicInteger ai = new AtomicInteger(0); -->
+<!--     public void increment (int amt) { -->
+<!--         int val = ai.get(); -->
+<!--         while (!ai.compareAndSet(val, val + amt)) { -->
+<!--             val = ai.get(); -->
+<!--         } -->
+<!--     } -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- Or -->
+
+<!-- ```java -->
+<!-- public class LockedCounter { -->
+<!--     private Lock lock = new StarvationFreeLock(); -->
+<!--     int count = 0; -->
+<!--     public void increment (int amt) { -->
+<!--         lock.lock() -->
+<!--         try { -->
+<!--             count += amt; -->
+<!--         } finally { -->
+<!--             lock.unlock(); -->
+<!--         } -->
+<!--     } -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- ## Scheduling w/ 2 Threads -->
+
+<!-- ```java -->
+<!-- public class SillyCounter { -->
+<!--     private AtomicInteger ai = new AtomicInteger(0); -->
+<!--     public void increment (int amt) { -->
+<!--         int val = ai.get(); -->
+<!--         while (!ai.compareAndSet(val, val + amt)) { -->
+<!--             val = ai.get(); -->
+<!--         } -->
+<!--     } -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- What happens to thread 1 if scheduler stops scheduling steps of thread 2? -->
+
+<!-- <div style="margin-bottom: 6em"></div> -->
 
 
-## Scheduling w/ 2 Threads
+<!-- ## Scheduling w/ 2 Threads -->
 
-```java
-public class SillyCounter {
-    private AtomicInteger ai = new AtomicInteger(0);
-    public void increment (int amt) {
-        int val = ai.get();
-        while (!ai.compareAndSet(val, val + amt)) {
-            val = ai.get();
-        }
-    }
-}
-```
+<!-- ```java -->
+<!-- public class LockedCounter { -->
+<!--     private Lock lock = new StarvationFreeLock(); -->
+<!--     int count = 0; -->
+<!--     public void increment (int amt) { -->
+<!--         lock.lock() -->
+<!--         try { -->
+<!--             count += amt; -->
+<!--         } finally { -->
+<!--             lock.unlock(); -->
+<!--         } -->
+<!--     } -->
+<!-- } -->
+<!-- ``` -->
 
-Is thread 1 guaranteed to make progress under *fair* scheduler?
-
-<div style="margin-bottom: 6em"></div>
+<!-- What happens to thread 1 if scheduler stops scheduling steps of thread 2? -->
 
 
-## Scheduling w/ 2 Threads
 
-```java
-public class LockedCounter {
-    private Lock lock = new StarvationFreeLock();
-    int count = 0;
-    public void increment (int amt) {
-        lock.lock()
-        try {
-            count += amt;
-        } finally {
-            lock.unlock();
-        }
-    }
-}
-```
+<!-- <div style="margin-bottom: 6em"></div> -->
 
-Is thread 1 guaranteed to make progress under *fair* scheduler?
 
-<div style="margin-bottom: 6em"></div>
+<!-- ## Scheduling w/ 2 Threads -->
 
-## So
+<!-- ```java -->
+<!-- public class SillyCounter { -->
+<!--     private AtomicInteger ai = new AtomicInteger(0); -->
+<!--     public void increment (int amt) { -->
+<!--         int val = ai.get(); -->
+<!--         while (!ai.compareAndSet(val, val + amt)) { -->
+<!--             val = ai.get(); -->
+<!--         } -->
+<!--     } -->
+<!-- } -->
+<!-- ``` -->
 
-- With an unfair scheduler (or when threads can be interrupted), lock-freedom (nonblocking) might be better
-    + guarantees some progress
-- With a fair scheduler (threads will not be interrupted), starvation-freedom (blocking) might be better
-    + with fairness assumption, *every* thread is guaranteed progress
+<!-- Is thread 1 guaranteed to make progress under *fair* scheduler? -->
+
+<!-- <div style="margin-bottom: 6em"></div> -->
+
+
+<!-- ## Scheduling w/ 2 Threads -->
+
+<!-- ```java -->
+<!-- public class LockedCounter { -->
+<!--     private Lock lock = new StarvationFreeLock(); -->
+<!--     int count = 0; -->
+<!--     public void increment (int amt) { -->
+<!--         lock.lock() -->
+<!--         try { -->
+<!--             count += amt; -->
+<!--         } finally { -->
+<!--             lock.unlock(); -->
+<!--         } -->
+<!--     } -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- Is thread 1 guaranteed to make progress under *fair* scheduler? -->
+
+<!-- <div style="margin-bottom: 6em"></div> -->
+
+<!-- ## So -->
+
+<!-- - With an unfair scheduler (or when threads can be interrupted), lock-freedom (nonblocking) might be better -->
+<!--     + guarantees some progress -->
+<!-- - With a fair scheduler (threads will not be interrupted), starvation-freedom (blocking) might be better -->
+<!--     + with fairness assumption, *every* thread is guaranteed progress -->
 	
-Nonblocking is not strictly superior to blocking!
+<!-- Nonblocking is not strictly superior to blocking! -->
 
 
 
-## Progress and Correctness Conditions are Indpendent
+<!-- ## Progress and Correctness Conditions are Indpendent -->
 
-- Can have a data structure that is...
-    + ...sequentially consistent and wait-free
-	+ ...linearizable and lock-free
-	+ ...sequentially consistent and deadlock-free
-	+ ...
+<!-- - Can have a data structure that is... -->
+<!--     + ...sequentially consistent and wait-free -->
+<!-- 	+ ...linearizable and lock-free -->
+<!-- 	+ ...sequentially consistent and deadlock-free -->
+<!-- 	+ ... -->
 	
-- Different implementations have different trade-offs
+<!-- - Different implementations have different trade-offs -->
 
-- Which implementation is best depends on application:
-    + how much synchronization is required?
-	    + how frequently is contention expected?
-	+ what correctness guarantee is required?
+<!-- - Which implementation is best depends on application: -->
+<!--     + how much synchronization is required? -->
+<!-- 	    + how frequently is contention expected? -->
+<!-- 	+ what correctness guarantee is required? -->
 	
 
-## Coming Up
+<!-- ## Coming Up -->
 
-Implementations!
+<!-- Implementations! -->
 
-- locks
-- data structures
+<!-- - locks -->
+<!-- - data structures -->
 
 
