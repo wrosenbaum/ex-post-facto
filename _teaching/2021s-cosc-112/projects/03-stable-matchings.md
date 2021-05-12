@@ -259,46 +259,97 @@ The program should compile and run (`main` is located in `SMTester.java`).  Howe
 To complete the project, you need to finish the implementations of `Agent.java` and `SMInstance.java`. These files represent, respectively, an `Agent` with preferences (a ranking) over other `Agents`, and a stable matching instance that stores. Specifically, you must write the following methods (whose functionalities are described in the comments in the code provided):
 
 - In `Agent.java`:
-    - `boolean prefers (Agent a, Agent b)`
-    - `void proposal (Agent a)`
-    - `void refusal ()`
+    - `boolean prefers(Agent a, Agent b)`
+    - `void proposal(Agent a)`
+    - `void refusal()`
 - In `SMInstance.java`:
-    - `void computeStableMatching ()`
-    - `Matching getMatching ()`
-    - `void setMatching (Matching matching)`
-    - `Pair<Agent> getBlockingPair ()`
-    - `boolean isStable ()`
+    - `void computeStableMatching()`
+    - `Matching getMatching()`
+    - `void setMatching(Matching matching)`
+    - `Pair<Agent> getBlockingPair()`
+    - `boolean isStable()`
 
 None of the methods above require a lot of code, but the behavior of some methods is subtle.
 
 ## Testing Your Solution
 
-To get you started with testing, the included file `SMTester.java` and associated `.txt` files will check that your code works with a few small examples. 
+To get you started with testing, the included file `SMTester.java` and associated `.txt` files will check that your code works with a few small examples. A correct solution generates the following output:
 
-![](https://paper-attachments.dropbox.com/s_DAA7B93DE5FBB0737B86C40F4C38E316C933EF34AF350E35460E84C3B70DB30D_1604958110547_sm-example-01.png)
+```text
+Current SMInstance:
+hospitals
+A B 
+residents
+a b 
+preferences
+A: a b 
+B: a b 
+a: A B 
+b: A B 
 
-![](https://paper-attachments.dropbox.com/s_DAA7B93DE5FBB0737B86C40F4C38E316C933EF34AF350E35460E84C3B70DB30D_1604958121637_sm-example-02.png)
+Testing the stability of the following matching:
+(a, B)
+(b, A)
 
-![](https://paper-attachments.dropbox.com/s_DAA7B93DE5FBB0737B86C40F4C38E316C933EF34AF350E35460E84C3B70DB30D_1604958139336_sm-example-03.png)
+The matching is not stable: (a, A) is a blocking pair!
 
+Testing the stability of the following matching:
+(a, A)
+(b, B)
 
-To test individual methods in your solution, please download and run the following programs. You can test one method at a time by commenting out the other test in the `main` method of the two programs.
+The matching is stable!
+Current SMInstance:
+hospitals
+A B C 
+residents
+a b c 
+preferences
+A: b a c 
+B: c b a 
+C: c b a 
+a: B A C 
+b: B A C 
+c: A B C 
 
-https://www.dropbox.com/s/djiblrfthuae6vo/DummyAgent.java?dl=0
-https://www.dropbox.com/s/pz6a5amw2dvdfyg/AgentTester.java?dl=0
-https://www.dropbox.com/s/zq6f6p9va0bywxh/multiple-sm-instance.txt?dl=0
+Computing stable matching...
+(a, C)
+(b, A)
+(c, B)
 
-https://www.dropbox.com/s/4xcs7qoam4d6o9v/small-instance.txt?dl=0
-https://www.dropbox.com/s/54mcz6xn6z1vgow/SMInstanceTester.java?dl=0
+Current SMInstance:
+hospitals
+A B C D E 
+residents
+a b c d e 
+preferences
+A: a b c d e 
+B: b a c d e 
+C: d b a c e 
+D: e b a c d 
+E: d a b c e 
+a: B D E A C 
+b: B D C A E 
+c: C A B D E 
+d: D A B C E 
+e: B C E D A 
+
+Computing stable matching...
+(a, D)
+(b, B)
+(c, C)
+(d, A)
+(e, E)
+```
+
+To test individual methods in your solution, please download and run the following programs provided in [`StableMatchings.zip`](/assets/java/2021s-cosc-112/StableMatchings.zip). You can test one method at a time by commenting out the other test in the `main` method of the two programs.
 
 ## What To Submit
 
-Please submit everything you need for your program to run to the Moodle submission link by **5:00 pm EST on Friday December 11th**. When you submit, please respond to the usual survey asking about your experience with the project.
+Please submit everything you need for your program to run to the Moodle submission link by **5:00 pm EST on Friday May 28**. When you submit, please respond to the usual survey asking about your experience with the project.
 
 ## Grading
 
 The project will be graded out of 5 points (plus possible extra credit). The first 3 points are based on the usual rubric:
-
 
 - **3** Everything compiles and runs as specified in this document (i.e., the program computes stable matchings); code is fairly readable and contains comments briefly describing the main functionality of methods defined/larger chunks of code.
 - **2** The program produces more-or-less correct output, but is sloppy/hard to read; comments may be there, but are not helpful.
@@ -315,7 +366,7 @@ Additionally, you may receive extra credit for submitting your project up to 4 d
 - Implement McVitie and Wilson’s algorithm that finds *all* stable matchings for a given instance. See McVitie and Wilson’s paper linked to from the course Moodle site for details of the algorithm.
 - Make program handle exceptions. Specifically, the program should verify that the preferences read from a file are valid in the following sense: every agent listed in some agent’s preferences is contained in the list of agents at the beginning of the file. Further, the preferences should be symmetric in the sense that if agent `a` appears in `A`’s preference list, then `A` appears in `a`'s preference list as well.
 - Make a graphical interface for your program. It should illustrate an instance of the problem graphically and animate proposals/refusals in some way. 
-- As mentioned above, McVitie and Wilson’s algorithm always finds the best stable matching for the residents (when the residents propose to hospitals), assuming all preference lists are listed faithfully. However, if the hospitals lie about (i.e., misreport) their true preferences, it could be the case that the algorithm finds a stable matching that is better for the hospitals in the sense that some hospital is matched with a resident they strictly prefer to their original resident, and no hospital is matched with a resident that is strictly worse than their original resident. Find a stable matching instance $$I$$ such that the hospitals can misreport their preferences such that McVitie and Wilson’s algorithm will compute a matching that is still stable for $$I$$, but is better for the hospitals than the stable matching if the hospitals truthfully report their preferences. 
+- As mentioned above, McVitie and Wilson’s algorithm always finds the best stable matching for the residents (when the residents propose to hospitals), assuming all preference lists are listed faithfully. However, if the hospitals lie about (i.e., misreport) their true preferences, it could be the case that the algorithm finds a stable matching that is better for the hospitals in the sense that some hospital is matched with a resident they strictly prefer to their original resident, and no hospital is matched with a resident that is strictly worse than their original resident. Find a stable matching instance $$I $$ such that the hospitals can misreport their preferences such that McVitie and Wilson’s algorithm will compute a matching that is still stable for $$I $$, but is better for the hospitals than the stable matching if the hospitals truthfully report their preferences. 
 - Suppose each hospital can have two residents. How would you modify McVitie and Wilson’s algorithm to find a stable matching? Implement your variant.
-- Give an argument that the matching produced by McVitie and Wilson’s algorithm does not contain any blocking pairs. (Hint. Argue by contradiction. Suppose $$(a, A)$$ is a blocking pair. Since $$a$$ proposed to hospitals from most to least preferred, they must have proposed to $$A$$ and been rejected...)
+- Give an argument that the matching produced by McVitie and Wilson’s algorithm does not contain any blocking pairs. (Hint. Argue by contradiction. Suppose $$(a, A)$$ is a blocking pair. Since $$a $$ proposed to hospitals from most to least preferred, they must have proposed to $$A $$ and been rejected...)
 

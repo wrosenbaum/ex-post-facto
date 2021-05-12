@@ -1,4 +1,4 @@
---
+---
 title: "Lecture 17: More Linked Lists"
 layout: reveal
 ---

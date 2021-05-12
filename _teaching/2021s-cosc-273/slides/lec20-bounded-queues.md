@@ -322,302 +322,302 @@ public class LockFreeQueue<T> implements SimpleQueue<T> {
 
 Let's test the implementations!
 
-## Bounded Queues
+<!-- ## Bounded Queues -->
 
-- Both previous queues were unbounded
-- Sometimes we want bounded queues:
-    + have limited space
-	+ want to force tighter synchronization between producers & consumers
+<!-- - Both previous queues were unbounded -->
+<!-- - Sometimes we want bounded queues: -->
+<!--     + have limited space -->
+<!-- 	+ want to force tighter synchronization between producers & consumers -->
 	
-How can we implement a bounded queue (with locks)?
+<!-- How can we implement a bounded queue (with locks)? -->
 
-<div style="margin-bottom: 8em"></div>
+<!-- <div style="margin-bottom: 8em"></div> -->
 
-## One Option
+<!-- ## One Option -->
 
-Keep track of size!
+<!-- Keep track of size! -->
 
-- Start with our `BoundedQueue`
-- Add a `final int capacity` field
-- Add an `AtomicInteger size` field
+<!-- - Start with our `BoundedQueue` -->
+<!-- - Add a `final int capacity` field -->
+<!-- - Add an `AtomicInteger size` field -->
 
-Why should `size` be atomic?
+<!-- Why should `size` be atomic? -->
 
-<div style="margin-bottom: 8em"></div>
+<!-- <div style="margin-bottom: 8em"></div> -->
 
-## Enqueue Method
+<!-- ## Enqueue Method -->
 
-1. acquires `enqLock`
-2. if `size` is less than capacity
-    - enqueue item
-	- increment size
-	- release lock
-3. otherwise
-	- throw exception? (total method)
-	- wait until `size < capacity`? (partial method)
+<!-- 1. acquires `enqLock` -->
+<!-- 2. if `size` is less than capacity -->
+<!--     - enqueue item -->
+<!-- 	- increment size -->
+<!-- 	- release lock -->
+<!-- 3. otherwise -->
+<!-- 	- throw exception? (total method) -->
+<!-- 	- wait until `size < capacity`? (partial method) -->
 		
-## Dequeue Method
+<!-- ## Dequeue Method -->
 
-1. acquires `deqLock`
-2. if `size` is greater than `0`
-    - dequeue item
-	- decrement size
-	- release lock
-3. otherwise
-    - throw exception? (total method)
-	- wait until `size > 0`? (partial method)
+<!-- 1. acquires `deqLock` -->
+<!-- 2. if `size` is greater than `0` -->
+<!--     - dequeue item -->
+<!-- 	- decrement size -->
+<!-- 	- release lock -->
+<!-- 3. otherwise -->
+<!--     - throw exception? (total method) -->
+<!-- 	- wait until `size > 0`? (partial method) -->
 	
-## An Unexceptional Queue
+<!-- ## An Unexceptional Queue -->
 
-Suppose we don't want to throw exceptions
+<!-- Suppose we don't want to throw exceptions -->
 
-- Full/empty queue operations are expected, not exceptional
-- Queue should handle these cases by having threads wait
+<!-- - Full/empty queue operations are expected, not exceptional -->
+<!-- - Queue should handle these cases by having threads wait -->
 
-Question: How might we implement this behavior?
+<!-- Question: How might we implement this behavior? -->
 
-<div style="margin-bottom: 8em"></div>
+<!-- <div style="margin-bottom: 8em"></div> -->
 
-## Enqueue with Waiting
+<!-- ## Enqueue with Waiting -->
 
-```java
-    public void enq (T value) {
-	enqLock.lock();
-	try {
-	    Node nd = new Node(value);
-            while (size.get() == capacity) { }; // wait until not full
-	    tail.next = nd;
-	    tail = nd;
-	} finally {
-	    enqLock.unlock();
-	}
-    }
-```
+<!-- ```java -->
+<!--     public void enq (T value) { -->
+<!-- 	enqLock.lock(); -->
+<!-- 	try { -->
+<!-- 	    Node nd = new Node(value); -->
+<!--             while (size.get() == capacity) { }; // wait until not full -->
+<!-- 	    tail.next = nd; -->
+<!-- 	    tail = nd; -->
+<!-- 	} finally { -->
+<!-- 	    enqLock.unlock(); -->
+<!-- 	} -->
+<!--     } -->
+<!-- ``` -->
 
-## A Problem?
+<!-- ## A Problem? -->
 
-This is wasteful!
+<!-- This is wasteful! -->
 
-```java
-while (size.get() == capacity) { }; // wait until not full
-```
+<!-- ```java -->
+<!-- while (size.get() == capacity) { }; // wait until not full -->
+<!-- ``` -->
 
-The thread:
+<!-- The thread: -->
 
-1. Acquires lock
-2. Fails to enqueue while holding lock
-3. Uses resources to repeatedly check condition `size.get() == capacity`
+<!-- 1. Acquires lock -->
+<!-- 2. Fails to enqueue while holding lock -->
+<!-- 3. Uses resources to repeatedly check condition `size.get() == capacity` -->
 
-What if it takes a while until the queue is not full?
+<!-- What if it takes a while until the queue is not full? -->
 
-## A More Prudent Way
+<!-- ## A More Prudent Way -->
 
-The following would be better:
+<!-- The following would be better: -->
 
-1. enqueuer sees that `size.get() == capacity`
-2. enqueuer temporarily gives up lock
-3. enqueuer passively waits for the *condition* that `size.get() < capacity`
-    + not constantly checking
-4. dequeuer sees that enqueuers are waiting
-5. after dequeue, dequeuer notifies waiting enqueuers
-6. enqueuer acquires lock, enqueues
+<!-- 1. enqueuer sees that `size.get() == capacity` -->
+<!-- 2. enqueuer temporarily gives up lock -->
+<!-- 3. enqueuer passively waits for the *condition* that `size.get() < capacity` -->
+<!--     + not constantly checking -->
+<!-- 4. dequeuer sees that enqueuers are waiting -->
+<!-- 5. after dequeue, dequeuer notifies waiting enqueuers -->
+<!-- 6. enqueuer acquires lock, enqueues -->
 
-## A Waiting Room Analogy
+<!-- ## A Waiting Room Analogy -->
 
-![](/assets/img/concurrent-queues/bounded-queue.png){: width="100%"}
+<!-- ![](/assets/img/concurrent-queues/bounded-queue.png){: width="100%"} -->
 
-## Queue Full
+<!-- ## Queue Full -->
 
-![](/assets/img/concurrent-queues/bounded-queue.png){: width="100%"}
+<!-- ![](/assets/img/concurrent-queues/bounded-queue.png){: width="100%"} -->
 
-## Enqueuer Arrives, Acquires Lock
+<!-- ## Enqueuer Arrives, Acquires Lock -->
 
-![](/assets/img/concurrent-queues/bounded-enq-1.png){: width="100%"}
+<!-- ![](/assets/img/concurrent-queues/bounded-enq-1.png){: width="100%"} -->
 
-## Enqueuer Sees Full, Waits
+<!-- ## Enqueuer Sees Full, Waits -->
 
-![](/assets/img/concurrent-queues/bounded-enq-2.png){: width="100%"}
+<!-- ![](/assets/img/concurrent-queues/bounded-enq-2.png){: width="100%"} -->
 
-## Enqueuer Arrives, Acquires Lock
+<!-- ## Enqueuer Arrives, Acquires Lock -->
 
-![](/assets/img/concurrent-queues/bounded-enq-3.png){: width="100%"}
+<!-- ![](/assets/img/concurrent-queues/bounded-enq-3.png){: width="100%"} -->
 
-## Enqueuer Sees Full, Waits
+<!-- ## Enqueuer Sees Full, Waits -->
 
-![](/assets/img/concurrent-queues/bounded-enq-4.png){: width="100%"}
+<!-- ![](/assets/img/concurrent-queues/bounded-enq-4.png){: width="100%"} -->
 
-## Dequeuer Arrives, Sees Full, Dequeues
+<!-- ## Dequeuer Arrives, Sees Full, Dequeues -->
 
-![](/assets/img/concurrent-queues/bounded-enq-5.png){: width="100%"}
+<!-- ![](/assets/img/concurrent-queues/bounded-enq-5.png){: width="100%"} -->
 
-## Dequeuer Announces No Longer Full
+<!-- ## Dequeuer Announces No Longer Full -->
 
-![](/assets/img/concurrent-queues/bounded-enq-6.png){: width="100%"}
+<!-- ![](/assets/img/concurrent-queues/bounded-enq-6.png){: width="100%"} -->
 
-## Enqueuers Leaving Waiting Room
+<!-- ## Enqueuers Leaving Waiting Room -->
 
-![](/assets/img/concurrent-queues/bounded-enq-7.png){: width="100%"}
+<!-- ![](/assets/img/concurrent-queues/bounded-enq-7.png){: width="100%"} -->
 
-## Dequeuer Releases Lock
+<!-- ## Dequeuer Releases Lock -->
 
-![](/assets/img/concurrent-queues/bounded-enq-8.png){: width="100%"}
+<!-- ![](/assets/img/concurrent-queues/bounded-enq-8.png){: width="100%"} -->
 
-## Enqueuer Locks; Enqueue Ensues
+<!-- ## Enqueuer Locks; Enqueue Ensues -->
 
-![](/assets/img/concurrent-queues/bounded-enq-9.png){: width="100%"}
+<!-- ![](/assets/img/concurrent-queues/bounded-enq-9.png){: width="100%"} -->
 
 
 
-## The `Lock` and `Condition` Interfaces
+<!-- ## The `Lock` and `Condition` Interfaces -->
 
-The `Lock` interface defines a curious method:
+<!-- The `Lock` interface defines a curious method: -->
 
-- `Condition newCondition()` returns a new Condition instance that is bound to this Lock instance
+<!-- - `Condition newCondition()` returns a new Condition instance that is bound to this Lock instance -->
 
-The `Condition` interface
+<!-- The `Condition` interface -->
 
-- `void await()` causes the current thread to wait until it is signalled or interrupted
-- `void	signal()` wakes up one waiting thread
-- `void	signalAll()` wakes up all waiting threads
+<!-- - `void await()` causes the current thread to wait until it is signalled or interrupted -->
+<!-- - `void	signal()` wakes up one waiting thread -->
+<!-- - `void	signalAll()` wakes up all waiting threads -->
 
-## Improving our Queue
+<!-- ## Improving our Queue -->
 
-Define condition for `enqLock`
+<!-- Define condition for `enqLock` -->
 
-- `notFullCondition` 
+<!-- - `notFullCondition`  -->
 
-When enqueuing to a full queue
+<!-- When enqueuing to a full queue -->
 
-- thread signals that it is waiting
-    + need a flag (`volatile boolean`) for this
-- thread calls `notFullCondition.await()`
-    + waits until `notFullCondition` is satisfied
+<!-- - thread signals that it is waiting -->
+<!--     + need a flag (`volatile boolean`) for this -->
+<!-- - thread calls `notFullCondition.await()` -->
+<!--     + waits until `notFullCondition` is satisfied -->
 
-## When Dequeueing
+<!-- ## When Dequeueing -->
 
-When dequeueing 
+<!-- When dequeueing  -->
 
-- thread checks if thread is waiting
-    + checks flag for this
-- if so, after dequeue, dequeuer calls `notFullCondition.signalAll()`
-    + signals that queue is no longer full
+<!-- - thread checks if thread is waiting -->
+<!--     + checks flag for this -->
+<!-- - if so, after dequeue, dequeuer calls `notFullCondition.signalAll()` -->
+<!--     + signals that queue is no longer full -->
 
-(Similar: `notEmptyCondition` for `deq` method)
+<!-- (Similar: `notEmptyCondition` for `deq` method) -->
 
-## Making a `BoundedQueue`
+<!-- ## Making a `BoundedQueue` -->
 
-```java
-public class BoundedQueue<T> implements SimpleQueue<T> {
-    ReentrantLock enqLock, deqLock;
-    Condition notEmptyCondition, notFullCondition;
-    AtomicInteger size;
-    volatile Node head, tail;
-    final int capacity;
+<!-- ```java -->
+<!-- public class BoundedQueue<T> implements SimpleQueue<T> { -->
+<!--     ReentrantLock enqLock, deqLock; -->
+<!--     Condition notEmptyCondition, notFullCondition; -->
+<!--     AtomicInteger size; -->
+<!--     volatile Node head, tail; -->
+<!--     final int capacity; -->
 
-    public BoundedQueue(int capacity) {
-	this.capacity = capacity;
-	this.head = new Node(null);
-	this.tail = this.head;
-	this.size = new AtomicInteger(0);
-	this.enqLock = new ReentrantLock();
-	this.notFullCondition = this.enqLock.newCondition();
-	this.deqLock = new ReentrantLock();
-	this.notEmptyCondition = this.deqLock.newCondition();
-    }
+<!--     public BoundedQueue(int capacity) { -->
+<!-- 	this.capacity = capacity; -->
+<!-- 	this.head = new Node(null); -->
+<!-- 	this.tail = this.head; -->
+<!-- 	this.size = new AtomicInteger(0); -->
+<!-- 	this.enqLock = new ReentrantLock(); -->
+<!-- 	this.notFullCondition = this.enqLock.newCondition(); -->
+<!-- 	this.deqLock = new ReentrantLock(); -->
+<!-- 	this.notEmptyCondition = this.deqLock.newCondition(); -->
+<!--     } -->
 
-    public void enq(T item) { ... }
+<!--     public void enq(T item) { ... } -->
 
-    public T deq() { ... }
+<!--     public T deq() { ... } -->
 
-    class Node { ... }
-}
-```
+<!--     class Node { ... } -->
+<!-- } -->
+<!-- ``` -->
 
-## Enqueueing
+<!-- ## Enqueueing -->
 
-```java
-    public void enq(T item) {
-	boolean mustWakeDequeuers = false;
-	Node nd = new Node(item);
-	enqLock.lock();
-	try {
-	    while (size.get() == capacity) {
-		try {
-		    // System.out.println("Queue full!");
-		    notFullCondition.await();
-		} catch (InterruptedException e) {
-		    // do nothing
-		}
-	    }
+<!-- ```java -->
+<!--     public void enq(T item) { -->
+<!-- 	boolean mustWakeDequeuers = false; -->
+<!-- 	Node nd = new Node(item); -->
+<!-- 	enqLock.lock(); -->
+<!-- 	try { -->
+<!-- 	    while (size.get() == capacity) { -->
+<!-- 		try { -->
+<!-- 		    // System.out.println("Queue full!"); -->
+<!-- 		    notFullCondition.await(); -->
+<!-- 		} catch (InterruptedException e) { -->
+<!-- 		    // do nothing -->
+<!-- 		} -->
+<!-- 	    } -->
 	    
-	    tail.next = nd;
-	    tail = nd;
+<!-- 	    tail.next = nd; -->
+<!-- 	    tail = nd; -->
 	    
-	    if (size.getAndIncrement() == 0) {
-		mustWakeDequeuers = true;
-	    }
+<!-- 	    if (size.getAndIncrement() == 0) { -->
+<!-- 		mustWakeDequeuers = true; -->
+<!-- 	    } -->
 	    
-	} finally {
+<!-- 	} finally { -->
 	    
-	    enqLock.unlock();
+<!-- 	    enqLock.unlock(); -->
 	    
-	}
+<!-- 	} -->
 
-	if (mustWakeDequeuers) {
+<!-- 	if (mustWakeDequeuers) { -->
 	    
-	    deqLock.lock();
+<!-- 	    deqLock.lock(); -->
 	    
-	    try {
-		notEmptyCondition.signalAll();
-	    } finally {
-		deqLock.unlock();
-	    }
-	}
-    }
-```
+<!-- 	    try { -->
+<!-- 		notEmptyCondition.signalAll(); -->
+<!-- 	    } finally { -->
+<!-- 		deqLock.unlock(); -->
+<!-- 	    } -->
+<!-- 	} -->
+<!--     } -->
+<!-- ``` -->
 
-## Dequeueing
+<!-- ## Dequeueing -->
 
-```java
-    public T deq() {
-	T item;
-	boolean mustWakeEnqueuers = false;
-	deqLock.lock();
-	try {
+<!-- ```java -->
+<!--     public T deq() { -->
+<!-- 	T item; -->
+<!-- 	boolean mustWakeEnqueuers = false; -->
+<!-- 	deqLock.lock(); -->
+<!-- 	try { -->
 
-	    while (head.next == null) {
-		try {
-		    // System.out.println("Queue empty!");
-		    notEmptyCondition.await();
-		} catch(InterruptedException e) {
-		    //do nothing
-		}
-	    }
+<!-- 	    while (head.next == null) { -->
+<!-- 		try { -->
+<!-- 		    // System.out.println("Queue empty!"); -->
+<!-- 		    notEmptyCondition.await(); -->
+<!-- 		} catch(InterruptedException e) { -->
+<!-- 		    //do nothing -->
+<!-- 		} -->
+<!-- 	    } -->
 	    
-	    item = head.next.item;
-	    head = head.next;
+<!-- 	    item = head.next.item; -->
+<!-- 	    head = head.next; -->
 
-	    if (size.getAndDecrement() == capacity) {
-		mustWakeEnqueuers = true;
-	    }
-	} finally {
-	    deqLock.unlock();
-	}
+<!-- 	    if (size.getAndDecrement() == capacity) { -->
+<!-- 		mustWakeEnqueuers = true; -->
+<!-- 	    } -->
+<!-- 	} finally { -->
+<!-- 	    deqLock.unlock(); -->
+<!-- 	} -->
 
-	if (mustWakeEnqueuers) {
-	    enqLock.lock();
-	    try {
-		notFullCondition.signalAll();
-	    } finally {
-		enqLock.unlock();
-	    }
-	}
+<!-- 	if (mustWakeEnqueuers) { -->
+<!-- 	    enqLock.lock(); -->
+<!-- 	    try { -->
+<!-- 		notFullCondition.signalAll(); -->
+<!-- 	    } finally { -->
+<!-- 		enqLock.unlock(); -->
+<!-- 	    } -->
+<!-- 	} -->
 
-	return item;
-    }	
-```
+<!-- 	return item; -->
+<!--     }	 -->
+<!-- ``` -->
 
-## Testing the Queue
+<!-- ## Testing the Queue -->
 
 
 
