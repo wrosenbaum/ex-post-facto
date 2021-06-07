@@ -13,7 +13,7 @@ Suppose you're designing an airplane
 1. Need computers to control *everything* 
     + sensors for speed, thrust, flap positions, pitch, roll, yaw
 	+ must adjust constantly to fly
-2. But computers occassionally (regularly) crash/need restart
+2. But computers occasionally (regularly) crash/need restart
 
 How to design around this issue?
 
@@ -47,7 +47,7 @@ What do we do?
 
 ## The Problem of Consensus
 
-Have multiple systems with different inputs
+Have multiple processes with different inputs
 
 - For us, binary inputs
     + `0` = decrease thrust
@@ -63,22 +63,22 @@ Setup:
 
 - $n$ processes/threads, $P_1, P_2, \ldots, P_n$
 - processes have unique IDs, $1, 2, \ldots, n$ (like `ThreadId.get()`)
-- each holds private input: $x_1, x_2, \ldots, x_n$
-    + for simplicity, each $x_i$ is $0$ or $1$
+- each process $i$ holds input $x_i = 0$ or $1$
 
 Output:
 
-- each process $i$ outputs $b_i$, 0 or 1
+- each process $i$ outputs $b_i = 0$ or $1$
 
 Failure:
 
 - Some process(es) may crash
     + failing process may perform some steps before failing
+	+ cannot distinguish a crashed process from a slow process
 
 ## Conditions for Consensus
 
 - **Agreement**: all processes output the same value
-- **Validity**: if all systems have the same intput, they all output that value
+- **Validity**: if all systems have the same input, they all output that value
 - **Termination**: all (non-faulty) processes decide on an output and terminate after a finite number of steps
 
 ## Exercise
@@ -103,7 +103,7 @@ Suppose some process(es) may crash at any time during an execution...
 How can we achieve...
 
 - ~~**Agreement**: all processes output the same value~~
-- **Validity**: if all systems have the same intput, they all output that value
+- **Validity**: if all systems have the same input, they all output that value
 - **Termination**: all (non-faulty) processes decide on an output and terminate after a finite number of steps
 
 <div style="margin-bottom: 8em"></div>
@@ -113,7 +113,7 @@ How can we achieve...
 How can we achieve...
 
 - **Agreement**: all processes output the same value
-- ~~**Validity**: if all systems have the same intput, they all output that value~~
+- ~~**Validity**: if all systems have the same input, they all output that value~~
 - **Termination**: all (non-faulty) processes decide on an output and terminate after a finite number of steps
 
 <div style="margin-bottom: 8em"></div>
@@ -123,7 +123,7 @@ How can we achieve...
 How can we achieve...
 
 - **Agreement**: all processes output the same value
-- **Validity**: if all systems have the same intput, they all output that value
+- **Validity**: if all systems have the same input, they all output that value
 - ~~**Termination**: all (non-faulty) processes decide on an output and terminate after a finite number of steps~~
 
 <div style="margin-bottom: 8em"></div>
@@ -153,7 +153,10 @@ What about consensus with faults?
 
 ## Our Plan
 
-Prove FLP result!
+Prove version of FLP result:
+
+- There is no *wait-free* protocol for consensus for any $n > 1$
+   + wait-free is stronger assumption than termination
 
 Before going further
 
@@ -210,8 +213,6 @@ for (int j = 0; j < nProcesses; j++) {
 return 1;
 ```
 
-## Example in Pictures
-
 ## Executions
 
 An **execution** $E$ of algorithm $A$ specifies
@@ -230,20 +231,179 @@ Executions may be incomplete
 
 Executions may be **extended** by scheduling more steps
 
-## Example of Execution
+## Example of Execution $E$
+
+![](/assets/img/consensus/dz-01.png){: width="100%"}
+
+## $E$ Step 01
+
+![](/assets/img/consensus/dz-02.png){: width="100%"}
+
+## $E$ Step 02
+
+![](/assets/img/consensus/dz-03.png){: width="100%"}
+
+## $E$ Step 03
+
+![](/assets/img/consensus/dz-04.png){: width="100%"}
+
+## $E$ Step 04
+
+![](/assets/img/consensus/dz-05.png){: width="100%"}
+
+## $E$ Step 05
+
+![](/assets/img/consensus/dz-06.png){: width="100%"}
+
+## $E$ Step 06
+
+![](/assets/img/consensus/dz-07.png){: width="100%"}
 
 ## Extending Executions
+
+In $E$, no process has terminated yet
+
+- We can consider **extensions** of a given execution
+- Start with $E$, and perform more steps
+
+## $E'$ Step 06
+
+![](/assets/img/consensus/dz-07.png){: width="100%"}
+
+## $E'$ Step 07
+
+![](/assets/img/consensus/dz-08.png){: width="100%"}
+
+## $E'$ Step 08
+
+![](/assets/img/consensus/dz-09.png){: width="100%"}
+
+## $E'$ Step 09
+
+![](/assets/img/consensus/dz-10.png){: width="100%"}
+
+## $E'$ Step 10
+
+![](/assets/img/consensus/dz-11.png){: width="100%"}
+
+## Note
+
+We can consider many different extensions of $E$
+
+## Extension $E'$ of $E$
+
+![](/assets/img/consensus/dz-11.png){: width="100%"}
+
+## Alternate extension $E''$ 
+
+![](/assets/img/consensus/dz-alt.png){: width="100%"}
 
 ## Indistinguishable Executions
 
 - $E$ and $E'$ are executions
-- they are **indistinguishable** at process $i$ if in $E$ and $E'$:
-    1. $i$ has same input
-	2. sequence of read/write operations performed by $i$ are same 
-	3. the sequence of values read and written by $i$ are the same 
+- they are **indistinguishable** at process $P_i$ if in $E$ and $E'$:
+    1. $P_i$ has same input
+	2. sequence of read/write operations performed by $P_i$ are same 
+	3. the sequence of values read and written by $P_i$ are the same 
 
-## Indistinguishable Example
+## $E'$ for `P1`
 
-## 
+![](/assets/img/consensus/dz-p1.png){: width="100%"}
+
+## $E''$ for `P1`
+
+![](/assets/img/consensus/dz-p1-alt.png){: width="100%"}
+
+## First Important Observation
+
+**Lemma 1.** If executions $E$ and $E'$ are indistinguishable to process $P_i$ then:
+
+1. If $P_i$ has not yet terminated, then $P_i$'s next step will be the same in any extension
+2. If $P_i$ has terminated, then $P_i$'s output is the same in $E$ and $E'$
+
+## Bivalent Executions
+
+- Consider a (hypothetical) wait-free consensus protocol $A$
+- Let $E$ be an execution of $A$
+
+We say that $E$ is...
+
+1. **$0$-valent** if in every extension of $E$, all processes output $0$
+2. **$1$-valent** if in every extension of $E$, all processes output $1$
+3. **bivalent** if there exist
+    - an extension $E'$ of $E$ in which all processes output $0$
+	- an extension $E''$ of $E$ in which all processes output $1$
+    
+## Second Important Observation
+
+**Lemma 2.** Suppose $A$ solves consensus. Then there is a bivalent initial state.
+
+- Here an *initial state* is an execution in which no process has yet taken a step
+    + the execution consists of only inputs for each process
+	
+## Proof of Lemma 2
+
+Must show: there is a bivalent initial state
+
+Argument:
+
+- by contradiction: suppose no bivalent initial state
+- consider sequence of initial states
+- show some are $0$-valent, some are $1$-valent
+- show that some must be bivalent
+	
+## $E_1$ is $0$-valent (Why?)
+
+![](/assets/img/consensus/univalent-0.png){: width="100%"}
+
+## $E_5$ is $1$-valent
+
+![](/assets/img/consensus/univalent-1.png){: width="100%"}
+
+## More Initial States
+
+![](/assets/img/consensus/bivalent-1.png){: width="100%"}
+
+## Assume: All Univalent
+
+![](/assets/img/consensus/bivalent-2.png){: width="100%"}
+
+## Adjacent Pair, Different Valency
+
+![](/assets/img/consensus/bivalent-3.png){: width="100%"}
+
+## All Extensions of $E_2$ Return $0$
+
+![](/assets/img/consensus/bivalent-4.png){: width="100%"}
+
+## All Extensions of $E_3$ Return $1$
+
+![](/assets/img/consensus/bivalent-5.png){: width="100%"}
+
+## $E_2'$ and $E_3'$ Indistinguishable 
+
+![](/assets/img/consensus/bivalent-6.png){: width="100%"}
+
+## $E_2$ and $E_3$ Bivalent
+
+![](/assets/img/consensus/bivalent-7.png){: width="100%"}
+
+## Note
+
+Don't need to assume $P_2$ crashes
+
+- just assume first step of $P_2$ is scheduled after some other thread outputs
+- this is possible because we assume $A$ is wait-free
+    + some process guaranteed to terminate even if one is not scheduled
+
+Mere possibility of a crash together with wait-free assumption implies existence a bivalent initial state
+
+- same holds if we require only termination with one fault
+
+## Next Time
+
+- Bivalent initial conditions have *critical executions*
+- Wait-free consensus is impossible!
+    + assuming only read/write registers...
 
 

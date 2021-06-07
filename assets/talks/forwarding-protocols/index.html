@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+
+<!-- 
+     --Introduction--
+     General question: how to efficiently move stuff from one place to another?
+     - Network is a path of n vertices
+     - Synchronous rounds: adversary injects a packet at some node
+     - Nodes/ respond by (possibly) forwarding packets to the right
+       - each buffer may forward at most one packet per round
+     - Packet is delivered when it is fowarded by rightmost node
+     - Our goal: minimize the maximum buffer size needed
+
+     Other strategies: 
+     - Greedy (buildup on the right)
+     - Downhill (buildup on the left)
+     - Forward past injection (no buildup, but global)
+
+     OED:
+     - i forwards to i+1 if either
+       (1) L(i+1) < L(i), or
+       (2) L(i) = L(i+1) and L(i) is odd
+
+     - Theorem: OED has maximum buffers of size O(\log n)
+     - This is tight
+
+     Proof idea
+     - Bound total number of packets in network (by n)
+     - Look at a "plateau" where every buffer has height at least $2 k$
+     - Let L be the length of the plateau
+     - Argue that at most $L$ packets are height above $2 k + 1$. 
+     - Then do some math...
+
+     Other results:
+     - OED is optimal for "local" protocols
+     - Generalize alg to single destination trees
+     - \Omega(n) buffer size is unavoidable in DAGs, multi destination paths, even for global algorithms
+
+ -->
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>The Space Requirement of Local Forwarding on Acyclic Networks</title>
+    <link rel="stylesheet" href="../../reveal.js-master/dist/reveal.css">
+    <link rel="stylesheet" href="../../css/condensation.css">
+    <link rel="stylesheet" type="text/css" href="../../css/packet-routing.css">
+    <link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700" rel="stylesheet">
+    <script type="text/javascript" src="../../js/packet-routing.js"></script>
+  </head>
+  
+  <body>
+    <div class="reveal">
+      <div class="slides">
+
+	<!-- <section id="routingSlide"> -->
+	<!--   <h3>Packet Routing</h3> -->
+	<!--   <script type="text/javascript">initializeBuffers("routingSlide", "oed")</script> -->
+	<!-- </section> -->
+
+	
+	<section>
+	  <!-- Title Slide -->
+	  <h1>Forwarding Protocols</h1>
+	</section>
+	
+	<section>
+	  <!-- Outline -->
+	  <h2>Overview</h2>
+	  <ol>
+	    <li>Packet Forwarding on a Path</li>
+	    <li>Odd-Even Downhill (OED) Forwarding</li>
+	    <li>Generalizations:</li>
+	    <ul>
+	      <li>Adversarial Queuing Thoery</li>
+	      <li>OED on Trees</li>
+	      <li>Lower Bounds</li>
+	    </ul>
+	  </ol>
+	</section>
+
+	<section>
+	  <!-- Introduction -->
+	  <h2>Introduction</h2>
+	  <p><strong>General Question:</strong> How do we efficiently move stuff from one place to another?</p>
+	  <ul>
+	    <li class="fragment" data-fragment-index="1">Network is a path of $n$ vertices</li>
+	    <li class="fragment" data-fragment-index="2">Motion in synchronous rounds:</li>
+	    <ol class="fragment" data-fragment-index="2">
+	      <li>adversary injects a single packet</li>
+	      <li>each node may forward a single packet</li>
+	    </ol>
+	    <li class="fragment" data-fragment-index="3">Packet is delivered when it is forwarded by right-most node</li>
+	  </ul>
+	  <p class="fragment" data-fragment-index="4"><strong>Goal:</strong> Minimize the maximum load of any buffer in the network.</p>
+	  <p class="fragment" data-fragment-index="5">That is, we consider <em>space complexity</em>.
+	</section>
+
+	<section id="greedySlide">
+	  <h2>Greedy Forwarding</h2>
+	  <p>Every nonempty buffer forwards a packet to the right.</p>
+	  <script type="text/javascript">initializeBuffers("greedySlide", "greedy")</script>
+	</section>
+
+	<section id="downhillSlide">
+	  <h2>Downhill/Slide Forwarding</h2>
+	  <p>Buffer $i$ forwards to $i+1$ if $ L(i) > L(i+1)$</p>
+	  <script type="text/javascript">initializeBuffers("downhillSlide", "downhill")</script>
+	</section>
+
+	<section id="globalSlide">
+	  <h2>Global Forwarding</h2>
+	  <p>Injection at $i$, all nonempty buffers $j \geq i$ forward</p>
+	  <script type="text/javascript">initializeBuffers("globalSlide", "global")</script>
+	</section>
+	
+	<section id="oedSlide">
+	  <h2>Odd Even Downhill (OED)</h2>
+
+	  <p>Buffer $i$ forwards to $i+1$ if:
+	  <ol>
+	    <li>$L(i) > L(i+1)$, or</li>
+	    <li>$L(i) = L(i+1)$ and $L(i)$ is <em>odd</em></li>
+	  </ol>
+	  <script type="text/javascript">initializeBuffers("oedSlide", "oed")</script>
+	</section>
+      </div>
+    </div>
+    <!-- <script src="../../reveal.js-master/lib/js/head.min.js"></script> -->
+    <script src="../../reveal.js-master/dist/reveal.js"></script>
+    <script>
+      Reveal.initialize({
+
+	math: {
+		mathjax: 'https://cdn.mathjax.org/mathjax/latest/MathJax.js',
+		config: 'TeX-AMS_HTML-full'  // See http://docs.mathjax.org/en/latest/config-files.html
+	},
+
+	dependencies: [
+		{ src: '../../reveal.js-master/plugin/math/math.js', async: true }
+	]
+      
+      });
+    </script>
+  </body>
+</html>

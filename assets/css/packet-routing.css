@@ -1,0 +1,44 @@
+.routing-canvas {
+    background-color: rgb(200, 200, 255);
+    /*width: 400px;
+    height: 600px;*/
+    position: relative;
+    margin: auto;
+    /*padding: 0px;*/
+}
+
+.buffer {
+    background-color: rgb(200, 200, 255);
+    /*width: 50px;
+    height: 600px;*/
+    position: absolute;
+    margin: 0px;
+    padding: 0px;
+}
+
+.packet {
+    background-color: rgb(100, 70, 255);
+    border-color: rgb(128, 128, 128) !important;
+    border-width: 3px !important;
+    border-style: solid !important;
+    border-radius: 50%;
+    /* margin: 5px 5px 5px 5px; */
+    /* padding: 5px; */
+    /* width: 30px; */
+    /* height: 30px; */
+    position: absolute;
+}
+
+.injectPacket {
+    /*background-color: rgb(100, 70, 255);*/
+    background-color: rgb(255, 70, 100);
+    border-style: solid !important;
+    border-radius: 50%;
+    border-color: rgb(128, 128, 128) !important;
+    border-width: 3px !important;
+    /* margin: 5px 5px 5px 5px; */
+    /* padding: 0px; */
+    /* width: 30px; */
+    /* height: 30px; */
+    position: absolute;
+}

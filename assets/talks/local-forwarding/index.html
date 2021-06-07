@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+
+<!-- 
+     --Introduction--
+     General question: how to efficiently move stuff from one place to another?
+     - Network is a path of n vertices
+     - Synchronous rounds: adversary injects a packet at some node
+     - Nodes/ respond by (possibly) forwarding packets to the right
+       - each buffer may forward at most one packet per round
+     - Packet is delivered when it is fowarded by rightmost node
+     - Our goal: minimize the maximum buffer size needed
+
+     Other strategies: 
+     - Greedy (buildup on the right)
+     - Downhill (buildup on the left)
+     - Forward past injection (no buildup, but global)
+
+     OED:
+     - i forwards to i+1 if either
+       (1) L(i+1) < L(i), or
+       (2) L(i) = L(i+1) and L(i) is odd
+
+     - Theorem: OED has maximum buffers of size O(\log n)
+     - This is tight
+
+     Proof idea
+     - Bound total number of packets in network (by n)
+     - Look at a "plateau" where every buffer has height at least $2 k$
+     - Let L be the length of the plateau
+     - Argue that at most $L$ packets are height above $2 k + 1$. 
+     - Then do some math...
+
+     Other results:
+     - OED is optimal for "local" protocols
+     - Generalize alg to single destination trees
+     - \Omega(n) buffer size is unavoidable in DAGs, multi destination paths, even for global algorithms
+
+ -->
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>The Space Requirement of Local Forwarding on Acyclic Networks</title>
+    <link rel="stylesheet" href="../../reveal.js-master/dist/reveal.css">
+    <link rel="stylesheet" href="../../css/condensation.css">
+    <link rel="stylesheet" type="text/css" href="../../css/packet-routing.css">
+    <link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700" rel="stylesheet">
+    <script type="text/javascript" src="../../js/packet-routing.js"></script>
+  </head>
+  
+  <body>
+    <div class="reveal">
+      <div class="slides">
+
+	<!-- <section id="routingSlide"> -->
+	<!--   <h3>Packet Routing</h3> -->
+	<!--   <script type="text/javascript">initializeBuffers("routingSlide", "oed")</script> -->
+	<!-- </section> -->
+
+	
+	<section>
+	  <!-- Title Slide -->
+	  <h1>The Space Requirement of Local Forwarding on Acyclic Networks</h1>
+	  <p class="author">Boaz Patt-Shamir and <strong>Will Rosenbaum</strong></p>
+	  <p class="author">Tel Aviv University</p>
+	</section>
+	
+	<section>
+	  <!-- Outline -->
+	  <h2>Overview</h2>
+	  <ol>
+	    <li>Packet Forwarding on a Path</li>
+	    <li>Odd-Even Downhill (OED) Forwarding</li>
+	    <li>Generalizations:</li>
+	    <ul>
+	      <li>Adversarial Queuing Thoery</li>
+	      <li>OED on Trees</li>
+	      <li>Lower Bounds</li>
+	    </ul>
+	  </ol>
+	</section>
+
+	<section>
+	  <!-- Introduction -->
+	  <h2>Introduction</h2>
+	  <p><strong>General Question:</strong> How do we efficiently move stuff from one place to another?</p>
+	  <ul>
+	    <li class="fragment" data-fragment-index="1">Network is a path of $n$ vertices</li>
+	    <li class="fragment" data-fragment-index="2">Motion in synchronous rounds:</li>
+	    <ol class="fragment" data-fragment-index="2">
+	      <li>adversary injects a single packet</li>
+	      <li>each node may forward a single packet</li>
+	    </ol>
+	    <li class="fragment" data-fragment-index="3">Packet is delivered when it is forwarded by right-most node</li>
+	  </ul>
+	  <p class="fragment" data-fragment-index="4"><strong>Goal:</strong> Minimize the maximum load of any buffer in the network.</p>
+	  <p class="fragment" data-fragment-index="5">That is, we consider <em>space complexity</em>.
+	</section>
+
+	<section id="greedySlide">
+	  <h2>Greedy Forwarding</h2>
+	  <p>Every nonempty buffer forwards a packet to the right.</p>
+	  <script type="text/javascript">initializeBuffers("greedySlide", "greedy")</script>
+	  <p class="fragment" data-fragment-index="1">Worst case buffer size is \(\Omega(n)\).</p>
+	</section>
+
+	<section id="downhillSlide">
+	  <h2>Downhill/Slide Forwarding</h2>
+	  <p>Buffer $i$ forwards to $i+1$ if $ L(i) > L(i+1)$</p>
+	  <script type="text/javascript">initializeBuffers("downhillSlide", "downhill")</script>
+	  <p class="fragment" data-fragment-index="1">Worst case buffer size is $\Omega(n)$.</p>
+	</section>
+
+	<section id="globalSlide">
+	  <h2>Global Forwarding</h2>
+	  <p>Injection at $i$, all nonempty buffers $j \geq i$ forward</p>
+	  <script type="text/javascript">initializeBuffers("globalSlide", "global")</script>
+	  <p class="fragment" data-fragment-index="1">Worst case buffer size is $O(1)$. (Miller & Patt-Shamir, 2016)</p>
+	</section>
+
+	<section>
+	  <h2>Local Forwarding</h2>
+	  <ul>
+	    <li class="fragment" data-fragment-index="1">Global forwarding can have great performance...</li>
+	    <li class="fragment" data-fragment-index="2">...but it requires instantaneous coordination!</li>
+	  </ul>
+	  <p class="fragment" data-fragment-index="3"><strong>Question:</strong> What is the best performance we can achieve if forwarding is <em>local</em>?</p>
+	  <ul class="fragment" data-fragment-index="4">
+	    <li>Forwarding rule for \(i\) depends only on loads of \(i\) and \(i\)'s neighbors.</li>
+	  </ul>
+	  <p class="fragment" data-fragment-index="5"><strong>Previously:</strong> All local algorithms we found had worst case loads of size $\Omega(n)$.</p>
+	</section>
+	
+	<section id="oedSlide">
+	  <h2>Odd Even Downhill (OED)</h2>
+
+	  <p>Buffer $i$ forwards to $i+1$ if:
+	  <ol>
+	    <li>$L(i) > L(i+1)$, or</li>
+	    <li>$L(i) = L(i+1)$ and $L(i)$ is <em>odd</em></li>
+	  </ol>
+	  <script type="text/javascript">initializeBuffers("oedSlide", "oed")</script>
+	</section>
+
+	<section>
+	  <h2>Main Results for OED</h2>
+	  
+	  <p><strong>Theorem 1.</strong> The worst case buffer load for OED forwarding is $\Theta(\log n)$.</p>
+	  
+	  <p><strong>Theorem 2.</strong> Any local forwarding procedure has worst-case buffer loads of size $\Omega(\log n)$.</p>
+	</section>
+
+	<section>
+	  <h2>Proof of Theorem 1</h2>
+	  <ul>
+	    <li class="fragment" data-fragment-index="1">Bound maximum number of packets in the network by $n$.</li>
+	    <li class="fragment" data-fragment-index="2">The <em>height</em> of a packet is one plus the number of packets beneath it in its buffer.
+	    <li class="fragment" data-fragment-index="3">During the execution, consider <em>plateaus</em> of consecutive nodes with $L(i) \geq j$.</li>
+	  </ul>
+	  <p class="fragment" data-fragment-index="4"><strong>Lemma 1.</strong> Let $\ell$ be the total length of plateaus of minimum height $j$ with $j$ even. Then there are at most $\ell$ packets at height at least $j + 1$.</p>
+	</section>
+
+	<section id="lemmaIllustration">
+	  <h2>Lemma 1 Illustration</h2>
+	  <p><strong>Lemma 1.</strong> Let $\ell$ be the total length of plateaus of minimum height $j$ with $j$ even. Then there are at most $\ell$ packets at height at least $j + 1$.</p>
+	  <script type="text/javascript">initializeBuffers("lemmaIllustration", "oed")</script>
+	  <script type="text/javascript">illustrateInject("lemmaIllustration")</script>
+	  <!-- <button type="button" onclick='illustrateInject("lemmaIllustration")'>Inject Packets!</button> -->
+	</section>
+
+	<section>
+	  <h2>Lemma 1 $\implies$ Theorem 1</h2>
+	  <p>Let $m$ be the maximal load. For $j \leq m$, $I_j$ is maximal interval with $L(i) \geq j$. Observe:</p>
+	  <ul>
+	    <li class="fragment" data-fragment-index="1">$I_m \subseteq I_{m-1} \subseteq \cdots \subseteq I_1$</li>
+	    <li>
+	      <p class="fragment" data-fragment-index="2">Lemma implies
+		\[
+		2 |I_{m}| \leq |I_{m-1}| + |I_{m}| \leq |I_{m - 2}|
+		\]
+		</p>
+	      <p class="fragment" data-fragment-index="3">
+		\[
+		\begin{align*}
+		&\vdots\\
+		2 |I_2| + 2 |I_4| + \cdots + &2 |I_{m-2}| + 2 |I_m| \leq |I_{0}| = n
+		\end{align*}
+		\]
+	      </p>
+	    </li>
+	  </ul>
+	  <p class="fragment" data-fragment-index="4">By induction $2 \cdot 3^{m/2} |I_m| \leq n$</p>
+	  <p class="fragment" data-fragment-index="5">Since $|I_m| \geq 1$, we get $m = O(\log n)$.</p>
+	</section>
+
+	<!-- <section> -->
+	<!--   <h2>Proof of Lemma 1. </h2> -->
+	<!-- </section> -->
+
+	<section>
+	  <h2>Lower Bounds</h2>
+	  <p><strong>Theorem 2.</strong> Any local forwarding procedure has worst-case buffer loads of size $\Omega(\log n)$.</p>
+	  <p class="fragment" data-fragment-index="1"><strong>Proof idea.</strong> Define an injection pattern $P$ that inflicts $\Omega(\log n)$ loads against any local forwarding algorithm $A$.</p>
+	  <ol>
+	    <li class="fragment" data-fragment-index="2">In first $n$ rounds, inject $n$ packets into buffer $1$.</li>
+	    <li class="fragment" data-fragment-index="3">Simulate $A$ for $t = n/4$ steps with no injections.</li>
+	    <li class="fragment" data-fragment-index="4">Take $I$ to be the half of the network with larger total load.</li>
+	    <li class="fragment" data-fragment-index="5">In $t$ rounds, inject $t$ packets in middle node of $I$.</li>
+	    <li class="fragment" data-fragment-index="6">Recurse on I, repeating 2&ndash;5.</li>
+	  </ol>
+	</section>
+
+	<section id="adversaryIll">
+	  <h2>Adversary Illustration (Greedy Forwarding)</h2>
+	  <script type="text/javascript">initializeBuffers("adversaryIll", "greedy")</script>
+	  
+	  <button type="button" onclick='saveConfig("adversaryIll")'>Save Configuration</button>
+	  <button type="button" onclick='forwardNoInj("adversaryIll")'>Forward Packets</button>
+	  <button type="button" onclick='restoreConfig("adversaryIll")'>Restore Configuration</button>
+	</section>
+
+	<section>
+	  <p><strong>Claim.</strong> In each iteration, the average load of $I$ increases by at least $1/4$.</p>
+	  <ul>
+	    <li class="fragment" data-fragment-index="1">In $n/4$ steps, at most $n/4$ packets leave the network, so <em>simulated</em> average load decreases by at most $1/4$.</li>
+	    <li  class="fragment" data-fragment-index="2">By choice of $I$, <em>simulated</em> average load of $I$ is at least $\alpha - 1/4.$</li>
+	    <li  class="fragment" data-fragment-index="3">Locality of $A \implies$ simulated and <em>true</em> behavior (with injections) are same on boundary of $I$.</li>
+	    <li class="fragment" data-fragment-index="4">$|I| / 2$ packets injected into $I$, so <em>true</em> average load is at least $\alpha - 1/4 + 1/2$.</li>
+	  </ul>
+	  <p class="fragment" data-fragment-index="5"><strong>Claim $\implies$ Lemma.</strong> After $\log n$ iterations, $I$ has length $1$ and load $\geq (1/4)\log n$.</p> 
+	</section>
+
+	<section>
+	  <h2>More General Lower Bounds</h2>
+	  <p><strong>Theorem 3.</strong> Even if we assume:</p>
+	  <ul>
+	    <li class="fragment" data-fragment-index="1">packets can be sent right or left,</li>
+	    <li class="fragment" data-fragment-index="2">each edge can forward arbitrarily many packets (still only 1 injection per round),</li>
+	    <li class="fragment" data-fragment-index="3">each packet can be delivered to either the right or left end of the network,</li>
+	    <li class="fragment" data-fragment-index="4">each node sees the state of nodes up to distance $d$ for any fixed constant $d$,</li>
+	  </ul>
+	  <p class="fragment" data-fragment-index="5">then there exists an adversary $P$ that inflicts loads of size
+	    \[
+	    \Omega\left(\frac{\log n}{\log \log n}\right)\,.
+	    \]
+	  </p>
+	</section>
+
+	<section>
+	  <h2>Can OED be generalized to a broader class of networks?</h2>
+	</section>
+
+	<section>
+	  <h2>Computational Model</h2>
+	  <p>Adversarial Queuing Theory (BKRS'96)</p>
+	  <ol>
+	    <li class="fragment" data-fragment-index="1">Network is a directed graph $G = (V, E)$.</li>
+	    <li class="fragment" data-fragment-index="2">Each edge $e \in E$ has a capacity $C(e)$</li>
+	    <li class="fragment" data-fragment-index="3">Each packet $p$ is injected with a specified path from source to destination</li>
+	    <li class="fragment" data-fragment-index="4"> Adversary is <strong>$(\rho, \sigma)$-bounded</strong> if for all $r < s \in \mathbf{N}$ and $e \in E$, the number of packets injected at times $t = r, \ldots, s-1$ whose path contains $e$ is at most
+	      \[
+	      \rho (s - r) + \sigma
+	      \]
+	    </li>
+	  </ol>
+	  <p class="fragment" data-fragment-index="5"><strong>Note.</strong> The adversary from first half of talk was $(1,0)$-bounded. </p>
+	</section>
+
+	<section>
+	  <h2>Single Destination Trees</h2>
+	  <ol>
+	    <li class="fragment" data-fragment-index="1">$G = (V, E)$ is a rooted tree</li>
+	    <li class="fragment" data-fragment-index="2">All packets have root as destination</li>
+	    <li class="fragment" data-fragment-index="3">WLOG tree has single edge to root</li>
+	    <li class="fragment" data-fragment-index="4">Total number of packets injected into network satisfy $(\rho, \sigma)$ bound</li>
+	    <li class="fragment" data-fragment-index="5">Assume every edge has capacity $C(e) = 1$ and rate $\rho \leq 1$.
+	  </ol>
+	</section>
+
+	<section>
+	  <h2>OED on Single Destination Trees</h2>
+	  <p class="fragment" data-fragment-index="1">Suppose $v \in V$ has children $u_1, \ldots, u_k$</p>
+	  <p class="fragment" data-fragment-index="2">Each round, do the following:</p>
+	  <ol class="fragment" data-fragment-index="2">
+	    <li>$u = \mathrm{argmax} \{L(u_1), L(u_2), \ldots, L(u_k)\}$</li>
+	    <li>Apply odd-even rule to edge $(u, v)$:</li>
+	    <ul>
+	      <li> $u$ forwards to $v \iff$ $L(u) > L(v)$ or $L(u) = L(v)$ and $L(u)$ is odd
+	    </ul>
+	  </ol>
+	</section>
+
+	<section>
+	  <h2>Tree OED Demo</h2>
+	  <div class="routing-canvas" id="tree-canvas" style="width=800px height=400px">
+	    <object data="tree-oed.svg" type="image/svg+xml" style="width800px height=400px"></object>
+	  </div>
+	  
+	  <button type="button" onclick='treeStep()'>Next Step</button>
+	</section>
+
+	<section>
+	  <h2>Tree OED Performance</h2>
+	  <p><strong>Theorem 4.</strong> Let $G = (V, E)$ be a single destination tree of depth $D$ with unit capacity edges. Then for any $(\rho, \sigma)$-bounded advsary $P$ with $\rho \leq 1$, OED forwarding achieves maximum loads of size $O(\sigma + \log D)$</p>
+	  <p class="fragment" data-fragment-index="1"><strong>Proof idea.</strong> Plateau of height $j$ is a maximal connected component of edges $(u, v)$ with $L(u) \geq j$.</p>
+	  <p class="fragment" data-fragment-index="2"><strong>Lemma 4.</strong> Let $F$ be the forest of plateaus of height $j$ for $j$ even, and $D$ the depth of $F$. Then there are at most $D + \sigma$ packets at height $\geq j + 1$.</p>
+	  <p class="fragment" data-fragment-index="3">Lemma 4 $\implies$ Theorem 4 (c.f. proof of Theorem 1)</p>
+	</section>
+
+	<section>
+	  <h2>Further Generalization?</h2>
+	  <p><strong>Question.</strong> Can some variant of OED forwarding acheive similar performance in more general networks? Multiple destinations? DAGs?</p>
+	  <p class="fragment" data-fragment-index="1"><strong>Theorem 5.</strong> No. <span class="fragment" data-fragment-index="2">Let $\mathcal{F}$ be the family of multiple destination paths or single source, single destination DAGs. Then for every $\rho > 1/2$, $\sigma \geq 1$, and <em>every</em> forwarding algorithm $A$ (possibly offline or global), there exists a $(\rho, \sigma)$-bounded injection pattern $P$ which inflicts loads of size $\Omega(n)$.</span></p>
+	</section>
+
+	<section>
+	  <h2>General Path Adversary</h2>
+	  <p>$G = $ path of length $n$, vertices labeled $1, \ldots, n$ left to right</p>
+	  <p class="fragment" data-fragment-index="1">For $i = 1, 2, \ldots, n/2$ do:</p>
+	  <ul class="fragment" data-fragment-index="1">
+	    <li>in $n - i$ rounds, inject</li>
+	    <ol>
+	      <li> $\rho(n - i)$ packets at $1$ with destination $n - i$</li>
+	      <li> $\rho(n - i)$ packets at $n - i$ with destination $n$</li>
+	    </ol>
+	  </ul>
+	  <p class="fragment" data-fragment-index="2">No matter how packets are forwarded, some buffer has load $\Omega(n)$.</p>
+	  <p class="fragment" data-fragment-index="3">Similar idea works for DAGs</p>
+	</section>
+
+	<section>
+	  <h2>Optimal Forwarding on DAGS</h2>
+	  <p><strong>Theorem 6</strong> (Adler & Ros&#233n, 2002). On DAGs greedy routing with "longest in system" scheduling achieves maximum buffer loads (and latency) $O(n)$.</p>
+	  <p class="fragment" data-fragment-index="1">Theorem 5 + Theorem 6 show greedy is optimal even for offline global forwarding!</p>
+	</section>
+
+	<section>
+	  <h2>Summary of Results</h2>
+	  <p>Space requirement of local forwarding on acyclic networks:</p>
+	  <table>
+	    <tr>
+	      <th>Topology/Locality</th>
+	      <th>greedy</th>
+	      <th>local</th>
+	      <th>global</th>
+	    </tr>
+	    <tr>
+	      <th>SD Trees</th>
+	      <th>$\Theta(n)$ <small>[1,2]</small></th>
+	      <th><span class="fragment" data-fragment-index="1" style="color: blue">$\Theta(\log n)$</span></th>
+	      <th>$\Theta(1)$ <small>[2]</small></th>
+	    </tr>
+	    <tr>
+	      <th>General DAGs</th>
+	      <th>$\Theta(n)$ <small>[1]</small></th>
+	      <th><span class="fragment" data-fragment-index="1" style="color: blue">$\Theta(n)$</span></th>
+	      <th><span class="fragment" data-fragment-index="1" style="color: blue">$\Theta(n)$</span></th>
+	    </tr>
+	  </table>
+	  <p>[1] Adler & Ros&#233n, 2002</p>
+	  <p>[2] Miller & Patt-Shamir, 2016</p>
+	</section>
+
+	<section>
+	  <h2>Ongoing Work and Open Problems</h2>
+	  <ul>
+	    <li>General uniform capacities on SD Trees (PODC 2017+)</li>
+	    <li>``Nearly Local'' forwarding (Patt-Shamir & R&#8212;, 2017+)</li>
+	    <li>Non-uniform capacities (open)</li>
+	    <li>Are these schemes practical? (open)</li>
+	  </ul>
+	</section>
+
+	
+	<!-- <section> -->
+	<!--   <h2>Other Results</h2> -->
+	<!--   <ul> -->
+	<!--     <li>Generalize OED to single destination trees.</li> -->
+	<!--     <li>More general networks: multiple destination paths & single source/single destination DAGs:</li> -->
+	<!--     <ol> -->
+	<!--       <li>Worst case loads are $\Omega(n)$ even for <em>global</em> and <em>offline</em> protocols.</li>  -->
+	<!--       <li>Greedy algorithm achieves $O(n)$ (Adler & Ros&#233n, 2002).</li> -->
+	<!--     </ol> -->
+	<!--   </ul> -->
+	<!-- </section> -->
+
+
+	<section>
+	  <h1>Thank You!</h1>
+	</section>
+
+      </div>
+    </div>
+    <!-- <script src="../../reveal.js-master/lib/js/head.min.js"></script> -->
+    <script src="../../reveal.js-master/dist/reveal.js"></script>
+    <script>
+      Reveal.initialize({
+
+	math: {
+		mathjax: 'https://cdn.mathjax.org/mathjax/latest/MathJax.js',
+		config: 'TeX-AMS_HTML-full'  // See http://docs.mathjax.org/en/latest/config-files.html
+	},
+
+	dependencies: [
+		{ src: '../../reveal.js-master/plugin/math/math.js', async: true }
+	]
+      
+      });
+    </script>
+  </body>
+</html>
