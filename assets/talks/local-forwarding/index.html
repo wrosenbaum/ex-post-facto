@@ -126,7 +126,7 @@
 	  </ul>
 	  <p class="fragment" data-fragment-index="3"><strong>Question:</strong> What is the best performance we can achieve if forwarding is <em>local</em>?</p>
 	  <ul class="fragment" data-fragment-index="4">
-	    <li>Forwarding rule for \(i\) depends only on loads of \(i\) and \(i\)'s neighbors.</li>
+	    <li>Forwarding rule for \(i\) depends only on loads of \(i\) and \(i\)s neighbors.</li>
 	  </ul>
 	  <p class="fragment" data-fragment-index="5"><strong>Previously:</strong> All local algorithms we found had worst case loads of size $\Omega(n)$.</p>
 	</section>
@@ -252,7 +252,7 @@
 
 	<section>
 	  <h2>Computational Model</h2>
-	  <p>Adversarial Queuing Theory (BKRS'96)</p>
+	  <p>Adversarial Queuing Theory (BKRS 96)</p>
 	  <ol>
 	    <li class="fragment" data-fragment-index="1">Network is a directed graph $G = (V, E)$.</li>
 	    <li class="fragment" data-fragment-index="2">Each edge $e \in E$ has a capacity $C(e)$</li>
@@ -392,20 +392,48 @@
       </div>
     </div>
     <!-- <script src="../../reveal.js-master/lib/js/head.min.js"></script> -->
-    <script src="../../reveal.js-master/dist/reveal.js"></script>
+    <script src="/assets/reveal.js-master/dist/reveal.js"></script>
+    <script src="/assets/reveal.js-master/plugin/math/math.js"></script>
+    <script src="/assets/reveal.js-master/plugin/zoom/zoom.js"></script>
+    <script src="/assets/reveal.js-master/plugin/notes/notes.js"></script>
+    <script src="/assets/reveal.js-master/plugin/search/search.js"></script>
+    <script src="/assets/reveal.js-master/plugin/markdown/markdown.js"></script>
+    <script src="/assets/reveal.js-master/plugin/highlight/highlight.js"></script>
     <script>
       Reveal.initialize({
+	  controls: false,
+	  progress: true,
+	  center: true,
+	  hash: true,
+	  transition: 'none',
+	  math: {
+	      config: 'TeX-AMS_HTML-full',
+	      TeX: {
+		  Macros: {
+		      R: '\\mathbb{R}',
+		      set: [ '\\left\\{#1 \\; ; \\; #2\\right\\}', 2 ]
+		  }
+	      }
+	  },
 
-	math: {
-		mathjax: 'https://cdn.mathjax.org/mathjax/latest/MathJax.js',
-		config: 'TeX-AMS_HTML-full'  // See http://docs.mathjax.org/en/latest/config-files.html
-	},
 
-	dependencies: [
-		{ src: '../../reveal.js-master/plugin/math/math.js', async: true }
-	]
-      
+	  // Learn about plugins: https://revealjs.com/plugins/
+	  plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath ]
       });
+
+      
+      // Reveal.initialize({
+
+      // 	math: {
+      // 		mathjax: 'https://cdn.mathjax.org/mathjax/latest/MathJax.js',
+      // 		config: 'TeX-AMS_HTML-full'  // See http://docs.mathjax.org/en/latest/config-files.html
+      // 	},
+
+      // 	dependencies: [
+      // 		{ src: '../../reveal.js-master/plugin/math/math.js', async: true }
+      // 	]
+      
+      // });
     </script>
   </body>
 </html>

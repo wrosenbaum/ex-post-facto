@@ -63,38 +63,6 @@
 	  <h1>Forwarding Protocols</h1>
 	</section>
 	
-	<section>
-	  <!-- Outline -->
-	  <h2>Overview</h2>
-	  <ol>
-	    <li>Packet Forwarding on a Path</li>
-	    <li>Odd-Even Downhill (OED) Forwarding</li>
-	    <li>Generalizations:</li>
-	    <ul>
-	      <li>Adversarial Queuing Thoery</li>
-	      <li>OED on Trees</li>
-	      <li>Lower Bounds</li>
-	    </ul>
-	  </ol>
-	</section>
-
-	<section>
-	  <!-- Introduction -->
-	  <h2>Introduction</h2>
-	  <p><strong>General Question:</strong> How do we efficiently move stuff from one place to another?</p>
-	  <ul>
-	    <li class="fragment" data-fragment-index="1">Network is a path of $n$ vertices</li>
-	    <li class="fragment" data-fragment-index="2">Motion in synchronous rounds:</li>
-	    <ol class="fragment" data-fragment-index="2">
-	      <li>adversary injects a single packet</li>
-	      <li>each node may forward a single packet</li>
-	    </ol>
-	    <li class="fragment" data-fragment-index="3">Packet is delivered when it is forwarded by right-most node</li>
-	  </ul>
-	  <p class="fragment" data-fragment-index="4"><strong>Goal:</strong> Minimize the maximum load of any buffer in the network.</p>
-	  <p class="fragment" data-fragment-index="5">That is, we consider <em>space complexity</em>.
-	</section>
-
 	<section id="greedySlide">
 	  <h2>Greedy Forwarding</h2>
 	  <p>Every nonempty buffer forwards a packet to the right.</p>

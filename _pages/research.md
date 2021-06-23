@@ -20,3 +20,7 @@ The central theme of my research is to understand the algorithmic cost of uncert
 - The Stable Marriage Problem
 
 Here are links to my [Google Scholar profile](https://scholar.google.com/citations?user=vMmb4p0AAAAJ&hl=en) and [DBLP page](https://dblp.org/pid/147/4867.html).
+
+### recent talks
+
+- Stable Matchings with Restricted Preferences, EC 2021 [slides](/talks/2021-07-EC-restricted-stable-matchings/slides/)
