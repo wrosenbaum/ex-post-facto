@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta charset="utf-8">
+
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reset.css">
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reveal.css">
+		<link rel="stylesheet" href="/assets/css/condensation.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="/assets/reveal.js-master/plugin/highlight/monokai.css" id="highlight-theme">
+		<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700" rel="stylesheet">
+
+	</head>
+
+	<body>
+
+
+	  <!-- this is where the reveailfy filter gets applied -->
+	  <div class="reveal"><div class="slides">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section id="lecture-05-defining-objects"><h1>Lecture 05: Defining Objects</h1></section><section id="outline"><h2>Outline</h2>
+<ol>
+  <li>A Final Thought on Recursion</li>
+  <li>Defining New Objects</li>
+  <li>A Counter Object</li>
+</ol></section><section id="a-final-thought-on-recursion"><h2>A Final Thought on Recursion</h2>
+<p>Recursion is…</p>
+<ul>
+  <li>subtle</li>
+  <li>sometimes efficient, sometimes not</li>
+  <li>powerful</li>
+  <li>miraculous</li>
+  <li>confusing</li>
+</ul></section><section id="how-confusing"><h2>How Confusing?</h2>
+<p>What does this program do?</p>
+<pre><code class="language-java">public static long collatz (long n) {
+    if (n == 1) return 1;
+    if (n % 2 == 0) return collatz (n / 2);
+    else return collatz (3 * n + 1);
+}
+</code></pre>
+<div style="margin-bottom: 12em"></div></section><section id="insanity"><h2>Insanity</h2>
+<pre><code class="language-java">public static long collatz (long n) {
+    if (n == 1) return 1;
+    if (n % 2 == 0) return collatz (n / 2);
+    else return collatz (3 * n + 1);
+}
+</code></pre>
+<ul>
+  <li><strong>It is not known if this method enters an infinite loop for some value of <code>n</code></strong></li>
+  <li>This is not for lack of interest in the problem:
+    <ul>
+      <li>studied by some of the most eminent mathematicians of the last century</li>
+    </ul>
+  </li>
+</ul></section><section id="defining-new-objects"><h1>Defining New Objects</h1></section><section id="coding-so-far"><h2>Coding So Far</h2>
+<ol>
+  <li>Statements, blocks, control flow (conditionals and iteration)</li>
+  <li>Methods: <strong>procedural programming</strong>
+    <ul>
+      <li>encapsulate code in methods</li>
+      <li>methods recieve input (arguments), perform operations, (maybe) produduce output (<code>return</code>)</li>
+      <li>when a method returns, all its resources (local variables) go away</li>
+    </ul>
+  </li>
+</ol></section><section id="procedural-programming"><h2>Procedural Programming</h2>
+<p>Design Principle:</p>
+<ul>
+  <li>Break a large task into smaller sub-tasks
+    <ul>
+      <li>write a method for each sub-task</li>
+    </ul>
+  </li>
+  <li>Makes code better:
+    <ul>
+      <li>shows <em>intent</em>
+</li>
+      <li>easier to maintain (one error, one bug)</li>
+      <li>makes code easier to read/understand</li>
+    </ul>
+  </li>
+</ul>
+<p>Methods allow for <strong>encapsulation</strong>: write a single piece of code that can be used by many parts of a program.</p></section><section id="object-orientation"><h2>Object Orientation</h2>
+<p>Idea: encapsulate code in <strong>objects</strong></p>
+<ol>
+  <li>Create object <strong>instances</strong>
+    <ul>
+      <li>each instance is like its own program</li>
+    </ul>
+  </li>
+  <li>Instances have internal <strong>state</strong>
+    <ul>
+      <li><em>instance variables</em></li>
+    </ul>
+  </li>
+  <li>Instances are <strong>persistent</strong>
+    <ul>
+      <li>once an instance is created, it remains indefinitely</li>
+    </ul>
+  </li>
+  <li>Instances can change internal state
+    <ul>
+      <li>
+<em>instance methods</em> are specific to each instance</li>
+    </ul>
+  </li>
+  <li>Instances can interact
+    <ul>
+      <li>call methods on an instance</li>
+    </ul>
+  </li>
+</ol></section><section id="object-oriented-design"><h2>Object Oriented Design</h2>
+<p>A different way to conceptualize a program:</p>
+<ul>
+  <li>Think in terms of interacting objects</li>
+</ul>
+<p>Advantages:</p>
+<ul>
+  <li>More conceptual structure</li>
+  <li>Better encapsulation</li>
+  <li>Separate <strong>interface</strong> from <strong>implementation</strong>
+    <ul>
+      <li>don’t need to understand how an object works (internally) to use the object</li>
+    </ul>
+  </li>
+</ul></section><section id="note"><h2>Note</h2>
+<ul>
+  <li>Object orientation is a useful <em>abstraction</em>
+</li>
+  <li>It does not provide greater power or more functionality</li>
+  <li>It is a way to think about:
+    <ul>
+      <li>solving problems</li>
+      <li>writing code</li>
+      <li>designing software</li>
+    </ul>
+  </li>
+</ul></section><section id="an-object"><h2>An Object</h2>
+<p>Forget about programming for a moment</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/RyCnHyUKt5M" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></section><section id="describe-the-clicker-counter"><h2>Describe the Clicker Counter</h2></section><section id="what-functionality-does-it-offer"><h2>What Functionality Does it Offer?</h2>
+<div style="margin-bottom: 12em"></div></section><section id="how-do-you-interact-with-it"><h2>How do You <em>Interact</em> With it?</h2>
+<div style="margin-bottom: 12em"></div></section><section id="what-is-its-internal-state"><h2>What is its Internal State?</h2>
+<div style="margin-bottom: 12em"></div></section><section id="what-limitations-does-it-have"><h2>What <em>Limitations</em> Does it Have?</h2>
+<div style="margin-bottom: 12em"></div></section><section id="how-can-we-represent-it-in-code"><h2>How Can We Represent it in Code?</h2>
+<p>We will define a <code>Counter</code> object!</p>
+<ul>
+  <li>Internal state:
+    <ul>
+      <li>store count as an <code>int</code>
+</li>
+    </ul>
+  </li>
+  <li>Instance methods:
+    <ul>
+      <li>get count</li>
+      <li>increment counter</li>
+      <li>reset</li>
+    </ul>
+  </li>
+  <li>Constructor</li>
+</ul>
+<p>Code it together!</p></section><section id="the-completed-object"><h2>The Completed Object</h2>
+<pre><code class="language-java">public class Counter {
+    private int count;
+    
+	// constructor defines how to initialize instance
+    public Counter () {
+	    count = 0;
+	}
+	
+	// getter method for count
+	public int getCount () {
+	    return count;
+	}
+	
+	// increment the counter
+	public void increment () {
+	    count++;
+	}
+	
+	// reset the counter
+	public void reset () {
+	    count = 0;
+	}
+}
+</code></pre></section><section id="how-can-we-use-the-counter"><h2>How can we use the Counter?</h2>
+<p>Create an <strong>instance</strong> of the <code>Counter</code> class:</p>
+<pre><code class="language-java">// create a Counter instance
+Counter myCounter = new Counter();
+		
+// increment the counter: call instance method		
+myCounter.increment();
+
+// print the current count
+System.out.println("Current count: " + myCounter.getCount());
+</code></pre></section><section id="why-make-a-counter-class"><h2>Why Make a <code>Counter</code> Class?</h2>
+<p>Couldn’t we have just used an <code>int</code>?</p>
+<div style="margin-bottom: 12em"></div></section><section id="reasons-counter-is-preferable-to-int"><h2>Reasons <code>Counter</code> is Preferable to <code>int</code>
+</h2>
+<ol>
+  <li>
+<em>Semantics.</em> a <code>Counter</code> signals object is being used to <em>count</em> something
+    <ul>
+      <li>an <code>int</code> could signify anything!</li>
+    </ul>
+  </li>
+  <li>
+<em>Safety.</em> a <code>Counter</code> restricts the operations
+    <ul>
+      <li>cannot do something accidentally that would mess up count</li>
+    </ul>
+  </li>
+  <li>
+<em>Separate implementation from interface.</em>
+    <ul>
+      <li>can change implementation without affecting code that uses counter</li>
+      <li>can use <code>Counter</code> objects without knowledge of internal workings</li>
+    </ul>
+  </li>
+  <li>
+<em>Extensibility.</em> can add functionality without affecting the code using <code>Counter</code>
+</li>
+</ol></section><section id="coming-up"><h2>Coming Up</h2>
+<p>Lots more about objects!</p>
+<ul>
+  <li>Access control (<code>public</code>, <code>private</code>, and in between)</li>
+  <li>Instance vs. class variables and methods</li>
+  <li>Passing object instances to methods</li>
+  <li>Defining relationships between objects</li>
+</ul></section>
+</div></div>
+
+
+	  <script src="/assets/reveal.js-master/dist/reveal.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/math/math.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/zoom/zoom.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/notes/notes.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/search/search.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/markdown/markdown.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/highlight/highlight.js"></script>
+	  <script>
+	    
+
+	    // Also available as an ES module, see:
+	    // https://revealjs.com/initialization/
+	    Reveal.initialize({
+		controls: false,
+		progress: true,
+		center: true,
+		hash: true,
+		transition: 'none',
+		math: {
+		    config: 'TeX-AMS_HTML-full',
+		    TeX: {
+			Macros: {
+			    R: '\\mathbb{R}',
+			    set: [ '\\left\\{#1 \\; ; \\; #2\\right\\}', 2 ]
+			}
+		    }
+		},
+
+
+		// Learn about plugins: https://revealjs.com/plugins/
+		plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath ]
+	    });
+
+	  </script>
+
+	</body>
+</html>
+	  
+
+<!-- <\!-- load the reveal.js css & js (assuming you've put it in assets/)-\-> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/reveal.scss" -->
+<!-- /> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/theme/source/white.scss" -->
+<!-- /> -->
+<!-- <script -->
+<!--   src="/assets/reveal.js-master/js/reveal.js" -->
+<!--   type="text/javascript" -->
+<!-- ></script> -->
+
+<!-- <\!-- configure the presentation, (you can tweak options to suit) -\-> -->
+<!-- <script> -->
+<!--   Reveal.initialize({ -->
+<!--     // Display presentation control arrows -->
+<!--     controls: false, -->
+
+<!--     // Help the user learn the controls by providing hints, for example by -->
+<!--     // bouncing the down arrow when they first encounter a vertical slide -->
+<!--     controlsTutorial: false, -->
+
+<!--     // Determines where controls appear, "edges" or "bottom-right" -->
+<!--     controlsLayout: "bottom-right", -->
+
+<!--     // Visibility rule for backwards navigation arrows; "faded", "hidden" -->
+<!--     // or "visible" -->
+<!--     controlsBackArrows: "faded", -->
+
+<!--     // Display a presentation progress bar -->
+<!--     progress: true, -->
+
+<!--     // Display the page number of the current slide -->
+<!--     slideNumber: false, -->
+
+<!--     // Push each slide change to the browser history -->
+<!--     history: false, -->
+
+<!--     // Enable keyboard shortcuts for navigation -->
+<!--     keyboard: true, -->
+
+<!--     // Enable the slide overview mode -->
+<!--     overview: true -->
+<!--   }); -->
+<!-- </script> -->

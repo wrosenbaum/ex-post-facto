@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta charset="utf-8">
+
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reset.css">
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reveal.css">
+		<link rel="stylesheet" href="/assets/css/condensation.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="/assets/reveal.js-master/plugin/highlight/monokai.css" id="highlight-theme">
+		<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700" rel="stylesheet">
+
+	</head>
+
+	<body>
+
+
+	  <!-- this is where the reveailfy filter gets applied -->
+	  <div class="reveal"><div class="slides">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ## Activity -->
+
+<!-- Write subclasses for [`BouncingShape`](/assets/java/abstract-bouncing-shapes/BouncingShape.java) to draw different shapes! -->
+
+<!-- - disk -->
+<!-- - square -->
+<!-- - diamond -->
+<section id="lecture-10-object-inheritance"><h1>Lecture 10: Object Inheritance</h1></section><section id="overview"><h2>Overview</h2>
+<ol>
+  <li>Object Inheritance</li>
+  <li>Abstract Classes</li>
+  <li>Activity: Abstract Shapes</li>
+</ol></section><section id="previously"><h2>Previously</h2>
+<ul>
+  <li>Used <code>class</code>es to represent types of objects</li>
+  <li>
+<em>Instances</em> interacted, but no relationships between object <em>types</em>
+</li>
+</ul></section><section id="starting-today"><h2>Starting today</h2>
+<ul>
+  <li>Inheritance—relationships between object types</li>
+</ul></section><section id="a-simple-class"><h2>A simple class</h2>
+<pre><code class="language-java">    public class Person {
+      private String name;           // an individual's name
+	  
+      public Person (String name) {
+        this.name = name; 
+      }
+	  
+      public String getName() {return name;}
+	  
+      public void sayGreeting () {System.out.println(name + ": Hello there!");}
+    }
+</code></pre></section><section id="a-slightly-less-simple-class"><h2>A slightly less simple class</h2>
+<pre><code class="language-java">    public class Student {
+      private String name;           // an individual's name
+      private String institution;
+
+      public Student (String name, String institution) {
+        this.name = name; 
+        this.institution = institution;
+      }
+	  
+      public String getName() {return name;}
+	  
+      public void sayGreeting () {System.out.println(name + ": What's Up?");}
+    }
+</code></pre></section><section id="redundant-code"><h2>Redundant code!</h2>
+<pre><code class="language-java">    public class Student {
+      private String name;                               // same as Person
+      private String institution;
+	  
+      public Student (String name, String institution) {
+        this.name = name;                                // same as Person
+        this.institution = institution;
+      }
+	  
+      public String getName() {return name;}             // same as Person
+	  
+      public void sayGreeting () {System.out.println(name + ": What's Up?");}
+    }
+</code></pre></section><section id="question"><h2>Question</h2>
+<p>Why should we make a whole new class just to make minor modifications to the <code>Person</code> class?</p>
+<ul>
+  <li>Add <code>institution</code> field</li>
+  <li>Change constructor arguments</li>
+  <li>Change greeting</li>
+</ul></section><section id="we-shouldnt"><h2>We shouldn’t!</h2></section><section id="subclasses-to-the-rescue"><h2>Subclasses to the rescue</h2>
+<p>Given <code>Person</code>, we can make a <strong>subclass</strong> <code>Student</code> that</p>
+<ol>
+  <li>adds functionality (stores institution)</li>
+  <li>modifies functionality (changes greeting)</li>
+</ol></section><section id="keyword-extends"><h2>Keyword <code>extends</code>
+</h2>
+<p>Making <code>Student</code> a subclass:</p>
+<pre><code class="language-java">public class Student extends Person {
+    private String institution;
+      
+    public Student (String name, String institution) {
+        super(name); // call the constructor for the superclass
+        this.institution = institution;
+    }
+	  
+    @Override
+    public void sayGreeting () {System.out.println(name + ": What's up?");}
+}
+</code></pre></section><section id="but-theres-an-error"><h2>But there’s an error!</h2>
+<pre><code class="language-text">    Student.java:10: error: name has private access in Person
+        public void sayGreeting () {System.out.println(name + ": What's up?");}
+                                                       ^
+    1 error
+</code></pre></section><section id="the-reason"><h2>The reason</h2>
+<ul>
+  <li>
+<code>private</code> variables and methods cannot be called from subclasses</li>
+</ul></section><section id="two-fixes"><h2>Two fixes</h2>
+<ul>
+  <li>use the getter method <code>getName()</code>
+</li>
+  <li>change <code>name</code> to <code>protected</code>
+    <ul>
+      <li>some consider risky: all classes in same directory can access <code>protected</code> methods/variables</li>
+    </ul>
+  </li>
+</ul></section><section id="using-the-subclass"><h2>Using the subclass</h2>
+<pre><code class="language-java">    Student alice = new Student("Alice", "Amherst College");
+    Person bob = new Person("Bob");
+    
+    alice.sayGreeting();    // prints "Alice: What's up?"
+    bob.sayGreeting();      // prints "Bob: Hello there!"
+</code></pre></section><section id="abstracting-away-the-details"><h1>Abstracting Away the Details</h1></section><section id="bouncing-disks"><h2>Bouncing Disks</h2>
+<pre><code class="language-java">public class BouncingDisk {
+    public static final int DEFAULT_RADIUS = 25;
+    
+    private Pair curPosition;      // position of the center
+    private Pair curVelocity;      // disk velocity (px / sec)
+    private Pair nextPosition;     // position in next frame
+    private Pair nextVelocity;     // velocity in next frame    
+    private double radius;
+    private Color color;
+    private World world;           // the world to which the disk belongs
+    
+    public BouncingDisk(World world, double radius, Color color, Pair position, Pair velocity) {
+	this.world = world;
+	this.radius = radius;
+	this.color = color;
+	curPosition = new Pair(position);
+	curVelocity = new Pair(velocity);
+	nextPosition = new Pair(position);
+	nextVelocity = new Pair(velocity);
+    }
+
+    public void update (double time) {
+	Pair delta = curVelocity.times(time);
+        nextPosition.set(curPosition.plus(delta));
+        bounce();
+    }
+
+    public void advance () {
+	curPosition.set(nextPosition);
+	curVelocity.set(nextVelocity);
+    }
+
+    public void setPosition(Pair p){
+        curPosition.set(p);
+    }
+
+    public void setVelocity(Pair v){
+        curVelocity.set(v);
+    }
+
+    public void draw(Graphics g) {
+	g.setColor(color);
+	g.fillOval( (int) (curPosition.getX() - radius),
+		    (int) (curPosition.getY() - radius),
+		    (int) (2 * radius), (int) (2 * radius));
+
+    }
+
+    private void bounce() {
+        // more code here
+    }
+}
+</code></pre></section><section id="questions"><h2>Questions</h2>
+<ol>
+  <li>How much of this code is specific to drawing a <strong>disk</strong>?</li>
+  <li>What would need to change to draw another shape?</li>
+</ol></section><section id="bouncing-shapes"><h2>Bouncing Shapes</h2>
+<p>Modifications:</p>
+<ol>
+  <li>Store <code>width</code> and <code>height</code> (instead of radius)</li>
+  <li>Make <code>position</code>, <code>velocity</code>, etc <code>protected</code> so subclasses can see these fields</li>
+  <li>Declare <strong>but don’t implement</strong> the <code>draw(Graphics g)</code>  method
+    <ul>
+      <li>need to make class and method <code>abstract</code>
+</li>
+    </ul>
+  </li>
+</ol>
+<p><strong>Note.</strong> We cannot make instances of of abstract  classes, but we can define subclasses that are not <code>abstract</code>.</p></section><section id="abstract-bouncing-shapes"><h2>Abstract Bouncing Shapes</h2>
+<pre><code class="language-java">import java.awt.Color;
+import java.awt.Graphics;
+import java.util.Random;
+
+public abstract class BouncingShape {
+    public static final int DEFAULT_WIDTH = 25;
+    public static final int DEFAULT_HEIGHT = 25;    
+    
+    protected Pair curPosition;      // position of the center
+    protected Pair curVelocity;      // disk velocity (px / sec)
+    protected Pair nextPosition;     // position in next frame
+    protected Pair nextVelocity;     // velocity in next frame    
+    protected double width;
+    protected double height;
+    protected Color color;
+    protected World world;           // the world to which the disk belongs
+    
+    public BouncingShape(World world, double width, double height, Color color, Pair position, Pair velocity) {
+	this.world = world;
+	this.width = width;
+	this.height = height;
+	this.color = color;
+	curPosition = new Pair(position);
+	curVelocity = new Pair(velocity);
+	nextPosition = new Pair(position);
+	nextVelocity = new Pair(velocity);
+    }
+
+    public void update (double time) {
+	Pair delta = curVelocity.times(time);
+        nextPosition.set(curPosition.plus(delta));
+        bounce();
+    }
+
+    public void advance () {
+	curPosition.set(nextPosition);
+	curVelocity.set(nextVelocity);
+    }
+
+    public void setPosition(Pair p){
+        curPosition.set(p);
+    }
+
+    public void setVelocity(Pair v){
+        curVelocity.set(v);
+    }
+
+    public abstract void draw(Graphics g);
+
+    protected void bounce() {
+	
+        if (nextPosition.getX() - width / 2 &lt;= 0){
+            nextVelocity.flipX();
+            nextPosition.setX(width / 2);
+        } else if (nextPosition.getX() + width / 2 &gt;= world.getWidth()){
+            nextVelocity.flipX();
+            nextPosition.setX(world.getWidth() - width / 2);
+        }
+	
+        if (nextPosition.getY() - height / 2 &lt;= 0){
+            nextVelocity.flipY();
+            nextPosition.setY(height / 2);
+        } else if (nextPosition.getY() + height / 2 &gt;=  world.getHeight()) {
+            nextVelocity.flipY();
+            nextPosition.setY(world.getHeight() - height / 2);
+        }
+    }
+}
+</code></pre></section>
+</div></div>
+
+
+	  <script src="/assets/reveal.js-master/dist/reveal.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/math/math.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/zoom/zoom.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/notes/notes.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/search/search.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/markdown/markdown.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/highlight/highlight.js"></script>
+	  <script>
+	    
+
+	    // Also available as an ES module, see:
+	    // https://revealjs.com/initialization/
+	    Reveal.initialize({
+		controls: false,
+		progress: true,
+		center: true,
+		hash: true,
+		transition: 'none',
+		math: {
+		    config: 'TeX-AMS_HTML-full',
+		    TeX: {
+			Macros: {
+			    R: '\\mathbb{R}',
+			    set: [ '\\left\\{#1 \\; ; \\; #2\\right\\}', 2 ]
+			}
+		    }
+		},
+
+
+		// Learn about plugins: https://revealjs.com/plugins/
+		plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath ]
+	    });
+
+	  </script>
+
+	</body>
+</html>
+	  
+
+<!-- <\!-- load the reveal.js css & js (assuming you've put it in assets/)-\-> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/reveal.scss" -->
+<!-- /> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/theme/source/white.scss" -->
+<!-- /> -->
+<!-- <script -->
+<!--   src="/assets/reveal.js-master/js/reveal.js" -->
+<!--   type="text/javascript" -->
+<!-- ></script> -->
+
+<!-- <\!-- configure the presentation, (you can tweak options to suit) -\-> -->
+<!-- <script> -->
+<!--   Reveal.initialize({ -->
+<!--     // Display presentation control arrows -->
+<!--     controls: false, -->
+
+<!--     // Help the user learn the controls by providing hints, for example by -->
+<!--     // bouncing the down arrow when they first encounter a vertical slide -->
+<!--     controlsTutorial: false, -->
+
+<!--     // Determines where controls appear, "edges" or "bottom-right" -->
+<!--     controlsLayout: "bottom-right", -->
+
+<!--     // Visibility rule for backwards navigation arrows; "faded", "hidden" -->
+<!--     // or "visible" -->
+<!--     controlsBackArrows: "faded", -->
+
+<!--     // Display a presentation progress bar -->
+<!--     progress: true, -->
+
+<!--     // Display the page number of the current slide -->
+<!--     slideNumber: false, -->
+
+<!--     // Push each slide change to the browser history -->
+<!--     history: false, -->
+
+<!--     // Enable keyboard shortcuts for navigation -->
+<!--     keyboard: true, -->
+
+<!--     // Enable the slide overview mode -->
+<!--     overview: true -->
+<!--   }); -->
+<!-- </script> -->

@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta charset="utf-8">
+
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reset.css">
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reveal.css">
+		<link rel="stylesheet" href="/assets/css/condensation.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="/assets/reveal.js-master/plugin/highlight/monokai.css" id="highlight-theme">
+		<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700" rel="stylesheet">
+
+	</head>
+
+	<body>
+
+
+	  <!-- this is where the reveailfy filter gets applied -->
+	  <div class="reveal"><div class="slides">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section id="lecture-16-generic-linked-lists"><h1>Lecture 16: Generic Linked Lists</h1></section><section id="overview"><h2>Overview</h2>
+<ol>
+  <li>Implementing a Linked List</li>
+  <li>Iterating over the List</li>
+  <li>Making the List Generic</li>
+</ol></section><section id="last-time"><h2>Last Time</h2>
+<p>Started making our <code>Zoo</code> dynamic:</p>
+<ol>
+  <li>
+<code>add(...)</code> new animals</li>
+  <li>
+<code>remove(...)</code> animals from the collection</li>
+  <li>check if zoo <code>contains(...)</code> an animal</li>
+</ol>
+<p>Also:</p>
+<ul>
+  <li><code>feedAnimals</code></li>
+</ul></section><section id="the-idea"><h2>The Idea</h2>
+<p>Represent <code>Zoo</code> as a <strong>linked list</strong> of <code>Node</code>s:</p>
+<p><img src="/assets/img/linked-list/initial.png" alt="" width="100%"></p></section><section id="adding-an-animal"><h2>Adding an Animal</h2>
+<p><img src="/assets/img/linked-list/add-doug.png" alt="" width="100%"></p></section><section id="step-1-create-a-node"><h2>Step 1: Create a <code>Node</code>
+</h2>
+<p><img src="/assets/img/linked-list/create-node.png" alt="" width="100%"></p></section><section id="step-2-update-tailnext"><h2>Step 2: Update <code>tail.next</code>
+</h2>
+<p><img src="/assets/img/linked-list/update-tail-next.png" alt="" width="100%"></p></section><section id="step-3-update-tail"><h2>Step 3: Update <code>tail</code>
+</h2>
+<p><img src="/assets/img/linked-list/update-tail.png" alt="" width="100%"></p></section><section id="adding-an-animal-in-code"><h2>Adding an <code>Animal</code> in Code</h2>
+<pre><code class="language-java">    // add an Animal to the zoo
+    public void add (Animal a) {
+
+	Node nd = new Node(a);
+
+	if (tail != null) {
+	    
+	    tail.setNext(nd);
+	    tail = nd;
+	    
+	} else {
+	    
+	    head = nd;
+	    tail = nd;
+	    
+	}
+    }
+</code></pre></section><section id="how-to-implement-feedanimals"><h2>How to Implement <code>feedAnimals</code>?</h2>
+<p><img src="/assets/img/linked-list/inserted.png" alt="" width="50%"></p>
+<div style="margin-bottom: 8em"></div></section><section id="how-to-implement-contains"><h2>How to Implement <code>contains</code>?</h2>
+<p><img src="/assets/img/linked-list/inserted.png" alt="" width="50%"></p>
+<div style="margin-bottom: 8em"></div></section><section id="how-to-implement--remove"><h2>How to Implement  <code>remove</code>?</h2>
+<p><img src="/assets/img/linked-list/inserted.png" alt="" width="50%"></p>
+<div style="margin-bottom: 8em"></div></section><section id="another-question"><h2>Another Question</h2>
+<p>With the array <code>Animal[] zoo</code> we could access all of the <code>Animal</code>s easily:</p>
+<pre><code class="language-java">Animal[] zoo;
+...
+for (int i = 0; i &lt; zoo.length; i++) {
+   // do something with zoo[i]
+}
+</code></pre>
+<p>How could we do something similar with the <code>Zoo</code> class?</p>
+<div style="margin-bottom: 8em"></div></section><section id="idea"><h2>Idea:</h2>
+<ul>
+  <li>Store a current node in the <code>Zoo</code>
+</li>
+  <li>Write a method <code>next()</code> that:
+    <ol>
+      <li>gets the animal stored in the current node (if not <code>null</code>)
+        <ul>
+          <li>if current node is <code>null</code>, go</li>
+        </ul>
+      </li>
+      <li>sets the current node to its next node</li>
+      <li>returns the animal</li>
+    </ol>
+  </li>
+  <li>Write a method <code>hasNext()</code> to check if there is a next animal</li>
+</ul>
+<p>(We will see a more elegant way using iterators later…)</p></section><section id="testing-our-code"><h2>Testing our Code</h2></section><section id="generics"><h1>Generics</h1></section><section id="more-than-just-a-zoo"><h2>More than just a Zoo</h2>
+<p>The logic and structure of our <code>Zoo</code> is great!</p>
+<p>But what if we want to store things other than <code>Animal</code>s?</p></section><section id="zoo"><h2>Zoo</h2>
+<p><img src="/assets/img/linked-list/zoo-final.png" alt="" width="100%"></p></section><section id="school"><h2>School</h2>
+<p><img src="/assets/img/linked-list/school.png" alt="" width="100%"></p></section><section id="set-of-numbers"><h2>Set of Numbers</h2>
+<p><img src="/assets/img/linked-list/numbers.png" alt="" width="100%"></p></section><section id="same-logic-same-implementation"><h2>Same Logic, Same Implementation?</h2>
+<p>How could we represent a list of <em>anything?</em></p>
+<div style="margin-bottom: 12em"></div></section><section id="one-idea-use-object"><h2>One Idea: Use <code>Object</code>
+</h2>
+<p><img src="/assets/img/linked-list/objects.png" alt="" width="100%"></p></section><section id="an-implementation"><h2>An Implementation</h2>
+<pre><code class="language-java">public class ListOfObjects {
+    private Node head = null;
+    private Node tail = null;
+
+    public void add (Object obj) {
+        ...	
+    }
+
+    public void remove (Object obj) {
+        ...	
+    }
+    
+    public boolean contains (Object obj) {
+        ...	
+    }
+	
+    public Object next () {
+        ...	
+    }
+}
+
+class Node {
+    private Object obj;
+    private Node next;
+
+    public Node (Object obj) {
+	this.obj = obj;
+	next = null;
+    }
+
+    public void setNext (Node nd) {
+	next = nd;
+    }
+
+    public Node getNext () {
+	return next;
+    }
+
+    public Object getObj () {
+	return obj;
+    }
+}
+</code></pre></section><section id="why-isnt-this-great"><h2>Why Isn’t This Great?</h2>
+<pre><code class="language-java">ListOfObjects list = new ListOfObjects();
+list.add(new Elephant("Alice"));
+...
+</code></pre>
+<div style="margin-bottom: 12em"></div></section><section id="why-this-isnt-great-i"><h2>Why this Isn’t Great I</h2>
+<pre><code class="language-java">ListOfObjects list = new ListOfObjects();
+list.add(new Elephant("Alice"));
+...
+</code></pre>
+<p>Casting! Every time we access something in the list, it must be cast as the correct type:</p>
+<pre><code class="language-java">Animal a = (Animal) list.next()
+</code></pre>
+<p>This is annoying…</p></section><section id="why-this-isnt-great-ii"><h2>Why this Isn’t Great II</h2>
+<pre><code class="language-java">ListOfObjects list = new ListOfObjects();
+list.add(new Elephant("Alice"));
+...
+</code></pre>
+<p>There is nothing requiring us to use the same datatype</p>
+<pre><code class="language-java">list.add(new Platypus("Bob"));
+list.add("Adding a String now");
+list.add(Integer.getInteger("3745"));
+</code></pre>
+<p>These operations are perfectly valid!</p>
+<ul>
+  <li>No error checking for consistent types!</li>
+</ul></section><section id="generics-a-better-way"><h2>Generics: A Better Way</h2>
+<p>Idea: Write a <code>GenericList</code> class that</p>
+<ol>
+  <li>can be used to store <em>any</em> specified type of object</li>
+  <li>each instance only stores one type</li>
+  <li>Java checks that correct types are used</li>
+</ol></section><section id="generic-syntax"><h2>Generic Syntax</h2>
+<p>Declare <code>class</code> with a <em>type</em>, <code>T</code>:</p>
+<pre><code class="language-java">public class GenericList&lt;T&gt; {
+    ...
+}
+</code></pre>
+<p>Inside the class, <code>T</code> can be used like a variable representing the type:</p>
+<pre><code class="language-java">// add an item of type T
+public void add (T item) {
+    ...
+}
+
+// get next item of type T
+public T next () {
+    ...
+}
+</code></pre></section><section id="two-options-for-node"><h2>Two Options for <code>Node</code>
+</h2>
+<ol>
+  <li>Make <code>Node</code> generic:
+    <pre><code class="language-java"> class Node&lt;T&gt; {
+     private T item;
+     private Node&lt;T&gt; next;
+     ...
+ }
+</code></pre>
+  </li>
+  <li>Make <code>Node</code> an <em>inner class</em>:
+    <pre><code class="language-java"> public class GenericList&lt;T&gt; {
+	
+     ...
+    
+     class Node {
+         private T item;
+         private Node&lt;T&gt; next;
+         ...
+     }		
+ }
+</code></pre>
+  </li>
+</ol></section><section id="using-our-generic-list"><h2>Using Our Generic List</h2>
+<pre><code class="language-java">// make lists storing different types
+GenericList&lt;Animal&gt; zoo = new GenericList&lt;Animal&gt;();
+GenericList&lt;Person&gt; amherst = new GenericList&lt;Person&gt;();
+
+// populate the lists
+zoo.add(new Platypus("Alice"));
+amherst.add(new Person("Bob"));
+
+...
+
+// these give errors!
+amherst.add(new Elephant("Eve"));
+zoo.contains("Bob");
+</code></pre></section>
+</div></div>
+
+
+	  <script src="/assets/reveal.js-master/dist/reveal.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/math/math.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/zoom/zoom.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/notes/notes.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/search/search.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/markdown/markdown.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/highlight/highlight.js"></script>
+	  <script>
+	    
+
+	    // Also available as an ES module, see:
+	    // https://revealjs.com/initialization/
+	    Reveal.initialize({
+		controls: false,
+		progress: true,
+		center: true,
+		hash: true,
+		transition: 'none',
+		math: {
+		    config: 'TeX-AMS_HTML-full',
+		    TeX: {
+			Macros: {
+			    R: '\\mathbb{R}',
+			    set: [ '\\left\\{#1 \\; ; \\; #2\\right\\}', 2 ]
+			}
+		    }
+		},
+
+
+		// Learn about plugins: https://revealjs.com/plugins/
+		plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath ]
+	    });
+
+	  </script>
+
+	</body>
+</html>
+	  
+
+<!-- <\!-- load the reveal.js css & js (assuming you've put it in assets/)-\-> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/reveal.scss" -->
+<!-- /> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/theme/source/white.scss" -->
+<!-- /> -->
+<!-- <script -->
+<!--   src="/assets/reveal.js-master/js/reveal.js" -->
+<!--   type="text/javascript" -->
+<!-- ></script> -->
+
+<!-- <\!-- configure the presentation, (you can tweak options to suit) -\-> -->
+<!-- <script> -->
+<!--   Reveal.initialize({ -->
+<!--     // Display presentation control arrows -->
+<!--     controls: false, -->
+
+<!--     // Help the user learn the controls by providing hints, for example by -->
+<!--     // bouncing the down arrow when they first encounter a vertical slide -->
+<!--     controlsTutorial: false, -->
+
+<!--     // Determines where controls appear, "edges" or "bottom-right" -->
+<!--     controlsLayout: "bottom-right", -->
+
+<!--     // Visibility rule for backwards navigation arrows; "faded", "hidden" -->
+<!--     // or "visible" -->
+<!--     controlsBackArrows: "faded", -->
+
+<!--     // Display a presentation progress bar -->
+<!--     progress: true, -->
+
+<!--     // Display the page number of the current slide -->
+<!--     slideNumber: false, -->
+
+<!--     // Push each slide change to the browser history -->
+<!--     history: false, -->
+
+<!--     // Enable keyboard shortcuts for navigation -->
+<!--     keyboard: true, -->
+
+<!--     // Enable the slide overview mode -->
+<!--     overview: true -->
+<!--   }); -->
+<!-- </script> -->

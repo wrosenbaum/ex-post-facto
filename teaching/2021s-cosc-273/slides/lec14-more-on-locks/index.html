@@ -1,0 +1,642 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta charset="utf-8">
+
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reset.css">
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reveal.css">
+		<link rel="stylesheet" href="/assets/css/condensation.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="/assets/reveal.js-master/plugin/highlight/monokai.css" id="highlight-theme">
+		<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700" rel="stylesheet">
+
+	</head>
+
+	<body>
+
+
+	  <!-- this is where the reveailfy filter gets applied -->
+	  <div class="reveal"><div class="slides">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ## Interlude: Thread-local Objects -->
+
+<!-- Java (generic) class: `ThreadLocal<T>` -->
+
+<!-- - Make a `T` for each thread -->
+<!-- - Some `ThreadLocal` methods: -->
+<!--     + `T get()` returns current thread's copy of variable -->
+<!-- 	+ `protected T initialValue()` returns current thread's initial value -->
+<!-- 	    + you'll want to `@Override` this to initialize  -->
+<!-- 	+ `void set(T value)` set value of current thread's copy -->
+
+<!-- ## Ugly Syntax -->
+
+<!-- Make a `MyClass` instance for each thread: -->
+
+<!-- ```java -->
+<!-- public class TLObjects { -->
+<!--     private ThreadLocal<MyClass> myInstance =  -->
+<!--         new ThreadLocal<MyClass>() { -->
+<!--             @Override -->
+<!--             protected MyClass initialValue() { -->
+<!--                 return new MyClass(...args...); -->
+<!--             } -->
+<!--         }; -->
+
+<!-- } -->
+<!-- ``` -->
+
+<!-- <div style="margin-bottom: 6em"></div> -->
+
+<!-- ## An Example: `ThreadId` -->
+
+<!-- Make a class that assigns sequential IDs to threads, starting at 0 -->
+
+<!-- Fields: -->
+
+<!-- - `static AtomicInteger` that stores next ID to be assigned -->
+<!-- - `static ThreadLocal<Integer>`that stores each thread's ID -->
+
+<!-- Methods: -->
+
+<!-- - `static int get()` returns value of thread's ID -->
+
+<!-- Why is everything `static`? -->
+
+<!-- <div style="margin-bottom: 4em"></div> -->
+
+<!-- ## `ThreadID` in Code -->
+
+<!-- ## Next Time -->
+
+<!-- - Using `ThreadLocal` variables to implement queue-based lock -->
+
+<!--     + CLH lock (Craig, Hagersten, Landin)  -->
+
+<!-- - Linked Lists -->
+<section id="lecture-14-more-locking-strategies"><h1>Lecture 14: More Locking Strategies</h1></section><section id="overview"><h2>Overview</h2>
+<ol>
+  <li>Review of TAS and TTAS</li>
+  <li>Backing Off</li>
+  <li>Queue Based Locks</li>
+</ol></section><section id="last-time"><h2>Last Time</h2>
+<p>The Test-and-set (TAS) Lock:</p>
+<pre><code class="language-java">public class TASLock {
+    AtomicBoolean isLocked = new AtomicBoolean(false);
+	
+    public void lock () {
+        while (isLocked.getAndSet(true)) {}
+    }
+	
+    public void unlock () {
+        isLocked.set(false);
+    }
+}
+</code></pre></section><section id="performance-of-tas"><h2>Performance of TAS</h2>
+<p>Decreases with number of processors</p>
+<ul>
+  <li>From Remus and Romulus (1M lock accesses):</li>
+</ul>
+<pre><code class="language-text">     n  elapsed time (ms)
+     1           109
+     2           200
+     3           492
+     4           494
+     5           576
+     6           804
+     7           796
+     8          1001
+     9          1130
+    10          1128
+    11          1123
+    12          1260
+    13          1320
+    14          1476
+    15          1610
+    16          1646
+    17          1594
+    18          1198
+    19          1755
+    20          1139
+    21          1940
+    22          2033
+    23          2133
+    24          2258
+    25          2125
+    26          2578
+    27          2211
+    28          2432
+    29          2188
+    30          2663
+    31          2579
+</code></pre>
+<p>Doing same number of ops takes 25 times as long on 31 threads as on 1 thread!</p></section><section id="one-problem-with-tas"><h2>One Problem with TAS</h2>
+<pre><code class="language-java">public class TASLock {
+    AtomicBoolean isLocked = new AtomicBoolean(false);
+	
+    public void lock () {
+        while (isLocked.getAndSet(true)) {}
+    }
+	
+    public void unlock () {
+        isLocked.set(false);
+    }
+}
+</code></pre>
+<p>Each thread calls <code>getAndSet</code> constantly!</p>
+<ul>
+  <li>more complex atomic primitive operations are more costly</li>
+</ul></section><section id="another-approach"><h2>Another Approach</h2>
+<p>Only try to <code>getAndSet</code> if previously saw lock was unlocked</p>
+<ul>
+  <li>the Test-and-test-and-set (TTAS) lock:</li>
+</ul>
+<pre><code class="language-java">    public void lock () {
+	while (true) {
+	    while (isLocked.get()) {};
+
+	    if (!isLocked.getAndSet(true)) {
+		return;
+	    }
+	}
+    }
+</code></pre>
+<ul>
+  <li>Less frequent <code>getAndSet</code> $\implies$ better performance?</li>
+</ul></section><section id="ttas-lock-performance"><h2>TTAS Lock Performance</h2>
+<p>Same test as before on Remus and Romulus (1M accesses):</p>
+<pre><code class="language-text">     n  elapsed time (ms)
+     1           108
+     2           202
+     3           206
+     4           212
+     5           253
+     6           237
+     7           218
+     8           242
+     9           275
+    10           250
+    11           214
+    12           239
+    13           216
+    14           265
+    15           219
+    16           283
+    17           266
+    18           287
+    19           279
+    20           286
+    21           231
+    22           294
+    23           300
+    24           243
+    25           293
+    26           303
+    27           300
+    28           294
+    29           302
+    30           303
+    31           305
+    32           309
+</code></pre>
+<p>Now: performance with 32 threads is less than 3 times slower than without contention!</p>
+<ul>
+  <li>That is about 8 times faster than TAS lock!</li>
+</ul></section><section id="the-moral"><h2>The Moral</h2>
+<ul>
+  <li>Read more, write less!
+    <ul>
+      <li>reading atomic variables is more efficient than writing</li>
+      <li>this is especially true when there is a lot of contention</li>
+    </ul>
+  </li>
+</ul></section><section id="yet-another-approach"><h2>Yet Another Approach</h2>
+<p>Backing off under contention</p>
+<pre><code class="language-java">    public void lock () {
+	while (true) {
+	    while (isLocked.get()) {};
+
+	    if (!isLocked.getAndSet(true)) {
+		return;
+	    }
+	}
+    }
+</code></pre>
+<ul>
+  <li>If we hit <code>if (...)</code> but fail to acquire lock, there are other threads attempting to acquire lock
+    <ul>
+      <li>
+<strong>contention detected</strong> at this point</li>
+    </ul>
+  </li>
+  <li>So: we could wait</li>
+</ul></section><section id="exponential-backoff"><h2>Exponential Backoff</h2>
+<p>Store:</p>
+<ol>
+  <li>
+<code>MIN_DELAY</code>, <code>MAX_DELAY</code> (constants)</li>
+  <li>
+<code>limit</code> initialized to <code>MIN_DELAY</code>
+</li>
+</ol>
+<p>When contention detected:</p>
+<ol>
+  <li>Pick random <code>delay</code> between <code>0</code> and <code>limit</code>
+</li>
+  <li>Update <code>limit = Math.min(2 * limit, MAX_DELAY)</code>
+</li>
+  <li>Wait <code>delay</code> time before attempting to acquire lock again</li>
+</ol></section><section id="illustration"><h2>Illustration</h2>
+<p><img src="/assets/img/exponential-backoff/contention.png" alt="" width="100%"></p></section><section id="contention-detected"><h2>Contention Detected</h2>
+<p><img src="/assets/img/exponential-backoff/contention-detected.png" alt="" width="100%"></p></section><section id="first-backoff"><h2>First Backoff</h2>
+<p><img src="/assets/img/exponential-backoff/backoff-1.png" alt="" width="100%"></p></section><section id="more-contention"><h2>More Contention</h2>
+<p><img src="/assets/img/exponential-backoff/contention-2.png" alt="" width="100%"></p></section><section id="second-backoff"><h2>Second Backoff</h2>
+<p><img src="/assets/img/exponential-backoff/backoff-2.png" alt="" width="100%"></p></section><section id="final-backoff"><h2>Final Backoff</h2>
+<p><img src="/assets/img/exponential-backoff/final.png" alt="" width="100%"></p></section><section id="result-of-exponential-backoff"><h2>Result of Exponential Backoff</h2>
+<ol>
+  <li>Spread out attempts to acquire lock
+    <ul>
+      <li>more contention $\implies$ larger <code>delay</code>
+</li>
+      <li>$\implies$ each attempt more likely to succeed</li>
+    </ul>
+  </li>
+  <li>Waiting threads don’t use (as many) computer resources</li>
+  <li>Locked resource may be under-utilized</li>
+</ol></section><section id="implementing-exponential-backoff"><h2>Implementing Exponential Backoff</h2>
+<p>Is it practical?</p>
+<pre><code class="language-text">     n  elapsed time (ms)
+     1           148
+     2           234
+     3           250
+     4           226
+     5           216
+     6           230
+     7           255
+     8           267
+     9           262
+    10           269
+    11           271
+    12           276
+    13           265
+    14           298
+    15           289
+    16           267
+    17           296
+    18           292
+    19           308
+    20           280
+    21           290
+    22           302
+    23           261
+    24           304
+    25           313
+    26           317
+    27           317
+    28           331
+    29           322
+    30           313
+    31           315
+    32           314
+</code></pre>
+<p>Not better than TTAS for tested parameters.</p>
+<ul>
+  <li><a href="">Download <code>SimpleLocks.zip</code></a></li>
+</ul></section><section id="technical-problem"><h2>Technical Problem</h2>
+<p>Textbook <code>Backoff</code> uses <code>Thread.sleep(...)</code></p>
+<ul>
+  <li>
+<code>sleep</code> tells OS scheduler not to schedule thread for a while
+    <ul>
+      <li>doesn’t use resources like <code>while (true) {};</code>
+</li>
+    </ul>
+  </li>
+  <li>Minimum <code>sleep</code> delay is 1 ms</li>
+  <li>This is MILLIONS of CPU cycles!
+    <ul>
+      <li>way too long to help with high contention/small tasks!</li>
+    </ul>
+  </li>
+  <li>My wasteful implementation uses “busy waiting”:</li>
+</ul>
+<pre><code class="language-java">    private void spin (long delay) {
+	long start = System.nanoTime();
+	long cur = System.nanoTime();
+
+	while (cur - start &lt; delay) {
+	    cur = System.nanoTime();
+	};
+    }
+</code></pre></section><section id="the-moral-1"><h2>The Moral</h2>
+<p>Exponential backoff is:</p>
+<ul>
+  <li>A useful strategy in a variety of contexts
+    <ul>
+      <li>frequently used in network protocols</li>
+    </ul>
+  </li>
+  <li>Probably not the best strategy for most of our locking needs</li>
+</ul></section><section id="a-goal"><h2>A Goal</h2>
+<p>So far:</p>
+<ul>
+  <li><code>TASLock</code></li>
+  <li><code>TTASLock</code></li>
+  <li><code>BackoffLock</code></li>
+</ul>
+<p>are deadlock-free, but not starvation free!</p>
+<p><strong>Question.</strong> How to achieve starvation freedom?</p>
+<div style="margin-bottom: 8em"></div></section><section id="queueing-lock-strategy"><h2>Queueing Lock Strategy</h2>
+<p>Represent threads waiting for lock as a queue</p>
+<ul>
+  <li>linked list representation of queue
+    <ul>
+      <li>each thread has associated node</li>
+      <li>node stores boolean value:
+        <ul>
+          <li>
+<code>true</code> I want/have lock</li>
+          <li>
+<code>false</code> I don’t want/have lock</li>
+        </ul>
+      </li>
+      <li>thread also stores predecessor node</li>
+    </ul>
+  </li>
+  <li>list initialized with a single node
+    <ul>
+      <li>
+<code>tail</code> node storing <code>false</code>
+</li>
+    </ul>
+  </li>
+</ul></section><section id="initial-configuration"><h2>Initial Configuration</h2>
+<div style="margin-bottom: 18em"></div></section><section id="thread-a-acquires-lock"><h2>Thread <code>A</code> Acquires Lock</h2>
+<div style="margin-bottom: 18em"></div></section><section id="thread-b-calls-lock"><h2>Thread <code>B</code> Calls <code>lock()</code>
+</h2>
+<div style="margin-bottom: 18em"></div></section><section id="thread-a-releases-lock"><h2>Thread <code>A</code> Releases Lock</h2>
+<div style="margin-bottom: 18em"></div></section><section id="thread-b-acquires-lock"><h2>Thread <code>B</code> Acquires Lock</h2>
+<div style="margin-bottom: 18em"></div></section><section id="technical-challenge"><h2>Technical Challenge</h2>
+<p>We need a <code>Node</code> for each thread!</p>
+<ul>
+  <li>Don’t know number of threads in advance!</li>
+</ul></section>
+</div></div>
+
+
+	  <script src="/assets/reveal.js-master/dist/reveal.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/math/math.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/zoom/zoom.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/notes/notes.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/search/search.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/markdown/markdown.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/highlight/highlight.js"></script>
+	  <script>
+	    
+
+	    // Also available as an ES module, see:
+	    // https://revealjs.com/initialization/
+	    Reveal.initialize({
+		controls: false,
+		progress: true,
+		center: true,
+		hash: true,
+		transition: 'none',
+		math: {
+		    config: 'TeX-AMS_HTML-full',
+		    TeX: {
+			Macros: {
+			    R: '\\mathbb{R}',
+			    set: [ '\\left\\{#1 \\; ; \\; #2\\right\\}', 2 ]
+			}
+		    }
+		},
+
+
+		// Learn about plugins: https://revealjs.com/plugins/
+		plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath ]
+	    });
+
+	  </script>
+
+	</body>
+</html>
+	  
+
+<!-- <\!-- load the reveal.js css & js (assuming you've put it in assets/)-\-> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/reveal.scss" -->
+<!-- /> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/theme/source/white.scss" -->
+<!-- /> -->
+<!-- <script -->
+<!--   src="/assets/reveal.js-master/js/reveal.js" -->
+<!--   type="text/javascript" -->
+<!-- ></script> -->
+
+<!-- <\!-- configure the presentation, (you can tweak options to suit) -\-> -->
+<!-- <script> -->
+<!--   Reveal.initialize({ -->
+<!--     // Display presentation control arrows -->
+<!--     controls: false, -->
+
+<!--     // Help the user learn the controls by providing hints, for example by -->
+<!--     // bouncing the down arrow when they first encounter a vertical slide -->
+<!--     controlsTutorial: false, -->
+
+<!--     // Determines where controls appear, "edges" or "bottom-right" -->
+<!--     controlsLayout: "bottom-right", -->
+
+<!--     // Visibility rule for backwards navigation arrows; "faded", "hidden" -->
+<!--     // or "visible" -->
+<!--     controlsBackArrows: "faded", -->
+
+<!--     // Display a presentation progress bar -->
+<!--     progress: true, -->
+
+<!--     // Display the page number of the current slide -->
+<!--     slideNumber: false, -->
+
+<!--     // Push each slide change to the browser history -->
+<!--     history: false, -->
+
+<!--     // Enable keyboard shortcuts for navigation -->
+<!--     keyboard: true, -->
+
+<!--     // Enable the slide overview mode -->
+<!--     overview: true -->
+<!--   }); -->
+<!-- </script> -->

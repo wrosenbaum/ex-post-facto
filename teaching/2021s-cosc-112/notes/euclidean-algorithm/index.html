@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<title>Will  Rosenbaum | The Euclidean Algorithm</title>
+<meta name="description" content="A blog about mathematics, computer science, etc.
+">
+
+<!-- Open Graph -->
+
+
+<!-- Bootstrap & MDB -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" integrity="sha512-MoRNloxbStBcD8z3M/2BmnT+rg4IsMxPkXaGh2zD6LGNNFE80W3onsAhRcMAMrSoyWL9xD7Ert0men7vR8LUZg==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" integrity="sha512-RO38pBRxYH3SoOprtPTD86JFOclM51/XTIdEPh5j8sj4tp8jmQIx26twG52UaLi//hQldfrh7e51WzP9wuP32Q==" crossorigin="anonymous" />
+
+<!-- Fonts & Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"  integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.0/css/academicons.min.css" integrity="sha512-W4yqoT1+8NLkinBLBZko+dFB2ZbHsYLDdr50VElllRcNt2Q4/GSs6u71UHKxB7S6JEMCp5Ve4xjh3eGQl/HRvg==" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+
+
+
+<!-- Code Syntax Highlighting -->
+<link rel="stylesheet" href="https://gitcdn.link/repo/jwarby/jekyll-pygments-themes/master/github.css" />
+
+<!-- Styles -->
+<link rel="shortcut icon" href="/assets/img/favicon.ico">
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<link rel="canonical" href="/teaching/2021s-cosc-112/notes/euclidean-algorithm/">
+
+<!-- JQuery -->
+<!-- jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+
+
+<!-- Theming-->
+
+  <script src="/assets/js/theme.js"></script>
+  <!-- Load DarkMode JS -->
+<script src="/assets/js/dark_mode.js"></script>
+
+
+
+
+
+
+    
+<!-- MathJax -->
+<script type="text/javascript">
+  window.MathJax = {
+    tex: {
+      tags: 'ams'
+    }
+  };
+</script>
+<script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js"></script>
+<script defer src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+
+  </head>
+
+  <body class="fixed-top-nav ">
+
+    <!-- Header -->
+
+    <header>
+
+    <!-- Nav Bar -->
+    <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top">
+    <div class="container">
+      
+      <a class="navbar-brand title font-weight-lighter" href="https://willrosenbaum.com/">
+       Will   Rosenbaum
+      </a>
+      
+      <!-- Navbar Toggle -->
+      <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar top-bar"></span>
+        <span class="icon-bar middle-bar"></span>
+        <span class="icon-bar bottom-bar"></span>
+      </button>
+      <div class="collapse navbar-collapse text-right" id="navbarNav">
+        <ul class="navbar-nav ml-auto flex-nowrap">
+          <!-- About -->
+          <li class="nav-item ">
+            <a class="nav-link" href="/">
+              about
+              
+            </a>
+          </li>
+          <!-- Other pages -->
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/teaching/">
+                teaching
+                
+              </a>
+          </li>
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/research/">
+                research
+                
+              </a>
+          </li>
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/publications/">
+                publications
+                
+              </a>
+          </li>
+          
+          
+	  
+          <!-- Blog -->
+          <li class="nav-item ">
+            <a class="nav-link" href="/blog/">
+              blog
+              
+            </a>
+          </li>
+          
+
+          
+            <div class = "toggle-container">
+              <a id = "light-toggle">
+                  <i class="fas fa-moon"></i>
+                  <i class="fas fa-sun"></i>
+              </a>
+            </div>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+</header>
+
+
+    <!-- Content -->
+
+    <div class="container mt-5">
+      <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">The Euclidean Algorithm</h1>
+    <p class="post-description">implementing one of the earliest algorithms in recorded history</p>
+  </header>
+
+  <article>
+    <p>Recall that a <strong>rational number</strong> \(q\) is a number that can be expressed as a ratio of integers \(r = \frac{a}{b}\), where we assume \(b &gt; 0\). A single rational number has (infinitely) many representations as a fraction. For example, \(\frac{2}{3} = \frac{4}{6} = \frac{6}{9} = \cdots\). When writing and manipulating fractions, we typically want to express fractions in <strong>reduced form</strong>. For example, we prefer the fraction \(2/3\) to the equivalent fraction \(8/12\), because 2 and 3 don’t share any common factors, while 8 and 12 are both divisible by 4. In this note, we will describe an efficient method of finding the greatest common divisor of two numbers, which we can then employ to reduce fractions in the <code class="language-plaintext highlighter-rouge">Fraction</code> class we will develop in lecture.</p>
+
+<h2 id="greatest-common-divisors">Greatest common divisors</h2>
+
+<p>Given integers \(a\) and \(d\), we say that \(d\) is a <strong>divisor</strong> of \(a\) if \(a\) can be written as a product \(a = d \cdot q\) where \(q\) is another integer. In this case, we call \(q\) the <strong>quotient</strong> of  \(a\) and \(q\).</p>
+
+<p>Given two integers \(a\) and \(b\), we say that \(d\) is a <strong>common divisor</strong> of \(a\) and \(b\) if \(d\) is a divisor of both \(a\) and \(d\). That is, \(d\) is a common divisor of \(a\) and \(b\) if there are two integers \(q_a\) and \(q_b\) such that \(a = d \cdot q_a\) and \(b = d \cdot q_b\). The <strong>greatest common divisor</strong> (<strong>GCD</strong>) of \(a\) and \(b\) is the largest integer \(d\) that is a divisor of both \(a\) and \(b\). We denote the greatest common divisor of \(a\) and \(b\) by \(\mathrm{gcd}(a, b)\).</p>
+
+<p><strong>Example.</strong> Consider \(a = 54\) and \(b = 24\). Then both \(a\) and \(b\) are divisible by 1, 2, 3, and 6, but they share no other divisors in common. Thus, we have \(\mathrm{gcd}(a, b) = 6\).</p>
+
+<p><strong>Note.</strong> For any integer \(a\), we have have \(\mathrm{gcd}(a, 0) = a\).</p>
+
+<h2 id="computing-the-gcd">Computing the gcd</h2>
+
+<p>In school, I was taught the following method for computing the GCD of two numbers:</p>
+
+<ol>
+  <li>factor both numbers as a product of prime numbers</li>
+  <li>find all of the common factors (with multiplicities)</li>
+  <li>the GCD is the product of the common factors</li>
+</ol>
+
+<p>Using the example above with \(a = 54\) and \(b = 24\), I’d have written</p>
+
+\[18 = 2 * 3 * 3 * 3\]
+
+<p>and</p>
+
+\[24 = 2 * 2 * 2 * 3\]
+
+<p>so the common factors are 2 and 3 with multiplicity 1 (2 only appears once in the factorization of 18, and 3 only appears once in the factorization of 24). Thus we have (correctly) found that \(\mathrm{gcd}(54, 24) = 6\).</p>
+
+<p>The problem with this method of computing the GCD is that you first must factor both numbers. Factoring is fine for small numbers, but once we look at larger numbers, factoring becomes inefficient. In fact, it is unknown whether or not there is an efficient algorithm for factoring large numbers (at least for classical, i.e., non-quantum, computers).</p>
+
+<p>Thankfully, there is an older and more efficient way of computing GCDs: the Euclidean algorithm. To understand the Euclidean algorithm, we must start with long division. Recall that given two integers \(a\) and \(b\), long division allows us to find the quotient \(q\) and remainder \(r\) upon dividing \(a\) by \(b\). That is, we can find \(q\) and \(r\) satisfying \(a = q \cdot b + r\) with \(0 \leq r &lt; b\).</p>
+
+<p>In Java, we can compute \(q\) and \(r\) using the standard arithmetic operations <code class="language-plaintext highlighter-rouge">q = a / b</code> and <code class="language-plaintext highlighter-rouge">r = a % b</code>. Now this brings us to an important fact:</p>
+
+<p><strong>Important Fact.</strong> Suppose \(a = q \cdot b + r\) with \(0 \leq r &lt; b\). Then \(\mathrm{gcd}(a, b) = \mathrm{gcd}(b, r)\).</p>
+
+<p>Why does this fact help us? Well, if we know that \(\mathrm{gcd}(a, b) = \mathrm{gcd}(b, r)\), then it suffices to compute \(\mathrm{gcd}(b, r)\). Also, \(r &lt; b\), so this second GCD involves smaller numbers than the original problem.</p>
+
+<p>But how do we compute \(\mathrm{gcd}(b, r)\)? By doing the same thing again! We can find \(q_2\) and \(r_2\) such that \(b = q_2 \cdot r + r_2\), and then we have</p>
+
+<p>\(\mathrm{gcd}(r, r_2) = \mathrm{gcd}(b, r) = \mathrm{gcd}(a, b)\) where \(r_2 &lt; r &lt; b\).</p>
+
+<p>Continuing this process, the GCD remains the same, but the second number continues to decrease. Since we get a decreasing sequence of non-negative integers, eventually (actually, quite quickly) we get a remainder of 0, so we find \(\mathrm{gcd}(a, b) = \cdots = \mathrm{gcd}(r_n, 0) = r_n\).</p>
+
+<p><strong>Example.</strong> Using the example \(a = 54, b = 24\) from before, we have</p>
+
+\[54 = 2 \cdot 24 + 6 \Rightarrow \mathrm{gcd}(54, 24) = \mathrm{gcd}(24, 6)\]
+
+<p>and</p>
+
+<p>\(24 = 4 \cdot 6 + 0 \Rightarrow \mathrm{gcd}(24, 6) = \mathrm{gcd}(6, 0)\).</p>
+
+<p>Since \(\mathrm{gcd}(6, 0) = 6\), we have \(\mathrm{gcd}(54, 24) = 6\), as we computed before.</p>
+
+<p><strong>Bigger example.</strong> Let’s compute \(\mathrm{gcd}(270, 192)\):</p>
+
+<ol>
+  <li>
+\[270 = 1 \cdot 192 + 78 \Rightarrow \mathrm{gcd}(270, 192) = \mathrm{gcd}(192, 78)\]
+  </li>
+  <li>
+\[192 = 2 \cdot 78 + 36 \Rightarrow \mathrm{gcd}(192, 78) = \mathrm{gcd}(78, 36)\]
+  </li>
+  <li>
+\[78 = 2 \cdot 36 + 6 \Rightarrow \mathrm{gcd}(78, 36) = \mathrm{gcd}(36, 6)\]
+  </li>
+  <li>
+\[36 = 6 \cdot 6 + 0 \Rightarrow \gcd(36, 6) = \gcd(6, 0) = 6\]
+  </li>
+</ol>
+
+<p>So putting it all together, we get \(\mathrm{gcd}(270, 192) = 6\).</p>
+
+<p>The process above defines the <strong>Euclidean Algorithm</strong>. A bit more formally, we can write the process recursively as follows:</p>
+
+<ul>
+  <li>\(\mathrm{gcd}(a, b)\):
+    <ul>
+      <li>if \(b = 0\), return \(a\)</li>
+      <li>otherwise, find \(q\) and \(r\) with \(a = q \cdot b + r\) with \(0 \leq r &lt; b\)</li>
+      <li>return \(\mathrm{gcd}(b, r)\)</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="implementing-the-euclidean-algorithm">Implementing the Euclidean Algorithm</h2>
+
+<p>The recursive description of the Euclidean Algorithm above lends itself to a deceptively simple implementation in Java:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public int gcd(int a, int b) {
+  if (b == 0) {
+    return a;
+  }
+
+  return gcd(b, a % b);
+}
+</code></pre></div></div>
+
+<p>This code is both concise and efficient.</p>
+
+<h2 id="iyi-proving-the-important-fact">IYI: Proving the Important Fact</h2>
+
+<p>Here, we prove the important fact from before:</p>
+
+<p><strong>Important Fact.</strong> Suppose \(a = q \cdot b + r\) with \(0 \leq r &lt; b\). Then \(\mathrm{gcd}(a, b) = \mathrm{gcd}(b, r)\).</p>
+
+<p><strong>Proof.</strong> It suffices to show that \(a\) and \(b\) have precisely the same set of common divisors as \(b\) and \(r\). To this end, first suppose \(d\) is a divisor of both \(a\) and \(b\). Then we can write \(a = q_a \cdot d\) and \(b = q_b \cdot d\) for some integers \(q_a\) and \(q_b\). Plugging these expressions for \(a\) and \(b\) into \(a = q \cdot b + r\) gives</p>
+
+\[q_a \cdot d = q \cdot q_b \cdot d + r\]
+
+<p>Solving this expression for \(r\) and combining like terms gives</p>
+
+<p>\(r = q_a \cdot d - q \cdot q_b \cdot d = (q_a - q \cdot q_b) \cdot d\).</p>
+
+<p>In particular, this shows that \(d\) is also a divisor of \(r\). Therefore, every common divisor of \(a\) and \(b\) is a divisor of \(r\).</p>
+
+<p>Now assume that \(d\) is a common divisor of \(b\) and \(r\). That is, we can write \(b = q_b \cdot d\) and \(r = q_r \cdot d\). Plugging these expressions in to \(a = q \cdot b + r\) gives</p>
+
+<p>\(a = q \cdot q_b \cdot d + q_r \cdot d = (q \cdot q_b + q_r) \cdot d\).</p>
+
+<p>Therefore, \(d\) is also a divisor of \(a\).</p>
+
+<p>We have shown that (1) any common divisor of \(a\) and \(b\) is also a divisor of \(r\), and (2) any common divisor of \(b\) and \(r\) is also a divisor of \(a\). Therefore \(a\) and \(b\) have precisely the same common divisors as \(b\) and \(r\), hence \(\mathrm{gcd}(a, b) = \mathrm{gcd}(b, r)\). □</p>
+
+  </article>
+
+</div>
+
+    </div>
+
+    <!-- Footer -->
+
+    
+<footer class="fixed-bottom">
+  <div class="container mt-0">
+    &copy; Copyright 2021 Will  Rosenbaum.
+    
+    
+    
+  </div>
+</footer>
+
+
+
+  </body>
+
+  <!-- Bootsrap & MDB scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.4.4/umd/popper.min.js" integrity="sha512-eUQ9hGdLjBjY3F41CScH3UX+4JDSI9zXeroz7hJ+RteoCaY+GP/LDoM8AO+Pt+DRFw3nXqsjh9Zsts8hnYv8/A==" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha512-M5KW3ztuIICmVIhjSqXe01oV2bpe248gOxqmlcYrEzAvws7Pw3z6BK0iGbrwvdrUQUhi3eXgtxp5I8PDo9YfjQ==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js" integrity="sha512-Mug9KHKmroQFMLm93zGrjhibM2z2Obg9l6qFG2qKjXEXkMp/VDkI4uju9m4QKPjWSwQ6O2qzZEnJDEeCw0Blcw==" crossorigin="anonymous"></script>
+
+  
+<!-- Mansory & imagesLoaded -->
+<script defer src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<script defer src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+<script defer src="/assets/js/mansory.js" type="text/javascript"></script>
+
+
+  
+
+
+<!-- Load Common JS -->
+<script src="/assets/js/common.js"></script>
+
+
+</html>

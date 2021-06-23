@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta charset="utf-8">
+
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reset.css">
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reveal.css">
+		<link rel="stylesheet" href="/assets/css/condensation.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="/assets/reveal.js-master/plugin/highlight/monokai.css" id="highlight-theme">
+		<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700" rel="stylesheet">
+
+	</head>
+
+	<body>
+
+
+	  <!-- this is where the reveailfy filter gets applied -->
+	  <div class="reveal"><div class="slides">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section id="project-02-substitution-cipher"><h1>Project 02: Substitution Cipher</h1></section><section id="outline"><h2>Outline</h2>
+<ol>
+  <li>Substitution Ciphers</li>
+  <li>Project Demo</li>
+  <li>Getting Started</li>
+</ol></section><section id="substitution-ciphers"><h1>Substitution Ciphers</h1></section><section id="secrecy"><h2>Secrecy</h2>
+<p>Since ancient times, people have relied on secret storing and transmission of sensitive information:</p>
+<ul>
+  <li>Military secrets
+    <ul>
+      <li>coordination</li>
+      <li>battle plans</li>
+    </ul>
+  </li>
+  <li>Secret diary</li>
+  <li>Secure payments (e.g., debit/credit card transactions)</li>
+  <li>…</li>
+</ul></section><section id="setup"><h2>Setup</h2>
+<ul>
+  <li>start with <strong>cleartext</strong> message
+    <ul>
+      <li>message that contains sensitive info</li>
+    </ul>
+  </li>
+  <li>want to generate a <strong>ciphertext</strong>
+    <ul>
+      <li>obscures sensitive info in cleartext</li>
+      <li>cleartext can be recovered from ciphertext
+        <ul>
+          <li>but only if you know how!</li>
+        </ul>
+      </li>
+      <li>
+<strong>key</strong> is secret that allows one to recover cleartext
+        <ul>
+          <li>key might be e.g., password</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul></section><section id="ciphers-and-keys"><h2>Ciphers and Keys</h2>
+<p>A <strong>cipher</strong> is a method of generating ciphertext from cleartext and vice versa</p>
+<p>More formally, a cipher has two methods:</p>
+<ol>
+  <li><code>encrypt : (cleartext, key) -&gt; ciphertext</code></li>
+  <li><code>decrypt : (ciphertext, key) -&gt; cleartext</code></li>
+</ol>
+<p>We require</p>
+<ul>
+  <li>if cleartext encrypted and decrypted with same key, get the same message back</li>
+</ul>
+<p>We hope</p>
+<ul>
+  <li>without key, it is hard recover cleartext from ciphertext</li>
+</ul></section><section id="caesar-cipher"><h2>Caesar Cipher</h2>
+<p>Idea: map each letter to another letter</p>
+<ul>
+  <li>use a single (cylic) shift $k$ (key)</li>
+</ul>
+<p>Example: a cyclic shift of $k = +3$:</p>
+<p><img src="/assets/img/substitution-cipher/caesar.png" alt="" width="100%"></p>
+<ul>
+  <li>to encrypt: follow arrow from each cleartext letter</li>
+  <li>to decrypt: reverse direction</li>
+</ul></section><section id="encrypt-example"><h2>Encrypt Example</h2>
+<p>Encrypt <code>RETREAT</code></p>
+<p><img src="/assets/img/substitution-cipher/caesar.png" alt="" width="100%"></p>
+<div style="margin-bottom: 8em"></div></section><section id="decrypt-example"><h2>Decrypt Example</h2>
+<p>Decrypt <code>DWWDFN</code></p>
+<p><img src="/assets/img/substitution-cipher/caesar.png" alt="" width="100%"></p>
+<div style="margin-bottom: 8em"></div></section><section id="how-secure-caesar"><h2>How Secure Caesar?</h2>
+<div style="margin-bottom: 12em"></div></section><section id="a-more-general-cipher"><h2>A More General Cipher</h2>
+<p>The <strong>substitution cipher</strong></p>
+<ul>
+  <li>choose an <em>arbitrary</em> one-to-one map between alphabets</li>
+  <li>encryption/decryption the same as with Caesar</li>
+</ul></section><section id="substitution-example"><h2>Substitution Example</h2>
+<p>Encrypt <code>RETREAT</code></p>
+<p><img src="/assets/img/substitution-cipher/substitution.png" alt="" width="100%"></p>
+<div style="margin-bottom: 8em"></div></section><section id="project-02"><h2>Project 02</h2>
+<p>Implement a substitution cipher!</p>
+<p>Two differences with previous example:</p>
+<ol>
+  <li>key should be a <code>long</code> value
+    <ul>
+      <li>create <code>Random</code> object with <code>long key</code> as seed</li>
+      <li>use <code>Random</code> to create substitution table</li>
+      <li>same <code>key</code> $\implies$ same table</li>
+      <li>use table to encrypt or decrypt</li>
+    </ul>
+  </li>
+  <li>alphabet consists of all 255 possible <code>char</code> values
+    <ul>
+      <li>not just chars <code>A</code> through <code>Z</code>
+</li>
+    </ul>
+  </li>
+</ol></section><section id="program-demo"><h2>Program Demo</h2></section><section id="today"><h2>Today</h2>
+<ul>
+  <li>Download and run code</li>
+  <li>Caesar cipher already implemented</li>
+  <li>Use code to decrypt a message
+    <ul>
+      <li><a href="/assets/java/2021s-cosc-112/project02-substitution-cipher/secret-message.txt">secret-message.txt</a></li>
+      <li>the key is the year of Julius Caesar’s assassination</li>
+      <li><a href="https://forms.gle/6EX7n15iG5oSY2w87"><strong>paste the decrypted text here</strong></a></li>
+    </ul>
+  </li>
+</ul></section>
+</div></div>
+
+
+	  <script src="/assets/reveal.js-master/dist/reveal.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/math/math.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/zoom/zoom.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/notes/notes.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/search/search.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/markdown/markdown.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/highlight/highlight.js"></script>
+	  <script>
+	    
+
+	    // Also available as an ES module, see:
+	    // https://revealjs.com/initialization/
+	    Reveal.initialize({
+		controls: false,
+		progress: true,
+		center: true,
+		hash: true,
+		transition: 'none',
+		math: {
+		    config: 'TeX-AMS_HTML-full',
+		    TeX: {
+			Macros: {
+			    R: '\\mathbb{R}',
+			    set: [ '\\left\\{#1 \\; ; \\; #2\\right\\}', 2 ]
+			}
+		    }
+		},
+
+
+		// Learn about plugins: https://revealjs.com/plugins/
+		plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath ]
+	    });
+
+	  </script>
+
+	</body>
+</html>
+	  
+
+<!-- <\!-- load the reveal.js css & js (assuming you've put it in assets/)-\-> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/reveal.scss" -->
+<!-- /> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/theme/source/white.scss" -->
+<!-- /> -->
+<!-- <script -->
+<!--   src="/assets/reveal.js-master/js/reveal.js" -->
+<!--   type="text/javascript" -->
+<!-- ></script> -->
+
+<!-- <\!-- configure the presentation, (you can tweak options to suit) -\-> -->
+<!-- <script> -->
+<!--   Reveal.initialize({ -->
+<!--     // Display presentation control arrows -->
+<!--     controls: false, -->
+
+<!--     // Help the user learn the controls by providing hints, for example by -->
+<!--     // bouncing the down arrow when they first encounter a vertical slide -->
+<!--     controlsTutorial: false, -->
+
+<!--     // Determines where controls appear, "edges" or "bottom-right" -->
+<!--     controlsLayout: "bottom-right", -->
+
+<!--     // Visibility rule for backwards navigation arrows; "faded", "hidden" -->
+<!--     // or "visible" -->
+<!--     controlsBackArrows: "faded", -->
+
+<!--     // Display a presentation progress bar -->
+<!--     progress: true, -->
+
+<!--     // Display the page number of the current slide -->
+<!--     slideNumber: false, -->
+
+<!--     // Push each slide change to the browser history -->
+<!--     history: false, -->
+
+<!--     // Enable keyboard shortcuts for navigation -->
+<!--     keyboard: true, -->
+
+<!--     // Enable the slide overview mode -->
+<!--     overview: true -->
+<!--   }); -->
+<!-- </script> -->

@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<title>Will  Rosenbaum | Handling Exceptions</title>
+<meta name="description" content="A blog about mathematics, computer science, etc.
+">
+
+<!-- Open Graph -->
+
+
+<!-- Bootstrap & MDB -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" integrity="sha512-MoRNloxbStBcD8z3M/2BmnT+rg4IsMxPkXaGh2zD6LGNNFE80W3onsAhRcMAMrSoyWL9xD7Ert0men7vR8LUZg==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" integrity="sha512-RO38pBRxYH3SoOprtPTD86JFOclM51/XTIdEPh5j8sj4tp8jmQIx26twG52UaLi//hQldfrh7e51WzP9wuP32Q==" crossorigin="anonymous" />
+
+<!-- Fonts & Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"  integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.0/css/academicons.min.css" integrity="sha512-W4yqoT1+8NLkinBLBZko+dFB2ZbHsYLDdr50VElllRcNt2Q4/GSs6u71UHKxB7S6JEMCp5Ve4xjh3eGQl/HRvg==" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+
+
+
+<!-- Code Syntax Highlighting -->
+<link rel="stylesheet" href="https://gitcdn.link/repo/jwarby/jekyll-pygments-themes/master/github.css" />
+
+<!-- Styles -->
+<link rel="shortcut icon" href="/assets/img/favicon.ico">
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<link rel="canonical" href="/teaching/2021s-cosc-112/notes/handling-exceptions/">
+
+<!-- JQuery -->
+<!-- jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+
+
+<!-- Theming-->
+
+  <script src="/assets/js/theme.js"></script>
+  <!-- Load DarkMode JS -->
+<script src="/assets/js/dark_mode.js"></script>
+
+
+
+
+
+
+    
+<!-- MathJax -->
+<script type="text/javascript">
+  window.MathJax = {
+    tex: {
+      tags: 'ams'
+    }
+  };
+</script>
+<script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js"></script>
+<script defer src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+
+  </head>
+
+  <body class="fixed-top-nav ">
+
+    <!-- Header -->
+
+    <header>
+
+    <!-- Nav Bar -->
+    <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top">
+    <div class="container">
+      
+      <a class="navbar-brand title font-weight-lighter" href="https://willrosenbaum.com/">
+       Will   Rosenbaum
+      </a>
+      
+      <!-- Navbar Toggle -->
+      <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar top-bar"></span>
+        <span class="icon-bar middle-bar"></span>
+        <span class="icon-bar bottom-bar"></span>
+      </button>
+      <div class="collapse navbar-collapse text-right" id="navbarNav">
+        <ul class="navbar-nav ml-auto flex-nowrap">
+          <!-- About -->
+          <li class="nav-item ">
+            <a class="nav-link" href="/">
+              about
+              
+            </a>
+          </li>
+          <!-- Other pages -->
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/teaching/">
+                teaching
+                
+              </a>
+          </li>
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/research/">
+                research
+                
+              </a>
+          </li>
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/publications/">
+                publications
+                
+              </a>
+          </li>
+          
+          
+	  
+          <!-- Blog -->
+          <li class="nav-item ">
+            <a class="nav-link" href="/blog/">
+              blog
+              
+            </a>
+          </li>
+          
+
+          
+            <div class = "toggle-container">
+              <a id = "light-toggle">
+                  <i class="fas fa-moon"></i>
+                  <i class="fas fa-sun"></i>
+              </a>
+            </div>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+</header>
+
+
+    <!-- Content -->
+
+    <div class="container mt-5">
+      <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Handling Exceptions</h1>
+    <p class="post-description">an introduction to exception handling in Java</p>
+  </header>
+
+  <article>
+    <p>You should download this code and follow along!</p>
+
+<ul>
+  <li><a href="/assets/java/handling-exceptions/BadFraction.java"><code class="language-plaintext highlighter-rouge">BadFraction.java</code></a></li>
+  <li><a href="/assets/java/handling-exceptions/DivisionByZeroException.java"><code class="language-plaintext highlighter-rouge">DivisionByZeroException.java</code></a></li>
+  <li><a href="/assets/java/handling-exceptions/Fraction.java"><code class="language-plaintext highlighter-rouge">Fraction.java</code></a></li>
+  <li><a href="/assets/java/handling-exceptions/FractionTester.java"><code class="language-plaintext highlighter-rouge">FractionTester.java</code></a></li>
+</ul>
+
+<p>Consider the following <code class="language-plaintext highlighter-rouge">Fraction</code> class (called <code class="language-plaintext highlighter-rouge">BadFraction</code> in the code above):</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Fraction</span> <span class="o">{</span>
+        
+        <span class="kd">private</span> <span class="kt">int</span> <span class="n">num</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="kt">int</span> <span class="n">den</span><span class="o">;</span>
+    
+        <span class="kd">public</span> <span class="kd">static</span> <span class="kt">int</span> <span class="nf">gcd</span><span class="o">(</span><span class="kt">int</span> <span class="n">n</span><span class="o">,</span> <span class="kt">int</span> <span class="n">m</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">m</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="k">return</span> <span class="n">n</span><span class="o">;</span>
+            <span class="k">return</span> <span class="nf">gcd</span><span class="o">(</span><span class="n">m</span><span class="o">,</span> <span class="n">n</span> <span class="o">%</span> <span class="n">m</span><span class="o">);</span>
+        <span class="o">}</span>
+    
+        <span class="nc">Fraction</span> <span class="o">()</span> <span class="o">{</span>
+            <span class="n">num</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+            <span class="n">den</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+        <span class="o">}</span>
+    
+        <span class="nc">Fraction</span> <span class="o">(</span><span class="kt">int</span> <span class="n">num</span><span class="o">,</span> <span class="kt">int</span> <span class="n">den</span><span class="o">)</span> <span class="o">{</span>        
+            <span class="k">this</span><span class="o">.</span><span class="na">num</span> <span class="o">=</span> <span class="n">num</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">den</span> <span class="o">=</span> <span class="n">den</span><span class="o">;</span>
+            <span class="n">reduce</span><span class="o">();</span>
+        <span class="o">}</span>
+    
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">reduce</span> <span class="o">()</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">gcd</span> <span class="o">=</span> <span class="n">gcd</span><span class="o">(</span><span class="n">num</span><span class="o">,</span> <span class="n">den</span><span class="o">);</span>
+    
+            <span class="k">if</span> <span class="o">(</span><span class="n">gcd</span> <span class="o">!=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+                <span class="n">num</span> <span class="o">/=</span> <span class="n">gcd</span><span class="o">;</span>
+                <span class="n">den</span> <span class="o">/=</span> <span class="n">gcd</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    
+        <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getNum</span> <span class="o">()</span> <span class="o">{</span><span class="k">return</span> <span class="n">num</span><span class="o">;}</span>
+        <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getDen</span> <span class="o">()</span> <span class="o">{</span><span class="k">return</span> <span class="n">den</span><span class="o">;}</span>
+    
+        <span class="kd">public</span> <span class="nc">Fraction</span> <span class="nf">plus</span> <span class="o">(</span><span class="nc">Fraction</span> <span class="n">f</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="nf">Fraction</span><span class="o">(</span><span class="n">num</span> <span class="o">*</span> <span class="n">f</span><span class="o">.</span><span class="na">den</span> <span class="o">+</span> <span class="n">den</span> <span class="o">*</span> <span class="n">f</span><span class="o">.</span><span class="na">num</span><span class="o">,</span> <span class="n">den</span> <span class="o">*</span> <span class="n">f</span><span class="o">.</span><span class="na">den</span><span class="o">);</span>
+        <span class="o">}</span>
+    
+        <span class="kd">public</span> <span class="nc">Fraction</span> <span class="nf">minus</span> <span class="o">(</span><span class="nc">Fraction</span> <span class="n">f</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">plus</span><span class="o">(</span><span class="n">f</span><span class="o">.</span><span class="na">times</span><span class="o">(-</span><span class="mi">1</span><span class="o">));</span>
+        <span class="o">}</span>
+    
+        <span class="kd">public</span> <span class="nc">Fraction</span> <span class="nf">reciprocal</span> <span class="o">()</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="nf">Fraction</span><span class="o">(</span><span class="n">den</span><span class="o">,</span> <span class="n">num</span><span class="o">);</span>
+        <span class="o">}</span>
+    
+        <span class="kd">public</span> <span class="nc">Fraction</span> <span class="nf">times</span> <span class="o">(</span><span class="nc">Fraction</span> <span class="n">f</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="nf">Fraction</span><span class="o">(</span><span class="n">num</span> <span class="o">*</span> <span class="n">f</span><span class="o">.</span><span class="na">num</span><span class="o">,</span> <span class="n">den</span> <span class="o">*</span> <span class="n">f</span><span class="o">.</span><span class="na">den</span><span class="o">);</span>
+        <span class="o">}</span>
+    
+        <span class="kd">public</span> <span class="nc">Fraction</span> <span class="nf">times</span> <span class="o">(</span><span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="k">new</span> <span class="nf">Fraction</span><span class="o">(</span><span class="n">num</span> <span class="o">*</span> <span class="n">n</span><span class="o">,</span> <span class="n">den</span><span class="o">);</span>
+        <span class="o">}</span>
+    
+        <span class="kd">public</span> <span class="nc">Fraction</span> <span class="nf">dividedBy</span> <span class="o">(</span><span class="nc">Fraction</span> <span class="n">f</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">times</span><span class="o">(</span><span class="n">f</span><span class="o">.</span><span class="na">reciprocal</span><span class="o">());</span>
+        <span class="o">}</span>
+    
+        <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">equals</span> <span class="o">(</span><span class="nc">Fraction</span> <span class="n">f</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="o">(</span><span class="n">num</span> <span class="o">*</span> <span class="n">f</span><span class="o">.</span><span class="na">den</span> <span class="o">==</span> <span class="n">f</span><span class="o">.</span><span class="na">num</span> <span class="o">*</span> <span class="n">den</span><span class="o">);</span>
+        <span class="o">}</span>
+    
+        <span class="kd">public</span> <span class="nc">String</span> <span class="nf">toString</span> <span class="o">()</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="o">(</span><span class="n">num</span> <span class="o">+</span> <span class="s">" / "</span> <span class="o">+</span> <span class="n">den</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>To test our <code class="language-plaintext highlighter-rouge">Fraction</code> class, we can make some <code class="language-plaintext highlighter-rouge">Fraction</code>s:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nc">Fraction</span> <span class="n">a</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Fraction</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">);</span>
+    <span class="nc">Fraction</span> <span class="n">b</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Fraction</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">3</span><span class="o">);</span>
+    <span class="nc">Fraction</span> <span class="n">c</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Fraction</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">6</span><span class="o">);</span>
+</code></pre></div></div>
+
+<p>We can do some arithmetic and get the expected results:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"a + b = "</span> <span class="o">+</span> <span class="n">a</span><span class="o">.</span><span class="na">plus</span><span class="o">(</span><span class="n">b</span><span class="o">).</span><span class="na">toString</span><span class="o">());</span>
+    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"a - b = "</span> <span class="o">+</span> <span class="n">a</span><span class="o">.</span><span class="na">minus</span><span class="o">(</span><span class="n">b</span><span class="o">).</span><span class="na">toString</span><span class="o">());</span>
+    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"a + b - c = "</span> <span class="o">+</span> <span class="n">a</span><span class="o">.</span><span class="na">plus</span><span class="o">(</span><span class="n">b</span><span class="o">).</span><span class="na">minus</span><span class="o">(</span><span class="n">c</span><span class="o">).</span><span class="na">toString</span><span class="o">());</span>
+    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"c / (a + b) = "</span> <span class="o">+</span> <span class="n">c</span><span class="o">.</span><span class="na">dividedBy</span><span class="o">(</span><span class="n">a</span><span class="o">.</span><span class="na">plus</span><span class="o">(</span><span class="n">b</span><span class="o">)));</span>
+</code></pre></div></div>
+
+<p>produces the following output</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    a + b = 5 / 6
+    a - b = 1 / 6
+    a + b - c = 2 / 3
+    c / (a + b) = 1 / 5
+</code></pre></div></div>
+
+<p>as we’d expect. But something strange happens when we run the following code:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nc">Fraction</span> <span class="n">oops</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="na">minus</span><span class="o">(</span><span class="n">b</span><span class="o">).</span><span class="na">minus</span><span class="o">(</span><span class="n">c</span><span class="o">).</span><span class="na">dividedBy</span><span class="o">(</span><span class="n">a</span><span class="o">.</span><span class="na">minus</span><span class="o">(</span><span class="n">b</span><span class="o">).</span><span class="na">minus</span><span class="o">(</span><span class="n">c</span><span class="o">));</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">oops</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">a</span><span class="o">))</span> <span class="o">{</span>
+      <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Huh... (a - b - c) / (a - b - c) == a"</span><span class="o">);</span>
+      <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"That is strange, because a = "</span> <span class="o">+</span> <span class="n">a</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>The resulting output is:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    Huh... (a - b - c) / (a - b - c) == a
+    That is strange, because a = 1 / 2
+</code></pre></div></div>
+
+<p>Why is this so strange? Well, because</p>
+
+\[\frac{a - b - c}{a - b - c} = \frac{1}{2} \Rightarrow 2 (a - b - c) = (a - b - c) \Rightarrow 2 = 1.\]
+
+<p>So it seems our program implies that \(2 = 1\)?!?! Well, no. This problem is revealed when we output the value of the fraction  \((a - b - c) / (a - b - c)\):</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"(a - b - c) / (a - b - c) = "</span> <span class="o">+</span> <span class="n">oops</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+</code></pre></div></div>
+
+<p>prints</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    (a - b - c) / (a - b - c) = 0 / 0
+</code></pre></div></div>
+
+<p>The real issue is that we divided by zero, and our program just lets us. In what follows, we will show how to use exception handling to fix this problem.</p>
+
+<h2 id="exceptions">Exceptions</h2>
+
+<p>Exceptions are a way that we can communicate that our program encountered some sort of error or unexpected input. You’ve probably encountered exceptions in your code resulting from mistakes in your code. For example if you have a program with</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> 
+    <span class="kt">int</span> <span class="n">c</span> <span class="o">=</span> <span class="n">a</span> <span class="o">/</span> <span class="n">b</span><span class="o">;</span>
+</code></pre></div></div>
+
+<p>your program will compile, but running it will result in:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    Exception in thread "main" java.lang.ArithmeticException: divide by zero
+            at DivideByZero.main(DivideByZero.java:6)
+</code></pre></div></div>
+
+<p>or something similar. Here, we will describe how to make and use exceptions so that we can deal with these errors in a graceful manner without crashing our programs.</p>
+
+<h5 id="defining-new-exceptions">Defining new exceptions</h5>
+
+<p>Java has many built-in exceptions (see the <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Exception.html">Java API documentation</a>—note that many of the listed direct subclasses have subclasses themselves!). If none of the exceptions listed there seem appropriate we can define a new exception by defining a subclass of the <code class="language-plaintext highlighter-rouge">Exception</code> class. Typically, all we need to do are to define two constructors for our exception that take, respectively, no arguments and a <code class="language-plaintext highlighter-rouge">String</code> as an argument.</p>
+
+<p>Here is the complete code for a <code class="language-plaintext highlighter-rouge">DivisionByZeroException</code> that we will use for our <code class="language-plaintext highlighter-rouge">Fraction</code> class:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">DivisionByZeroException</span> <span class="kd">extends</span> <span class="nc">Exception</span> <span class="o">{</span>
+      <span class="kd">public</span> <span class="nf">DivisionByZeroException</span> <span class="o">()</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">();</span>
+      <span class="o">}</span>
+    
+      <span class="kd">public</span> <span class="nf">DivisionByZeroException</span> <span class="o">(</span><span class="nc">String</span> <span class="n">message</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">(</span><span class="n">message</span><span class="o">);</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>That’s all we have to do to make a new exception class!</p>
+
+<h5 id="throwing-exceptions">Throwing exceptions</h5>
+
+<p>When we encounter the exception that our code should deal with, we <strong>throw</strong> the exception, using the keyword <code class="language-plaintext highlighter-rouge">throw</code>. There are a few places in <code class="language-plaintext highlighter-rouge">Fraction</code> where a division by zero error could occur. The first place is in the constructor for Fraction itself. There is currently nothing stopping a programmer from writing <code class="language-plaintext highlighter-rouge">new Fraction(1, 0)</code> and carrying on.</p>
+
+<p>To avoid this scenario, we throw a division by zero exception by adding the following lines to the <code class="language-plaintext highlighter-rouge">Fraction</code> constructor:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">if</span> <span class="o">(</span><span class="n">den</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">throw</span> <span class="k">new</span> <span class="nf">DivisionByZeroException</span><span class="o">();</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>Whenever a method throws an exception, we must add the exception(s) that could be thrown to the method’s declaration. We do so by adding <code class="language-plaintext highlighter-rouge">throws …</code> to the method declaration after the parameter list, where <code class="language-plaintext highlighter-rouge">…</code> is the list of exceptions the method could throw. For example, our new constructor becomes:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nc">Fraction</span> <span class="o">(</span><span class="kt">int</span> <span class="n">num</span><span class="o">,</span> <span class="kt">int</span> <span class="n">den</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">DivisionByZeroException</span> <span class="o">{</span>
+      <span class="k">if</span> <span class="o">(</span><span class="n">den</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">throw</span> <span class="k">new</span> <span class="nf">DivisionByZeroException</span><span class="o">();</span>
+      <span class="o">}</span>
+            
+      <span class="k">this</span><span class="o">.</span><span class="na">num</span> <span class="o">=</span> <span class="n">num</span><span class="o">;</span>
+      <span class="k">this</span><span class="o">.</span><span class="na">den</span> <span class="o">=</span> <span class="n">den</span><span class="o">;</span>
+      <span class="n">reduce</span><span class="o">();</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>To make our exception more informative, we can add a message saying what happened by passing a <code class="language-plaintext highlighter-rouge">String</code> to the exception’s constructor, for example</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">throw</span> <span class="k">new</span> <span class="nc">DivisionByZeroException</span><span class="o">(</span><span class="s">"Tried to create Fraction with numerator "</span> <span class="o">+</span> <span class="n">num</span> <span class="o">+</span> <span class="s">" and denominator "</span> <span class="o">+</span> <span class="n">den</span><span class="o">);</span>
+</code></pre></div></div>
+
+<p>Unfortunately, our work isn’t done yet. If we compile the new <code class="language-plaintext highlighter-rouge">Fraction</code> class, we’ll get errors such as:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    Fraction.java:30: error: unreported exception DivisionByZeroException; must be caught or declared to be thrown
+            return new Fraction(num * f.den + den * f.num, den * f.den);
+</code></pre></div></div>
+
+<p>Line 30 is in our <code class="language-plaintext highlighter-rouge">plus</code> method. The problem is that the method calls the constructor for <code class="language-plaintext highlighter-rouge">Fraction</code>, which could throw an exception. Thus, <code class="language-plaintext highlighter-rouge">plus</code> needs to either “catch” the exception (and figure out how to handle it), or throw the exception back to whatever method called <code class="language-plaintext highlighter-rouge">plus</code> in the first place. If we don’t know how to handle the exception within <code class="language-plaintext highlighter-rouge">plus</code>, we should opt for the latter option. To this end, we can just change the declaration of <code class="language-plaintext highlighter-rouge">plus</code> to indicate that it can throw a <code class="language-plaintext highlighter-rouge">DivisionByZeroException</code> as well:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="nc">Fraction</span> <span class="n">plus</span> <span class="kd">throws</span> <span class="nf">DivisionByZeroException</span> <span class="o">(</span><span class="nc">Fraction</span> <span class="n">f</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">return</span> <span class="k">new</span> <span class="nf">Fraction</span><span class="o">(</span><span class="n">num</span> <span class="o">*</span> <span class="n">f</span><span class="o">.</span><span class="na">den</span> <span class="o">+</span> <span class="n">den</span> <span class="o">*</span> <span class="n">f</span><span class="o">.</span><span class="na">num</span><span class="o">,</span> <span class="n">den</span> <span class="o">*</span> <span class="n">f</span><span class="o">.</span><span class="na">den</span><span class="o">);</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>Then we can do the same with all methods that call the <code class="language-plaintext highlighter-rouge">Fraction</code> constructor and <code class="language-plaintext highlighter-rouge">plus</code> so that the <code class="language-plaintext highlighter-rouge">Fraction.java</code> compiles.</p>
+
+<p>Now let’s try to test the <code class="language-plaintext highlighter-rouge">Fraction</code> class with the following <code class="language-plaintext highlighter-rouge">FractionTester</code> program:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">FractionTester</span> <span class="o">{</span>
+      <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span> <span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="nc">DivisionByZeroException</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Making some fractions..."</span><span class="o">);</span>
+        <span class="nc">Fraction</span> <span class="n">a</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Fraction</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">);</span>
+        <span class="nc">Fraction</span> <span class="n">b</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Fraction</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">3</span><span class="o">);</span>
+        <span class="nc">Fraction</span> <span class="n">c</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Fraction</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">6</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"a = "</span> <span class="o">+</span> <span class="n">a</span><span class="o">.</span><span class="na">toString</span><span class="o">()</span> <span class="o">+</span>
+                           <span class="s">", b = "</span> <span class="o">+</span> <span class="n">b</span><span class="o">.</span><span class="na">toString</span><span class="o">()</span> <span class="o">+</span>
+                           <span class="s">", c = "</span> <span class="o">+</span> <span class="n">c</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+    
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Doing some arithmetic..."</span><span class="o">);</span>
+    
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"a + b = "</span> <span class="o">+</span> <span class="n">a</span><span class="o">.</span><span class="na">plus</span><span class="o">(</span><span class="n">b</span><span class="o">).</span><span class="na">toString</span><span class="o">());</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"a - b = "</span> <span class="o">+</span> <span class="n">a</span><span class="o">.</span><span class="na">minus</span><span class="o">(</span><span class="n">b</span><span class="o">).</span><span class="na">toString</span><span class="o">());</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"a + b - c = "</span> <span class="o">+</span> <span class="n">a</span><span class="o">.</span><span class="na">plus</span><span class="o">(</span><span class="n">b</span><span class="o">).</span><span class="na">minus</span><span class="o">(</span><span class="n">c</span><span class="o">).</span><span class="na">toString</span><span class="o">());</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"c / (a + b) = "</span> <span class="o">+</span> <span class="n">c</span><span class="o">.</span><span class="na">dividedBy</span><span class="o">(</span><span class="n">a</span><span class="o">.</span><span class="na">plus</span><span class="o">(</span><span class="n">b</span><span class="o">)));</span>
+    
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Computing (a - b - c) / (a - b - c)..."</span><span class="o">);</span>
+        <span class="nc">Fraction</span> <span class="n">oops</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="na">minus</span><span class="o">(</span><span class="n">b</span><span class="o">).</span><span class="na">minus</span><span class="o">(</span><span class="n">c</span><span class="o">).</span><span class="na">dividedBy</span><span class="o">(</span><span class="n">a</span><span class="o">.</span><span class="na">minus</span><span class="o">(</span><span class="n">b</span><span class="o">).</span><span class="na">minus</span><span class="o">(</span><span class="n">c</span><span class="o">));</span>
+    
+        <span class="k">if</span> <span class="o">(</span><span class="n">oops</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">a</span><span class="o">))</span> <span class="o">{</span>
+          <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Huh... (a - b - c) / (a - b - c) == a"</span><span class="o">);</span>
+          <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"That is strange, because a = "</span> <span class="o">+</span> <span class="n">a</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+        <span class="o">}</span>
+    
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"(a - b - c) / (a - b - c) = "</span> <span class="o">+</span> <span class="n">oops</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>Unfortunately, now we can’t compile <code class="language-plaintext highlighter-rouge">FractionTester</code>  because we get a bunch of errors about unreported exceptions:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    FractionTester.java:4: error: unreported exception DivisionByZeroException; must be caught or declared to be thrown
+            Fraction a = new Fraction(1, 2);
+</code></pre></div></div>
+
+<p>We can fix all of these errors by declaring that our main method <code class="language-plaintext highlighter-rouge">throws DivisionByZeroException</code>s. It is bad form to have a main method throw exceptions (the whole point of having the exceptions is so that we can handle them), but here is what happens:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    Making some fractions...
+    a = 1 / 2, b = 1 / 3, c = 1 / 6
+    Doing some arithmetic...
+    a + b = 5 / 6
+    a - b = 1 / 6
+    a + b - c = 2 / 3
+    c / (a + b) = 1 / 5
+    Computing (a - b - c) / (a - b - c)...
+    Exception in thread "main" DivisionByZeroException: Tried to create Fraction with numerator 1 and denominator 0
+            at Fraction.&lt;init&gt;(Fraction.java:14)
+            at Fraction.reciprocal(Fraction.java:43)
+            at Fraction.dividedBy(Fraction.java:55)
+            at FractionTester.main(FractionTester.java:19)
+</code></pre></div></div>
+
+<p>This is progress in the sense that the program at least alerts us that there is a problem with division by zero (unlike before). But this is still bad in the sense that our program is interrupted before we can try to fix the issue.</p>
+
+<h5 id="catching-exceptions">Catching exceptions</h5>
+
+<p>In the programs above, exceptions are thrown, but we never attempt to fix or isolate the problem. As a result, when an exception is encountered, the program terminates (albeit with a helpful message indicating where the problem occurred).</p>
+
+<p>If we know how to handle a problem indicated by a thrown exception, we can “catch” the exception by using  <strong>try-catch blocks</strong>:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">try</span> <span class="o">{</span>
+      <span class="c1">// some code that could throw SomeException</span>
+    <span class="o">}</span>
+    <span class="k">catch</span> <span class="o">(</span><span class="nc">SomeException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+      <span class="c1">// code to run if SomeException is thrown</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>When the code in the <code class="language-plaintext highlighter-rouge">try</code> block throws <code class="language-plaintext highlighter-rouge">SomeException</code>, execution of the <code class="language-plaintext highlighter-rouge">try</code> block is stopped, and the code in the <code class="language-plaintext highlighter-rouge">catch</code> block is executed. Since the code in the catch block deals with the exception, the method containing the try-catch blocks doesn’t need to throw <code class="language-plaintext highlighter-rouge">SomeException</code> itself.</p>
+
+<p><strong>Note.</strong> We can handle multiple exceptions by having multiple catch blocks:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">try</span> <span class="o">{</span>
+      <span class="c1">// some code that could throw SomeException or AnotherException</span>
+    <span class="o">}</span>
+    <span class="k">catch</span> <span class="o">(</span><span class="nc">SomeException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+      <span class="c1">// code to run if SomeException is thrown</span>
+    <span class="o">}</span>
+    <span class="k">catch</span> <span class="o">(</span><span class="nc">AnotherException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+      <span class="c1">// code to run if AnotherException is thrown</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>Now we can catch the exceptions thrown by <code class="language-plaintext highlighter-rouge">Fraction</code> in our <code class="language-plaintext highlighter-rouge">FractionTester</code> program:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">FractionTester</span> <span class="o">{</span>
+        <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span> <span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Making some fractions..."</span><span class="o">);</span>
+    
+            <span class="nc">Fraction</span> <span class="n">a</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Fraction</span><span class="o">();</span>
+            <span class="nc">Fraction</span> <span class="n">b</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Fraction</span><span class="o">();</span>
+            <span class="nc">Fraction</span> <span class="n">c</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Fraction</span><span class="o">();</span>
+    
+            <span class="k">try</span> <span class="o">{</span>
+                <span class="n">a</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Fraction</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">);</span>
+                <span class="n">b</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Fraction</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">3</span><span class="o">);</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Fraction</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">6</span><span class="o">);</span>
+    
+                <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"a = "</span> <span class="o">+</span> <span class="n">a</span><span class="o">.</span><span class="na">toString</span><span class="o">()</span> <span class="o">+</span>
+                                   <span class="s">", b = "</span> <span class="o">+</span> <span class="n">b</span><span class="o">.</span><span class="na">toString</span><span class="o">()</span> <span class="o">+</span>
+                                   <span class="s">", c = "</span> <span class="o">+</span> <span class="n">c</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+            <span class="o">}</span>
+            <span class="k">catch</span> <span class="o">(</span><span class="nc">DivisionByZeroException</span> <span class="n">e</span><span class="o">){</span>
+                <span class="c1">// Since I defined the Fractions above not to be zero, I'm</span>
+                <span class="c1">// not even going to write any code here. I *know* a</span>
+                <span class="c1">// DivisionByZeroException won't occur</span>
+            <span class="o">}</span>
+            
+            <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Doing some basic arithmetic..."</span><span class="o">);</span>
+    
+            <span class="k">try</span> <span class="o">{</span>
+    
+                <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"a + b = "</span> <span class="o">+</span> <span class="n">a</span><span class="o">.</span><span class="na">plus</span><span class="o">(</span><span class="n">b</span><span class="o">).</span><span class="na">toString</span><span class="o">());</span>
+                <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"a - b = "</span> <span class="o">+</span> <span class="n">a</span><span class="o">.</span><span class="na">minus</span><span class="o">(</span><span class="n">b</span><span class="o">).</span><span class="na">toString</span><span class="o">());</span>
+                <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"a + b - c = "</span> <span class="o">+</span> <span class="n">a</span><span class="o">.</span><span class="na">plus</span><span class="o">(</span><span class="n">b</span><span class="o">).</span><span class="na">minus</span><span class="o">(</span><span class="n">c</span><span class="o">).</span><span class="na">toString</span><span class="o">());</span>
+                <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"c / (a + b) = "</span> <span class="o">+</span> <span class="n">c</span><span class="o">.</span><span class="na">dividedBy</span><span class="o">(</span><span class="n">a</span><span class="o">.</span><span class="na">plus</span><span class="o">(</span><span class="n">b</span><span class="o">)));</span>
+                <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"1 / (a - b - c) = "</span> <span class="o">+</span> <span class="n">a</span><span class="o">.</span><span class="na">minus</span><span class="o">(</span><span class="n">b</span><span class="o">).</span><span class="na">minus</span><span class="o">(</span><span class="n">c</span><span class="o">).</span><span class="na">reciprocal</span><span class="o">());</span>
+            <span class="o">}</span>                
+            <span class="k">catch</span> <span class="o">(</span><span class="nc">DivisionByZeroException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+                <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Oops. We divided by zero! "</span> <span class="o">+</span> <span class="n">e</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>Notice that we had to declare <code class="language-plaintext highlighter-rouge">Fraction</code>s <code class="language-plaintext highlighter-rouge">a</code>, <code class="language-plaintext highlighter-rouge">b</code>, and <code class="language-plaintext highlighter-rouge">c</code> outside of the first <code class="language-plaintext highlighter-rouge">try</code> block, where we called their zero-argument constructors (which do not throw exceptions).</p>
+
+<p>Running the program gives the following output:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    Making some fractions...
+    a = 1 / 2, b = 1 / 3, c = 1 / 6
+    Doing some basic arithmetic...
+    a + b = 5 / 6
+    a - b = 1 / 6
+    a + b - c = 2 / 3
+    c / (a + b) = 1 / 5
+    Oops. We divided by zero! DivisionByZeroException: Tried to create Fraction with numerator 1 and denominator 0
+</code></pre></div></div>
+
+<p>Things are looking good, but our program can be improved. First of all, since the <code class="language-plaintext highlighter-rouge">Fraction</code> constructor throws an exception, we can assume that any <code class="language-plaintext highlighter-rouge">Fraction</code> instance does not have a zero denominator after construction. Since <code class="language-plaintext highlighter-rouge">den</code> is private and there is no method to set <code class="language-plaintext highlighter-rouge">den</code> directly, we can safely assume that adding, subtracting, and multiplying existing <code class="language-plaintext highlighter-rouge">Fraction</code> instances will not create <code class="language-plaintext highlighter-rouge">Fraction</code>s with zero denominators. Thus we can catch <code class="language-plaintext highlighter-rouge">DivisionByZeroExceptions</code> directly in these methods. For example:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="nc">Fraction</span> <span class="nf">plus</span> <span class="o">(</span><span class="nc">Fraction</span> <span class="n">f</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">try</span> <span class="o">{</span>
+          <span class="k">return</span> <span class="k">new</span> <span class="nf">Fraction</span><span class="o">(</span><span class="n">num</span> <span class="o">*</span> <span class="n">f</span><span class="o">.</span><span class="na">den</span> <span class="o">+</span> <span class="n">den</span> <span class="o">*</span> <span class="n">f</span><span class="o">.</span><span class="na">num</span><span class="o">,</span> <span class="n">den</span> <span class="o">*</span> <span class="n">f</span><span class="o">.</span><span class="na">den</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="k">catch</span> <span class="o">(</span><span class="nc">DivisionByZeroException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+          <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>Again, we can be certain that the exception we’re “catching” never occurs, so we don’t need to put any code here. We can modify <code class="language-plaintext highlighter-rouge">minus</code>  and <code class="language-plaintext highlighter-rouge">times</code> similarly. The methods <code class="language-plaintext highlighter-rouge">reciprocal</code> and <code class="language-plaintext highlighter-rouge">dividedBy</code>, however, might create zero denominators (if they are called with an argument whose value is <code class="language-plaintext highlighter-rouge">0</code>), so they should still throw exceptions.</p>
+
+<p>Once we’ve made these modifications to <code class="language-plaintext highlighter-rouge">Fraction</code>, we don’t need to call <code class="language-plaintext highlighter-rouge">plus</code>, <code class="language-plaintext highlighter-rouge">minus</code>, or <code class="language-plaintext highlighter-rouge">times</code> in <code class="language-plaintext highlighter-rouge">FractionTester</code> inside a <code class="language-plaintext highlighter-rouge">try</code> block. Now we can separate the “dangerous” statements into their own try-catch blocks so that we can make more specific behavior:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">try</span> <span class="o">{</span>
+    
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"c / (a + b) = "</span> <span class="o">+</span> <span class="n">c</span><span class="o">.</span><span class="na">dividedBy</span><span class="o">(</span><span class="n">a</span><span class="o">.</span><span class="na">plus</span><span class="o">(</span><span class="n">b</span><span class="o">)));</span>
+    <span class="o">}</span>
+    
+    <span class="k">catch</span> <span class="o">(</span><span class="nc">DivisionByZeroException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+    
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Oops. You tried to divide "</span> <span class="o">+</span> <span class="n">c</span><span class="o">.</span><span class="na">toString</span><span class="o">()</span> <span class="o">+</span> <span class="s">" by "</span> <span class="o">+</span> <span class="n">a</span><span class="o">.</span><span class="na">plus</span><span class="o">(</span><span class="n">b</span><span class="o">).</span><span class="na">toString</span><span class="o">()</span> <span class="o">+</span>  <span class="s">". "</span> <span class="o">+</span> <span class="n">e</span><span class="o">);</span>
+    <span class="o">}</span>
+    
+    <span class="k">try</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"1 / (a - b - c) = "</span> <span class="o">+</span> <span class="n">a</span><span class="o">.</span><span class="na">minus</span><span class="o">(</span><span class="n">b</span><span class="o">).</span><span class="na">minus</span><span class="o">(</span><span class="n">c</span><span class="o">).</span><span class="na">reciprocal</span><span class="o">());</span>
+    <span class="o">}</span>
+    <span class="k">catch</span> <span class="o">(</span><span class="nc">DivisionByZeroException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Oops. You tried to take the reciprocal of "</span> <span class="o">+</span> <span class="n">a</span><span class="o">.</span><span class="na">minus</span><span class="o">(</span><span class="n">b</span><span class="o">).</span><span class="na">minus</span><span class="o">(</span><span class="n">c</span><span class="o">).</span><span class="na">toString</span><span class="o">()</span> <span class="o">+</span>  <span class="s">". "</span> <span class="o">+</span> <span class="n">e</span><span class="o">);</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>The resulting modification outputs:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    Making some fractions...
+    a = 1 / 2, b = 1 / 3, c = 1 / 6
+    Doing some basic arithmetic...
+    a + b = 5 / 6
+    a - b = 1 / 6
+    a + b - c = 2 / 3
+    c / (a + b) = 1 / 5
+    Oops. You tried to take the reciprocal of 0 / 1 DivisionByZeroException: Tried to create Fraction with numerator 1 and denominator 0
+</code></pre></div></div>
+
+<p>Finally, to see that this exception handling actually buys us something, see what happens if we move the first few arithmetic operations to <em>after</em> the try-catch blocks:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Doing some basic arithmetic..."</span><span class="o">);</span>
+    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"a + b = "</span> <span class="o">+</span> <span class="n">a</span><span class="o">.</span><span class="na">plus</span><span class="o">(</span><span class="n">b</span><span class="o">).</span><span class="na">toString</span><span class="o">());</span>
+    <span class="k">try</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"c / (a + b) = "</span> <span class="o">+</span> <span class="n">c</span><span class="o">.</span><span class="na">dividedBy</span><span class="o">(</span><span class="n">a</span><span class="o">.</span><span class="na">plus</span><span class="o">(</span><span class="n">b</span><span class="o">)));</span>
+    <span class="o">}</span>
+    <span class="k">catch</span> <span class="o">(</span><span class="nc">DivisionByZeroException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>   
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Oops. You tried to divide "</span> <span class="o">+</span> <span class="n">c</span><span class="o">.</span><span class="na">toString</span><span class="o">()</span> <span class="o">+</span> <span class="s">" by "</span> <span class="o">+</span> <span class="n">a</span><span class="o">.</span><span class="na">plus</span><span class="o">(</span><span class="n">b</span><span class="o">).</span><span class="na">toString</span><span class="o">()</span> <span class="o">+</span>  <span class="s">". "</span> <span class="o">+</span> <span class="n">e</span><span class="o">);</span>
+    <span class="o">}</span>
+    
+    <span class="k">try</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"1 / (a - b - c) = "</span> <span class="o">+</span> <span class="n">a</span><span class="o">.</span><span class="na">minus</span><span class="o">(</span><span class="n">b</span><span class="o">).</span><span class="na">minus</span><span class="o">(</span><span class="n">c</span><span class="o">).</span><span class="na">reciprocal</span><span class="o">());</span>
+    <span class="o">}</span>
+    <span class="k">catch</span> <span class="o">(</span><span class="nc">DivisionByZeroException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Oops. You tried to take the reciprocal of "</span> <span class="o">+</span> <span class="n">a</span><span class="o">.</span><span class="na">minus</span><span class="o">(</span><span class="n">b</span><span class="o">).</span><span class="na">minus</span><span class="o">(</span><span class="n">c</span><span class="o">).</span><span class="na">toString</span><span class="o">()</span> <span class="o">+</span>  <span class="s">". "</span> <span class="o">+</span> <span class="n">e</span><span class="o">);</span>
+    <span class="o">}</span>
+    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"a - b = "</span> <span class="o">+</span> <span class="n">a</span><span class="o">.</span><span class="na">minus</span><span class="o">(</span><span class="n">b</span><span class="o">).</span><span class="na">toString</span><span class="o">());</span>
+    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"a + b - c = "</span> <span class="o">+</span> <span class="n">a</span><span class="o">.</span><span class="na">plus</span><span class="o">(</span><span class="n">b</span><span class="o">).</span><span class="na">minus</span><span class="o">(</span><span class="n">c</span><span class="o">).</span><span class="na">toString</span><span class="o">());</span>
+</code></pre></div></div>
+
+<p>Now this code gives the following output:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    Making some fractions...
+    a = 1 / 2, b = 1 / 3, c = 1 / 6
+    Doing some basic arithmetic...
+    a + b = 5 / 6
+    c / (a + b) = 1 / 5
+    Oops. You tried to take the reciprocal of 0 / 1. DivisionByZeroException: Tried to create Fraction with numerator 1 and denominator 0
+    a - b = 1 / 6
+    a + b - c = 2 / 3
+</code></pre></div></div>
+
+<p>This is progress! We did some arithmetic that previously either crashed our program, or (worse!) gave a subtle error without us having any clue why. Now, we can detect mistakes in the program’s input/execution and deal with them in such a way that the program continues to function despite the exception.</p>
+
+  </article>
+
+</div>
+
+    </div>
+
+    <!-- Footer -->
+
+    
+<footer class="fixed-bottom">
+  <div class="container mt-0">
+    &copy; Copyright 2021 Will  Rosenbaum.
+    
+    
+    
+  </div>
+</footer>
+
+
+
+  </body>
+
+  <!-- Bootsrap & MDB scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.4.4/umd/popper.min.js" integrity="sha512-eUQ9hGdLjBjY3F41CScH3UX+4JDSI9zXeroz7hJ+RteoCaY+GP/LDoM8AO+Pt+DRFw3nXqsjh9Zsts8hnYv8/A==" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha512-M5KW3ztuIICmVIhjSqXe01oV2bpe248gOxqmlcYrEzAvws7Pw3z6BK0iGbrwvdrUQUhi3eXgtxp5I8PDo9YfjQ==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js" integrity="sha512-Mug9KHKmroQFMLm93zGrjhibM2z2Obg9l6qFG2qKjXEXkMp/VDkI4uju9m4QKPjWSwQ6O2qzZEnJDEeCw0Blcw==" crossorigin="anonymous"></script>
+
+  
+<!-- Mansory & imagesLoaded -->
+<script defer src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<script defer src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+<script defer src="/assets/js/mansory.js" type="text/javascript"></script>
+
+
+  
+
+
+<!-- Load Common JS -->
+<script src="/assets/js/common.js"></script>
+
+
+</html>

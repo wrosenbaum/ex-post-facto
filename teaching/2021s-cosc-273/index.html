@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-<title>Will  Rosenbaum | ex-post-facto</title>
+<title>Will  Rosenbaum | COSC 273: Parallel and Distributed Computing</title>
 <meta name="description" content="A blog about mathematics, computer science, etc.
 ">
 
@@ -33,7 +33,7 @@
 <link rel="shortcut icon" href="/assets/img/favicon.ico">
 <link rel="stylesheet" href="/assets/css/main.css">
 
-<link rel="canonical" href="/blog/">
+<link rel="canonical" href="/teaching/2021s-cosc-273/">
 
 <!-- JQuery -->
 <!-- jQuery -->
@@ -108,8 +108,6 @@
           
           
           
-          
-          
           <li class="nav-item ">
               <a class="nav-link" href="/teaching/">
                 teaching
@@ -138,7 +136,7 @@
           
 	  
           <!-- Blog -->
-          <li class="nav-item active">
+          <li class="nav-item ">
             <a class="nav-link" href="/blog/">
               blog
               
@@ -167,24 +165,116 @@
     <div class="container mt-5">
       <div class="post">
 
-  <div class="header-bar">
-    <h1>Ex Post Facto Obvious</h1>
-    <h2>a blog about math, computer science, and whatnot</h2>
-  </div>
+  <header class="post-header">
+    <h1 class="post-title">COSC 273: Parallel and Distributed Computing</h1>
+    <p class="post-description">course materials for Spring 2021</p>
+  </header>
 
+  <article>
+    <p>Welcome to the Spring 2021 edition of <em>COSC 273: Parallel and Distributed Computing</em>! Here, you will find links to course materials and assignments. Please start by reading the course syllabus.</p>
 
-  <ul class="post-list">
-    
-      <li>
-        <h3><a class="post-title" href="/blog/2021/updates/">New Site, Finally</a></h3>
-        <p class="post-meta">February 7, 2021</p>
-        <p>a long overdue overhaul of my website</p>
-      </li>
-    
-  </ul>
+<ul>
+  <li><a href="./syllabus/">Course Syllabus</a></li>
+  <li><a href="https://docs.google.com/spreadsheets/d/18fLHh-1Lz5KusvD_-_EsX0s0Joh6qrxHv9HukR4UWA0/edit?usp=sharing">Accountability Group Assignments</a></li>
+  <li><a href="https://docs.google.com/document/d/1zElhsgBedfaoenn1uyz5OQZ7cQPK1-pvDuuk3fL1vxs/edit?usp=sharing">Office Hours Signup</a></li>
+</ul>
 
-  
+<h4 id="notes">Notes</h4>
 
+<h5 id="week-01-feb-1519">Week 01 (Feb. 15–19)</h5>
+
+<ul>
+  <li><a href="./notes/multithreading/">Multithreading</a></li>
+  <li><a href="./notes/monte-carlo-method/">Monte Carlo Simulation</a></li>
+</ul>
+
+<h5 id="week-02-feb-2226">Week 02 (Feb. 22–26)</h5>
+
+<ul>
+  <li><a href="./notes/posets-and-scheduling/">Partially Ordered Sets and Scheduling</a></li>
+  <li><em>AMP</em> Chapter 01, Sections 1–2, 4, 6 (by Wednesday)</li>
+  <li><em>AMP</em> Chapter 02, Sections 1–4, 7, skim 9 (by Friday)</li>
+</ul>
+
+<h4 id="slides">Slides</h4>
+
+<h5 id="lectures">Lectures</h5>
+
+<ul>
+  <li><a href="./slides/lec01-introduction-and-motivation/">Lecture 01: Introduction and Motivation</a></li>
+  <li><a href="./slides/lec02-limitations-of-parallelism/">Lecture 02: Limitations of Parallelism and Distributed Control</a></li>
+  <li><a href="./slides/lec03-mutex-1/">Lecture 03: Mutual Exclusion I</a></li>
+  <li><a href="./slides/lec04-mutex-2/">Lecture 04: Mutual Exclusion II</a></li>
+  <li><a href="./slides/lec05-mutex-3/">Lecture 05: Mutual Exclusion III</a></li>
+  <li><a href="./slides/lec06-concurrent-objects-1/">Lecture 06: Concurrent Objects I</a></li>
+  <li><a href="./slides/lec07-concurrent-objects-2/">Lecture 07: Concurrent Objects II</a></li>
+  <li><a href="./slides/lec08-concurrent-objects-3/">Lecture 08: Concurrent Objects III</a></li>
+  <li><a href="./slides/lec09-linearizability-and-progress/">Lecture 09: Linearizability and Progress</a></li>
+  <li><a href="./slides/lec10-more-linearizability-and-progress/">Lecture 10: More on Linearizability and Progress</a></li>
+  <li><a href="./slides/lec11-and-more-linearizability-and-progress/">Lecture 11: And More on Linearizability and Progress</a></li>
+  <li><a href="./slides/lec12-progress-and-locks/">Lecture 12: Progress and Locks</a></li>
+  <li><a href="./slides/lec13-lock-implementations/">Lecture 13: Lock Implementations</a></li>
+  <li><a href="./slides/lec14-more-on-locks/">Lecture 14: More on Locks</a></li>
+  <li><a href="./slides/lec15-thread-local-objects/">Lecture 15: Thread Local Objects</a></li>
+  <li><a href="./slides/lec16-linked-lists/">Lecture 16: Concurrent Linked Lists</a></li>
+  <li><a href="./slides/lec17-more-linked-lists/">Lecture 17: More Linked Lists</a></li>
+  <li><a href="./slides/lec18-lazy-and-nonblocking-lists/">Lecture 18: Lazy and Nonblocking Lists</a></li>
+  <li><a href="./slides/lec19-pools-and-queues/">Lecture 19: Pools and Queues</a></li>
+  <li><a href="./slides/lec20-bounded-queues/">Lecture 20: Lock-free and Bounded Queues</a></li>
+  <li><a href="./slides/lec21-a-bounded-queue/">Lecture 21: A Bounded Queue</a></li>
+  <li><a href="./slides/lec22-stacks/">Lecture 22: Stacks</a></li>
+  <li><a href="./slides/lec23-consensus-1/">Lecture 23: Consensus 1</a></li>
+  <li><a href="./slides/lec24-consensus-2/">Lecture 24: Consensus 2</a></li>
+  <li><a href="./slides/lec25-consensus-and-beyond/">Lecture 25: Consensus &amp; Beyond</a></li>
+</ul>
+
+<h5 id="lab-slides">Lab Slides</h5>
+
+<ul>
+  <li><a href="./slides/lab01/">Lab Week 01</a></li>
+  <li><a href="./slides/lab02/">Lab Week 02</a></li>
+  <li><a href="./slides/lab03/">Lab Week 03</a></li>
+  <li><a href="./slides/lab04/">Lab Week 04</a></li>
+  <li><a href="./slides/lab05/">Lab Week 05</a></li>
+  <li><a href="./slides/lab06/">Lab Week 06</a></li>
+  <li><a href="./slides/lab07/">Lab Week 07</a></li>
+  <li><a href="./slides/lab09/">Lab Week 09</a></li>
+  <li><a href="./slides/lab11/">Lab Week 11</a></li>
+  <li><a href="./slides/lab12/">Lab Week 13</a></li>
+</ul>
+
+<h4 id="labs">Labs</h4>
+
+<ul>
+  <li><a href="./labs/01-estimating-pi/">Lab 01: Estimating Pi</a> (Due 2/26/21)</li>
+  <li><a href="./labs/02-computing-shortcuts/">Lab 02: Computing Shortcuts</a> (Due 3/12/21)</li>
+  <li><a href="./labs/03-mandelbrot-set/">Lab 03: Visualizing the Mandelbrot Set</a> (Due 3/26/21)</li>
+  <li><a href="./labs/04-primes/">Lab 04: Computing Primes</a> (Due 4/16/21)</li>
+  <li><a href="./labs/05-sorting/">Lab 05: Sorting</a> (Optional. Complete by 5/19/21 for credit.)</li>
+</ul>
+
+<h4 id="assignments">Assignments</h4>
+
+<ul>
+  <li><a href="./hw/homework-01/">Assignment 01</a> (Due 3/5/21)</li>
+  <li><a href="./hw/homework-02/">Assignment 02</a> (Due 3/19/21)</li>
+  <li><a href="./hw/homework-03/">Assignment 03</a> (Due 4/2/21)</li>
+  <li>Assignment 04 (Due 4/23/21)</li>
+  <li>Assignment 05 (Due 5/7/21)</li>
+</ul>
+
+<h4 id="final-project">Final Project</h4>
+
+<p><a href="./final-project/announcement/">Project Announcement</a></p>
+
+<ul>
+  <li>Project Proposal (Due 4/9/21)</li>
+  <li><a href="./final-project/baseline/">Proof of Concept</a> (Due 5/7/21)</li>
+  <li>Project Video (Due 5/19/21)</li>
+  <li><a href="./final-project/final-submission/">Final Project</a> (Due 5/28/21)</li>
+</ul>
+
+  </article>
 
 </div>
 

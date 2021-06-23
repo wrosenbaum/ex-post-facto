@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta charset="utf-8">
+
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reset.css">
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reveal.css">
+		<link rel="stylesheet" href="/assets/css/condensation.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="/assets/reveal.js-master/plugin/highlight/monokai.css" id="highlight-theme">
+		<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700" rel="stylesheet">
+
+	</head>
+
+	<body>
+
+
+	  <!-- this is where the reveailfy filter gets applied -->
+	  <div class="reveal"><div class="slides">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section id="lecture-25-mazes-and-states"><h1>Lecture 25: Mazes and States</h1></section><section id="last-time"><h2>Last Time</h2>
+<ul>
+  <li>Considered solving mazes</li>
+  <li>Developed <em>depth-first</em> strategy</li>
+  <li>Saw depth-first can yield inefficient solutions</li>
+  <li>Considered another strategy: <em>breadth-first</em>
+</li>
+</ul></section><section id="another-strategy"><h2>Another Strategy</h2>
+<p>Explore in all directions simultaneously!</p>
+<ul>
+  <li>Consider all possible first steps</li>
+  <li>Then all possible second steps
+    <ul>
+      <li>ignore previously visited cells</li>
+    </ul>
+  </li>
+  <li>…</li>
+</ul>
+<p>This strategy is <strong>breadth first</strong></p>
+<ul>
+  <li>Explore all possible next steps</li>
+</ul></section><section id="illustration-depth-1"><h2>Illustration: Depth 1</h2>
+<p><img src="/assets/img/mazes/bfs1.png" alt="" width="50%"></p></section><section id="illustration-depth-2"><h2>Illustration: Depth 2</h2>
+<p><img src="/assets/img/mazes/bfs2.png" alt="" width="50%"></p></section><section id="illustration-depth-3"><h2>Illustration: Depth 3</h2>
+<p><img src="/assets/img/mazes/bfs3.png" alt="" width="50%"></p></section><section id="illustration-depth-4"><h2>Illustration: Depth 4</h2>
+<p><img src="/assets/img/mazes/bfs4.png" alt="" width="50%"></p></section><section id="completed-search"><h2>Completed Search</h2>
+<p><img src="/assets/img/mazes/bfs5.png" alt="" width="50%"></p></section><section id="return-solution"><h2>Return Solution</h2>
+<p><img src="/assets/img/mazes/bfs6.png" alt="" width="50%"></p></section><section id="a-nice-feature"><h2>A Nice Feature</h2>
+<p>The shortest path from start to goal is found</p>
+<ul>
+  <li>why?</li>
+</ul>
+<div style="margin-bottom: 12em"></div></section><section id="implementation-notes"><h2>Implementation Notes</h2>
+<ul>
+  <li>again, store <code>visited</code> and <code>active</code> cells</li>
+  <li>
+<code>active</code> cells are boundary between <code>visited</code> and unvisited</li>
+  <li>store <code>active</code> cells in a <strong>queue</strong>
+    <ul>
+      <li>all cells at distance $d$ from start are visited before any cell at distance $d+1$ is visited</li>
+    </ul>
+  </li>
+  <li>initially, <code>active</code> and <code>visited</code> are just starting cell</li>
+  <li>each cell stores its <code>parent</code> cell
+    <ul>
+      <li>
+<code>parent</code> is cell from which cell was visited</li>
+    </ul>
+  </li>
+</ul></section><section id="breadth-first-illustration"><h2>Breadth-first Illustration</h2>
+<p><img src="/assets/img/mazes/maze02.png" alt="" width="30%"></p>
+<div style="margin-bottom: 6em"></div></section><section id="breadth-first-in-code"><h2>Breadth-first in Code</h2></section><section id="two-solution-philosophies"><h2>Two Solution Philosophies</h2>
+<ol>
+  <li>Depth-first
+    <ul>
+      <li>Keep going until you can’t go any farther, then backtrack</li>
+      <li>Naturally suited to stack ADT</li>
+      <li>Naturally suited to recursive solution</li>
+    </ul>
+  </li>
+  <li>Breadth-first
+    <ul>
+      <li>Exhaustively search all cells in increasing distance from start</li>
+      <li>Keep track of “parent” cell for each cell</li>
+    </ul>
+  </li>
+</ol></section><section id="abstracting-away-from-mazes"><h2>Abstracting Away from Mazes</h2></section><section id="features-of-mazes"><h2>Features of Mazes</h2>
+<ol>
+  <li>Comprised of cells: <em>states</em>
+</li>
+  <li>Cells having neighboring cells
+    <ul>
+      <li>can move from one cell to its neighbors</li>
+      <li>moving from one state to another is a <em>transition</em>
+</li>
+    </ul>
+  </li>
+  <li>Have starting position</li>
+  <li>Have goal position(s)</li>
+</ol>
+<p><strong>Objective:</strong> find a sequence of transitions from initial state to gaol state</p></section><section id="two-stratgies"><h2>Two Stratgies</h2>
+<p><img src="/assets/img/state-space-search/maze-dfs.png" alt="" width="40%">
+<img src="/assets/img/state-space-search/maze-bfs.png" alt="" width="40%"></p></section><section id="more-problems-same-features"><h2>More Problems, Same Features</h2>
+<ul>
+  <li>Driving directions</li>
+  <li>Solving puzzles</li>
+  <li>Playing games
+    <ul>
+      <li>tic-tac-toe</li>
+      <li>chess</li>
+      <li>…</li>
+    </ul>
+  </li>
+  <li>Tasks in artificial intelligence</li>
+</ul></section><section id="generic-problem"><h2>Generic Problem</h2>
+<p>Input:</p>
+<ul>
+  <li>Initial state</li>
+  <li>Transition rules</li>
+  <li>Goal state(s)</li>
+</ul>
+<p>Output:</p>
+<ul>
+  <li>Sequence of transitions from initial state to goal state</li>
+</ul></section><section id="example-tower-of-hanoi"><h2>Example: Tower of Hanoi</h2>
+<ul>
+  <li>3 pegs</li>
+  <li>$n$ disks sit atop pegs</li>
+  <li>move one peg at a time</li>
+  <li>cannot place larger disk atop smaller</li>
+</ul></section><section id="initial-state"><h2>Initial State</h2>
+<p><img src="/assets/img/state-space-search/toh-initial.png" alt="" width="100%"></p></section><section id="goal-state"><h2>Goal State</h2>
+<p><img src="/assets/img/state-space-search/toh-goal.png" alt="" width="100%"></p></section><section id="transitions"><h2>Transitions</h2>
+<p><img src="/assets/img/state-space-search/toh-transition.png" alt="" width="100%"></p></section><section id="states-and-transitions"><h2>States and Transitions</h2>
+<ul>
+  <li>states are the configurations of the game
+    <ul>
+      <li>collection of disks on each peg</li>
+    </ul>
+  </li>
+  <li>transitions connect one state to another if a single legal move transforms one to the other</li>
+</ul></section><section id="state-diagram"><h2>State Diagram</h2>
+<p><img src="/assets/img/state-space-search/toh-state-space.png" alt="" width="100%"></p></section><section id="solving-toh"><h2>Solving ToH</h2>
+<ul>
+  <li>can use same strategy as maze solutions</li>
+  <li>start at start state (blue above)</li>
+  <li>search entire state space for goal state (green above)
+    <ul>
+      <li>use DFS or BFS</li>
+    </ul>
+  </li>
+  <li>return path from start to goal state</li>
+</ul></section><section id="what-to-implement"><h2>What to Implement?</h2>
+<ul>
+  <li>class representing states</li>
+  <li>method for computing neighbors of a state</li>
+  <li>method for determining if a state is a goal</li>
+</ul></section><section id="abstract-state-representation"><h2>Abstract State Representation</h2>
+<pre><code class="language-java">abstract class State {
+    private State parent = null;
+    public abstract ArrayList&lt;State&gt; getNeighbors ();
+    public State getParent() { return parent; }
+    public void setParent(State parent) { this.parent = parent; }
+    public abstract boolean isGoal ();
+}
+</code></pre>
+<div style="margin-bottom: 12em"></div></section><section id="abstract-solution"><h2>Abstract Solution</h2>
+<ul>
+  <li>Use same strategies as maze
+    <ul>
+      <li>breadth-first search (BFS)</li>
+      <li>depth-first search (DFS)</li>
+    </ul>
+  </li>
+  <li>Same idea can be applied to any problem that can be encoded as:
+    <ul>
+      <li>states and transitions</li>
+      <li>given initial state</li>
+      <li>want to find goal state</li>
+    </ul>
+  </li>
+  <li>Can write generic solver program
+    <ul>
+      <li>solves problems without referencing which problem is being solved!</li>
+    </ul>
+  </li>
+</ul></section><section id="generic-dfs-solution"><h2>Generic DFS Solution</h2>
+<pre><code class="language-java">    private static boolean getDFSolution (Stack&lt;State&gt; active, ArrayList&lt;State&gt; visited) {
+	
+	if (active.peek().isGoal())
+	    return true;
+
+	State cur = active.peek();
+	ArrayList&lt;State&gt; neighbors = cur.getNeighbors();
+
+	for (State s : neighbors) {
+	    if (!visited.contains(s)) {
+		visited.add(s);
+		active.push(s);
+
+		if (getDFSolution(active, visited))
+		    return true;
+	    }
+	}
+
+	active.pop();
+	return false;
+    }
+</code></pre></section><section id="generic-bfs-solution"><h2>Generic BFS Solution</h2>
+<pre><code class="language-java">    private static State getBFSolution (State start) {
+	ArrayList&lt;State&gt; visited = new ArrayList&lt;State&gt;();	
+	Queue&lt;State&gt; active = new Queue&lt;State&gt;();
+
+	State next = start;
+	visited.add(next);
+
+	while (!next.isGoal()) {
+	    for (State s : next.getNeighbors()) {
+		if (!visited.contains(s)) {
+		    visited.add(s);
+		    active.enqueue(s);
+		    s.setParent(next);
+		}
+	    }
+	    if (!active.isEmpty()) 
+		next = active.dequeue();
+	    else
+		return null; 
+	}
+	return next;
+    }
+</code></pre></section><section id="state-space-search"><h2>State Space Search</h2>
+<ul>
+  <li>generic technique for solving loads of problems
+    <ul>
+      <li>driving directions, puzzles, games, artificial intelligence,…</li>
+      <li>can solve a problem without really knowing how!</li>
+    </ul>
+  </li>
+</ul></section><section id="how-did-we-get-here"><h2>How did we get here?</h2>
+<ul>
+  <li>represent input/states as interacting objects: <strong>object oriented design</strong>
+</li>
+  <li>solve problems <strong>generically</strong> (polymorphism, interfaces, generic classes)
+    <ul>
+      <li>same code can be used to solve many different problems</li>
+    </ul>
+  </li>
+  <li>store/access/manipulate states in <strong>data structures</strong> (arrays, linked lists)
+    <ul>
+      <li>implement <strong>abstract data types</strong> (stacks, queues)</li>
+    </ul>
+  </li>
+  <li>generate solution to problems <strong>recursively</strong> (DFS)</li>
+</ul></section><section id="next-semester"><h2>Next Semester</h2>
+<p>COSC 211: Data Structures</p>
+<ul>
+  <li>Deep dive into how to effectively store, organize, access, and manipulate data</li>
+  <li>Rigorously reason about:
+    <ul>
+      <li>correctness</li>
+      <li>efficiency</li>
+    </ul>
+  </li>
+</ul></section><section id="thank-you"><h1>Thank You</h1></section>
+</div></div>
+
+
+	  <script src="/assets/reveal.js-master/dist/reveal.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/math/math.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/zoom/zoom.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/notes/notes.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/search/search.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/markdown/markdown.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/highlight/highlight.js"></script>
+	  <script>
+	    
+
+	    // Also available as an ES module, see:
+	    // https://revealjs.com/initialization/
+	    Reveal.initialize({
+		controls: false,
+		progress: true,
+		center: true,
+		hash: true,
+		transition: 'none',
+		math: {
+		    config: 'TeX-AMS_HTML-full',
+		    TeX: {
+			Macros: {
+			    R: '\\mathbb{R}',
+			    set: [ '\\left\\{#1 \\; ; \\; #2\\right\\}', 2 ]
+			}
+		    }
+		},
+
+
+		// Learn about plugins: https://revealjs.com/plugins/
+		plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath ]
+	    });
+
+	  </script>
+
+	</body>
+</html>
+	  
+
+<!-- <\!-- load the reveal.js css & js (assuming you've put it in assets/)-\-> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/reveal.scss" -->
+<!-- /> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/theme/source/white.scss" -->
+<!-- /> -->
+<!-- <script -->
+<!--   src="/assets/reveal.js-master/js/reveal.js" -->
+<!--   type="text/javascript" -->
+<!-- ></script> -->
+
+<!-- <\!-- configure the presentation, (you can tweak options to suit) -\-> -->
+<!-- <script> -->
+<!--   Reveal.initialize({ -->
+<!--     // Display presentation control arrows -->
+<!--     controls: false, -->
+
+<!--     // Help the user learn the controls by providing hints, for example by -->
+<!--     // bouncing the down arrow when they first encounter a vertical slide -->
+<!--     controlsTutorial: false, -->
+
+<!--     // Determines where controls appear, "edges" or "bottom-right" -->
+<!--     controlsLayout: "bottom-right", -->
+
+<!--     // Visibility rule for backwards navigation arrows; "faded", "hidden" -->
+<!--     // or "visible" -->
+<!--     controlsBackArrows: "faded", -->
+
+<!--     // Display a presentation progress bar -->
+<!--     progress: true, -->
+
+<!--     // Display the page number of the current slide -->
+<!--     slideNumber: false, -->
+
+<!--     // Push each slide change to the browser history -->
+<!--     history: false, -->
+
+<!--     // Enable keyboard shortcuts for navigation -->
+<!--     keyboard: true, -->
+
+<!--     // Enable the slide overview mode -->
+<!--     overview: true -->
+<!--   }); -->
+<!-- </script> -->

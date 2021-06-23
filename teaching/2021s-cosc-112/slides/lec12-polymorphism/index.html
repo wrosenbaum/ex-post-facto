@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta charset="utf-8">
+
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reset.css">
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reveal.css">
+		<link rel="stylesheet" href="/assets/css/condensation.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="/assets/reveal.js-master/plugin/highlight/monokai.css" id="highlight-theme">
+		<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700" rel="stylesheet">
+
+	</head>
+
+	<body>
+
+
+	  <!-- this is where the reveailfy filter gets applied -->
+	  <div class="reveal"><div class="slides">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section id="lecture-12-polymorphism"><h1>Lecture 12: Polymorphism</h1></section><section id="announcements"><h2>Announcements</h2>
+<ol>
+  <li>Please compile and run the code for Project 02 today!
+    <ul>
+      <li><a href="https://willrosenbaum.com/teaching/2021s-cosc-112/projects/02-substitution-cipher/">Project Description</a></li>
+      <li><a href="https://forms.gle/meXLqN5XM2SFeA1t5">Response</a></li>
+    </ul>
+  </li>
+  <li>Quiz Posted Today
+    <ul>
+      <li>Covers object inheritance</li>
+      <li>Complete by Sunday</li>
+    </ul>
+  </li>
+</ol></section><section id="outline"><h2>Outline</h2>
+<ol>
+  <li>Recap of Inheritance</li>
+  <li>Polymorphism</li>
+</ol></section><section id="advantage-of-inheritance"><h2>Advantage of Inheritance</h2>
+<p>Encapsulation!</p>
+<ul>
+  <li>Write a (super) class with common features of many classes</li>
+  <li>Write sub classes that inherit from super class
+    <ul>
+      <li>only implement the <em>differences</em> with the super-class</li>
+    </ul>
+  </li>
+  <li>Do not re-implement/duplicate common code</li>
+</ul></section><section id="when-to-use-inheritance"><h2>When to use Inheritance</h2>
+<p>The “is a” rule:</p>
+<ul>
+  <li>Two object types: <code>Object1</code>, <code>Object2</code>
+</li>
+  <li>If <code>Object2</code> is a <code>Object1</code>, then it might make sense to define <code>Object2</code> as a subclass of <code>Object1</code>
+    <ul>
+      <li>e.g. <code>Apple</code> is a <code>Fruit</code>, so maybe define <code>class Apple extends Fruit</code>
+</li>
+    </ul>
+  </li>
+</ul></section><section id="polymorphism"><h1>Polymorphism</h1></section><section id="an-example-with-animals"><h2>An Example, with Animals</h2>
+<pre><code class="language-java">public abstract class Animal {
+    private String name;
+
+    public Animal (String name) { this.name = name; }
+
+    public String getName () { return name; }
+
+    public abstract String getSpecies ();
+
+    public void feed () {
+	System.out.println("You just fed " + name + " the " + getSpecies()
+			   + " some " + getFavoriteFood() + "!");
+    }
+
+    public abstract String getFavoriteFood ();
+
+    public abstract void printAnimalFact ();
+}
+</code></pre></section><section id="your-task"><h2>Your Task</h2>
+<p>Write a <code>class</code> that <code>extends Animal</code></p>
+<ol>
+  <li>Implement all <code>abstract</code> methods</li>
+  <li>Implement one method that is specific to your animal
+    <ul>
+      <li>e.g., <code>Dog</code> might have a <code>bark()</code> method that prints <code>Woof!</code> to <code>System.out</code>.</li>
+    </ul>
+  </li>
+</ol></section><section id="making-a-zoo"><h2>Making a Zoo</h2>
+<p>A zoo with one type of animal:</p>
+<pre><code class="language-java">public class Zoo {
+    public static final int ZOO_SIZE = 10;
+        
+    public static void main(String[] args) {
+	
+	Platypus[] animals = new Platypus[ZOO_SIZE];
+	
+	for (int i = 0; i &lt; animals.length; i++) {
+	    animals[i] = new Platypus(Names.getRandomName());
+	}
+
+	for (int i = 0; i &lt; animals.length; i++) {
+	    animals[i].feed();
+	}
+    }
+}
+</code></pre></section><section id="but-we-want-more"><h2>But We Want More!</h2>
+<p>How can we store different <em>types</em> of animal in our zoo?</p>
+<ul>
+  <li>Declare <code>animals</code> to be an array of <code>Animal</code>:</li>
+</ul>
+<pre><code class="language-java">Animal[] animals = new Animal[ZOO_SIZE];
+</code></pre>
+<ul>
+  <li>Initialize each entry in <code>animals</code> to be the desired type of <code>Animal</code>:</li>
+</ul>
+<pre><code class="language-java">animals[0] = new Platypus(Names.getRandomName());
+animals[1] = new Dog(Names.getRandomName());
+...
+</code></pre></section><section id="why-is-this-okay"><h2>Why is this Okay?</h2>
+<pre><code class="language-java">Animal[] animals = new Animal[ZOO_SIZE];
+animals[0] = new Platypus(Names.getRandomName());
+animals[1] = new Dog(Names.getRandomName());
+...
+</code></pre>
+<ul>
+  <li>
+<code>animals[i]</code> stores a <em>reference</em> to an <code>Animal</code>
+</li>
+  <li>a <code>Platypus</code> is type of <code>Animal</code>
+    <ul>
+      <li><code>Platypus extends Animal</code></li>
+    </ul>
+  </li>
+  <li>can call any method defined in <code>Animal</code> class…</li>
+</ul></section><section id="polymorphism-1"><h2>Polymorphism</h2>
+<p>The entries in <code>animals</code> are (references to) <code>Animal</code>s</p>
+<ul>
+  <li>But they are <em>also</em> types of <code>Animal</code>
+    <ul>
+      <li>some are <code>Platypus</code>es, some are <code>Dog</code>s, …</li>
+    </ul>
+  </li>
+  <li>A single instance satisfies the specification of multiple classes at once</li>
+</ul>
+<p>This is <strong>polymorphism</strong></p></section><section id="checking-types"><h2>Checking Types</h2>
+<p>We can see polymorphism using the <code>instanceof</code> keyword</p>
+<ul>
+  <li>
+<code>alice instanceof Animal</code> returns <code>true</code> if <code>alice</code> is an <code>Animal</code>
+</li>
+  <li>
+<code>alice instanceof Platypus</code> returns <code>true</code> if <code>alice</code> is a <code>Platypus</code>
+</li>
+</ul>
+<p>For example</p>
+<pre><code class="language-java">	    if (alice instanceof Animal) {
+		System.out.println("Alice is an Animal!");
+	    }
+	    if (alice instanceof Platypus) {
+		System.out.println("Alice is a Platypus");
+	    }
+</code></pre></section><section id="question"><h2>Question</h2>
+<p>What happens if call <code>alice.sting()</code>?</p>
+<ul>
+  <li>
+<code>alice</code> refers to a <code>Platypus</code>
+</li>
+  <li>
+<code>Platypus</code> has a method <code>sting()</code>
+</li>
+  <li>
+<code>alice</code> refers to an <code>Animal</code> that is a <code>Platypus</code>
+    <ul>
+      <li>so she can <code>sting()</code> right?</li>
+    </ul>
+  </li>
+</ul>
+<div style="margin-bottom: 8em"></div></section><section id="recall-casting"><h2>Recall casting</h2>
+<ul>
+  <li>We can convert some primitive data types to others</li>
+  <li>Some conversions are automatic:</li>
+</ul>
+<pre><code class="language-java">int n = 10;
+double d = n; // java thinks this is okay
+</code></pre></section><section id="but"><h2>But…</h2>
+<pre><code class="language-java">    double d = 10.0;
+    int n = d; 
+</code></pre>
+<p>gives</p>
+<pre><code class="language-text">    error: incompatible types: possible lossy conversion from double to int
+</code></pre></section><section id="explicit-casting"><h2>Explicit Casting</h2>
+<p>We can force Java to do the conversion by casting:</p>
+<pre><code class="language-java">    double d = 10.0;
+    int n = (int) d; // truncates d (i.e., removes everything after the decimal)
+</code></pre></section><section id="casting-with-class"><h2>Casting with <code>class</code>
+</h2>
+<ul>
+  <li>We can also cast instances of classes to subclasses</li>
+  <li>The following gives an error since <code>sting</code> is not defined for <code>Animal</code>
+    <pre><code class="language-java">  Animal alice = new Platypus("Alice");
+  alice.sting();
+</code></pre>
+  </li>
+  <li>The variable <code>alice</code> is treated as a reference to an <code>Animal</code>, not a <code>Platypus</code>
+</li>
+  <li>we can make a new variable referring to the same instance, but treated as a <code>Platypus</code>:</li>
+</ul>
+<pre><code class="language-java">    Platypus aliceToo = (Platypus) alice; // cast alice a ref to Platypus
+    aliceToo.sting(); // this works now!
+</code></pre></section><section id="a-problem-with-arrays"><h2>A problem with arrays</h2>
+<ul>
+  <li>What if we don’t know the type of an entry of an array?
+    <ul>
+      <li>if <code>animals[0]</code> is a <code>Platypus</code>, it should <code>sting()</code>
+</li>
+      <li>otherwise don’t do anything</li>
+    </ul>
+  </li>
+  <li>use the operator <code>instanceof</code>
+</li>
+</ul>
+<pre><code class="language-java">    if (animals[i] instanceof Platypus) {
+      Platypus p = (Platypus) animals[i];
+      p.sting();
+    }
+</code></pre></section>
+</div></div>
+
+
+	  <script src="/assets/reveal.js-master/dist/reveal.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/math/math.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/zoom/zoom.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/notes/notes.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/search/search.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/markdown/markdown.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/highlight/highlight.js"></script>
+	  <script>
+	    
+
+	    // Also available as an ES module, see:
+	    // https://revealjs.com/initialization/
+	    Reveal.initialize({
+		controls: false,
+		progress: true,
+		center: true,
+		hash: true,
+		transition: 'none',
+		math: {
+		    config: 'TeX-AMS_HTML-full',
+		    TeX: {
+			Macros: {
+			    R: '\\mathbb{R}',
+			    set: [ '\\left\\{#1 \\; ; \\; #2\\right\\}', 2 ]
+			}
+		    }
+		},
+
+
+		// Learn about plugins: https://revealjs.com/plugins/
+		plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath ]
+	    });
+
+	  </script>
+
+	</body>
+</html>
+	  
+
+<!-- <\!-- load the reveal.js css & js (assuming you've put it in assets/)-\-> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/reveal.scss" -->
+<!-- /> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/theme/source/white.scss" -->
+<!-- /> -->
+<!-- <script -->
+<!--   src="/assets/reveal.js-master/js/reveal.js" -->
+<!--   type="text/javascript" -->
+<!-- ></script> -->
+
+<!-- <\!-- configure the presentation, (you can tweak options to suit) -\-> -->
+<!-- <script> -->
+<!--   Reveal.initialize({ -->
+<!--     // Display presentation control arrows -->
+<!--     controls: false, -->
+
+<!--     // Help the user learn the controls by providing hints, for example by -->
+<!--     // bouncing the down arrow when they first encounter a vertical slide -->
+<!--     controlsTutorial: false, -->
+
+<!--     // Determines where controls appear, "edges" or "bottom-right" -->
+<!--     controlsLayout: "bottom-right", -->
+
+<!--     // Visibility rule for backwards navigation arrows; "faded", "hidden" -->
+<!--     // or "visible" -->
+<!--     controlsBackArrows: "faded", -->
+
+<!--     // Display a presentation progress bar -->
+<!--     progress: true, -->
+
+<!--     // Display the page number of the current slide -->
+<!--     slideNumber: false, -->
+
+<!--     // Push each slide change to the browser history -->
+<!--     history: false, -->
+
+<!--     // Enable keyboard shortcuts for navigation -->
+<!--     keyboard: true, -->
+
+<!--     // Enable the slide overview mode -->
+<!--     overview: true -->
+<!--   }); -->
+<!-- </script> -->

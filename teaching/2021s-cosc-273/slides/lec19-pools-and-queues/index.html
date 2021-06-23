@@ -1,0 +1,913 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta charset="utf-8">
+
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reset.css">
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reveal.css">
+		<link rel="stylesheet" href="/assets/css/condensation.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="/assets/reveal.js-master/plugin/highlight/monokai.css" id="highlight-theme">
+		<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700" rel="stylesheet">
+
+	</head>
+
+	<body>
+
+
+	  <!-- this is where the reveailfy filter gets applied -->
+	  <div class="reveal"><div class="slides">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ## Concurrent `enq`/`deq` -->
+
+<!-- - Okay if queue is not empty -->
+<!--     + `head` and `tail` refer to different nodes -->
+<!-- 	+ no concurrent modification -->
+<!-- - What if queue is empty? -->
+
+<!-- <div style="margin-bottom: 8em"></div> -->
+
+<!-- ## Concurrent Subtlety -->
+
+<!-- ![](/assets/img/concurrent-queues/unbounded-conc.png){: width="100%"} -->
+
+<!-- ## Concurrent Subtlety -->
+
+<!-- ![](/assets/img/concurrent-queues/unbounded-conc.png){: width="50%"} -->
+
+<!-- - `enq` checks for `head.next` -->
+<!-- - `deq` updates `tail.next` (= `head.next`) -->
+
+<!-- Who wins? -->
+
+<!-- ## Linearizing `enq()` -->
+
+<!-- ```java -->
+<!--     public void enq (T value) { -->
+<!-- 	enqLock.lock(); -->
+<!-- 	try { -->
+<!-- 	    Node nd = new Node(value); -->
+<!-- 	    tail.next = nd; -->
+<!-- 	    tail = nd; -->
+<!-- 	} finally { -->
+<!-- 	    enqLock.unlock(); -->
+<!-- 	} -->
+<!--     } -->
+<!-- ``` -->
+
+<!-- <div style="margin-bottom: 6em"></div> -->
+
+<!-- ## Linearizing `deq()` -->
+
+<!-- ```java -->
+<!--     public T deq() throws EmptyException { -->
+<!-- 	T value; -->
+<!-- 	deqLock.lock(); -->
+<!-- 	try { -->
+<!-- 	    if (head.next == null) { -->
+<!-- 		throw new EmptyException(); -->
+<!-- 	    } -->
+<!-- 	    value = head.next.value; -->
+<!-- 	    head = head.next; -->
+<!-- 	} finally { -->
+<!-- 	    deqLock.unlock(); -->
+<!-- 	} -->
+
+<!-- 	return value; -->
+<!--     } -->
+<!-- ``` -->
+
+<!-- <div style="margin-bottom: 6em"></div> -->
+
+<!-- ## Something to Consider -->
+
+<!-- `enq` linearizes to -->
+<!-- ```java -->
+<!-- tail.next = nd -->
+<!-- ``` -->
+
+<!-- - this happens before `tail` is updated -->
+
+<!-- `deq` linearizes to -->
+<!-- ```java -->
+<!-- value = head.next.value; -->
+<!-- ``` -->
+
+<!-- - this happens before `head` is updated -->
+
+<!-- So: -->
+
+<!-- - `head` and `tail` don't always point to first (predecessor) and last items in the queue -->
+
+<!-- Why is this not a problem? -->
+
+<!-- ## Why is this not a problem? -->
+
+<!-- `head` and `tail` don't always point to first (predecessor) and last items in the queue? -->
+
+<!-- Not a problem because -->
+
+<!-- - Nodes lock `enq`/`deq` operations -->
+<!-- - `tail`/`head` updated before lock released -->
+<!-- - only `enq` cares about `tail` value -->
+<!--     + other enqueuers don't modify until after `tail` updated -->
+<!-- - only `deq` cares about `head` value -->
+<!--     + other dequeuers don't modify until after `head` udpated -->
+<!-- - crisis averted -->
+
+<!-- ## What is the Next Question? -->
+
+<!-- ...we've got a queue with locks... -->
+
+<!-- ## Can We Make a Lock-free Queue? -->
+
+<!-- Use `AtomicReferences` for `head`/`tail`/`next` -->
+
+<!-- - can atomically verify/update fields with `compareAndSet` -->
+<!-- - e.g. for `enq` -->
+<!--     ``` -->
+<!-- Node nd = new Node(item); -->
+<!-- Node last = tail.get(); -->
+<!-- Node next = last.next.get(); -->
+<!-- if (next == null) { -->
+<!--     last.next.compareAndSet(next, node); -->
+<!-- } -->
+<!-- 	``` -->
+
+<!-- The subtelty -->
+
+<!-- - Cannot modify both `tail` and `tail.get().next` atomically -->
+<!-- - At some point, `tail` will not refer to last node in list -->
+<!-- - Without locks, other threads will be able to see this! -->
+
+<!-- ## The Challenge -->
+
+<!-- `enq` and `deq` must function properly even if: -->
+
+<!-- 1. `head` and `tail` don't point where they should -->
+<!-- 2. other `enq` and `deq` operations are in progress -->
+<!--     - partially complete method calls -->
+
+<!-- <div style="margin-bottom: 8em"></div> -->
+
+<!-- ## An Idea -->
+
+<!-- Clean up each others' messes! -->
+
+<!-- - Call to `enq` can detect if `tail` isn't correct -->
+<!-- 	+ `tail.get().next != null` -->
+<!-- - If this occurs, update tail: -->
+<!--     ```java -->
+<!-- Node last = tail.get(); -->
+<!-- Node next = last.next.get(); -->
+<!-- if (next != null) { -->
+<!--     tail.compareAndSet(last, next); -->
+<!-- } -->
+
+<!--     ``` -->
+
+<!-- Threads helping each other! -->
+
+<!-- ## `LockFreeQueue` -->
+
+<!-- ```java -->
+<!-- public class LockFreeQueue<T> implements SimpleQueue<T> { -->
+<!--     private AtomicReference<Node> head; -->
+<!--     private AtomicReference<Node> tail; -->
+
+<!--     public LockFreeQueue() { -->
+<!-- 	Node sentinel = new Node(null); -->
+<!-- 	this.head = new AtomicReference<Node>(sentinel); -->
+<!-- 	this.tail = new AtomicReference<Node>(sentinel); -->
+<!--     } -->
+
+<!--     public void enq(T item) {...} -->
+
+<!--     public T deq() throws EmptyException {...} -->
+
+<!--     class Node { -->
+<!-- 	public T value; -->
+<!-- 	public AtomicReference<Node> next; -->
+
+<!-- 	public Node(T value) { -->
+<!-- 	    this.value = value; -->
+<!-- 	    this.next  = new AtomicReference<Node>(null); -->
+<!-- 	} -->
+<!--     }     -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- ## Lock-free Enqueue Method -->
+
+<!-- ```java -->
+<!--     public void enq(T item) { -->
+<!-- 	if (item == null) throw new NullPointerException(); -->
+
+<!-- 	Node node = new Node(item);  -->
+
+<!-- 	while (true) {		  -->
+<!-- 	    Node last = tail.get();     -->
+<!-- 	    Node next = last.next.get();  -->
+
+<!-- 	    if (last == tail.get()) { -->
+
+<!-- 		if (next == null) { -->
+
+<!-- 		    if (last.next.compareAndSet(next, node)) { -->
+<!-- 			tail.compareAndSet(last, node); -->
+<!-- 			return; -->
+<!-- 		    } -->
+
+<!-- 		} else { -->
+
+<!-- 		    tail.compareAndSet(last, next); -->
+
+<!-- 		} -->
+<!-- 	    } -->
+<!-- 	} -->
+<!--     } -->
+<!-- ``` -->
+
+<!-- ## Lock-free Dequeue Method -->
+
+<!-- ```java -->
+<!--     public T deq() throws EmptyException { -->
+
+<!-- 	while (true) { -->
+
+<!-- 	    Node first = head.get(); -->
+<!-- 	    Node last = tail.get(); -->
+<!-- 	    Node next = first.next.get(); -->
+
+<!-- 	    if (first == head.get()) { -->
+<!-- 		if (first == last) {   -->
+<!-- 		    if (next == null) {	 -->
+<!-- 			throw new EmptyException(); -->
+<!-- 		    } -->
+
+<!-- 		    tail.compareAndSet(last, next); -->
+<!-- 		} else { -->
+<!-- 		    T value = next.value;  -->
+<!-- 		    if (head.compareAndSet(first, next)) -->
+<!-- 			return value; -->
+<!-- 		} -->
+<!-- 	    } -->
+<!-- 	} -->
+<!--     } -->
+<!-- ``` -->
+
+<!-- ## Cool. -->
+
+<!-- Let's test the implementations! -->
+
+<section id="lecture-19-pools-and-queues"><h1>Lecture 19: Pools and Queues</h1></section><section id="overview"><h2>Overview</h2>
+<ol>
+  <li>Finishing Up Lists</li>
+  <li>Pools &amp; Queues</li>
+  <li>A Blocking Queue</li>
+  <li>A Lock-free Queue</li>
+</ol></section><section id="last-time-lock-free-linked-list"><h2>Last Time: Lock-free linked list</h2>
+<p>Use <code>AtomicMarkableReference&lt;Node&gt;</code> for fields</p>
+<ul>
+  <li>
+<code>mark</code> indicates logical removal</li>
+</ul>
+<p>For <code>add</code>/<code>remove</code>:</p>
+<ol>
+  <li>Find location</li>
+  <li>Validate and modify
+    <ul>
+      <li>(first logically remove if <code>remove</code>)</li>
+      <li>use <code>compareAndSet</code> to atomically
+        <ol>
+          <li>check that predecessor node has not been removed</li>
+          <li>update <code>next</code> field of predecessor</li>
+        </ol>
+      </li>
+    </ul>
+  </li>
+</ol>
+<p>For <code>contains</code>:</p>
+<ul>
+  <li>Just traverse the list!</li>
+</ul></section><section id="common-functionality"><h2>Common Functionality</h2>
+<p>Traverse are remove:</p>
+<ol>
+  <li>Find <code>pred</code> and <code>curr</code> where <code>item</code> lives</li>
+  <li>Physically remove logically removed nodes along the way</li>
+</ol>
+<p>Return: a <code>Window</code></p>
+<pre><code class="language-java">    class Window {
+	public Node pred;
+	public Node curr;
+
+	public Window (Node pred, Node curr) {
+	    this.pred = pred;
+	    this.curr = curr;
+	}
+    }
+</code></pre></section><section id="finding-and-removing-in-code"><h2>Finding and Removing in Code</h2>
+<pre><code class="language-java">    public Window find(Node head, long key) {
+	Node pred = null;
+	Node curr = null;
+	Node succ = null;
+	boolean[] marked = {false};
+	boolean snip;
+
+	retry: while(true) {
+	    pred = head;
+	    curr = pred.next.getReference();
+	    while(true) {
+		succ = curr.next.get(marked);
+		while(marked[0]) {
+		    snip = pred.next.compareAndSet(curr, succ, false, false);
+		    if (!snip) continue retry;
+		    curr = pred.next.getReference();
+		    succ = curr.next.get(marked);
+		}
+		if (curr.key &gt;= key) {
+		    return new Window(pred, curr);
+		}
+		pred = curr;
+		curr = succ;
+	    }
+	}
+</code></pre>
+<div style="margin-bottom: 4em"></div></section><section id="removal-in-code"><h2>Removal in Code</h2>
+<pre><code class="language-java">    public boolean remove(T item) {
+	int key = item.hashCode();
+	boolean snip;
+	while (true) {
+	    Window window = find(head, key);
+	    Node pred = window.pred;
+	    Node curr = window.curr;
+
+	    if (curr.key != key) {
+		return false;
+	    }
+
+	    Node succ = curr.next.getReference();
+	    snip = curr.next.compareAndSet(succ, succ, false, true);
+	    if (!snip) {
+		continue;
+	    }
+	    pred.next.compareAndSet(curr, succ, false, false);
+	    return true;
+	}
+    }
+</code></pre>
+<div style="margin-bottom: 4em"></div></section><section id="test-the-code"><h2>Test the Code</h2></section><section id="single-thread-performance"><h2>Single Thread Performance</h2>
+<p>Runtimes: 1M Operations</p>
+<table>
+  <thead>
+    <tr>
+      <th>n elts</th>
+      <th>coarse</th>
+      <th>fine</th>
+      <th>optimistic</th>
+      <th>lazy</th>
+      <th>non-block</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>10</td>
+      <td>0.11 s</td>
+      <td>0.14 s</td>
+      <td>0.13 s</td>
+      <td>0.11 s</td>
+      <td>0.11 s</td>
+    </tr>
+    <tr>
+      <td>100</td>
+      <td>0.14 s</td>
+      <td>0.46 s</td>
+      <td>0.19 s</td>
+      <td>0.13 s</td>
+      <td>0.20 s</td>
+    </tr>
+    <tr>
+      <td>1000</td>
+      <td>1.1 s</td>
+      <td>3.9 s</td>
+      <td>2.2 s</td>
+      <td>1.1 s</td>
+      <td>2.8 s</td>
+    </tr>
+    <tr>
+      <td>10000</td>
+      <td>28 s</td>
+      <td>39 s</td>
+      <td>59 s</td>
+      <td>29 s</td>
+      <td>66 s</td>
+    </tr>
+  </tbody>
+</table></section><section id="performance-8-threads"><h2>Performance, 8 Threads</h2>
+<p>Runtimes: 1M Operations</p>
+<table>
+  <thead>
+    <tr>
+      <th>n elts</th>
+      <th>coarse</th>
+      <th>fine</th>
+      <th>optimistic</th>
+      <th>lazy</th>
+      <th>non-block</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>10</td>
+      <td>0.21 s</td>
+      <td>0.36 s</td>
+      <td>0.33 s</td>
+      <td>0.33 s</td>
+      <td>0.21 s</td>
+    </tr>
+    <tr>
+      <td>100</td>
+      <td>0.27 s</td>
+      <td>1.80 s</td>
+      <td>0.38 s</td>
+      <td>0.12 s</td>
+      <td>0.07 s</td>
+    </tr>
+    <tr>
+      <td>1000</td>
+      <td>1.8 s</td>
+      <td>4.7 s</td>
+      <td>0.86 s</td>
+      <td>0.19 s</td>
+      <td>0.49 s</td>
+    </tr>
+    <tr>
+      <td>10,000</td>
+      <td>32 s</td>
+      <td>17 s</td>
+      <td>9.2 s</td>
+      <td>4.7 s</td>
+      <td>9.2 s</td>
+    </tr>
+  </tbody>
+</table>
+<p>Note: fewer elements $\implies$ greater contention</p></section><section id="the-moral"><h2>The Moral</h2>
+<p>Many ways of achieving correct behavior</p>
+<p>Tradeoffs:</p>
+<ul>
+  <li>Conceptual simplicity vs complexity/sophistication</li>
+  <li>Best performance depends on usage case
+    <ul>
+      <li>very high contention: coarse locking is best
+        <ul>
+          <li>simplest</li>
+        </ul>
+      </li>
+      <li>moderately high contention: non-blocking is best
+        <ul>
+          <li>most sophisticated</li>
+          <li>hardest to reason about</li>
+          <li>easiest to mess up</li>
+        </ul>
+      </li>
+      <li>lower contention: lazy is best
+        <ul>
+          <li>moderately sophisticated</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul></section><section id="more-data-structures"><h2>More Data Structures</h2>
+<p>Recently:</p>
+<ul>
+  <li>Thread pools to simplify thread/task management</li>
+</ul>
+<p>Questions:</p>
+<ul>
+  <li>What is a pool?</li>
+  <li>How are they implemented?</li>
+</ul></section><section id="a-poolt-interface"><h2>A <code>Pool&lt;T&gt;</code> Interface</h2>
+<p>Want to model producer/consumer problem</p>
+<ul>
+  <li>producers create things (e.g., tasks)</li>
+  <li>consumers consume things (e.g., complete tasks)</li>
+</ul>
+<p>A <strong>pool</strong> stores items between production and consumption:</p>
+<pre><code class="language-java">public interface Pool&lt;T&gt; {
+    void put(T item); // add item to the pool
+    T get();          // remove item from pool
+}
+</code></pre></section><section id="pool-properties"><h2>Pool Properties</h2>
+<ol>
+  <li>Bounded vs unbounded</li>
+  <li>Fairness
+    <ul>
+      <li>FIFO queue</li>
+      <li>LIFO stack</li>
+      <li>Something else?</li>
+    </ul>
+  </li>
+  <li>Method specifications
+    <ul>
+      <li>partial: threads wait for conditions
+        <ul>
+          <li>
+<code>get</code> from empty pool waits for a <code>put</code>
+</li>
+          <li>
+<code>put</code> to full pool waits for a <code>get</code>
+</li>
+        </ul>
+      </li>
+      <li>total: no calls wait for others</li>
+      <li>synchronous: e.g. every <code>put</code> call waits for <code>get</code>
+</li>
+    </ul>
+  </li>
+</ol></section><section id="implementing-a-pool"><h2>Implementing a Pool</h2>
+<p>Can use a queue to implement a pool:</p>
+<ul>
+  <li>
+<code>enq</code> implements <code>put</code>
+</li>
+  <li>
+<code>deq</code> implements <code>get</code>
+</li>
+  <li>LIFO priority</li>
+</ul>
+<p>Two queue implementations today</p>
+<ol>
+  <li>Unbounded total queue (blocking)</li>
+  <li>Lock-free unbounded total queue</li>
+</ol></section><section id="unbounded-total-queue-blocking"><h2>Unbounded Total Queue (Blocking)</h2>
+<ul>
+  <li>Use linked list implementation of queue</li>
+  <li>Store:
+    <ul>
+      <li>
+<code>Node head</code> sentinal
+        <ul>
+          <li>
+<code>deq</code> returns <code>head.next</code> value (if any), updates <code>head</code>
+</li>
+        </ul>
+      </li>
+      <li>
+<code>Node tail</code>
+        <ul>
+          <li>
+<code>enq</code> updates <code>tail.next</code>, updates <code>tail</code>
+</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Locks:
+    <ul>
+      <li>
+<code>enqLock</code> locks <code>enq</code> operation</li>
+      <li>
+<code>deqLock</code> locks <code>deq</code> operation</li>
+      <li>individual <code>Node</code>s are <em>not</em> locked</li>
+    </ul>
+  </li>
+</ul></section><section id="unbounded-queue-in-pictures"><h2>Unbounded Queue in Pictures</h2>
+<p><img src="/assets/img/concurrent-queues/unbounded-queue.png" alt="" width="100%"></p></section><section id="dequeue-1-aquire-deqlock"><h2>Dequeue 1: Aquire <code>deqLock</code>
+</h2>
+<p><img src="/assets/img/concurrent-queues/unbounded-deq-1.png" alt="" width="100%"></p></section><section id="dequeue-2-get-element-or-exception"><h2>Dequeue 2: Get Element (or Exception)</h2>
+<p><img src="/assets/img/concurrent-queues/unbounded-deq-2.png" alt="" width="100%"></p></section><section id="dequeue-3-update-head"><h2>Dequeue 3: Update <code>head</code>
+</h2>
+<p><img src="/assets/img/concurrent-queues/unbounded-deq-3.png" alt="" width="100%"></p></section><section id="dequeue-4-release-lock"><h2>Dequeue 4: Release Lock</h2>
+<p><img src="/assets/img/concurrent-queues/unbounded-deq-4.png" alt="" width="100%"></p></section><section id="enqueue-1-make-node"><h2>Enqueue 1: Make Node</h2>
+<p><img src="/assets/img/concurrent-queues/unbounded-enq-1.png" alt="" width="100%"></p></section><section id="enqueue-2-acquire-enqlock"><h2>Enqueue 2: Acquire <code>enqLock</code>
+</h2>
+<p><img src="/assets/img/concurrent-queues/unbounded-enq-2.png" alt="" width="100%"></p></section><section id="enqueue-3-update-tailnext"><h2>Enqueue 3: Update <code>tail.next</code>
+</h2>
+<p><img src="/assets/img/concurrent-queues/unbounded-enq-3.png" alt="" width="100%"></p></section><section id="enqueue-4-update-tail"><h2>Enqueue 4: Update <code>tail</code>
+</h2>
+<p><img src="/assets/img/concurrent-queues/unbounded-enq-4.png" alt="" width="100%"></p></section><section id="enqueue-5-release-lock"><h2>Enqueue 5: Release Lock</h2>
+<p><img src="/assets/img/concurrent-queues/unbounded-enq-5.png" alt="" width="100%"></p></section><section id="unboundedqueue-in-code"><h2>
+<code>UnboundedQueue</code> in Code</h2>
+<pre><code class="language-java">public class UnboundedQueue&lt;T&gt; implements SimpleQueue&lt;T&gt; {
+    final ReentrantLock enqLock;
+    final ReentrantLock deqLock;
+    volatile Node head;
+    volatile Node tail;
+
+    public UnboundedQueue() {
+	head = new Node(null);
+	tail = head;
+	enqLock = new ReentrantLock();
+	deqLock = new ReentrantLock();
+    }
+
+    public T deq() throws EmptyException {
+	T value;
+	deqLock.lock();
+	try {
+	    if (head.next == null) {
+		throw new EmptyException();
+	    }
+	    value = head.next.value;
+	    head = head.next;
+	} finally {
+	    deqLock.unlock();
+	}
+
+	return value;
+    }
+
+    public void enq (T value) {
+	enqLock.lock();
+	try {
+	    Node nd = new Node(value);
+	    tail.next = nd;
+	    tail = nd;
+	} finally {
+	    enqLock.unlock();
+	}
+    }
+    
+    class Node {
+	final T value;
+	volatile Node next;
+
+	public Node (T value) {
+	    this.value = value;
+	}
+    }
+}
+</code></pre></section><section id="unbounded-logic"><h2>Unbounded Logic</h2>
+<p>Easy to reason about:</p>
+<ul>
+  <li>concurrent calls to <code>enq</code>
+    <ul>
+      <li>one acquires <code>enqLock</code>
+</li>
+      <li>others wait</li>
+    </ul>
+  </li>
+  <li>concurrent calls to <code>deq</code>
+    <ul>
+      <li>one acquires <code>deqLock</code>
+</li>
+      <li>others wait</li>
+    </ul>
+  </li>
+</ul>
+<p>What about concurrent calls to <code>enq</code>/<code>deq</code>?</p>
+<ul>
+  <li>Ever an issue?</li>
+</ul>
+<div style="margin-bottom: 6em"></div></section>
+</div></div>
+
+
+	  <script src="/assets/reveal.js-master/dist/reveal.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/math/math.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/zoom/zoom.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/notes/notes.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/search/search.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/markdown/markdown.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/highlight/highlight.js"></script>
+	  <script>
+	    
+
+	    // Also available as an ES module, see:
+	    // https://revealjs.com/initialization/
+	    Reveal.initialize({
+		controls: false,
+		progress: true,
+		center: true,
+		hash: true,
+		transition: 'none',
+		math: {
+		    config: 'TeX-AMS_HTML-full',
+		    TeX: {
+			Macros: {
+			    R: '\\mathbb{R}',
+			    set: [ '\\left\\{#1 \\; ; \\; #2\\right\\}', 2 ]
+			}
+		    }
+		},
+
+
+		// Learn about plugins: https://revealjs.com/plugins/
+		plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath ]
+	    });
+
+	  </script>
+
+	</body>
+</html>
+	  
+
+<!-- <\!-- load the reveal.js css & js (assuming you've put it in assets/)-\-> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/reveal.scss" -->
+<!-- /> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/theme/source/white.scss" -->
+<!-- /> -->
+<!-- <script -->
+<!--   src="/assets/reveal.js-master/js/reveal.js" -->
+<!--   type="text/javascript" -->
+<!-- ></script> -->
+
+<!-- <\!-- configure the presentation, (you can tweak options to suit) -\-> -->
+<!-- <script> -->
+<!--   Reveal.initialize({ -->
+<!--     // Display presentation control arrows -->
+<!--     controls: false, -->
+
+<!--     // Help the user learn the controls by providing hints, for example by -->
+<!--     // bouncing the down arrow when they first encounter a vertical slide -->
+<!--     controlsTutorial: false, -->
+
+<!--     // Determines where controls appear, "edges" or "bottom-right" -->
+<!--     controlsLayout: "bottom-right", -->
+
+<!--     // Visibility rule for backwards navigation arrows; "faded", "hidden" -->
+<!--     // or "visible" -->
+<!--     controlsBackArrows: "faded", -->
+
+<!--     // Display a presentation progress bar -->
+<!--     progress: true, -->
+
+<!--     // Display the page number of the current slide -->
+<!--     slideNumber: false, -->
+
+<!--     // Push each slide change to the browser history -->
+<!--     history: false, -->
+
+<!--     // Enable keyboard shortcuts for navigation -->
+<!--     keyboard: true, -->
+
+<!--     // Enable the slide overview mode -->
+<!--     overview: true -->
+<!--   }); -->
+<!-- </script> -->

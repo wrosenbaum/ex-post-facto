@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta charset="utf-8">
+
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reset.css">
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reveal.css">
+		<link rel="stylesheet" href="/assets/css/condensation.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="/assets/reveal.js-master/plugin/highlight/monokai.css" id="highlight-theme">
+		<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700" rel="stylesheet">
+
+	</head>
+
+	<body>
+
+
+	  <!-- this is where the reveailfy filter gets applied -->
+	  <div class="reveal"><div class="slides">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section id="lecture-15-thread-local-objects"><h1>Lecture 15: Thread Local Objects</h1></section><section id="overview"><h2>Overview</h2>
+<ol>
+  <li>Queue Locking Strategy</li>
+  <li>Thread Objects</li>
+  <li>Implementing CLH Lock</li>
+</ol></section><section id="last-time"><h2>Last Time</h2>
+<p>Compared</p>
+<ul>
+  <li>TAS lock</li>
+  <li>TTAS lock</li>
+  <li>Backoff lock</li>
+</ul>
+<p>Shortcoming:</p>
+<ul>
+  <li>Not starvation-free</li>
+  <li>All threads access same variable concurrently</li>
+</ul></section><section id="today"><h2>Today</h2>
+<p>Implementing a queue-based lock</p>
+<ul>
+  <li>Idea:
+    <ul>
+      <li>use linked list representation of a queue</li>
+      <li>each thread controls a node, sees predecessor node</li>
+      <li>use node to signal status to successor</li>
+    </ul>
+  </li>
+  <li>New construction:
+    <ul>
+      <li>thread local objects</li>
+    </ul>
+  </li>
+</ul></section><section id="clh-lock"><h2>CLH Lock</h2>
+<p>Each thread has:</p>
+<ul>
+  <li>
+<code>Node myNode</code> node “owned” by thread</li>
+  <li>
+<code>Node myPred</code> node owned by predecessor thread</li>
+</ul>
+<p>Each <code>Node</code> has:</p>
+<ul>
+  <li>
+<code>boolean locked</code>:
+    <ul>
+      <li>
+<code>myNode.locked = true</code> signals I want/have lock</li>
+      <li>
+<code>myNode.locked = false</code> signals I have released lock</li>
+    </ul>
+  </li>
+</ul>
+<p>Thread acquires lock when <code>myPred.locked</code> is <code>false</code></p></section><section id="clh-lock-initial-state"><h2>CLH Lock Initial State</h2>
+<p><img src="/assets/img/clh-lock/initial.png" alt="" width="100%"></p></section><section id="thread-1-arrives"><h2>Thread 1 Arrives</h2>
+<p><img src="/assets/img/clh-lock/thread1-arrives.png" alt="" width="100%"></p></section><section id="thread-1-acquires-lock"><h2>Thread 1 Acquires Lock</h2>
+<p><img src="/assets/img/clh-lock/thread1-acquires.png" alt="" width="100%"></p></section><section id="thread-2-arrives"><h2>Thread 2 Arrives</h2>
+<p><img src="/assets/img/clh-lock/thread2-arrives.png" alt="" width="100%"></p></section><section id="thread-2-locks"><h2>Thread 2 Locks</h2>
+<p><img src="/assets/img/clh-lock/thread2-locks.png" alt="" width="100%"></p></section><section id="thread-3-arrives"><h2>Thread 3 Arrives</h2>
+<p><img src="/assets/img/clh-lock/thread3-arrives.png" alt="" width="100%"></p></section><section id="thread-3-locks"><h2>Thread 3 Locks</h2>
+<p><img src="/assets/img/clh-lock/thread3-locks.png" alt="" width="100%"></p></section><section id="thread-1-unlocks-1"><h2>Thread 1 Unlocks (1)</h2>
+<p><img src="/assets/img/clh-lock/thread1-unlocks-1.png" alt="" width="100%"></p></section><section id="thread-1-unlocks-2"><h2>Thread 1 Unlocks (2)</h2>
+<p><img src="/assets/img/clh-lock/thread1-unlocks-2.png" alt="" width="100%"></p></section><section id="thread-2-unlocks"><h2>Thread 2 Unlocks</h2>
+<p><img src="/assets/img/clh-lock/thread2-unlocks.png" alt="" width="100%"></p></section><section id="thread-3-unlocks"><h2>Thread 3 Unlocks</h2>
+<p><img src="/assets/img/clh-lock/thread3-unlocks.png" alt="" width="100%"></p></section><section id="a-subtlety"><h2>A Subtlety</h2>
+<p>When a node locks, 2 things happen:</p>
+<ul>
+  <li>updates (shared) <code>tail</code>
+</li>
+  <li>updates (own) <code>myPred</code>
+</li>
+</ul>
+<p>In what order should these updates occur?</p>
+<p><img src="/assets/img/clh-lock/thread3-arrives.png" alt="" width="50%"></p>
+<div style="margin-bottom: 4em"></div></section><section id="swapping-atomically"><h2>Swapping Atomically</h2>
+<p>Use <code>AtomicReference&lt;...&gt;</code> class</p>
+<ul>
+  <li>has <code>getAndSet</code> method
+    <ul>
+      <li>returns previous value</li>
+      <li>sets new value</li>
+      <li>atomic</li>
+    </ul>
+  </li>
+  <li>use <code>myPred = tail.getAndSet(myNode)</code>
+</li>
+</ul></section><section id="another-subtlety"><h2>Another Subtlety</h2>
+<p>Each thread <em>has own</em> variables</p>
+<ul>
+  <li><code>myNode</code></li>
+  <li><code>myPred</code></li>
+</ul>
+<p>How do we get different variables for each thread???</p></section><section id="interlude-thread-local-objects"><h2>Interlude: Thread-local Objects</h2>
+<p>Java (generic) class: <code>ThreadLocal&lt;T&gt;</code></p>
+<ul>
+  <li>Make a <code>T</code> for each thread</li>
+  <li>Some <code>ThreadLocal</code> methods:
+    <ul>
+      <li>
+<code>T get()</code> returns current thread’s copy of variable</li>
+      <li>
+<code>protected T initialValue()</code> returns current thread’s initial value
+        <ul>
+          <li>you’ll want to <code>@Override</code> this to initialize</li>
+        </ul>
+      </li>
+      <li>
+<code>void set(T value)</code> set value of current thread’s copy</li>
+    </ul>
+  </li>
+</ul></section><section id="ugly-syntax"><h2>Ugly Syntax</h2>
+<p>Make a <code>MyClass</code> instance for each thread:</p>
+<pre><code class="language-java">public class TLObjects {
+    private ThreadLocal&lt;MyClass&gt; myInstance =
+        new ThreadLocal&lt;MyClass&gt;() {
+            @Override
+            protected MyClass initialValue() {
+                return new MyClass(...args...);
+            }
+        };
+    
+}
+</code></pre>
+<p>Uses <em>anonymous inner class</em> construction</p>
+<ul>
+  <li>syntax of constructor call, followed by <code>{...}</code>
+</li>
+  <li>“<code>...</code>” implements/overrides methods</li>
+</ul>
+<div style="margin-bottom: 4em"></div></section><section id="an-example-threadid"><h2>An Example: <code>ThreadId</code>
+</h2>
+<p>Make a class that assigns IDs to threads sequentially</p>
+<p>Fields:</p>
+<ul>
+  <li>
+<code>static AtomicInteger</code> that stores next ID to be assigned</li>
+  <li>
+<code>static ThreadLocal&lt;Integer&gt;</code> that stores thread’s ID</li>
+</ul>
+<p>Methods:</p>
+<ul>
+  <li>
+<code>static int get()</code> returns value of thread’s ID</li>
+</ul>
+<p>Why is everything <code>static</code>?</p>
+<div style="margin-bottom: 4em"></div></section><section id="threadid-in-code"><h2>
+<code>ThreadID</code> in Code</h2></section><section id="using-threadlocal-for-clhlock"><h2>Using <code>ThreadLocal</code> for <code>CLHLock</code>
+</h2>
+<p>Fields:</p>
+<ul>
+  <li>Shared reference to <code>tail</code> node
+    <ul>
+      <li>must be <code>AtomicReference</code> to <code>getAndSet</code> atomically</li>
+    </ul>
+  </li>
+  <li>Thread local (references to) nodes
+    <ul>
+      <li>
+<code>myNode</code>, the <code>Node</code> I initially own</li>
+      <li>
+<code>predNode</code>, initially <code>null</code>
+</li>
+    </ul>
+  </li>
+</ul>
+<p>Methods:</p>
+<ul>
+  <li>
+<code>lock()</code>
+    <ul>
+      <li>set <code>myNode.locked = ture</code>
+</li>
+      <li>atomically:
+        <ul>
+          <li>get shared <code>tail</code> node</li>
+          <li>set <code>tail</code> to <code>myNode</code>
+</li>
+        </ul>
+      </li>
+      <li>wait until <code>myPred.locked == false</code>
+</li>
+    </ul>
+  </li>
+  <li>
+<code>unlock()</code>
+    <ul>
+      <li>set <code>myNode.locked = false</code> (releases lock)</li>
+      <li>update <code>myNode</code> to <code>myPred</code>
+</li>
+    </ul>
+  </li>
+</ul></section><section id="testing-clhlock"><h2>Testing <code>CLHLock</code>
+</h2></section><section id="next-time"><h2>Next Time</h2>
+<ul>
+  <li>Linked Lists</li>
+</ul></section>
+</div></div>
+
+
+	  <script src="/assets/reveal.js-master/dist/reveal.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/math/math.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/zoom/zoom.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/notes/notes.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/search/search.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/markdown/markdown.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/highlight/highlight.js"></script>
+	  <script>
+	    
+
+	    // Also available as an ES module, see:
+	    // https://revealjs.com/initialization/
+	    Reveal.initialize({
+		controls: false,
+		progress: true,
+		center: true,
+		hash: true,
+		transition: 'none',
+		math: {
+		    config: 'TeX-AMS_HTML-full',
+		    TeX: {
+			Macros: {
+			    R: '\\mathbb{R}',
+			    set: [ '\\left\\{#1 \\; ; \\; #2\\right\\}', 2 ]
+			}
+		    }
+		},
+
+
+		// Learn about plugins: https://revealjs.com/plugins/
+		plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath ]
+	    });
+
+	  </script>
+
+	</body>
+</html>
+	  
+
+<!-- <\!-- load the reveal.js css & js (assuming you've put it in assets/)-\-> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/reveal.scss" -->
+<!-- /> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/theme/source/white.scss" -->
+<!-- /> -->
+<!-- <script -->
+<!--   src="/assets/reveal.js-master/js/reveal.js" -->
+<!--   type="text/javascript" -->
+<!-- ></script> -->
+
+<!-- <\!-- configure the presentation, (you can tweak options to suit) -\-> -->
+<!-- <script> -->
+<!--   Reveal.initialize({ -->
+<!--     // Display presentation control arrows -->
+<!--     controls: false, -->
+
+<!--     // Help the user learn the controls by providing hints, for example by -->
+<!--     // bouncing the down arrow when they first encounter a vertical slide -->
+<!--     controlsTutorial: false, -->
+
+<!--     // Determines where controls appear, "edges" or "bottom-right" -->
+<!--     controlsLayout: "bottom-right", -->
+
+<!--     // Visibility rule for backwards navigation arrows; "faded", "hidden" -->
+<!--     // or "visible" -->
+<!--     controlsBackArrows: "faded", -->
+
+<!--     // Display a presentation progress bar -->
+<!--     progress: true, -->
+
+<!--     // Display the page number of the current slide -->
+<!--     slideNumber: false, -->
+
+<!--     // Push each slide change to the browser history -->
+<!--     history: false, -->
+
+<!--     // Enable keyboard shortcuts for navigation -->
+<!--     keyboard: true, -->
+
+<!--     // Enable the slide overview mode -->
+<!--     overview: true -->
+<!--   }); -->
+<!-- </script> -->

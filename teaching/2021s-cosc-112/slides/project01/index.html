@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta charset="utf-8">
+
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reset.css">
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reveal.css">
+		<link rel="stylesheet" href="/assets/css/condensation.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="/assets/reveal.js-master/plugin/highlight/monokai.css" id="highlight-theme">
+		<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700" rel="stylesheet">
+
+	</head>
+
+	<body>
+
+
+	  <!-- this is where the reveailfy filter gets applied -->
+	  <div class="reveal"><div class="slides">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section id="project-01-conways-game-of-life"><h1>Project 01: Conway’s Game of Life</h1></section><section id="outline"><h2>Outline</h2>
+<ol>
+  <li>Program Introduction</li>
+  <li>Simulation by Hand</li>
+  <li>Program Usage</li>
+  <li>Get Started!</li>
+</ol></section><section id="conways-game-of-life"><h2>Conway’s Game of Life</h2>
+<ul>
+  <li>0 player game played on a grid of squares</li>
+  <li>Each cell (square) can be alive or dead</li>
+  <li>Next step/generation determined by current configuration
+    <ul>
+      <li>each cell has 8 neighbors</li>
+      <li>whether a cell is dead or alive in next generation depends on number of alive neighbors</li>
+    </ul>
+  </li>
+</ul></section><section id="your-task"><h2>Your Task</h2>
+<ul>
+  <li>Complete implementation of Conway’s Game of Life</li>
+  <li>Experiment and find “interesting” initial configurations</li>
+</ul></section><section id="the-challenges"><h2>The Challenges</h2>
+<ol>
+  <li>Understand and work with a larger program
+    <ul>
+      <li>given a lot of code, much of it unfamiliar</li>
+      <li>understand structure enough to work with the code</li>
+    </ul>
+  </li>
+  <li>Implement Life</li>
+  <li>Use your program to experiment!</li>
+</ol></section><section id="the-rules"><h2>The Rules</h2>
+<p>“Game” played on square grid of <strong>cells</strong></p>
+<ul>
+  <li>each cell has 8 neighbors</li>
+  <li>cells can be in one of two states: alive or dead</li>
+  <li>system evolves in rounds</li>
+</ul></section><section id="each-round"><h2>Each Round</h2>
+<p>State of each cell in the <em>next</em> round is determined state in this round:</p>
+<ol>
+  <li>If cell is alive and 2 or 3 live neighbors, it stays alive</li>
+  <li>If cell is dead but has 3 live neighbors, it becomes alive</li>
+  <li>Otherwise, cell is dead in next round</li>
+</ol></section><section id="test-your-understanding"><h2>Test Your Understanding</h2></section><section id="simple-examples-i-red--alive"><h2>Simple Examples I (Red = Alive)</h2>
+<p><img src="/assets/img/conways-life/eg01.png" alt="" width="45%">
+<img src="/assets/img/conways-life/eg02.png" alt="" width="45%"></p></section><section id="simple-examples-ii-red--alive"><h2>Simple Examples II (Red = Alive)</h2>
+<p><img src="/assets/img/conways-life/eg03.png" alt="" width="45%">
+<img src="/assets/img/conways-life/eg04.png" alt="" width="45%"></p></section><section id="using-the-program"><h2>Using the Program</h2>
+<ol>
+  <li>Compile and run from terminal</li>
+  <li>Terminal usage:</li>
+</ol>
+<pre><code class="language-text">java Life &lt;init file&gt; &lt;no. of generations&gt; &lt;interface: Graphic or Text&gt;
+</code></pre></section><section id="testing-examples"><h2>Testing Examples</h2></section><section id="wild-behavior"><h2>Wild Behavior</h2></section><section id="why-do-people-like-cgol"><h2>Why do People Like CGoL?</h2>
+<ol>
+  <li>Simple rules, unexpectedly complex behavior</li>
+  <li>Behavior is <em>provably</em> unpredictable
+    <ul>
+      <li>given two configurations there is no algorithm that determines whether a game started from the first config eventually reaches the second</li>
+    </ul>
+  </li>
+  <li>Can “program” certain behavior
+    <ul>
+      <li>
+<em>Life</em> can simulate an <em>arbitrary</em> computer program</li>
+    </ul>
+  </li>
+</ol></section><section id="initialization-file-structure"><h2>Initialization File Structure</h2>
+<pre><code class="language-text">4 4     // dimensions of board (square)
+1 1     // coordinates of alive cells 
+1 2
+2 1
+2 2
+</code></pre>
+<p><img src="/assets/img/conways-life/eg01.png" alt="" width="25%"></p></section><section id="get-started"><h2>Get Started!</h2></section>
+</div></div>
+
+
+	  <script src="/assets/reveal.js-master/dist/reveal.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/math/math.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/zoom/zoom.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/notes/notes.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/search/search.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/markdown/markdown.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/highlight/highlight.js"></script>
+	  <script>
+	    
+
+	    // Also available as an ES module, see:
+	    // https://revealjs.com/initialization/
+	    Reveal.initialize({
+		controls: false,
+		progress: true,
+		center: true,
+		hash: true,
+		transition: 'none',
+		math: {
+		    config: 'TeX-AMS_HTML-full',
+		    TeX: {
+			Macros: {
+			    R: '\\mathbb{R}',
+			    set: [ '\\left\\{#1 \\; ; \\; #2\\right\\}', 2 ]
+			}
+		    }
+		},
+
+
+		// Learn about plugins: https://revealjs.com/plugins/
+		plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath ]
+	    });
+
+	  </script>
+
+	</body>
+</html>
+	  
+
+<!-- <\!-- load the reveal.js css & js (assuming you've put it in assets/)-\-> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/reveal.scss" -->
+<!-- /> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/theme/source/white.scss" -->
+<!-- /> -->
+<!-- <script -->
+<!--   src="/assets/reveal.js-master/js/reveal.js" -->
+<!--   type="text/javascript" -->
+<!-- ></script> -->
+
+<!-- <\!-- configure the presentation, (you can tweak options to suit) -\-> -->
+<!-- <script> -->
+<!--   Reveal.initialize({ -->
+<!--     // Display presentation control arrows -->
+<!--     controls: false, -->
+
+<!--     // Help the user learn the controls by providing hints, for example by -->
+<!--     // bouncing the down arrow when they first encounter a vertical slide -->
+<!--     controlsTutorial: false, -->
+
+<!--     // Determines where controls appear, "edges" or "bottom-right" -->
+<!--     controlsLayout: "bottom-right", -->
+
+<!--     // Visibility rule for backwards navigation arrows; "faded", "hidden" -->
+<!--     // or "visible" -->
+<!--     controlsBackArrows: "faded", -->
+
+<!--     // Display a presentation progress bar -->
+<!--     progress: true, -->
+
+<!--     // Display the page number of the current slide -->
+<!--     slideNumber: false, -->
+
+<!--     // Push each slide change to the browser history -->
+<!--     history: false, -->
+
+<!--     // Enable keyboard shortcuts for navigation -->
+<!--     keyboard: true, -->
+
+<!--     // Enable the slide overview mode -->
+<!--     overview: true -->
+<!--   }); -->
+<!-- </script> -->

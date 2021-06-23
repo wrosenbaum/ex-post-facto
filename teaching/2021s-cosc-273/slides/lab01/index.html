@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta charset="utf-8">
+
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reset.css">
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reveal.css">
+		<link rel="stylesheet" href="/assets/css/condensation.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="/assets/reveal.js-master/plugin/highlight/monokai.css" id="highlight-theme">
+		<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700" rel="stylesheet">
+
+	</head>
+
+	<body>
+
+
+	  <!-- this is where the reveailfy filter gets applied -->
+	  <div class="reveal"><div class="slides">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section id="welcome-to-cosc-273"><h1>Welcome to COSC 273!</h1></section><section id="outline"><h2>Outline</h2>
+<ul>
+  <li>Introductions</li>
+  <li>Lab Section Plan</li>
+  <li>Lab 01: Estimating Pi</li>
+  <li>Other Examples</li>
+</ul>
+<p>(general course introduction in lecture)</p></section><section id="introductions"><h1>Introductions</h1></section><section id="your-professor"><h2>Your Professor</h2>
+<ul>
+  <li><a href="https://www.willrosenbaum.com">Will Rosenbaum</a></li>
+  <li>Originally from Seattle</li>
+  <li>Undregrad at Reed College in Portland, OR</li>
+  <li>PhD in Mathematics from UCLA</li>
+  <li>Postdocs at
+    <ul>
+      <li>Tel Aviv University</li>
+      <li>Max Planck Institute for Informatics (Saarbruecken, Germany)</li>
+    </ul>
+  </li>
+  <li>Started at Amherst last fall</li>
+</ul></section><section id="my-research"><h2>My Research</h2>
+<ul>
+  <li>Theoretical Computer Science
+    <ul>
+      <li>Interface between math and CS</li>
+    </ul>
+  </li>
+  <li>Theory of Distributed Systems
+    <ul>
+      <li>What can systems of interacting processors (broadly construed) compute?</li>
+    </ul>
+  </li>
+  <li>Research Questions
+    <ul>
+      <li>How efficiently can a computational task be performed in principle?</li>
+      <li>What resources (time, memory, communication) are required to perform tasks?</li>
+      <li>What tasks <em>cannot</em> be solved efficiently?</li>
+    </ul>
+  </li>
+</ul></section><section id="outside-of-work"><h2>Outside of Work</h2>
+<ul>
+  <li>Spend most time with family: Alivia, Ione (daughter), Finnegan (dog), Pip &amp; Posy (cats)</li>
+  <li>Hobbies: cooking, playing piano, hiking</li>
+</ul></section><section id="lab-sessions"><h1>Lab Sessions</h1></section><section id="purpose"><h2>Purpose</h2>
+<ul>
+  <li>Informal discussion (small groups)</li>
+  <li>Get questions answered</li>
+  <li>Lectures focus on <em>principles</em>
+</li>
+  <li>Labs focus on <em>practice</em> (i.e., coding)
+    <ul>
+      <li>Troubleshooting code, etc</li>
+    </ul>
+  </li>
+</ul></section><section id="lab-structure"><h2>Lab Structure</h2>
+<ul>
+  <li>Orientation/Lab introduction</li>
+  <li>Questions</li>
+  <li>Small group discussion</li>
+  <li>Brief recap</li>
+</ul></section><section id="lab-enrollment"><h2>Lab Enrollment</h2>
+<p>Current enrollment:</p>
+<ul>
+  <li>Lab 01: 36</li>
+  <li>Lab 02: 5</li>
+</ul>
+<p>Need to balance these enrollments!</p>
+<ul>
+  <li>I’ll send out questionnaire to balance sections class as equitably as equitably as possible</li>
+</ul></section><section id="course-enrollment"><h2>Course Enrollment</h2>
+<ul>
+  <li>Currently full</li>
+  <li>Many others want to enroll</li>
+  <li>If you plan to drop the class, please do so early so that others can enroll during add/drop period</li>
+</ul></section><section id="lab-01-estimating-pi"><h1>Lab 01: Estimating Pi</h1></section><section id="a-formula-from-high-school"><h2>A Formula from High School</h2>
+<p style="text-align: center;"><img src="/assets/img/monte-carlo-method/dartboard.svg" alt="dartboard" width="40%"></p>
+<p>Area of a disk: \(A = \pi r^2\)</p></section><section id="an-idea-from-probability"><h2>An Idea from Probability</h2>
+<p>Pick a random point inside the framed region.</p>
+<p style="text-align: center;"><img src="/assets/img/monte-carlo-method/dartboard.svg" alt="dartboard" width="40%"></p>
+<p>The <em>probability</em> the point lies in the disk is proportional to the disk’s area.</p></section><section id="in-more-detail"><h2>In More Detail</h2>
+<ul>
+  <li>area of disk is \(\pi r^2\)</li>
+  <li>area of surrounding square is \((2 r)^2 = 4 r^2\)</li>
+  <li>the probability that a (uniformly) random point in the square lies in the disk is:
+\(\frac{\text{area of circle}}{\text{area of square}} = \frac{\pi r^2}{4 r^2} = \frac 1 4 \pi.\)</li>
+</ul>
+<p>so…</p></section><section id="estimation-by-sampling"><h2>Estimation by Sampling</h2>
+<p>…to estimate \(\pi\), suffices to estimate the probability that a random point point in the square lies inside the disk:</p>
+<ul>
+  <li>pick a bunch of random points</li>
+  <li>see how many lie in disk</li>
+  <li>\(p =\) proportion of points that do</li>
+  <li>
+\[\pi \approx 4 p\]
+  </li>
+</ul>
+<p>Example of <strong>Monte Carlo method</strong></p></section><section id="an-example-by-hand"><h2>An Example by Hand</h2>
+<p style="text-align: center;"><img src="/assets/img/monte-carlo-method/dartboard.svg" alt="dartboard" width="40%"></p>
+<p>Number of Samples:</p>
+<p>Number of Hits:</p>
+<p>\(\pi\) Estimate:</p></section><section id="does-this-work"><h2>Does This Work?</h2>
+<ul>
+  <li>Mathematically guaranteed to work most of the time, for sufficiently many random points</li>
+  <li>How many?</li>
+  <li>How efficient is this solution?</li>
+</ul></section><section id="basic-pi-demo"><h2>Basic Pi Demo</h2></section><section id="speeding-things-up"><h2>Speeding Things Up</h2>
+<p>A nice feature of the code:</p>
+<ul>
+  <li>The more samples we run, the better the approximation</li>
+  <li>Samples can be run <em>independently</em> and results aggregated</li>
+</ul></section><section id="speeding-things-up-1"><h2>Speeding Things Up</h2>
+<p>A nice feature of modern computers:</p>
+<ul>
+  <li>They can do multiple independent operations <em>in parallel</em>
+</li>
+  <li>We can generate indpendent samples concurrently</li>
+  <li>Just need to figure out how in code!</li>
+</ul></section><section id="parallel-pi-demo"><h2>Parallel Pi Demo</h2></section><section id="threads-in-java"><h2>Threads in Java</h2>
+<p>Threads…</p>
+<ul>
+  <li>are single sequences of operations</li>
+  <li>can be executed concurrently/in parallel by modern computers</li>
+  <li>can be created/run by making instances of the <code>Thread</code> class</li>
+  <li><strong>are incredibly subtle to reason about</strong></li>
+</ul></section><section id="lab-01"><h2>Lab 01</h2>
+<p>Use multithreading to estimate \(\pi\) as quickly as possible (using Monte Carlo method above)</p>
+<ul>
+  <li><a href="/teaching/2021s-cosc-273/notes/multithreading">Notes on Multithreading Here</a></li>
+</ul></section><section id="multithreading-is-great"><h2>Multithreading is Great!</h2>
+<p>Fractal Example</p></section>
+</div></div>
+
+
+	  <script src="/assets/reveal.js-master/dist/reveal.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/math/math.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/zoom/zoom.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/notes/notes.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/search/search.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/markdown/markdown.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/highlight/highlight.js"></script>
+	  <script>
+	    
+
+	    // Also available as an ES module, see:
+	    // https://revealjs.com/initialization/
+	    Reveal.initialize({
+		controls: false,
+		progress: true,
+		center: true,
+		hash: true,
+		transition: 'none',
+		math: {
+		    config: 'TeX-AMS_HTML-full',
+		    TeX: {
+			Macros: {
+			    R: '\\mathbb{R}',
+			    set: [ '\\left\\{#1 \\; ; \\; #2\\right\\}', 2 ]
+			}
+		    }
+		},
+
+
+		// Learn about plugins: https://revealjs.com/plugins/
+		plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath ]
+	    });
+
+	  </script>
+
+	</body>
+</html>
+	  
+
+<!-- <\!-- load the reveal.js css & js (assuming you've put it in assets/)-\-> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/reveal.scss" -->
+<!-- /> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/theme/source/white.scss" -->
+<!-- /> -->
+<!-- <script -->
+<!--   src="/assets/reveal.js-master/js/reveal.js" -->
+<!--   type="text/javascript" -->
+<!-- ></script> -->
+
+<!-- <\!-- configure the presentation, (you can tweak options to suit) -\-> -->
+<!-- <script> -->
+<!--   Reveal.initialize({ -->
+<!--     // Display presentation control arrows -->
+<!--     controls: false, -->
+
+<!--     // Help the user learn the controls by providing hints, for example by -->
+<!--     // bouncing the down arrow when they first encounter a vertical slide -->
+<!--     controlsTutorial: false, -->
+
+<!--     // Determines where controls appear, "edges" or "bottom-right" -->
+<!--     controlsLayout: "bottom-right", -->
+
+<!--     // Visibility rule for backwards navigation arrows; "faded", "hidden" -->
+<!--     // or "visible" -->
+<!--     controlsBackArrows: "faded", -->
+
+<!--     // Display a presentation progress bar -->
+<!--     progress: true, -->
+
+<!--     // Display the page number of the current slide -->
+<!--     slideNumber: false, -->
+
+<!--     // Push each slide change to the browser history -->
+<!--     history: false, -->
+
+<!--     // Enable keyboard shortcuts for navigation -->
+<!--     keyboard: true, -->
+
+<!--     // Enable the slide overview mode -->
+<!--     overview: true -->
+<!--   }); -->
+<!-- </script> -->

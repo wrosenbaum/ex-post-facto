@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta charset="utf-8">
+
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reset.css">
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reveal.css">
+		<link rel="stylesheet" href="/assets/css/condensation.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="/assets/reveal.js-master/plugin/highlight/monokai.css" id="highlight-theme">
+		<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700" rel="stylesheet">
+
+	</head>
+
+	<body>
+
+
+	  <!-- this is where the reveailfy filter gets applied -->
+	  <div class="reveal"><div class="slides">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- # Linearizability -->
+
+<!-- ## Weird Thing about SC -->
+
+<!-- SC makes no reference to invocation/response intervals for method calls -->
+
+<!-- - Why bother with time intervals if we ignore them (execept relative order for single threads)? -->
+
+<!-- ## Another idea -->
+
+<!-- - Make sure execution is consistent with timing of method calls -->
+<!-- - Consider sequential executions consistent with each method call taking effect at some *instant* during the method call -->
+
+<!-- ## Same Example, Fewer Options -->
+
+<!-- ![](/assets/img/consistency/mult-ops.png){: width="100%"} -->
+
+<!-- Can only change relative order of method calls if they overlap -->
+
+<!-- <div style="margin-bottom: 8em"></div> -->
+
+<!-- ## Linearization Points -->
+
+<!-- A **linearization point** is a point in a method call where method "takes effect" -->
+
+<!-- - all events after linearization point see effect of method call -->
+<!-- - linearization points must be distinct (correspond to some atomic operation) -->
+
+<!-- ## Example of Linearization Points -->
+
+<!-- ![](/assets/img/consistency/linearization-pts.png){: width="100%"} -->
+
+<!-- <div style="margin-bottom: 8em"></div> -->
+
+<!-- ## Equivalent Sequential Execution -->
+
+<!-- ![](/assets/img/consistency/equivalent-seq-exec.png){: width="100%"} -->
+
+<!-- <div style="margin-bottom: 8em"></div> -->
+
+<!-- ## An Alternative Sequential Execution -->
+
+<!-- ![](/assets/img/consistency/alt-seq-exec.png){: width="100%"} -->
+
+<!-- <div style="margin-bottom: 8em"></div> -->
+
+<!-- ## Linearizability -->
+
+<!-- A concurrent execution is **linearizable** if: -->
+
+<!-- - exists a linearization point in each method call such that execution is consistent with sequential execution where method calls occur in order of corresponding linearization points -->
+
+<!-- An implementation of an object is linearizable if: -->
+
+<!-- - it guarantees every execution is linearizable -->
+
+<!-- ## Comparing Linearizability and SC -->
+
+<!-- 1. Does linearizability imply sequential consistency? -->
+<!-- 2. Does sequential consistency imply linearizability? -->
+
+<!-- <div style="margin-bottom: 12em"></div> -->
+
+<!-- ## Linearizability $\implies$ SC -->
+
+<!-- Must show: -->
+
+<!-- 1. Maintains program order -->
+<!-- 2. Satisfies sequential specification -->
+
+<!-- <div style="margin-bottom: 12em"></div> -->
+
+<!-- ## SC $\nRightarrow$ Linearizability -->
+
+<!-- ![](/assets/img/consistency/compositionality-p.png){: width="100%"} -->
+
+<!-- <div style="margin-bottom: 12em"></div> -->
+
+<!-- ## Compositionality -->
+
+<!-- Recall this execution with 2 queues (not sequentially consistent) -->
+
+<!-- ![](/assets/img/consistency/compositionality.png){: width="100%"} -->
+
+<!-- <div style="margin-bottom: 12em"></div> -->
+
+<!-- ## But... -->
+
+<!-- `p` and `q` are not linearizable in this execution! -->
+
+<!-- ![](/assets/img/consistency/compositionality.png){: width="100%"} -->
+
+<!-- <div style="margin-bottom: 12em"></div> -->
+
+<!-- ## Two More Questions -->
+
+<!-- 1. Are linearizable objects compositional? -->
+<!-- 2. Are linearizable executions nonblocking? -->
+
+<!-- ## Are Linearizable Objects Compositional? -->
+
+<!-- <div style="margin-bottom: 18em"></div> -->
+
+<!-- ## Are Linearizable Executions Nonblocking? -->
+
+<!-- <div style="margin-bottom: 18em"></div> -->
+
+<!-- # Progress Conditions -->
+
+<!-- ## Is Nonblocking Property Practical? -->
+
+<!-- Nonblocking property $\implies$ *existence* of consistent response to pending method calls -->
+
+<!-- - Does not ensure that such a response can be *found* easily -->
+
+<!-- <div style="margin-bottom: 8em"></div> -->
+
+<!-- ## Nonblocking Progress Conditions -->
+
+<!-- Conditions for implementations: -->
+
+<!-- - **Wait-freedom**: pending method invocation always completes in a finite number of steps -->
+
+<!-- - **Lock-freedom**: among all pending method calls, some method completes in a finite number of steps -->
+
+<!-- <div style="margin-bottom: 8em"></div> -->
+
+<!-- ## Properties of Nonblocking Progress -->
+
+<!-- - Progress is guaranteed even if some thread stalls -->
+<!-- - Wait-freedom gives *maximal progress* -->
+<!-- - Lock-freedom gives *minimal progress* -->
+<!--     + starvation can still occur -->
+<!-- - Actual progress depends on *scheduler*  -->
+<!--     + determines which threads make steps -->
+
+<!-- <div style="margin-bottom: 4em"></div> -->
+
+<!-- ## Blocking Progress Conditions -->
+
+<!-- - **deadlock-free**: whenever *all* pending method calls take steps, each method call completes in a finite number of steps -->
+
+<!-- - **starvation-free**: whenever *all* pending methods take steps, *some* method call completes in a finite number of steps -->
+
+<!-- ## Blocking vs Nonblocking Progess -->
+
+<!-- Nonblocking progress -->
+
+<!-- - guarantees progress for any scheduler -->
+<!-- - valid even if a process crashes -->
+
+<!-- Blocking progress -->
+
+<!-- - progress only guaranteed for *fair* schedulers -->
+<!-- - if a process crashes, progress not guaranteed -->
+
+<!-- ## Up Next -->
+
+<!-- 1. Better multithreading through executors -->
+<!-- 2. Implementations! -->
+<!--     - locks -->
+<!-- 	- data structures -->
+
+<section id="lecture-08-concurrent-objects-3"><h1>Lecture 08: Concurrent Objects 3</h1></section><section id="outline"><h2>Outline</h2>
+<ol>
+  <li>Sequential Consistency</li>
+  <li>Linearizability</li>
+  <li>Progress Conditions</li>
+</ol></section><section id="last-time"><h2>Last Time</h2>
+<p>What is “correct” behavior for a concurrent execution of a data structure?</p></section><section id="sequential-consistency"><h1>Sequential Consistency</h1></section><section id="two-natual-desiderata"><h2>Two Natual Desiderata</h2>
+<p>Method calls/responses consistent with <em>some</em> sequential execution</p>
+<p>Method calls can be ordered such that:</p>
+<ol>
+  <li>
+    <p>they are consistent with <strong>program order</strong></p>
+
+    <ul>
+      <li>if a <em>single thread</em> calls <code>methodOne()</code> before <code>methodTwo()</code>, then <code>methodOne()</code> $\to$ <code>methodTwo()</code> in sequential execution</li>
+    </ul>
+  </li>
+  <li>
+    <p>pre/post conditions for each method call satisfy data structure’s sequential specification</p>
+  </li>
+</ol>
+<p>Such executions are <strong>sequentially consistent</strong></p></section><section id="definition"><h2>Definition</h2>
+<p>An execution is <strong>sequentially consistent</strong> if all method calls can be ordered such that:</p>
+<ol>
+  <li>they are consistent with program order</li>
+  <li>they meet object’s sequential specification</li>
+</ol>
+<p>An <em>implementation</em> of an object is sequentially consistent if it guarantees <em>every</em> execution is sequentially consistent</p></section><section id="example"><h2>Example</h2>
+<p>What are possible outcomes of <code>deq()</code> calls in a sequentially consistent execution?</p>
+<p><img src="/assets/img/consistency/mult-ops.png" alt="" width="100%"></p>
+<div style="margin-bottom: 12em"></div></section><section id="sequential-consistency-is-weak"><h2>Sequential Consistency is Weak</h2>
+<ul>
+  <li>Method calls can appear interleaved in <em>any</em> order that maintains program order</li>
+  <li>No guarantees for “real time” order
+    <ul>
+      <li>(partially) order methods w.r.t. real time</li>
+    </ul>
+  </li>
+</ul>
+<p><img src="/assets/img/consistency/mult-ops.png" alt="" width="100%"></p></section><section id="sequential-consistency-is-nonblocking"><h2>Sequential Consistency is Nonblocking</h2>
+<p>Consider concurrent execution:</p>
+<ul>
+  <li>Pending method call (invoked, but no response yet)</li>
+  <li>Then: exists a response that can be made immediately that does not violate SC</li>
+</ul>
+<p>It is possible to achieve SC without needing to wait for response from other pending methods</p>
+<ul>
+  <li>May still be difficult to figure out <em>which</em> response will give SC execution</li>
+</ul></section><section id="nonblocking-example"><h2>Nonblocking Example</h2>
+<p><img src="/assets/img/consistency/concurrent-exec.png" alt="" width="100%"></p>
+<div style="margin-bottom: 8em"></div></section><section id="a-subtler-issue"><h2>A Subtler Issue</h2>
+<p>Suppose we have a program two queues, <code>p</code> and <code>q</code></p>
+<ul>
+  <li>Implementation of queue guarantees sequentially consistency</li>
+</ul>
+<p>Must an execution of a program with <code>p</code> and <code>q</code> be sequentially consistent?</p>
+<div style="margin-bottom: 8em"></div></section><section id="an-execution"><h2>An Execution</h2>
+<p><img src="/assets/img/consistency/compositionality.png" alt="" width="100%"></p>
+<div style="margin-bottom: 12em"></div></section><section id="sequentially-consistent-for-p"><h2>Sequentially Consistent for <code>p</code>
+</h2>
+<p><img src="/assets/img/consistency/compositionality-p.png" alt="" width="100%"></p>
+<div style="margin-bottom: 12em"></div></section><section id="sequentially-consistent-for-q"><h2>Sequentially Consistent for <code>q</code>
+</h2>
+<p><img src="/assets/img/consistency/compositionality-q.png" alt="" width="100%"></p>
+<div style="margin-bottom: 12em"></div></section><section id="but-is-execution-sc"><h2>But is Execution SC?</h2>
+<p><img src="/assets/img/consistency/compositionality.png" alt="" width="100%"></p>
+<div style="margin-bottom: 12em"></div></section><section id="sequential-consistency-is-not-compositional"><h2>Sequential Consistency is not Compositional</h2>
+<p>A property $\mathcal{P}$ is <strong>compositional</strong> if</p>
+<ul>
+  <li>Whenever all objects in system satisfy $\mathcal{P}$, then system satisfies $\mathcal{P}$</li>
+</ul>
+<p>Previous example shows:</p>
+<ul>
+  <li>Sequential consistency is <em>not</em> compositional</li>
+</ul></section><section id="sequential-consistency-is"><h2>Sequential Consistency Is…</h2>
+<ul>
+  <li>…Maybe the weakest reasonble guarantee we could expect of a concurrent implementation of an object</li>
+  <li>…Potentially allows for a lot of parallelism
+    <ul>
+      <li>SC is a nonblocking property</li>
+    </ul>
+  </li>
+  <li>…Not compositional
+    <ul>
+      <li>a system made of SC components need not be SC!</li>
+    </ul>
+  </li>
+</ul></section>
+</div></div>
+
+
+	  <script src="/assets/reveal.js-master/dist/reveal.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/math/math.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/zoom/zoom.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/notes/notes.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/search/search.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/markdown/markdown.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/highlight/highlight.js"></script>
+	  <script>
+	    
+
+	    // Also available as an ES module, see:
+	    // https://revealjs.com/initialization/
+	    Reveal.initialize({
+		controls: false,
+		progress: true,
+		center: true,
+		hash: true,
+		transition: 'none',
+		math: {
+		    config: 'TeX-AMS_HTML-full',
+		    TeX: {
+			Macros: {
+			    R: '\\mathbb{R}',
+			    set: [ '\\left\\{#1 \\; ; \\; #2\\right\\}', 2 ]
+			}
+		    }
+		},
+
+
+		// Learn about plugins: https://revealjs.com/plugins/
+		plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath ]
+	    });
+
+	  </script>
+
+	</body>
+</html>
+	  
+
+<!-- <\!-- load the reveal.js css & js (assuming you've put it in assets/)-\-> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/reveal.scss" -->
+<!-- /> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/theme/source/white.scss" -->
+<!-- /> -->
+<!-- <script -->
+<!--   src="/assets/reveal.js-master/js/reveal.js" -->
+<!--   type="text/javascript" -->
+<!-- ></script> -->
+
+<!-- <\!-- configure the presentation, (you can tweak options to suit) -\-> -->
+<!-- <script> -->
+<!--   Reveal.initialize({ -->
+<!--     // Display presentation control arrows -->
+<!--     controls: false, -->
+
+<!--     // Help the user learn the controls by providing hints, for example by -->
+<!--     // bouncing the down arrow when they first encounter a vertical slide -->
+<!--     controlsTutorial: false, -->
+
+<!--     // Determines where controls appear, "edges" or "bottom-right" -->
+<!--     controlsLayout: "bottom-right", -->
+
+<!--     // Visibility rule for backwards navigation arrows; "faded", "hidden" -->
+<!--     // or "visible" -->
+<!--     controlsBackArrows: "faded", -->
+
+<!--     // Display a presentation progress bar -->
+<!--     progress: true, -->
+
+<!--     // Display the page number of the current slide -->
+<!--     slideNumber: false, -->
+
+<!--     // Push each slide change to the browser history -->
+<!--     history: false, -->
+
+<!--     // Enable keyboard shortcuts for navigation -->
+<!--     keyboard: true, -->
+
+<!--     // Enable the slide overview mode -->
+<!--     overview: true -->
+<!--   }); -->
+<!-- </script> -->

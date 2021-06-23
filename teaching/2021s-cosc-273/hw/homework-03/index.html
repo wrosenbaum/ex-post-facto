@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-<title>Will  Rosenbaum | ex-post-facto</title>
+<title>Will  Rosenbaum | Homework 03</title>
 <meta name="description" content="A blog about mathematics, computer science, etc.
 ">
 
@@ -33,7 +33,7 @@
 <link rel="shortcut icon" href="/assets/img/favicon.ico">
 <link rel="stylesheet" href="/assets/css/main.css">
 
-<link rel="canonical" href="/blog/">
+<link rel="canonical" href="/teaching/2021s-cosc-273/hw/homework-03/">
 
 <!-- JQuery -->
 <!-- jQuery -->
@@ -108,8 +108,6 @@
           
           
           
-          
-          
           <li class="nav-item ">
               <a class="nav-link" href="/teaching/">
                 teaching
@@ -138,7 +136,7 @@
           
 	  
           <!-- Blog -->
-          <li class="nav-item active">
+          <li class="nav-item ">
             <a class="nav-link" href="/blog/">
               blog
               
@@ -167,24 +165,58 @@
     <div class="container mt-5">
       <div class="post">
 
-  <div class="header-bar">
-    <h1>Ex Post Facto Obvious</h1>
-    <h2>a blog about math, computer science, and whatnot</h2>
-  </div>
+  <header class="post-header">
+    <h1 class="post-title">Homework 03</h1>
+    <p class="post-description">linearizability and progress</p>
+  </header>
 
+  <article>
+    <p>You can <a href="/assets/pdf/2021s-cosc-273/homework-03.pdf">download a PDF of this assignment here</a></p>
 
-  <ul class="post-list">
-    
-      <li>
-        <h3><a class="post-title" href="/blog/2021/updates/">New Site, Finally</a></h3>
-        <p class="post-meta">February 7, 2021</p>
-        <p>a long overdue overhaul of my website</p>
-      </li>
-    
-  </ul>
+<h2 id="instructions">Instructions</h2>
 
-  
+<p>You may work in groups of up to 4 and submit a single assignment for the group. For computational problems, please show your work; for conceptual questions, please explain your reasoning. Solutions may be neatly hand-written and scanned or typeset. Please submit your solution to Moodle <strong>in PDF format</strong>.</p>
 
+<p><strong>Due: Friday, April 2, 23:59 AoE</strong></p>
+
+<hr />
+
+<p>The following exercises refer to the queue implementation, <code class="language-plaintext highlighter-rouge">IQueue</code>. For simplicity, assume that the array <code class="language-plaintext highlighter-rouge">items</code> is unbounded. You can <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/atomic/AtomicInteger.html#compareAndSet(int,int)">read about the <code class="language-plaintext highlighter-rouge">compareAndSet</code> method for the <code class="language-plaintext highlighter-rouge">AtomicInteger</code> class here</a>.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">IQueue</span> <span class="o">{</span>
+    <span class="nc">AtomicInteger</span> <span class="n">head</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">AtomicInteger</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+    <span class="nc">AtomicInteger</span> <span class="n">tail</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">AtomicInteger</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+    <span class="kt">int</span><span class="o">[]</span> <span class="n">items</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="nc">Integer</span><span class="o">.</span><span class="na">MAX_VALUE</span><span class="o">];</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">enq</span> <span class="o">(</span><span class="kt">int</span> <span class="n">x</span><span class="o">)</span> <span class="o">{</span>
+	<span class="kt">int</span> <span class="n">slot</span><span class="o">;</span>
+	<span class="k">do</span> <span class="o">{</span>
+	    <span class="n">slot</span> <span class="o">=</span> <span class="n">tail</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
+	<span class="o">}</span> <span class="k">while</span> <span class="o">(!</span><span class="n">tail</span><span class="o">.</span><span class="na">compareAndSet</span><span class="o">(</span><span class="n">slot</span><span class="o">,</span> <span class="n">slot</span><span class="o">+</span><span class="mi">1</span><span class="o">));</span>
+	<span class="n">items</span><span class="o">[</span><span class="n">slot</span><span class="o">]</span> <span class="o">=</span> <span class="n">x</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">deq</span> <span class="o">()</span> <span class="kd">throws</span> <span class="nc">EmptyException</span> <span class="o">{</span>
+	<span class="kt">int</span> <span class="n">value</span><span class="o">;</span>
+	<span class="kt">int</span> <span class="n">slot</span><span class="o">;</span>
+	<span class="k">do</span> <span class="o">{</span>
+	    <span class="n">slot</span> <span class="o">=</span> <span class="n">head</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
+	    <span class="n">value</span> <span class="o">=</span> <span class="n">items</span><span class="o">[</span><span class="n">slot</span><span class="o">];</span>
+	    <span class="k">if</span> <span class="o">(</span><span class="n">value</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
+		<span class="k">throw</span> <span class="k">new</span> <span class="nf">EmptyException</span><span class="o">();</span>
+	<span class="o">}</span> <span class="k">while</span> <span class="o">(!</span><span class="n">head</span><span class="o">.</span><span class="na">compareAndSet</span><span class="o">(</span><span class="n">slot</span><span class="o">,</span> <span class="n">slot</span><span class="o">+</span><span class="mi">1</span><span class="o">));</span>
+	<span class="k">return</span> <span class="n">value</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<h2 id="exercises">Exercises</h2>
+
+<p><strong>Exercise 1.</strong> Give an execution demonstrating that <code class="language-plaintext highlighter-rouge">IQueue</code> is <em>not</em> linearizable.</p>
+
+<p><strong>Exercise 2.</strong> Is <code class="language-plaintext highlighter-rouge">IQueue</code> wait-free? Lock-free? Why or why not?</p>
+
+  </article>
 
 </div>
 

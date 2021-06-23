@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta charset="utf-8">
+
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reset.css">
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reveal.css">
+		<link rel="stylesheet" href="/assets/css/condensation.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="/assets/reveal.js-master/plugin/highlight/monokai.css" id="highlight-theme">
+		<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700" rel="stylesheet">
+
+	</head>
+
+	<body>
+
+
+	  <!-- this is where the reveailfy filter gets applied -->
+	  <div class="reveal"><div class="slides">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section id="lab-02-graphics--recursion--fractals"><h1>Lab 02: Graphics + Recursion = Fractals</h1></section><section id="outline"><h2>Outline</h2>
+<ol>
+  <li>Announcements</li>
+  <li>Lab 02 Suggestions</li>
+  <li>Small group work</li>
+</ol></section><section id="announcements"><h2>Announcements</h2>
+<ol>
+  <li>Accountability group survey</li>
+  <li>First quiz this week
+    <ul>
+      <li>topic will be recursion</li>
+      <li>conceptual question</li>
+      <li>related to Wednesday lecture material</li>
+    </ul>
+  </li>
+</ol></section><section id="lab-02-suggestions"><h1>Lab 02 Suggestions</h1></section><section id="lab-02-overview"><h2>Lab 02 Overview</h2>
+<p><img src="/assets/img/2021s-cosc-112/lab02-recursive-graphics/output.png" alt="" width="50%"></p>
+<p><a href="/teaching/2021s-cosc-112/labs/02-recursive-graphics/">Instructions here</a></p></section><section id="a-closer-look"><h2>A Closer Look</h2>
+<p><img src="/assets/img/2021s-cosc-112/lab02-recursive-graphics/output-cropped.png" alt="" width="50%"></p></section><section id="how-was-this-generated"><h2>How Was This Generated?</h2>
+<div style="margin-bottom: 12em"></div></section><section id="notes-on-overlap"><h2>Notes on Overlap</h2>
+<ul>
+  <li>Drawing commands executed in order</li>
+  <li>New drawings <em>on top</em> of old:</li>
+</ul>
+<pre><code class="language-java">drawSquareA();
+drawSquareB();
+</code></pre>
+<p>Code above will show square B in foreground (if squares A and B overlap)</p></section><section id="difference-between-images"><h2>Difference Between Images</h2>
+<p><img src="/assets/img/2021s-cosc-112/lab02-recursive-graphics/output-overlap.png" alt="" width="100%"></p></section><section id="recursion-depth"><h2>Recursion Depth</h2>
+<p>Draw picture to depth 0, 1, 2</p>
+<div style="margin-bottom: 12em"></div></section><section id="look-at-the-code"><h2>Look at the Code</h2>
+<ul>
+  <li>Keep track of current depth</li>
+  <li>Compiling with command line</li>
+  <li>What happens with infinite loop?</li>
+</ul></section>
+</div></div>
+
+
+	  <script src="/assets/reveal.js-master/dist/reveal.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/math/math.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/zoom/zoom.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/notes/notes.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/search/search.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/markdown/markdown.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/highlight/highlight.js"></script>
+	  <script>
+	    
+
+	    // Also available as an ES module, see:
+	    // https://revealjs.com/initialization/
+	    Reveal.initialize({
+		controls: false,
+		progress: true,
+		center: true,
+		hash: true,
+		transition: 'none',
+		math: {
+		    config: 'TeX-AMS_HTML-full',
+		    TeX: {
+			Macros: {
+			    R: '\\mathbb{R}',
+			    set: [ '\\left\\{#1 \\; ; \\; #2\\right\\}', 2 ]
+			}
+		    }
+		},
+
+
+		// Learn about plugins: https://revealjs.com/plugins/
+		plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath ]
+	    });
+
+	  </script>
+
+	</body>
+</html>
+	  
+
+<!-- <\!-- load the reveal.js css & js (assuming you've put it in assets/)-\-> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/reveal.scss" -->
+<!-- /> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/theme/source/white.scss" -->
+<!-- /> -->
+<!-- <script -->
+<!--   src="/assets/reveal.js-master/js/reveal.js" -->
+<!--   type="text/javascript" -->
+<!-- ></script> -->
+
+<!-- <\!-- configure the presentation, (you can tweak options to suit) -\-> -->
+<!-- <script> -->
+<!--   Reveal.initialize({ -->
+<!--     // Display presentation control arrows -->
+<!--     controls: false, -->
+
+<!--     // Help the user learn the controls by providing hints, for example by -->
+<!--     // bouncing the down arrow when they first encounter a vertical slide -->
+<!--     controlsTutorial: false, -->
+
+<!--     // Determines where controls appear, "edges" or "bottom-right" -->
+<!--     controlsLayout: "bottom-right", -->
+
+<!--     // Visibility rule for backwards navigation arrows; "faded", "hidden" -->
+<!--     // or "visible" -->
+<!--     controlsBackArrows: "faded", -->
+
+<!--     // Display a presentation progress bar -->
+<!--     progress: true, -->
+
+<!--     // Display the page number of the current slide -->
+<!--     slideNumber: false, -->
+
+<!--     // Push each slide change to the browser history -->
+<!--     history: false, -->
+
+<!--     // Enable keyboard shortcuts for navigation -->
+<!--     keyboard: true, -->
+
+<!--     // Enable the slide overview mode -->
+<!--     overview: true -->
+<!--   }); -->
+<!-- </script> -->

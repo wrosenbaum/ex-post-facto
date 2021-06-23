@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<title>Will  Rosenbaum | COSC 112: Introduction to Computer Science II</title>
+<meta name="description" content="A blog about mathematics, computer science, etc.
+">
+
+<!-- Open Graph -->
+
+
+<!-- Bootstrap & MDB -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" integrity="sha512-MoRNloxbStBcD8z3M/2BmnT+rg4IsMxPkXaGh2zD6LGNNFE80W3onsAhRcMAMrSoyWL9xD7Ert0men7vR8LUZg==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" integrity="sha512-RO38pBRxYH3SoOprtPTD86JFOclM51/XTIdEPh5j8sj4tp8jmQIx26twG52UaLi//hQldfrh7e51WzP9wuP32Q==" crossorigin="anonymous" />
+
+<!-- Fonts & Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"  integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.0/css/academicons.min.css" integrity="sha512-W4yqoT1+8NLkinBLBZko+dFB2ZbHsYLDdr50VElllRcNt2Q4/GSs6u71UHKxB7S6JEMCp5Ve4xjh3eGQl/HRvg==" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+
+
+
+<!-- Code Syntax Highlighting -->
+<link rel="stylesheet" href="https://gitcdn.link/repo/jwarby/jekyll-pygments-themes/master/github.css" />
+
+<!-- Styles -->
+<link rel="shortcut icon" href="/assets/img/favicon.ico">
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<link rel="canonical" href="/teaching/2021s-cosc-112/">
+
+<!-- JQuery -->
+<!-- jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+
+
+<!-- Theming-->
+
+  <script src="/assets/js/theme.js"></script>
+  <!-- Load DarkMode JS -->
+<script src="/assets/js/dark_mode.js"></script>
+
+
+
+
+
+
+    
+<!-- MathJax -->
+<script type="text/javascript">
+  window.MathJax = {
+    tex: {
+      tags: 'ams'
+    }
+  };
+</script>
+<script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js"></script>
+<script defer src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+
+  </head>
+
+  <body class="fixed-top-nav ">
+
+    <!-- Header -->
+
+    <header>
+
+    <!-- Nav Bar -->
+    <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top">
+    <div class="container">
+      
+      <a class="navbar-brand title font-weight-lighter" href="https://willrosenbaum.com/">
+       Will   Rosenbaum
+      </a>
+      
+      <!-- Navbar Toggle -->
+      <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar top-bar"></span>
+        <span class="icon-bar middle-bar"></span>
+        <span class="icon-bar bottom-bar"></span>
+      </button>
+      <div class="collapse navbar-collapse text-right" id="navbarNav">
+        <ul class="navbar-nav ml-auto flex-nowrap">
+          <!-- About -->
+          <li class="nav-item ">
+            <a class="nav-link" href="/">
+              about
+              
+            </a>
+          </li>
+          <!-- Other pages -->
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/teaching/">
+                teaching
+                
+              </a>
+          </li>
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/research/">
+                research
+                
+              </a>
+          </li>
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/publications/">
+                publications
+                
+              </a>
+          </li>
+          
+          
+	  
+          <!-- Blog -->
+          <li class="nav-item ">
+            <a class="nav-link" href="/blog/">
+              blog
+              
+            </a>
+          </li>
+          
+
+          
+            <div class = "toggle-container">
+              <a id = "light-toggle">
+                  <i class="fas fa-moon"></i>
+                  <i class="fas fa-sun"></i>
+              </a>
+            </div>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+</header>
+
+
+    <!-- Content -->
+
+    <div class="container mt-5">
+      <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">COSC 112: Introduction to Computer Science II</h1>
+    <p class="post-description">course materials for Spring 2021</p>
+  </header>
+
+  <article>
+    <p>Welcome to the Spring 2021 edition of <em>COSC 112: Introduction to Computer Science II</em>! Here, you will find links to course materials and assignments. Please start by reading the course syllabus.</p>
+
+<ul>
+  <li><a href="./syllabus/">Course Syllabus</a></li>
+  <li><a href="https://docs.google.com/document/d/1zElhsgBedfaoenn1uyz5OQZ7cQPK1-pvDuuk3fL1vxs/edit?usp=sharing">Office Hours Sign-up</a></li>
+</ul>
+
+<h4 id="notes-and-resources">Notes and Resources</h4>
+
+<h5 id="week-01-feb-1519">Week 01 (Feb. 15–19)</h5>
+
+<ul>
+  <li><a href="./notes/getting-started-java/">Getting Started with Java</a></li>
+  <li><a href="./notes/anatomy-of-java-program/">Anatomy of a Java Program</a></li>
+</ul>
+
+<h5 id="week-02-feb-2226">Week 02 (Feb. 22–26)</h5>
+
+<ul>
+  <li><em>Recursion</em>, Chapter 10 in <em>Java Programming</em> (available on course Moodle site)</li>
+  <li><a href="/teaching/2021s-cosc-112/notes/recursive-fractals/">Recursive Fractals</a></li>
+  <li><a href="/teaching/2021s-cosc-112/notes/recursive-image/">A Recursive Image</a></li>
+  <li><a href="/teaching/2021s-cosc-112/notes/recursive-fibonacci/">How Slow is Recursive Fibonacci?</a></li>
+</ul>
+
+<h5 id="week-03-march-15">Week 03 (March 1–5)</h5>
+
+<ul>
+  <li><strong>IYI</strong> <a href="https://www.youtube.com/watch?v=2SUvWfNJSsM">Binary, Hanoi and Sierpinski, part 1</a> (link to YouTube video)
+    <ul>
+      <li>describes an iterative approach to solving the Tower of Hanoi puzzle</li>
+    </ul>
+  </li>
+  <li><strong>IYI</strong> <a href="./notes/collatz-conjecture/">Collatz Conjecture</a></li>
+  <li><em>Writing Classes to Define Objects</em>, Chapter 15 in <em>Java Programming</em></li>
+  <li><a href="./notes/defining-new-objects/">Defining New Objects</a></li>
+</ul>
+
+<h5 id="week-04-march-812">Week 04 (March 8–12)</h5>
+
+<ul>
+  <li><a href="./notes/euclidean-algorithm/">The Euclidean Algorithm</a></li>
+  <li><a href="https://www.youtube.com/watch?v=PZRI1IfStY0">Floating Point Numbers</a> (link to Computerphile YouTube video)</li>
+</ul>
+
+<h5 id="week-05-march-1519">Week 05 (March 15–19)</h5>
+
+<ul>
+  <li><a href="./notes/objects-methods-references/">Objects, Methods, and References</a></li>
+  <li><a href="./notes/overloading-and-static-methods/">Overloading and Static Methods</a></li>
+</ul>
+
+<h5 id="week-06-march-2226">Week 06 (March 22–26)</h5>
+
+<ul>
+  <li><a href="./notes/handling-exceptions/">Handling Exceptions</a></li>
+  <li><a href="./notes/object-inheritance/">Object Inheritance</a></li>
+</ul>
+
+<h5 id="week-11-april-2630">Week 11 (April 26–30)</h5>
+
+<ul>
+  <li><a href="./notes/interfaces/">Interfaces and Comparing Objects</a></li>
+  <li><a href="./notes/iterators/">Iterators</a></li>
+</ul>
+
+<h5 id="week-12-may-37">Week 12 (May 3–7)</h5>
+
+<ul>
+  <li><a href="/assets/java/2021s-cosc-112/Balance.zip"><code class="language-plaintext highlighter-rouge">Balance.zip</code></a> Program using a stack to check a bracketed expression is balanced.</li>
+</ul>
+
+<h5 id="week-13-may-1014">Week 13 (May 10–14)</h5>
+
+<ul>
+  <li><a href="/assets/java/2021s-cosc-112/Maze.zip"><code class="language-plaintext highlighter-rouge">Maze.zip</code></a> Program demonstrating depth-first and breadth-first strategies for solving mazes.</li>
+</ul>
+
+<h4 id="slides">Slides</h4>
+
+<h5 id="lecture-slides">Lecture Slides</h5>
+
+<ul>
+  <li><a href="./slides/lec01-introduction/">Lecture 01: Course Introduction</a></li>
+  <li><a href="./slides/lec02-recursion-1/">Lecture 02: Recursion I</a></li>
+  <li><a href="./slides/lec03-recursion-2/">Lecture 03: Recursion II</a></li>
+  <li><a href="./slides/lec04-recursion-3/">Lecture 04: Recursion III</a></li>
+  <li><a href="./slides/lec05-objects-1/">Lecture 05: Objects I</a></li>
+  <li><a href="./slides/lec06-objects-2/">Lecture 06: Objects II</a></li>
+  <li><a href="./slides/lec07-objects-3/">Lecture 07: Objects III</a></li>
+  <li><a href="./slides/lec08-objects-and-memory/">Lecture 08: Objects and Memory</a></li>
+  <li><a href="./slides/lec09-more-objects-and-memory/">Lecture 09: More Objects and Memory</a></li>
+  <li><a href="./slides/lec10-object-inheritance/">Lecture 10: Object Inheritance</a></li>
+  <li><a href="./slides/lec11-inheritance-and-polymorphism/">Lecture 11: Inheritance and Polymorphism</a></li>
+  <li><a href="./slides/lec12-polymorphism/">Lecture 12: Polymorphism</a></li>
+  <li><a href="./slides/lec13-casting-and-objects/">Lecture 13: Casting and <code class="language-plaintext highlighter-rouge">Object</code>s</a></li>
+  <li><a href="./slides/lec14-objects-and-lists/">Lecture 14: Objects and Lists</a></li>
+  <li><a href="./slides/lec15-linked-lists/">Lecture 15: Linked Lists</a></li>
+  <li><a href="./slides/lec16-generic-lists/">Lecture 16: Generic Linked Lists</a></li>
+  <li><a href="./slides/lec17-generic-lists/">Lecture 17: Generic Linked Lists</a></li>
+  <li><a href="./slides/lec18-interfaces/">Lecture 18: Interfaces</a></li>
+  <li><a href="./slides/lec19-stacks/">Lecture 19: Stacks</a></li>
+  <li><a href="./slides/lec20-stacks-continued/">Lecture 20: Stacks Continued</a></li>
+  <li><a href="./slides/lec21-sm-and-stacks/">Lecture 21: Stacks and Balanced Expressions</a></li>
+  <li><a href="./slides/lec22-queues/">Lecture 22: Queues</a></li>
+  <li><a href="./slides/lec23-mazes/">Lecture 23: Mazes</a></li>
+  <li><a href="./slides/lec24-more-mazes/">Lecture 24: More Mazes</a></li>
+  <li><a href="./slides/lec25-mazes-and-states/">Lecture 25: Mazes and States</a></li>
+</ul>
+
+<h5 id="lab-slides">Lab Slides</h5>
+
+<ul>
+  <li><a href="./slides/lab01">Week 01</a></li>
+  <li><a href="./slides/lab02">Week 02</a></li>
+  <li><a href="./slides/project01/">Week 03</a></li>
+  <li><a href="./slides/lab-week04/">Week 04</a></li>
+  <li><a href="./slides/lab-week05/">Week 05</a></li>
+  <li><a href="./slides/lab-week06/">Week 06</a></li>
+  <li><a href="./slides/lab-week07/">Week 07</a></li>
+  <li><a href="./slides/lab-week08/">Week 08</a></li>
+  <li><a href="./slides/lab-week09/">Week 09</a></li>
+  <li><a href="./slides/lab-week11/">Week 11</a></li>
+  <li><a href="./slides/lab-week13/">Week 13</a></li>
+</ul>
+
+<h4 id="lab-assignments">Lab Assignments</h4>
+
+<ul>
+  <li><a href="./labs/01-hello-graphics/">Lab 01: Hello, Graphics!</a> (Due 2/19/21)</li>
+  <li><a href="./labs/02-recursive-graphics/">Lab 02: Graphics + Recursion = Fractals</a> (Due 2/26/21)</li>
+  <li><a href="./labs/03-bouncing-disks/">Lab 03: Bouncing Disks</a> (Due 3/19/21)</li>
+  <li><a href="./labs/04-exceptions/">Lab 04: Exceptions</a> (Due 3/26/21)</li>
+  <li><a href="./labs/05-monte-carlo/">Lab 05: Monte Carlo</a> (Due 4/16/21)</li>
+  <li><a href="./labs/06-disk-game/">Lab 06: Disk Game</a> (Due 4/30/21)
+<!-- - Lab 07 (Due 4/30/21) -->
+<!-- - Lab 08 (Due 5/7/21) --></li>
+</ul>
+
+<h4 id="projects">Projects</h4>
+
+<ul>
+  <li><a href="./projects/01-game-of-life/">Project 01: Conway’s Game of Life</a> (Due 3/12/21)</li>
+  <li><a href="./projects/02-substitution-cipher/">Project 02: Substitution Cipher</a> (Due 4/9/21)</li>
+  <li><a href="./projects/03-stable-matchings/">Project 03: Stable Matchings</a> (Due 5/28/21)</li>
+</ul>
+
+  </article>
+
+</div>
+
+    </div>
+
+    <!-- Footer -->
+
+    
+<footer class="fixed-bottom">
+  <div class="container mt-0">
+    &copy; Copyright 2021 Will  Rosenbaum.
+    
+    
+    
+  </div>
+</footer>
+
+
+
+  </body>
+
+  <!-- Bootsrap & MDB scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.4.4/umd/popper.min.js" integrity="sha512-eUQ9hGdLjBjY3F41CScH3UX+4JDSI9zXeroz7hJ+RteoCaY+GP/LDoM8AO+Pt+DRFw3nXqsjh9Zsts8hnYv8/A==" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha512-M5KW3ztuIICmVIhjSqXe01oV2bpe248gOxqmlcYrEzAvws7Pw3z6BK0iGbrwvdrUQUhi3eXgtxp5I8PDo9YfjQ==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js" integrity="sha512-Mug9KHKmroQFMLm93zGrjhibM2z2Obg9l6qFG2qKjXEXkMp/VDkI4uju9m4QKPjWSwQ6O2qzZEnJDEeCw0Blcw==" crossorigin="anonymous"></script>
+
+  
+<!-- Mansory & imagesLoaded -->
+<script defer src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<script defer src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+<script defer src="/assets/js/mansory.js" type="text/javascript"></script>
+
+
+  
+
+
+<!-- Load Common JS -->
+<script src="/assets/js/common.js"></script>
+
+
+</html>

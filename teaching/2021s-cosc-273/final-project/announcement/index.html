@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-<title>Will  Rosenbaum | ex-post-facto</title>
+<title>Will  Rosenbaum | Final Project Announcement</title>
 <meta name="description" content="A blog about mathematics, computer science, etc.
 ">
 
@@ -33,7 +33,7 @@
 <link rel="shortcut icon" href="/assets/img/favicon.ico">
 <link rel="stylesheet" href="/assets/css/main.css">
 
-<link rel="canonical" href="/blog/">
+<link rel="canonical" href="/teaching/2021s-cosc-273/final-project/announcement/">
 
 <!-- JQuery -->
 <!-- jQuery -->
@@ -108,8 +108,6 @@
           
           
           
-          
-          
           <li class="nav-item ">
               <a class="nav-link" href="/teaching/">
                 teaching
@@ -138,7 +136,7 @@
           
 	  
           <!-- Blog -->
-          <li class="nav-item active">
+          <li class="nav-item ">
             <a class="nav-link" href="/blog/">
               blog
               
@@ -167,24 +165,92 @@
     <div class="container mt-5">
       <div class="post">
 
-  <div class="header-bar">
-    <h1>Ex Post Facto Obvious</h1>
-    <h2>a blog about math, computer science, and whatnot</h2>
-  </div>
+  <header class="post-header">
+    <h1 class="post-title">Final Project Announcement</h1>
+    <p class="post-description">overview of your final project for Parallel and Distributed Computing</p>
+  </header>
 
+  <article>
+    <h2 id="overview">Overview</h2>
 
-  <ul class="post-list">
-    
-      <li>
-        <h3><a class="post-title" href="/blog/2021/updates/">New Site, Finally</a></h3>
-        <p class="post-meta">February 7, 2021</p>
-        <p>a long overdue overhaul of my website</p>
-      </li>
-    
-  </ul>
+<p>The final project for COSC 273 <em>Parallel and Distributed Computing</em> is your opportunity to apply techniques of parallel programming to a larger-scale problem of your choosing. The topic is entirely open-ended, though your program should involve some computationally intensive component where parallel programming techniques could provide a substantial impact on the program’s performance. The primary goal of the project is to understand and document the effect of parallelism on your problem.</p>
 
-  
+<p>You may work in groups of up to 4 people.</p>
 
+<p>The emphasis of the project is on testing different implementations and their effects on your program’s performance. Thus, the problem you address should be complex enough that there are multiple approaches and/or steps to optimize, but simple enough that you can test multiple versions of your program’s components. For example, you might consider:</p>
+
+<ul>
+  <li>partitioning and accessing the program’s input in different ways
+    <ul>
+      <li>many small tasks versus fewer larger tasks?</li>
+      <li>does cache locality have a significant effect on performance?</li>
+    </ul>
+  </li>
+  <li>is there a significant effect of using threads directly compared to the Java executor framework?</li>
+  <li>do different multithreaded data structure implementations have a significant impact on performance?
+    <ul>
+      <li>which lock implementation gives best performance?</li>
+      <li>is there a significant effect of using non-blocking data structures compared to blocking?</li>
+    </ul>
+  </li>
+</ul>
+
+<p>Program documentation is a central component of your project. You will be expected to rigorously test and document the effects of different implementations of the components of your program.</p>
+
+<h2 id="project-components">Project Components</h2>
+
+<p>The project consists of five main components: (1) a preliminary proposal, (2) a baseline implementation/proof of concept, (3) a short video explaining and demonstrating the project to your peers, (4) the final program itself, and (5) documentation for the final program.</p>
+
+<h5 id="preliminary-proposal">Preliminary Proposal</h5>
+
+<p><em>Due: Friday, April 9</em></p>
+
+<p>Your preliminary proposal is a brief (~2 page) write-up explaining your plan for the project. It should introduce the topic of your project, identify a particular computational task to be performed, and explain why and/or how parallelism might be employed to improve your program’s performance.</p>
+
+<p>The scale of the basic program should not be too large. Specifically, your group should be able to write a baseline implementation (i.e., without any parallel programming) in 2 to 3 weeks. You will then spend a more significant amount of time testing and documenting parallelized versions of your program.</p>
+
+<ul>
+  <li>Here is <a href="https://docs.google.com/document/d/1POJsmWKC8caKLZXsApJBpsOAoudZhz-QjGgvrUxM35E/edit?usp=sharing">a link a proposal outline to get you started</a>. Note that responses to the questions don’t need to be long—a few sentences suffices</li>
+  <li>You may submit your proposals to <a href="https://drive.google.com/drive/folders/10S8fZQS0c12G6yQTCzYx7CitsNMgAMkv?usp=sharing">this shared folder</a></li>
+</ul>
+
+<h5 id="baseline-implementation">Baseline Implementation</h5>
+
+<p><em>Due: Friday, May 7</em></p>
+
+<p>Before optimizing and testing your code, your group should implement a baseline (not parallelized) proof-of-concept program. This program should provide most of the functionality of your final program. In addition to the program itself, you will submit documentation on its usage, and provide some details on how you expect to parallelize/optimize the program.</p>
+
+<h5 id="video">Video</h5>
+
+<p><em>Due: Wednesday, May 19</em></p>
+
+<p>You will submit a short (10-15 minute) video explaining your project. The intended audience is your peers in the class. The video should explain (1) the context and significance of the problem your program solves, (2) the baseline program, and (3) where and how parallelism can be employed to improve performance. You may also wish to address technical challenges you faced and how you overcame them. Your video should be largely conceptual, and you do not need to present final results.</p>
+
+<h5 id="final-submission">Final Submission</h5>
+
+<p><em>Due: Friday, May 28</em></p>
+
+<p>Your final submission will include the finalized program together with documentation on the program’s usage and testing. The documentation should include a comparison of the baseline and optimized performance, and provide a history of the different variations and tests you performed to arrive at the final version. While your aim is to achieve the best performance for your program, the documentation should demonstrate why and how this performance is achieved, even if the improvement over the baseline implementation is modest.</p>
+
+<h2 id="grading">Grading</h2>
+
+<p>The final project is worth 30% of your grade for the course. The different components are weighted as follows:</p>
+
+<ul>
+  <li>10% Preliminary proposal</li>
+  <li>20% Baseline implementation</li>
+  <li>20% Video</li>
+  <li>50% Final submission
+    <ul>
+      <li>30% documentation</li>
+      <li>20% final program</li>
+    </ul>
+  </li>
+</ul>
+
+<p>More detailed rubrics for the individual components will be provided in advance of their due dates.</p>
+
+  </article>
 
 </div>
 

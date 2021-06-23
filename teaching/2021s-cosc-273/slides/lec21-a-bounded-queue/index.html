@@ -1,0 +1,861 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta charset="utf-8">
+
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reset.css">
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reveal.css">
+		<link rel="stylesheet" href="/assets/css/condensation.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="/assets/reveal.js-master/plugin/highlight/monokai.css" id="highlight-theme">
+		<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700" rel="stylesheet">
+
+	</head>
+
+	<body>
+
+
+	  <!-- this is where the reveailfy filter gets applied -->
+	  <div class="reveal"><div class="slides">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section id="lecture-21-a-bounded-queue"><h1>Lecture 21: A Bounded Queue</h1></section><section id="reminder"><h2>Reminder</h2>
+<p>Proof of Concept for final project <strong>due this Friday.</strong></p></section><section id="overview"><h2>Overview</h2>
+<ol>
+  <li>Testing Previous Queues</li>
+  <li>A Bounded Queue</li>
+  <li>Stacks</li>
+</ol></section><section id="previously"><h2>Previously</h2>
+<ol>
+  <li>Unbounded Queue with Locks
+    <ul>
+      <li>lock <code>enq</code> and <code>deq</code> methods</li>
+    </ul>
+  </li>
+  <li>Lock-free Unbounded Queue
+    <ul>
+      <li>use <code>AtomicReference</code> for <code>head</code>, <code>tail</code>, <code>next</code>
+</li>
+      <li>use <code>compareAndSet</code> to validate &amp; update atomically</li>
+      <li>update <code>head</code>/<code>tail</code> proactively
+        <ul>
+          <li>guard against incomplete <code>deq</code>/<code>enq</code>
+</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol></section><section id="lock-free-dequeue-method"><h2>Lock-free Dequeue Method</h2>
+<pre><code class="language-java">    public T deq() throws EmptyException {
+	
+	while (true) {
+	    
+	    Node first = head.get();
+	    Node last = tail.get();
+	    Node next = first.next.get();
+	    
+	    if (first == head.get()) {
+		if (first == last) {
+		    if (next == null) {
+			throw new EmptyException();
+		    }
+		    
+		    tail.compareAndSet(last, next);
+		} else {
+		    T value = next.value;
+		    if (head.compareAndSet(first, next))
+			return value;
+		}
+	    }
+	}
+    }
+</code></pre></section><section id="testing-our-queues"><h2>Testing our Queues</h2></section><section id="bounded-queues"><h2>Bounded Queues</h2>
+<ul>
+  <li>Both previous queues were unbounded</li>
+  <li>Sometimes we want bounded queues:
+    <ul>
+      <li>have limited space</li>
+      <li>want to force tighter synchronization between producers &amp; consumers</li>
+    </ul>
+  </li>
+</ul>
+<p>How can we implement a bounded queue (with locks)?</p>
+<div style="margin-bottom: 8em"></div></section><section id="one-option"><h2>One Option</h2>
+<p>Keep track of size!</p>
+<ul>
+  <li>Start with our <code>UnboundedQueue</code>
+    <ul>
+      <li>lock <code>enq</code> and <code>deq</code> methods</li>
+    </ul>
+  </li>
+  <li>Add a <code>final int capacity</code> field</li>
+  <li>Add an <code>AtomicInteger size</code> field
+    <ul>
+      <li>increment upon <code>enq</code>
+</li>
+      <li>decrement upon <code>deq</code>
+</li>
+    </ul>
+  </li>
+  <li>Make sure <code>size &lt;= capacity</code>
+</li>
+</ul>
+<p>Why should <code>size</code> be atomic?</p>
+<div style="margin-bottom: 8em"></div></section><section id="enqueue-method"><h2>Enqueue Method</h2>
+<ol>
+  <li>acquires <code>enqLock</code>
+</li>
+  <li>if <code>size</code> is less than capacity
+    <ul>
+      <li>enqueue item</li>
+      <li>increment size</li>
+      <li>release lock</li>
+    </ul>
+  </li>
+  <li>otherwise
+    <ul>
+      <li>throw exception? (total method)</li>
+      <li>wait until <code>size &lt; capacity</code>? (partial method)</li>
+    </ul>
+  </li>
+</ol></section><section id="dequeue-method"><h2>Dequeue Method</h2>
+<ol>
+  <li>acquires <code>deqLock</code>
+</li>
+  <li>if <code>size</code> is greater than <code>0</code>
+    <ul>
+      <li>dequeue item</li>
+      <li>decrement size</li>
+      <li>release lock</li>
+    </ul>
+  </li>
+  <li>otherwise
+    <ul>
+      <li>throw exception? (total method)</li>
+      <li>wait until <code>size &gt; 0</code>? (partial method)</li>
+    </ul>
+  </li>
+</ol></section><section id="an-unexceptional-queue"><h2>An Unexceptional Queue</h2>
+<p>Suppose we don’t want to throw exceptions</p>
+<ul>
+  <li>Full/empty queue operations are expected, not exceptional</li>
+  <li>Queue should handle these cases by having threads wait</li>
+</ul>
+<p>Question: How might we implement this behavior?</p>
+<div style="margin-bottom: 8em"></div></section><section id="enqueue-with-waiting"><h2>Enqueue with Waiting</h2>
+<pre><code class="language-java">    public void enq (T value) {
+	enqLock.lock();
+	try {
+	    Node nd = new Node(value);
+            while (size.get() == capacity) { }; // wait until not full
+	    tail.next = nd;
+	    tail = nd;
+	} finally {
+	    enqLock.unlock();
+	}
+    }
+</code></pre></section><section id="a-problem"><h2>A Problem?</h2>
+<p>This is wasteful!</p>
+<pre><code class="language-java">while (size.get() == capacity) { }; // wait until not full
+</code></pre>
+<p>The thread:</p>
+<ol>
+  <li>Acquires lock</li>
+  <li>Fails to enqueue while holding lock</li>
+  <li>Uses resources to repeatedly check condition <code>size.get() == capacity</code>
+</li>
+</ol>
+<p>What if it takes a while until the queue is not full?</p></section><section id="a-more-prudent-way"><h2>A More Prudent Way</h2>
+<p>The following would be better:</p>
+<ol>
+  <li>enqueuer sees that <code>size.get() == capacity</code>
+</li>
+  <li>enqueuer temporarily gives up lock</li>
+  <li>enqueuer passively waits for the <em>condition</em> that <code>size.get() &lt; capacity</code>
+    <ul>
+      <li>not constantly checking</li>
+    </ul>
+  </li>
+  <li>dequeuer sees that enqueuers are waiting</li>
+  <li>after dequeue, dequeuer notifies waiting enqueuers</li>
+  <li>enqueuer acquires lock, enqueues</li>
+</ol></section><section id="a-waiting-room-analogy"><h2>A Waiting Room Analogy</h2>
+<p><img src="/assets/img/concurrent-queues/bounded-queue.png" alt="" width="100%"></p></section><section id="queue-full"><h2>Queue Full</h2>
+<p><img src="/assets/img/concurrent-queues/bounded-queue.png" alt="" width="100%"></p></section><section id="enqueuer-arrives-acquires-lock"><h2>Enqueuer Arrives, Acquires Lock</h2>
+<p><img src="/assets/img/concurrent-queues/bounded-enq-1.png" alt="" width="100%"></p></section><section id="enqueuer-sees-full-waits"><h2>Enqueuer Sees Full, Waits</h2>
+<p><img src="/assets/img/concurrent-queues/bounded-enq-2.png" alt="" width="100%"></p></section><section id="enqueuer-arrives-acquires-lock-1"><h2>Enqueuer Arrives, Acquires Lock</h2>
+<p><img src="/assets/img/concurrent-queues/bounded-enq-3.png" alt="" width="100%"></p></section><section id="enqueuer-sees-full-waits-1"><h2>Enqueuer Sees Full, Waits</h2>
+<p><img src="/assets/img/concurrent-queues/bounded-enq-4.png" alt="" width="100%"></p></section><section id="dequeuer-arrives-sees-full-dequeues"><h2>Dequeuer Arrives, Sees Full, Dequeues</h2>
+<p><img src="/assets/img/concurrent-queues/bounded-enq-5.png" alt="" width="100%"></p></section><section id="dequeuer-announces-no-longer-full"><h2>Dequeuer Announces No Longer Full</h2>
+<p><img src="/assets/img/concurrent-queues/bounded-enq-6.png" alt="" width="100%"></p></section><section id="enqueuers-leaving-waiting-room"><h2>Enqueuers Leaving Waiting Room</h2>
+<p><img src="/assets/img/concurrent-queues/bounded-enq-7.png" alt="" width="100%"></p></section><section id="dequeuer-releases-lock"><h2>Dequeuer Releases Lock</h2>
+<p><img src="/assets/img/concurrent-queues/bounded-enq-8.png" alt="" width="100%"></p></section><section id="enqueuer-locks-enqueue-ensues"><h2>Enqueuer Locks; Enqueue Ensues</h2>
+<p><img src="/assets/img/concurrent-queues/bounded-enq-9.png" alt="" width="100%"></p></section><section id="the-lock-and-condition-interfaces"><h2>The <code>Lock</code> and <code>Condition</code> Interfaces</h2>
+<p>The <code>Lock</code> interface defines a curious method:</p>
+<ul>
+  <li>
+<code>Condition newCondition()</code> returns a new Condition instance that is bound to this Lock instance</li>
+</ul>
+<p>The <code>Condition</code> interface</p>
+<ul>
+  <li>
+<code>void await()</code> causes the current thread to wait until it is signalled or interrupted</li>
+  <li>
+<code>void	signal()</code> wakes up one waiting thread</li>
+  <li>
+<code>void	signalAll()</code> wakes up all waiting threads</li>
+</ul></section><section id="improving-our-queue"><h2>Improving our Queue</h2>
+<p>Define condition for <code>enqLock</code></p>
+<ul>
+  <li><code>notFullCondition</code></li>
+</ul>
+<p>When enqueuing to a full queue</p>
+<ul>
+  <li>thread signals that it is waiting
+    <ul>
+      <li>need a flag (<code>volatile boolean</code>) for this</li>
+    </ul>
+  </li>
+  <li>thread calls <code>notFullCondition.await()</code>
+    <ul>
+      <li>waits until <code>notFullCondition</code> is satisfied</li>
+    </ul>
+  </li>
+</ul></section><section id="when-dequeueing"><h2>When Dequeueing</h2>
+<p>When dequeueing</p>
+<ul>
+  <li>thread checks if thread is waiting
+    <ul>
+      <li>checks flag for this</li>
+    </ul>
+  </li>
+  <li>if so, after dequeue, dequeuer calls <code>notFullCondition.signalAll()</code>
+    <ul>
+      <li>signals that queue is no longer full</li>
+    </ul>
+  </li>
+</ul>
+<p>(Similar: <code>notEmptyCondition</code> for <code>deq</code> method)</p></section><section id="making-a-boundedqueue"><h2>Making a <code>BoundedQueue</code>
+</h2>
+<pre><code class="language-java">public class BoundedQueue&lt;T&gt; implements SimpleQueue&lt;T&gt; {
+    ReentrantLock enqLock, deqLock;
+    Condition notEmptyCondition, notFullCondition;
+    AtomicInteger size;
+    volatile Node head, tail;
+    final int capacity;
+
+    public BoundedQueue(int capacity) {
+	this.capacity = capacity;
+	this.head = new Node(null);
+	this.tail = this.head;
+	this.size = new AtomicInteger(0);
+	this.enqLock = new ReentrantLock();
+	this.notFullCondition = this.enqLock.newCondition();
+	this.deqLock = new ReentrantLock();
+	this.notEmptyCondition = this.deqLock.newCondition();
+    }
+
+    public void enq(T item) { ... }
+
+    public T deq() { ... }
+
+    class Node { ... }
+}
+</code></pre></section><section id="enqueueing"><h2>Enqueueing</h2>
+<pre><code class="language-java">    public void enq(T item) {
+	boolean mustWakeDequeuers = false;
+	Node nd = new Node(item);
+	enqLock.lock();
+	try {
+	    while (size.get() == capacity) {
+		try {
+		    // System.out.println("Queue full!");
+		    notFullCondition.await();
+		} catch (InterruptedException e) {
+		    // do nothing
+		}
+	    }
+	    
+	    tail.next = nd;
+	    tail = nd;
+	    
+	    if (size.getAndIncrement() == 0) {
+		mustWakeDequeuers = true;
+	    }
+	    
+	} finally {
+	    
+	    enqLock.unlock();
+	    
+	}
+
+	if (mustWakeDequeuers) {
+	    
+	    deqLock.lock();
+	    
+	    try {
+		notEmptyCondition.signalAll();
+	    } finally {
+		deqLock.unlock();
+	    }
+	}
+    }
+</code></pre></section><section id="dequeueing"><h2>Dequeueing</h2>
+<pre><code class="language-java">    public T deq() {
+	T item;
+	boolean mustWakeEnqueuers = false;
+	deqLock.lock();
+	try {
+
+	    while (head.next == null) {
+		try {
+		    // System.out.println("Queue empty!");
+		    notEmptyCondition.await();
+		} catch(InterruptedException e) {
+		    //do nothing
+		}
+	    }
+	    
+	    item = head.next.item;
+	    head = head.next;
+
+	    if (size.getAndDecrement() == capacity) {
+		mustWakeEnqueuers = true;
+	    }
+	} finally {
+	    deqLock.unlock();
+	}
+
+	if (mustWakeEnqueuers) {
+	    enqLock.lock();
+	    try {
+		notFullCondition.signalAll();
+	    } finally {
+		enqLock.unlock();
+	    }
+	}
+
+	return item;
+    }	
+</code></pre></section><section id="testing-the-queue"><h2>Testing the Queue</h2></section><section id="for-your-consideration"><h2>For Your Consideration</h2>
+<p>What if we want to make a lock-free bounded queue?</p>
+<ul>
+  <li>Can we just add <code>size</code> and <code>capacity</code> fields to our <code>LockFreeQueue</code>?</li>
+</ul></section><section id="stacks"><h1>Stacks</h1></section><section id="recall-the-stack"><h2>Recall the Stack</h2>
+<p>Basic operations</p>
+<ul>
+  <li>
+<code>void push(T item)</code> add a new item to the top of the stack</li>
+  <li>
+<code>T pop()</code> remove top item from the stack and return it
+    <ul>
+      <li>throw <code>EmptyException</code> if stack was empty</li>
+    </ul>
+  </li>
+</ul></section><section id="linked-list-implementation"><h2>Linked List Implementation</h2>
+<p><img src="/assets/img/stacks/list-stack.png" alt="" width="100%"></p></section><section id="push-step-1-create-node"><h2>
+<code>push()</code> Step 1: Create Node</h2>
+<p><img src="/assets/img/stacks/list-stack-push-1.png" alt="" width="100%"></p></section><section id="push-step-2-set-next"><h2>
+<code>push()</code> Step 2: Set <code>next</code>
+</h2>
+<p><img src="/assets/img/stacks/list-stack-push-2.png" alt="" width="100%"></p></section><section id="push-step-3-set-head"><h2>
+<code>push()</code> Step 3: Set <code>head</code>
+</h2>
+<p><img src="/assets/img/stacks/list-stack-push-3.png" alt="" width="100%"></p></section><section id="push-complete"><h2>
+<code>push()</code> Complete</h2>
+<p><img src="/assets/img/stacks/list-stack-push-4.png" alt="" width="100%"></p></section><section id="pop"><h2>
+<code>pop()</code>?</h2>
+<p><img src="/assets/img/stacks/list-stack-push-4.png" alt="" width="100%"></p></section><section id="pop-step-1-store-value"><h2>
+<code>pop()</code> Step 1: Store <code>value</code>
+</h2>
+<p><img src="/assets/img/stacks/list-stack-pop-1.png" alt="" width="100%"></p></section><section id="pop-step-2-update-head"><h2>
+<code>pop()</code> Step 2: Update <code>head</code>
+</h2>
+<p><img src="/assets/img/stacks/list-stack-pop-2.png" alt="" width="100%"></p></section><section id="pop-step-3-return-value"><h2>
+<code>pop()</code> Step 3: Return <code>value</code>
+</h2>
+<p><img src="/assets/img/stacks/list-stack-pop-3.png" alt="" width="100%"></p></section><section id="concurrent-stack"><h2>Concurrent Stack</h2>
+<p>With locks:</p>
+<ul>
+  <li>Since all operations modify <code>head</code>, coarse locking is natural choice</li>
+</ul>
+<p>Without locks?</p>
+<div style="margin-bottom: 12em"></div></section><section id="a-lock-free-stack"><h2>A Lock-free Stack</h2>
+<p>Use linked-list implementation</p>
+<ul>
+  <li>Logic is simpler than queues’ because all operations affect same node</li>
+  <li>Idea:
+    <ul>
+      <li>store <code>top</code> as an <code>AtomicReference&lt;Node&gt;</code>
+</li>
+      <li>use <code>compareAndSet</code> to modify <code>top</code>
+        <ul>
+          <li>success, or retry</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Unlike queue:
+    <ul>
+      <li>item on top of stack precisely when <code>top</code> points to item’s <code>Node</code>
+</li>
+    </ul>
+  </li>
+</ul></section><section id="implementing-the-lock-free-stack"><h2>Implementing the Lock-Free Stack</h2>
+<pre><code class="language-java">public class LockFreeStack&lt;T&gt; implements SimpleStack&lt;T&gt; {
+    AtomicReference&lt;Node&gt; top = new AtomicReference&lt;Node&gt;(null);
+
+    public void push(T item) {...}
+
+    public T pop() throws EmptyException {...}
+    
+    class Node {
+	public T value;
+	public AtomicReference&lt;Node&gt; next;
+    
+	public Node(T value) {
+	    this.value = value;
+	    this.next  = new AtomicReference&lt;Node&gt;(null);
+	}
+    }    
+
+}
+</code></pre></section><section id="implementing-push"><h2>Implementing <code>push</code>
+</h2>
+<pre><code class="language-java">    public void push(T item) {
+	
+	Node nd = new Node(item);
+	Node oldTop = top.get();
+	nd.next.set(oldTop);
+	
+	while (!top.compareAndSet(oldTop, nd)) {
+	    oldTop = top.get();
+	    nd.next.set(oldTop);	    
+	}
+    }
+</code></pre></section><section id="implementing-pop"><h2>Implementing <code>pop</code>
+</h2>
+<pre><code class="language-java">    public T pop() throws EmptyException {
+	while (true) {
+	    Node oldTop = top.get();
+	    
+	    if (oldTop == null) {
+		throw new EmptyException();
+	    }
+
+	    Node newTop = oldTop.next.get();
+
+	    if (top.compareAndSet(oldTop, newTop)) {
+		return oldTop.value;
+	    }
+	}
+    }
+</code></pre></section><section id="sequential-bottleneck"><h2>Sequential Bottleneck</h2>
+<p>Modifying <code>top</code></p>
+<ul>
+  <li>No matter how many threads, <code>push</code>/<code>pop</code> rate limited by <code>top.compareAndSet(...)</code>
+</li>
+  <li>This seems inherent to any stack…</li>
+</ul>
+<div style="margin-bottom: 8em"></div>
+<p>… or is it?</p></section><section id="elimination"><h2>Elimination</h2>
+<p>Consider several concurrent accesses to a stack:</p>
+<ul>
+  <li>T1 calls <code>stk.push(item1)</code>
+</li>
+  <li>T2 calls <code>stk.push(item2)</code>
+</li>
+  <li>T3 calls <code>stk.pop()</code>
+</li>
+  <li>T4 calls <code>stk.push(item4)</code>
+</li>
+  <li>T5 calls <code>stk.pop()</code>
+</li>
+  <li>T6 calls <code>stk.pop()</code>
+</li>
+</ul>
+<p><strong>Trick Question.</strong> What is the state of <code>stk</code> after these calls?</p>
+<div style="margin-bottom: 8em"></div></section><section id="what-do-we-need-the-stack-for"><h2>What do we need the stack for?</h2>
+<p>Match and exchange!</p>
+<div style="margin-bottom: 16em"></div>
+<p>Cut out the middleperson!</p></section><section id="a-different-strategy"><h2>A Different Strategy</h2>
+<ol>
+  <li>Attempt to <code>push</code>/<code>pop</code> to stack
+    <ul>
+      <li>if success, good job</li>
+    </ul>
+  </li>
+  <li>If attempt fails, try to find a partner
+    <ul>
+      <li>if <code>push</code>, try to find a <code>pop</code> and give them your value</li>
+      <li>if <code>pop</code>, try to find a <code>push</code> and take their value</li>
+    </ul>
+  </li>
+</ol>
+<p>Next time: implement an exchange object to facilitate this</p></section>
+</div></div>
+
+
+	  <script src="/assets/reveal.js-master/dist/reveal.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/math/math.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/zoom/zoom.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/notes/notes.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/search/search.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/markdown/markdown.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/highlight/highlight.js"></script>
+	  <script>
+	    
+
+	    // Also available as an ES module, see:
+	    // https://revealjs.com/initialization/
+	    Reveal.initialize({
+		controls: false,
+		progress: true,
+		center: true,
+		hash: true,
+		transition: 'none',
+		math: {
+		    config: 'TeX-AMS_HTML-full',
+		    TeX: {
+			Macros: {
+			    R: '\\mathbb{R}',
+			    set: [ '\\left\\{#1 \\; ; \\; #2\\right\\}', 2 ]
+			}
+		    }
+		},
+
+
+		// Learn about plugins: https://revealjs.com/plugins/
+		plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath ]
+	    });
+
+	  </script>
+
+	</body>
+</html>
+	  
+
+<!-- <\!-- load the reveal.js css & js (assuming you've put it in assets/)-\-> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/reveal.scss" -->
+<!-- /> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/theme/source/white.scss" -->
+<!-- /> -->
+<!-- <script -->
+<!--   src="/assets/reveal.js-master/js/reveal.js" -->
+<!--   type="text/javascript" -->
+<!-- ></script> -->
+
+<!-- <\!-- configure the presentation, (you can tweak options to suit) -\-> -->
+<!-- <script> -->
+<!--   Reveal.initialize({ -->
+<!--     // Display presentation control arrows -->
+<!--     controls: false, -->
+
+<!--     // Help the user learn the controls by providing hints, for example by -->
+<!--     // bouncing the down arrow when they first encounter a vertical slide -->
+<!--     controlsTutorial: false, -->
+
+<!--     // Determines where controls appear, "edges" or "bottom-right" -->
+<!--     controlsLayout: "bottom-right", -->
+
+<!--     // Visibility rule for backwards navigation arrows; "faded", "hidden" -->
+<!--     // or "visible" -->
+<!--     controlsBackArrows: "faded", -->
+
+<!--     // Display a presentation progress bar -->
+<!--     progress: true, -->
+
+<!--     // Display the page number of the current slide -->
+<!--     slideNumber: false, -->
+
+<!--     // Push each slide change to the browser history -->
+<!--     history: false, -->
+
+<!--     // Enable keyboard shortcuts for navigation -->
+<!--     keyboard: true, -->
+
+<!--     // Enable the slide overview mode -->
+<!--     overview: true -->
+<!--   }); -->
+<!-- </script> -->

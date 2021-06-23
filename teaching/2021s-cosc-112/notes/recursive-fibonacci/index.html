@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<title>Will  Rosenbaum | How Slow is Recursive Fibonacci?</title>
+<meta name="description" content="A blog about mathematics, computer science, etc.
+">
+
+<!-- Open Graph -->
+
+
+<!-- Bootstrap & MDB -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" integrity="sha512-MoRNloxbStBcD8z3M/2BmnT+rg4IsMxPkXaGh2zD6LGNNFE80W3onsAhRcMAMrSoyWL9xD7Ert0men7vR8LUZg==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" integrity="sha512-RO38pBRxYH3SoOprtPTD86JFOclM51/XTIdEPh5j8sj4tp8jmQIx26twG52UaLi//hQldfrh7e51WzP9wuP32Q==" crossorigin="anonymous" />
+
+<!-- Fonts & Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"  integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.0/css/academicons.min.css" integrity="sha512-W4yqoT1+8NLkinBLBZko+dFB2ZbHsYLDdr50VElllRcNt2Q4/GSs6u71UHKxB7S6JEMCp5Ve4xjh3eGQl/HRvg==" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+
+
+
+<!-- Code Syntax Highlighting -->
+<link rel="stylesheet" href="https://gitcdn.link/repo/jwarby/jekyll-pygments-themes/master/github.css" />
+
+<!-- Styles -->
+<link rel="shortcut icon" href="/assets/img/favicon.ico">
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<link rel="canonical" href="/teaching/2021s-cosc-112/notes/recursive-fibonacci/">
+
+<!-- JQuery -->
+<!-- jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+
+
+<!-- Theming-->
+
+  <script src="/assets/js/theme.js"></script>
+  <!-- Load DarkMode JS -->
+<script src="/assets/js/dark_mode.js"></script>
+
+
+
+
+
+
+    
+<!-- MathJax -->
+<script type="text/javascript">
+  window.MathJax = {
+    tex: {
+      tags: 'ams'
+    }
+  };
+</script>
+<script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js"></script>
+<script defer src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+
+  </head>
+
+  <body class="fixed-top-nav ">
+
+    <!-- Header -->
+
+    <header>
+
+    <!-- Nav Bar -->
+    <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top">
+    <div class="container">
+      
+      <a class="navbar-brand title font-weight-lighter" href="https://willrosenbaum.com/">
+       Will   Rosenbaum
+      </a>
+      
+      <!-- Navbar Toggle -->
+      <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar top-bar"></span>
+        <span class="icon-bar middle-bar"></span>
+        <span class="icon-bar bottom-bar"></span>
+      </button>
+      <div class="collapse navbar-collapse text-right" id="navbarNav">
+        <ul class="navbar-nav ml-auto flex-nowrap">
+          <!-- About -->
+          <li class="nav-item ">
+            <a class="nav-link" href="/">
+              about
+              
+            </a>
+          </li>
+          <!-- Other pages -->
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/teaching/">
+                teaching
+                
+              </a>
+          </li>
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/research/">
+                research
+                
+              </a>
+          </li>
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/publications/">
+                publications
+                
+              </a>
+          </li>
+          
+          
+	  
+          <!-- Blog -->
+          <li class="nav-item ">
+            <a class="nav-link" href="/blog/">
+              blog
+              
+            </a>
+          </li>
+          
+
+          
+            <div class = "toggle-container">
+              <a id = "light-toggle">
+                  <i class="fas fa-moon"></i>
+                  <i class="fas fa-sun"></i>
+              </a>
+            </div>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+</header>
+
+
+    <!-- Content -->
+
+    <div class="container mt-5">
+      <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">How Slow is Recursive Fibonacci?</h1>
+    <p class="post-description">Examining the efficiency of a recursive method.</p>
+  </header>
+
+  <article>
+    <p>In lecture, we saw that the recursive solution to computing the Fibonacci numbers is <strong>much</strong> slower than the iterative version. How much slower? These were the results comparing the amount of time the two programs required for a few reasonably large values:</p>
+
+<p><img src="/assets/img/recursive-fibonacci/runtimes.png" alt="" width="75%" /></p>
+
+<p>For example, computing <code class="language-plaintext highlighter-rouge">f(45)</code> recursively required almost 3 1/2 seconds, while the iterative solution finished in less that 1 ms. So the recursive solution is (at least) 3,500 times slower than the iterative solution! But why?</p>
+
+<h2 id="recursive-calls">Recursive Calls</h2>
+
+<p>To understand why the recursive fibonacci method is so slow, it helps to understand how many “recursive calls” the method makes. That is, if we execute <code class="language-plaintext highlighter-rouge">fibonacci(n)</code>, how many times does <code class="language-plaintext highlighter-rouge">fibonacci(&lt;something&gt;)</code>  actually get called? Here is the code for reference:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">private</span> <span class="kd">static</span> <span class="kt">int</span> <span class="nf">fibonacci</span> <span class="o">(</span><span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">n</span> <span class="o">&lt;=</span> <span class="mi">2</span><span class="o">)</span> <span class="k">return</span> <span class="mi">1</span><span class="o">;</span>
+    
+    <span class="k">return</span> <span class="nf">fibonacci</span><span class="o">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="o">)</span> <span class="o">+</span> <span class="n">fibonacci</span><span class="o">(</span><span class="n">n</span><span class="o">-</span><span class="mi">2</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>For small values of <code class="language-plaintext highlighter-rouge">n</code>, we can compute the number of recursive calls directly. For <code class="language-plaintext highlighter-rouge">n = 1</code> and <code class="language-plaintext highlighter-rouge">n = 2</code>, the function hits <code class="language-plaintext highlighter-rouge">return 1</code>, without any recursive calls to <code class="language-plaintext highlighter-rouge">fibonacci(...)</code>. Now <code class="language-plaintext highlighter-rouge">fibonacci(3)</code> executes</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">return</span> <span class="n">fibonacci</span><span class="o">(</span><span class="mi">2</span><span class="o">)</span> <span class="o">+</span> <span class="n">fibonacci</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+</code></pre></div></div>
+
+<p>so there are 2 recursive calls made. What about <code class="language-plaintext highlighter-rouge">fibonacci(4)</code>? In this case, we execute</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">return</span> <span class="n">fibonacci</span><span class="o">(</span><span class="mi">3</span><span class="o">)</span> <span class="o">+</span> <span class="n">fibonacci</span><span class="o">(</span><span class="mi">2</span><span class="o">);</span>
+</code></pre></div></div>
+
+<p>Thus there are 2 recursive calls again. But  <code class="language-plaintext highlighter-rouge">fibonacci(3)</code>  itself makes 2 recursive calls (by the above), while <code class="language-plaintext highlighter-rouge">fibonacci(2)</code> makes none. So the total number of calls to <code class="language-plaintext highlighter-rouge">fibonacci(&lt;something&gt;)</code> by <code class="language-plaintext highlighter-rouge">fibonacci(4)</code> is <code class="language-plaintext highlighter-rouge">2 + 2 + 0 = 4</code>.</p>
+
+<p>Note that we are already seeing some repeated work: <code class="language-plaintext highlighter-rouge">fibonacci(4)</code> calls <code class="language-plaintext highlighter-rouge">fibonacci(3)</code> and <code class="language-plaintext highlighter-rouge">fibonacci(2)</code>, but <code class="language-plaintext highlighter-rouge">fibonacci(3)</code> <em>also</em> calls <code class="language-plaintext highlighter-rouge">fibonacci(2)</code>. So the code is computing the same thing twice, and having to waste time performing each repeated call!</p>
+
+<p>The following figure shows the so-called <strong>recursion tree</strong> corresponding to an execution of <code class="language-plaintext highlighter-rouge">fibonacci(6)</code>:</p>
+
+<p><img src="/assets/img/recursive-fibonacci/tree.png" alt="" width="75%" /></p>
+
+<p>This tree illustrates which calls to <code class="language-plaintext highlighter-rouge">fibonacci</code> (<code class="language-plaintext highlighter-rouge">fib</code> in the image) make recursive calls. Note that <code class="language-plaintext highlighter-rouge">fib(4)</code> gets called twice, <code class="language-plaintext highlighter-rouge">fib(3)</code> three times, <code class="language-plaintext highlighter-rouge">fib(2)</code> 5 times, and <code class="language-plaintext highlighter-rouge">fib(1)</code> 3 times. That is a lot of wasted effort!</p>
+
+<p>The diagram above is what computer scientists and mathematicians call a <strong>tree.</strong> The bottom-most nodes (labeled <code class="language-plaintext highlighter-rouge">fib(2)</code> and <code class="language-plaintext highlighter-rouge">fib(1)</code>) are the <strong>leaves.</strong> These correspond to the “base cases” in the recursion, as these cases do not make recursive calls to <code class="language-plaintext highlighter-rouge">fib</code>. The <strong>root</strong> is the top-most node, labeled <code class="language-plaintext highlighter-rouge">fib(6)</code> in our picture. Weirdly, mathematicians and computer scientists draw “trees” with “leaves” at the bottom and a “root” on top, which is the opposite of how an actual tree outside grows. Go figure.</p>
+
+<h5 id="depth-of-recursion">Depth of recursion</h5>
+
+<p>The <strong>depth</strong> of a recursion tree is the is the length of the longest path from the root to any leaf. For example, in the image above, the longest path from the root (labeled <code class="language-plaintext highlighter-rouge">fib(6)</code>) to any leaf is the path following the recursive calls <code class="language-plaintext highlighter-rouge">fib(5)</code> , <code class="language-plaintext highlighter-rouge">fib(4)</code>, <code class="language-plaintext highlighter-rouge">fib(3)</code>, <code class="language-plaintext highlighter-rouge">fib(2)</code> (or <code class="language-plaintext highlighter-rouge">fib(1)</code>). This path has length 4 (there are 4 recursive calls along both the paths to <code class="language-plaintext highlighter-rouge">fib(2)</code>  and <code class="language-plaintext highlighter-rouge">fib(1)</code> the path), so the <strong>depth of recursion</strong> for this computation of <code class="language-plaintext highlighter-rouge">fib(6)</code> is 4.</p>
+
+<h2 id="computing-the-number-of-recursive-calls">Computing the number of recursive calls</h2>
+
+<p>In general (for <code class="language-plaintext highlighter-rouge">n &gt; 3</code>), a call to <code class="language-plaintext highlighter-rouge">fibonacci(n)</code> makes 2 recursive calls to <code class="language-plaintext highlighter-rouge">fibonacci(n-1)</code> and <code class="language-plaintext highlighter-rouge">fibonacci(n-2)</code>. These recursive calls in turn make more recursive calls. How many?</p>
+
+<p>Well… we can compute it! We can write a method <code class="language-plaintext highlighter-rouge">numberOfCalls(int n)</code> that counts the number of recursive calls <code class="language-plaintext highlighter-rouge">fibonacci(n)</code> makes. Note that we should have</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">numberOfCalls(1)</code> returns 0</li>
+  <li><code class="language-plaintext highlighter-rouge">numberOfCalls(2)</code> returns 0</li>
+</ul>
+
+<p>On the other hand, for <code class="language-plaintext highlighter-rouge">n &gt; 2</code>, <code class="language-plaintext highlighter-rouge">fibonacci(n)</code> makes recursive calls to <code class="language-plaintext highlighter-rouge">fibonacci(n-1)</code> and <code class="language-plaintext highlighter-rouge">fibonacci(n-2)</code>. So <code class="language-plaintext highlighter-rouge">numberOfCalls(n)</code> should return <code class="language-plaintext highlighter-rouge">2 + \numberOfCalls(n-1) + \numberOfCalls(n-2)</code>. So we are led to <em>another</em> recursive function definition:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>      <span class="kd">private</span> <span class="kd">static</span> <span class="kt">int</span> <span class="nf">numberOfCalls</span> <span class="o">(</span><span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">n</span> <span class="o">==</span> <span class="mi">1</span> <span class="o">||</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">2</span><span class="o">)</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="mi">0</span><span class="o">;</span>
+            <span class="o">}</span>
+    
+            <span class="k">return</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">numberOfCalls</span><span class="o">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="o">)</span> <span class="o">+</span> <span class="n">numberOfCalls</span><span class="o">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">2</span><span class="o">);</span>
+        <span class="o">}</span>
+</code></pre></div></div>
+
+<p>Here’s the the output for the first few values of <code class="language-plaintext highlighter-rouge">n</code>:</p>
+
+<p><img src="/assets/img/recursive-fibonacci/recursive-calls.png" alt="" width="75%" /></p>
+
+<p>Note the pattern: the number of recursive calls <strong>almost doubles</strong> each time <code class="language-plaintext highlighter-rouge">n</code> increases by one. So computing <code class="language-plaintext highlighter-rouge">fibonacci(11)</code> this way requires almost twice as much work as <code class="language-plaintext highlighter-rouge">fibonacci(10)</code>, and so on. Obviously, this is wasteful!</p>
+
+<p>A more efficient thing to do would be store each value of <code class="language-plaintext highlighter-rouge">fibonacci(n)</code> when it is computed, say, in an array. Instead of re-computing each value from scratch, the program could then look up a value to see if it has been computed before. If so, it can simply fetch the stored value rather than making a new recursive call.</p>
+
+<h5 id="question">Question</h5>
+
+<p>How many recursive calls does <code class="language-plaintext highlighter-rouge">numberOfCalls(n)</code> make?</p>
+
+
+  </article>
+
+</div>
+
+    </div>
+
+    <!-- Footer -->
+
+    
+<footer class="fixed-bottom">
+  <div class="container mt-0">
+    &copy; Copyright 2021 Will  Rosenbaum.
+    
+    
+    
+  </div>
+</footer>
+
+
+
+  </body>
+
+  <!-- Bootsrap & MDB scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.4.4/umd/popper.min.js" integrity="sha512-eUQ9hGdLjBjY3F41CScH3UX+4JDSI9zXeroz7hJ+RteoCaY+GP/LDoM8AO+Pt+DRFw3nXqsjh9Zsts8hnYv8/A==" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha512-M5KW3ztuIICmVIhjSqXe01oV2bpe248gOxqmlcYrEzAvws7Pw3z6BK0iGbrwvdrUQUhi3eXgtxp5I8PDo9YfjQ==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js" integrity="sha512-Mug9KHKmroQFMLm93zGrjhibM2z2Obg9l6qFG2qKjXEXkMp/VDkI4uju9m4QKPjWSwQ6O2qzZEnJDEeCw0Blcw==" crossorigin="anonymous"></script>
+
+  
+<!-- Mansory & imagesLoaded -->
+<script defer src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<script defer src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+<script defer src="/assets/js/mansory.js" type="text/javascript"></script>
+
+
+  
+
+
+<!-- Load Common JS -->
+<script src="/assets/js/common.js"></script>
+
+
+</html>

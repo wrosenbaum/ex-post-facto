@@ -1,0 +1,886 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta charset="utf-8">
+
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reset.css">
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reveal.css">
+		<link rel="stylesheet" href="/assets/css/condensation.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="/assets/reveal.js-master/plugin/highlight/monokai.css" id="highlight-theme">
+		<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700" rel="stylesheet">
+
+	</head>
+
+	<body>
+
+
+	  <!-- this is where the reveailfy filter gets applied -->
+	  <div class="reveal"><div class="slides">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ## Common Functionality -->
+
+<!-- Traverse are remove: -->
+
+<!-- 1. Find `pred` and `curr` where `item` lives -->
+<!-- 2. Physically remove logically removed nodes along the way -->
+
+<!-- Return: a `Window` -->
+
+<!-- ```java -->
+<!--     class Window { -->
+<!-- 	public Node pred; -->
+<!-- 	public Node curr; -->
+
+<!-- 	public Window (Node pred, Node curr) { -->
+<!-- 	    this.pred = pred; -->
+<!-- 	    this.curr = curr; -->
+<!-- 	} -->
+<!--     } -->
+<!-- ``` -->
+
+<!-- ## Finding and Removing in Code -->
+
+<!--     public Window find(Node head, long key) { -->
+<!-- 	Node pred = null; -->
+<!-- 	Node curr = null; -->
+<!-- 	Node succ = null; -->
+<!-- 	boolean[] marked = {false}; -->
+<!-- 	boolean snip; -->
+
+<!-- 	retry: while(true) { -->
+<!-- 	    pred = head; -->
+<!-- 	    curr = pred.next.getReference(); -->
+<!-- 	    while(true) { -->
+<!-- 		succ = curr.next.get(marked); -->
+<!-- 		while(marked[0]) { -->
+<!-- 		    snip = pred.next.compareAndSet(curr, succ, false, false); -->
+<!-- 		    if (!snip) continue retry; -->
+<!-- 		    curr = pred.next.getReference(); -->
+<!-- 		    succ = curr.next.get(marked); -->
+<!-- 		} -->
+<!-- 		if (curr.key >= key) { -->
+<!-- 		    return new Window(pred, curr); -->
+<!-- 		} -->
+<!-- 		pred = curr; -->
+<!-- 		curr = succ; -->
+<!-- 	    } -->
+<!-- 	} -->
+
+<!-- ## Removal in Code -->
+
+<!-- ```java -->
+<!--     public boolean remove(T item) { -->
+<!-- 	int key = item.hashCode(); -->
+<!-- 	boolean snip; -->
+<!-- 	while (true) { -->
+<!-- 	    Window window = find(head, key); -->
+<!-- 	    Node pred = window.pred; -->
+<!-- 	    Node curr = window.curr; -->
+
+<!-- 	    if (curr.key != key) { -->
+<!-- 		return false; -->
+<!-- 	    } -->
+
+<!-- 	    Node succ = curr.next.getReference(); -->
+<!-- 	    snip = curr.next.attemptMark(succ, true); -->
+<!-- 	    if (!snip) { -->
+<!-- 		continue; -->
+<!-- 	    } -->
+<!-- 	    pred.next.compareAndSet(curr, succ, false, false); -->
+<!-- 	    return true; -->
+<!-- 	} -->
+<!--     } -->
+<!-- ``` -->
+
+<!-- ## Test the Code -->
+
+<!-- ## Single Thread Performance -->
+
+<!-- Runtimes: 1M Operations -->
+
+<!-- | n elts | coarse | fine | optimistic | lazy | non-block | -->
+<!-- |--------------|----------------|--------------|------------|------|------| -->
+<!-- |10| 0.11 s | 0.14 s | 0.13 s| 0.11 s| 0.11 s | -->
+<!-- |100| 0.14 s| 0.46 s | 0.19 s| 0.13 s| 0.20 s | -->
+<!-- |1000| 1.1 s| 3.9 s | 2.2 s| 1.1 s| 2.8 s | -->
+<!-- |10000| 28 s| 39 s | 59 s| 29 s | 66 s | -->
+
+<!-- ## Performance, 8 Threads -->
+
+<!-- Runtimes: 1M Operations -->
+
+<!-- | n elts | coarse | fine | optimistic | lazy | non-block | -->
+<!-- |--------------|----------------|--------------|------------|------|-----| -->
+<!-- |10| 0.21 s | 0.36 s | 0.33 s | 0.33 s | 0.21 s | -->
+<!-- |100| 0.27 s | 1.80 s | 0.38 s | 0.12 s| 0.07 s | -->
+<!-- |1000| 1.8 s | 4.7 s | 0.86 s | 0.19 s| 0.49 s | -->
+<!-- |10,000| 32 s | 17 s | 9.2 s| 4.7 s | 9.2 s | -->
+
+<!-- Note: fewer elements $\implies$ greater contention -->
+
+
+
+
+
+
+<section id="lecture-18-lazy-and-nonblocking-lists"><h1>Lecture 18: Lazy and Nonblocking Lists</h1></section><section id="overview"><h2>Overview</h2>
+<ol>
+  <li>Logical Removal and Lazy Lists</li>
+  <li>Nonblocking Lists</li>
+  <li>List Appraisal</li>
+</ol></section><section id="last-times"><h2>Last Time(s)</h2>
+<ol>
+  <li>Coarse-grained synchronization
+    <ul>
+      <li>lock the whole data structure for each operation</li>
+    </ul>
+  </li>
+  <li>Fine-grained synchronization
+    <ul>
+      <li>lock the parts of the data structure currently being accessed</li>
+    </ul>
+  </li>
+  <li>Optimistic synchronization
+    <ul>
+      <li>don’t lock until ready to modify</li>
+      <li>validate between locking and modification</li>
+      <li>validation failure $\implies$ restart</li>
+    </ul>
+  </li>
+</ol></section><section id="optimistic-insertion"><h2>Optimistic Insertion</h2>
+<p><img src="/assets/img/concurrent-lists/optimistic-list.png" alt="" width="100%"></p></section><section id="step-1-traverse-the-list"><h2>Step 1: Traverse the List</h2>
+<p><img src="/assets/img/concurrent-lists/optimistic-insert-1.png" alt="" width="100%"></p></section><section id="step-1-traverse-the-list-1"><h2>Step 1: Traverse the List</h2>
+<p><img src="/assets/img/concurrent-lists/optimistic-insert-2.png" alt="" width="100%"></p></section><section id="step-1-traverse-the-list-2"><h2>Step 1: Traverse the List</h2>
+<p><img src="/assets/img/concurrent-lists/optimistic-insert-3.png" alt="" width="100%"></p></section><section id="step-2-acquire-locks"><h2>Step 2: Acquire Locks</h2>
+<p><img src="/assets/img/concurrent-lists/optimistic-insert-4.png" alt="" width="100%"></p></section><section id="step-3-validate-list---traverse"><h2>Step 3: Validate List - Traverse</h2>
+<p><img src="/assets/img/concurrent-lists/optimistic-insert-5.png" alt="" width="100%"></p></section><section id="step-3-validate-list---pred-reachable"><h2>Step 3: Validate List - <code>pred</code> Reachable?</h2>
+<p><img src="/assets/img/concurrent-lists/optimistic-insert-6.png" alt="" width="100%"></p></section><section id="step-3-validate-list---is-curr-next"><h2>Step 3: Validate List - Is <code>curr</code> next?</h2>
+<p><img src="/assets/img/concurrent-lists/optimistic-insert-7.png" alt="" width="100%"></p></section><section id="step-4-perform-insertion"><h2>Step 4: Perform Insertion</h2>
+<p><img src="/assets/img/concurrent-lists/optimistic-insert-8.png" alt="" width="100%"></p></section><section id="step-5-release-locks"><h2>Step 5: Release Locks</h2>
+<p><img src="/assets/img/concurrent-lists/optimistic-insert-9.png" alt="" width="100%"></p></section><section id="performance-single-threaded"><h2>Performance, Single Threaded</h2>
+<p>Runtimes: 1M Operations</p>
+<table>
+  <thead>
+    <tr>
+      <th>num elements</th>
+      <th>coarse-grained</th>
+      <th>fine-grained</th>
+      <th>optimistic</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>10</td>
+      <td>0.11 s</td>
+      <td>0.14 s</td>
+      <td>0.13 s</td>
+    </tr>
+    <tr>
+      <td>100</td>
+      <td>0.14 s</td>
+      <td>0.46 s</td>
+      <td>0.19 s</td>
+    </tr>
+    <tr>
+      <td>1000</td>
+      <td>1.1 s</td>
+      <td>3.9 s</td>
+      <td>2.2 s</td>
+    </tr>
+    <tr>
+      <td>10000</td>
+      <td>28 s</td>
+      <td>39 s</td>
+      <td>59 s</td>
+    </tr>
+  </tbody>
+</table>
+<ul>
+  <li>fine-grained slow-down: more locks</li>
+  <li>optimistic slow-down: validataion</li>
+</ul></section><section id="performance-8-threads"><h2>Performance, 8 Threads</h2>
+<p>Runtimes: 1M Operations</p>
+<table>
+  <thead>
+    <tr>
+      <th>num elements</th>
+      <th>coarse-grained</th>
+      <th>fine-grained</th>
+      <th>optimistic</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>10</td>
+      <td>0.21 s</td>
+      <td>0.36 s</td>
+      <td>0.33 s</td>
+    </tr>
+    <tr>
+      <td>100</td>
+      <td>0.27 s</td>
+      <td>1.80 s</td>
+      <td>0.38 s</td>
+    </tr>
+    <tr>
+      <td>1000</td>
+      <td>1.8 s</td>
+      <td>4.7 s</td>
+      <td>0.86 s</td>
+    </tr>
+    <tr>
+      <td>10,000</td>
+      <td>32 s</td>
+      <td>17 s</td>
+      <td>9.2 s</td>
+    </tr>
+  </tbody>
+</table>
+<p>Note: fewer elements $\implies$ greater contention</p></section><section id="optimism-and-validation"><h2>Optimism and Validation</h2>
+<p>Under best circumstances:</p>
+<ul>
+  <li>validation succeeds
+    <ul>
+      <li>likely if little contention</li>
+    </ul>
+  </li>
+  <li>still traverse the list twice</li>
+</ul>
+<p>Under contention:</p>
+<ul>
+  <li>all operations are <em>blocking</em>
+    <ul>
+      <li>not wait-free</li>
+    </ul>
+  </li>
+  <li>contention can lead to validation failures
+    <ul>
+      <li>not starvation-free</li>
+    </ul>
+  </li>
+</ul></section><section id="observation"><h2>Observation</h2>
+<p>Operations are complicated because they consist of several steps</p>
+<ul>
+  <li>hard to reason about <em>when</em> the operation appears to take place</li>
+  <li>coarse/fine-grained synchronization stop other threads from seeing operations “in progress”</li>
+  <li>optimistic synchronization may encounter “in progress” operations before locking
+    <ul>
+      <li>validation required</li>
+    </ul>
+  </li>
+</ul></section><section id="lazy-synchronization"><h2>Lazy Synchronization</h2>
+<ul>
+  <li>
+<strong>Mark</strong> a node before physical removal
+    <ul>
+      <li>marked nodes are <em>logically removed</em>, still physically present</li>
+    </ul>
+  </li>
+  <li>Only marked nodes are ever removed</li>
+</ul>
+<p>Validation simplified:</p>
+<ul>
+  <li>Just check if nodes are marked</li>
+  <li>No need to traverse whole list!</li>
+</ul></section><section id="lazy-operation"><h2>Lazy Operation</h2>
+<ol>
+  <li>Traverse without locking</li>
+  <li>Lock relevant nodes</li>
+  <li>Validate list
+    <ul>
+      <li>check nodes are
+        <ul>
+          <li>not marked</li>
+          <li>correct relationship</li>
+        </ul>
+      </li>
+      <li>if validation fails, go back to Step 1</li>
+    </ul>
+  </li>
+  <li>Perform operation
+    <ul>
+      <li>for removal, mark node first</li>
+    </ul>
+  </li>
+  <li>Unlock nodes</li>
+</ol></section><section id="lazy-removal-illustrated"><h2>Lazy Removal Illustrated</h2>
+<p><img src="/assets/img/concurrent-lists/lazy-list.png" alt="" width="100%"></p></section><section id="step-1-traverse-list"><h2>Step 1: Traverse List</h2>
+<p><img src="/assets/img/concurrent-lists/lazy-list-remove-1.png" alt="" width="100%"></p></section><section id="step-1-traverse-list-1"><h2>Step 1: Traverse List</h2>
+<p><img src="/assets/img/concurrent-lists/lazy-list-remove-2.png" alt="" width="100%"></p></section><section id="step-2-lock-nodes"><h2>Step 2: Lock Nodes</h2>
+<p><img src="/assets/img/concurrent-lists/lazy-list-remove-3.png" alt="" width="100%"></p></section><section id="step-3-validate-prednext--curr"><h2>Step 3: Validate <code>pred.next == curr</code>?</h2>
+<p><img src="/assets/img/concurrent-lists/lazy-list-remove-4.png" alt="" width="100%"></p></section><section id="step-3-validate-not-marked"><h2>Step 3: Validate not marked?</h2>
+<p><img src="/assets/img/concurrent-lists/lazy-list-remove-4.png" alt="" width="100%"></p></section><section id="step-4a-perform-logical-removal"><h2>Step 4a: Perform Logical Removal</h2>
+<p><img src="/assets/img/concurrent-lists/lazy-list-remove-5.png" alt="" width="100%"></p></section><section id="step-4b-perform-physical-removal"><h2>Step 4b: Perform Physical Removal</h2>
+<p><img src="/assets/img/concurrent-lists/lazy-list-remove-6.png" alt="" width="100%"></p></section><section id="step-5-release-locks-and-done"><h2>Step 5: Release Locks and Done!</h2>
+<p><img src="/assets/img/concurrent-lists/lazy-list-remove-7.png" alt="" width="100%"></p></section><section id="a-node-in-code"><h2>A <code>Node</code> in Code</h2>
+<pre><code class="language-java">    private class Node {
+	T item;
+	int key;
+	Node next;
+	Lock lock;
+	volatile boolean marked;
+
+	public Node (int key) {
+	    this.item = null;
+	    this.key = key;
+	    this.next = null;
+	    this.lock = new ReentrantLock();
+	    this.marked = false;
+	}
+	
+	public Node (T item) {
+	    this.item = item;
+	    this.key = item.hashCode();
+	    this.next = null;
+	    this.lock = new ReentrantLock();
+	}
+
+	public void lock () {
+	    lock.lock();
+	}
+
+	public void unlock () {
+	    lock.unlock();
+	}
+	
+    }
+</code></pre></section><section id="validation-simplified"><h2>Validation, Simplified</h2>
+<pre><code class="language-java">    private boolean validate (Node pred, Node curr) {
+	return !pred.marked &amp;&amp; !curr.marked &amp;&amp; pred.next == curr;
+    }
+</code></pre></section><section id="improvements"><h2>Improvements?</h2>
+<ol>
+  <li>Limited locking as in optimistic synchronization</li>
+  <li>Simpler validation
+    <ul>
+      <li>faster—no list traversal</li>
+      <li>more likely to succeed?</li>
+    </ul>
+  </li>
+  <li>Logical removal easier to reason about
+    <ul>
+      <li>linearization point at logical removal line</li>
+    </ul>
+  </li>
+  <li>
+<code>contains()</code> no longer acquires locks
+    <ul>
+      <li>often most frequent operation</li>
+      <li>now it is wait-free!</li>
+    </ul>
+  </li>
+</ol></section><section id="wait-free-containment"><h2>Wait-free Containment</h2>
+<pre><code class="language-java">    public boolean contains (T item) {
+	int key = item.hashCode();
+	Node curr = head;
+	while (curr.key &lt; key) {
+	    curr = curr.next;
+	}
+
+	return curr.key == key &amp;&amp; !curr.marked;
+    }
+</code></pre></section><section id="testing-performance"><h2>Testing Performance!</h2></section><section id="single-thread-performance"><h2>Single Thread Performance</h2>
+<p>Runtimes: 1M Operations</p>
+<table>
+  <thead>
+    <tr>
+      <th>n elts</th>
+      <th>coarse</th>
+      <th>fine</th>
+      <th>optimistic</th>
+      <th>lazy</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>10</td>
+      <td>0.11 s</td>
+      <td>0.14 s</td>
+      <td>0.13 s</td>
+      <td>0.11 s</td>
+    </tr>
+    <tr>
+      <td>100</td>
+      <td>0.14 s</td>
+      <td>0.46 s</td>
+      <td>0.19 s</td>
+      <td>0.13 s</td>
+    </tr>
+    <tr>
+      <td>1000</td>
+      <td>1.1 s</td>
+      <td>3.9 s</td>
+      <td>2.2 s</td>
+      <td>1.1 s</td>
+    </tr>
+    <tr>
+      <td>10000</td>
+      <td>28 s</td>
+      <td>39 s</td>
+      <td>59 s</td>
+      <td>29 s</td>
+    </tr>
+  </tbody>
+</table></section><section id="performance-8-threads-1"><h2>Performance, 8 Threads</h2>
+<p>Runtimes: 1M Operations</p>
+<table>
+  <thead>
+    <tr>
+      <th>n elts</th>
+      <th>coarse</th>
+      <th>fine</th>
+      <th>optimistic</th>
+      <th>lazy</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>10</td>
+      <td>0.21 s</td>
+      <td>0.36 s</td>
+      <td>0.33 s</td>
+      <td>0.33 s</td>
+    </tr>
+    <tr>
+      <td>100</td>
+      <td>0.27 s</td>
+      <td>1.80 s</td>
+      <td>0.38 s</td>
+      <td>0.12 s</td>
+    </tr>
+    <tr>
+      <td>1000</td>
+      <td>1.8 s</td>
+      <td>4.7 s</td>
+      <td>0.86 s</td>
+      <td>0.19 s</td>
+    </tr>
+    <tr>
+      <td>10,000</td>
+      <td>32 s</td>
+      <td>17 s</td>
+      <td>9.2 s</td>
+      <td>4.7 s</td>
+    </tr>
+  </tbody>
+</table>
+<p>Note: fewer elements $\implies$ greater contention</p></section><section id="lazy-appraisal"><h2>Lazy Appraisal</h2>
+<p>Advantages:</p>
+<ul>
+  <li>Less locking than fine-grained</li>
+  <li>More opportunities for parallelism than coarse-grained</li>
+  <li>Simpler validataion than optimistic</li>
+  <li>Wait-free <code>contains</code> method</li>
+</ul>
+<p>Disadvantages:</p>
+<ul>
+  <li>Validation could still fail (though maybe less likely)</li>
+  <li>Not starvation-free
+    <ul>
+      <li>even if locks are starvation-free</li>
+    </ul>
+  </li>
+  <li>
+<code>add</code> and <code>remove</code> still blocking</li>
+</ul></section><section id="whats-next"><h2>What’s Next?</h2>
+<p>Can we make <em>all</em> of the operations wait-free?</p>
+<ul>
+  <li>A concurrent list without locks?</li>
+</ul></section><section id="why-does-lazylist-need-locks"><h2>Why Does LazyList Need Locks?</h2>
+<ol>
+  <li>Traverse without locking</li>
+  <li>Lock relevant nodes</li>
+  <li>Validate list</li>
+  <li>Perform operation</li>
+  <li>Unlock nodes</li>
+</ol>
+<div style="margin-bottom: 6em"></div></section><section id="why-does-lazylist-need-locks-1"><h2>Why Does LazyList Need Locks?</h2>
+<p>The issue:</p>
+<ul>
+  <li>Validation and modification are separate steps</li>
+  <li>Must enforce that nodes are unchanged between validation and mod</li>
+</ul>
+<p>Cause for hope:</p>
+<ul>
+  <li>Validataion is simple, local:
+    <pre><code class="language-java">      private boolean validate (Node pred, Node curr) {
+  	return !pred.marked &amp;&amp; !curr.marked &amp;&amp; pred.next == curr;
+      }
+</code></pre>
+  </li>
+  <li>Modification (e.g., <code>add</code>) is simple, local:
+    <pre><code class="language-java"> Node node = new Node(item);
+ node.next = curr;
+ pred.next = node; // this is the only step that modifies list!
+</code></pre>
+  </li>
+</ul></section><section id="an-idea"><h2>An Idea</h2>
+<p>If we can</p>
+<ol>
+  <li>combine validation and modification steps</li>
+  <li>perform this operation atomically</li>
+</ol>
+<p>then maybe we can avoid locking?</p></section><section id="a-tool"><h2>A Tool</h2>
+<p>Better living with atomics!</p>
+<ul>
+  <li><code>AtomicMarkableReference&lt;T&gt;</code></li>
+  <li>Stores
+    <ol>
+      <li>a reference to a <code>T</code>
+</li>
+      <li>a boolean <code>marked</code>
+</li>
+    </ol>
+  </li>
+  <li>Atomic operations
+    <ol>
+      <li><code>boolean compareAndSet(T expectedRef, T newRef, boolean expectedMark, boolean newMark)</code></li>
+      <li><code>T get(boolean[] marked)</code></li>
+      <li><code>T getReference()</code></li>
+      <li><code>boolean isMarked()</code></li>
+    </ol>
+  </li>
+</ul></section><section id="an-algorithm"><h2>An Algorithm?</h2>
+<p>Use <code>AtomicMarkableReference&lt;Node&gt;</code> for fields</p>
+<ul>
+  <li>
+<code>mark</code> indicates logical removal</li>
+</ul>
+<p>For <code>add</code>/<code>remove</code>:</p>
+<ol>
+  <li>Find location</li>
+  <li>Validate and modify
+    <ul>
+      <li>(first logically remove if <code>remove</code>)</li>
+      <li>use <code>compareAndSet</code> to atomically
+        <ol>
+          <li>check that predecessor node has not been removed</li>
+          <li>update <code>next</code> field of predecessor</li>
+        </ol>
+      </li>
+    </ul>
+  </li>
+</ol>
+<p>For <code>contains</code>:</p>
+<ul>
+  <li>Just traverse the list!</li>
+</ul></section><section id="next-week"><h2>Next Week</h2>
+<p>Other linear data structures!</p>
+<ul>
+  <li>Queues</li>
+  <li>Stacks</li>
+</ul></section>
+</div></div>
+
+
+	  <script src="/assets/reveal.js-master/dist/reveal.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/math/math.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/zoom/zoom.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/notes/notes.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/search/search.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/markdown/markdown.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/highlight/highlight.js"></script>
+	  <script>
+	    
+
+	    // Also available as an ES module, see:
+	    // https://revealjs.com/initialization/
+	    Reveal.initialize({
+		controls: false,
+		progress: true,
+		center: true,
+		hash: true,
+		transition: 'none',
+		math: {
+		    config: 'TeX-AMS_HTML-full',
+		    TeX: {
+			Macros: {
+			    R: '\\mathbb{R}',
+			    set: [ '\\left\\{#1 \\; ; \\; #2\\right\\}', 2 ]
+			}
+		    }
+		},
+
+
+		// Learn about plugins: https://revealjs.com/plugins/
+		plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath ]
+	    });
+
+	  </script>
+
+	</body>
+</html>
+	  
+
+<!-- <\!-- load the reveal.js css & js (assuming you've put it in assets/)-\-> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/reveal.scss" -->
+<!-- /> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/theme/source/white.scss" -->
+<!-- /> -->
+<!-- <script -->
+<!--   src="/assets/reveal.js-master/js/reveal.js" -->
+<!--   type="text/javascript" -->
+<!-- ></script> -->
+
+<!-- <\!-- configure the presentation, (you can tweak options to suit) -\-> -->
+<!-- <script> -->
+<!--   Reveal.initialize({ -->
+<!--     // Display presentation control arrows -->
+<!--     controls: false, -->
+
+<!--     // Help the user learn the controls by providing hints, for example by -->
+<!--     // bouncing the down arrow when they first encounter a vertical slide -->
+<!--     controlsTutorial: false, -->
+
+<!--     // Determines where controls appear, "edges" or "bottom-right" -->
+<!--     controlsLayout: "bottom-right", -->
+
+<!--     // Visibility rule for backwards navigation arrows; "faded", "hidden" -->
+<!--     // or "visible" -->
+<!--     controlsBackArrows: "faded", -->
+
+<!--     // Display a presentation progress bar -->
+<!--     progress: true, -->
+
+<!--     // Display the page number of the current slide -->
+<!--     slideNumber: false, -->
+
+<!--     // Push each slide change to the browser history -->
+<!--     history: false, -->
+
+<!--     // Enable keyboard shortcuts for navigation -->
+<!--     keyboard: true, -->
+
+<!--     // Enable the slide overview mode -->
+<!--     overview: true -->
+<!--   }); -->
+<!-- </script> -->

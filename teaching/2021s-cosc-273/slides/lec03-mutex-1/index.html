@@ -1,0 +1,712 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta charset="utf-8">
+
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reset.css">
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reveal.css">
+		<link rel="stylesheet" href="/assets/css/condensation.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="/assets/reveal.js-master/plugin/highlight/monokai.css" id="highlight-theme">
+		<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700" rel="stylesheet">
+
+	</head>
+
+	<body>
+
+
+	  <!-- this is where the reveailfy filter gets applied -->
+	  <div class="reveal"><div class="slides">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ## ...But Could It Be Better?  -->
+
+<!-- ## A Stronger Liveness Condition -->
+
+<!-- **Starvation-freedom** If a dog wants to go out, eventually it will be able to go out. -->
+
+<!-- Does Third Protocol give starvation freedom? -->
+
+<!-- <div style="margin-bottom: 8em"></div> -->
+
+<!-- ## Sorry, Ruple -->
+
+<!-- Third protocol is not starvation-free! -->
+
+<!-- - Finn could go out, come in, go out, come in... -->
+<!-- - Scott only looks at Will's flag when it is up -->
+<!-- - Ruple never goes out -->
+
+<!-- Can we achieve starvation-freedom? -->
+
+<!-- ## Mutual Exclusion Problem -->
+
+<!-- - safety property (bad things don't happen) -->
+
+<!--     + mutual exclusion -->
+
+<!-- - liveness properties (good things eventually happen) -->
+
+<!--     + deadlock-freedom -->
+
+<!-- 	+ starvation-freedom -->
+
+<!-- ## Bringing it Back to Computers -->
+
+<!-- Multiple threads/processors attempt to: -->
+
+<!-- - call a method, execute block of code, read/write to a field, ... -->
+
+<!-- Want to ensure: -->
+
+<!-- - only one thread/processor accesses resource at a time -->
+<!-- - eventually one (or all) threads/processors should get access -->
+
+<!-- ## In Java -->
+
+<!-- Coming back to our `Counter`: -->
+
+<!-- ```java -->
+<!-- public class Counter { -->
+<!--     long count = 0; -->
+
+<!--     public long getCount () { return count; } -->
+
+<!-- 	public void increment () {  -->
+<!-- 	    count++;      // this line of code is *critical* -->
+<!-- 	} -->
+
+<!-- 	public void reset () { count = 0; } -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- ## Critical Sections -->
+
+<!-- A **critical section** of code is a block of code that should be executed sequentially by one thread at a time: -->
+
+<!-- - no concurrent executions -->
+<!-- - no interleaving of statements with other threads -->
+
+<!-- For example -->
+
+<!-- ```java -->
+<!-- public void increment () { -->
+<!--     // start critical section -->
+<!--     count++; -->
+<!--     // end critical section -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- ## Protecting Critical Sections with Locks -->
+
+<!-- The [`Lock` interface](https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/locks/Lock.html) has two (for now) methods: -->
+
+<!-- - `void lock()`: when method returns, thread **acquires lock** -->
+<!--     + thread waits until lock is acquired -->
+
+<!-- - `void unlock()`: when method returns, thread **releases lock** -->
+<!--     + lock is available for another thread to acquire it -->
+
+<!-- ## Locks and Mutual Exclusion -->
+
+<!-- A `Lock` should satisfy safety and liveness: -->
+
+<!-- - safety -->
+<!--     + *mutual exclusion* at most one thread holds any lock at any given time -->
+
+<!-- - liveness -->
+<!--     + *deadlock-freedom* if multiple threads try to concurrently acquire a lock, one will eventually acquire it -->
+<!-- 	+ *starvation-freedom* if a thread tries to acquire lock, it will eventually succeed -->
+
+<!-- ## Using Locks 1 -->
+
+<!-- Object instance has a `Lock` member variable: -->
+
+<!-- ```java -->
+<!-- public class SomeClass { -->
+<!--     // an instance of an object implementing Lock -->
+<!--     private Lock lock = new SomeLockImplementation(); -->
+
+<!-- 	... -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- ## Using Locks 2 -->
+
+<!-- Surround critical section with a try/catch/finally block -->
+
+<!-- ```java -->
+<!-- lock.lock();            // lock acquired after this -->
+<!-- try { -->
+<!--     // critical section -->
+<!-- } finally { -->
+<!--     lock.unlock();      // lock released after this -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- The `finally` block ensures that `lock.unlock()` is called even if there is an exception or return statement in the critical section! -->
+
+<!-- ## A Locked Counter -->
+
+<!-- ```java -->
+<!-- public class Counter { -->
+<!--     long count = 0; -->
+<!--     Lock lock = new SomeLockImplementation(); -->
+
+<!--     public long getCount () { return count; } -->
+
+<!--     public void increment () {  -->
+<!--         lock.lock(); -->
+<!--         try { -->
+
+<!--             count++; -->
+
+<!--         } finally { -->
+
+<!--             lock.unlock(); -->
+
+<!--         } -->
+<!--     } -->
+
+<!--     // should probably lock this too... -->
+<!--     public void reset () { count = 0; } -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- ## Things to Consider -->
+
+<!-- - Might want more than one lock -->
+<!--     + e.g., multiple distinct critical sections that *can* be executed concurrently -->
+<!-- 	+ object with two counters, could have one lock for each counter -->
+<!-- 	+ different counters incremented at same time is fine -->
+
+<!-- - Interdependencies between locked objects can cause trouble -->
+<!--     + individual locks well-behaved -->
+<!-- 	+ example: *dining philosophers problem* (we'll talk about later) -->
+
+<!-- ## Coming Up -->
+
+<!-- How do we actually *implement* locks?!?! -->
+
+<!-- - Many different solutions -->
+<!-- - Offer different tradeoffs -->
+<!--     + performance with little contention -->
+<!-- 	+ performance with a lot of contention -->
+<!-- - Which lock implementation is best depends on application -->
+
+<section id="lecture-03-mutual-exclusion-i"><h1>Lecture 03: Mutual Exclusion I</h1></section><section id="outline"><h2>Outline</h2>
+<ol>
+  <li>
+<code>Counter</code> Example</li>
+  <li>A Parable</li>
+  <li>Mutual Exclusion and Properties</li>
+</ol></section><section id="counter-example"><h2>
+<code>Counter</code> Example</h2>
+<p>Recall the <code>Counter</code> object:</p>
+<pre><code class="language-java">public class Counter {
+    long count = 0;
+    
+    public long getCount () { return count; }
+    public void increment () { count++; }
+    public void reset () { count = 0; }
+}
+</code></pre></section><section id="intended-behavior"><h2>Intended Behavior</h2>
+<p>If <code>increment()</code> is called <code>n</code> times, <code>count</code> should be <code>n</code></p>
+<ul>
+  <li>even if incremented by different threads!</li>
+</ul></section><section id="problem-with-counter"><h2>Problem with Counter</h2>
+<p>When multiple threads increment in parallel, only one incrementation performed!</p></section><section id="correct-behavior"><h2>Correct Behavior</h2>
+<p>If multiple threads try to increment at a time:</p>
+<ul>
+  <li>exactly one thread gets to increment at a time</li>
+  <li>other threads wait until increment completed</li>
+</ul></section><section id="terminology"><h2>Terminology</h2>
+<p>We want our <code>Counter</code> to satisfy <strong>mutual exclusion</strong>.</p></section><section id="a-parable"><h1>A Parable</h1></section><section id="a-shared-resource"><h2>A Shared Resource</h2>
+<ul>
+  <li>Professor (Scott) Alfeld and I are neighbors</li>
+  <li>For purposes of today’s lecture, say we share a backyard</li>
+  <li>We have dogs: Finnnegan (my dog), Ruple (Scott’s dog)</li>
+  <li>Sadly, our dogs don’t get along
+    <ul>
+      <li>they used to, but not anymore</li>
+      <li>we don’t know why</li>
+    </ul>
+  </li>
+</ul></section><section id="finn-and-ruple"><h2>Finn and Ruple</h2>
+<p><img src="/assets/img/mutex-1/finn.jpeg" alt="" width="45%"> <img src="/assets/img/mutex-1/ruple.jpeg" alt="" width="45%"></p></section><section id="a-question"><h2>A Question</h2>
+<p>How can Scott and Will ensure that we don’t let Finn and Ruple out in the yard at the same time?</p>
+<ul>
+  <li>don’t like bothering each other with a text/phone call</li>
+  <li>shouldn’t have to “actively” communicate unless both dogs need to go out</li>
+  <li>have a way of passively signaling intent
+    <ul>
+      <li>use flags!</li>
+      <li>each has a flag that can be raised or lowered</li>
+      <li>can see the state of each other’s flags</li>
+    </ul>
+  </li>
+</ul></section><section id="a-picture"><h2>A Picture</h2>
+<div style="margin-bottom: 12em"></div></section><section id="our-goals"><h2>Our Goals</h2>
+<p><strong>Safety Goal:</strong></p>
+<ul>
+  <li>Both dogs are not simultaneously out in the yard
+    <ul>
+      <li>
+<em>mutual exclusion</em> property</li>
+    </ul>
+  </li>
+</ul>
+<p><strong>Liveness Goal:</strong></p>
+<ul>
+  <li>If both dogs need to go outside, eventually one does
+    <ul>
+      <li>
+<em>deadlock-freedom</em> property</li>
+    </ul>
+  </li>
+</ul>
+<p>Note: getting mutal exclusion and deadlock-freedom separately is easy!</p></section><section id="a-first-protocol"><h2>A First Protocol</h2>
+<p>Raised flag means my dog is in the yard!</p>
+<ol>
+  <li>Look to see if other flag is raised.
+    <ul>
+      <li>if so, wait until not raised</li>
+    </ul>
+  </li>
+  <li>
+    <p>If not, raise flag then let dog out</p>
+  </li>
+  <li>When dog comes in, lower flag</li>
+</ol></section><section id="does-first-protocol-work"><h2>Does First Protocol Work?</h2>
+<div style="margin-bottom: 12em"></div></section><section id="a-bad-execution"><h2>A Bad Execution:</h2>
+<ol>
+  <li>
+    <p>We both look at (approximately) the same time and see others’ flag is down.</p>
+  </li>
+  <li>
+    <p>We both raise flags as (approximately) the same time.</p>
+  </li>
+  <li>
+    <p>We both let dogs out at the same time.</p>
+  </li>
+</ol></section><section id="a-second-protocol"><h2>A Second Protocol</h2>
+<p>Raised flag means I want to let my dog out!</p>
+<ol>
+  <li>
+    <p>Raise flag.</p>
+  </li>
+  <li>Check if other flag is up
+    <ul>
+      <li>if so, wait until not raised</li>
+    </ul>
+  </li>
+  <li>
+    <p>If other flag is down, let dog out!</p>
+  </li>
+  <li>When dog returns, lower flag.</li>
+</ol></section><section id="does-second-protocol-work"><h2>Does Second Protocol Work?</h2>
+<div style="margin-bottom: 12em"></div></section><section id="another-bad-execution"><h2>Another Bad Execution</h2>
+<ol>
+  <li>
+    <p>Both raise flag at (approximately) same time.</p>
+  </li>
+  <li>
+    <p>Both see other’s flag raised.</p>
+  </li>
+  <li>
+    <p>Both wait… neither dog ever goes outside!</p>
+  </li>
+</ol></section><section id="more-generally"><h2>More Generally</h2>
+<p>Both protocols are <strong>symmetric</strong></p>
+<ul>
+  <li>Scott and Will behave the same way according to what we see</li>
+</ul>
+<p>Can a symmetric protocol possibly work?</p></section><section id="for-any-symmetric-protocol"><h2>For Any Symmetric Protocol</h2>
+<p>Suppose we act simultaneously:</p>
+<ol>
+  <li>
+    <p>start in same state</p>
+  </li>
+  <li>
+    <p>perform same action</p>
+  </li>
+  <li>
+    <p>see that other performed same action</p>
+  </li>
+  <li>
+    <p>respond in same manner</p>
+  </li>
+  <li>
+    <p>…</p>
+  </li>
+</ol>
+<p>This continues indefinitely</p>
+<p>So either</p>
+<ul>
+  <li>we both let dogs out at same time, or</li>
+  <li>neither dog goes out ever</li>
+</ul></section><section id="apparently"><h2>Apparently</h2>
+<p>We need an asymmetric protocol</p>
+<ul>
+  <li>Under contention, give Finn priority
+    <ul>
+      <li>Scott agrees with this</li>
+    </ul>
+  </li>
+</ul>
+<p><strong>Note.</strong> <em>Symmetry breaking</em> is a common theme in parallel/distributed computing.</p></section><section id="third-protocol"><h2>Third Protocol</h2>
+<p>Separate protocols for Will and Scott</p></section><section id="wills-protocol"><h2>Will’s Protocol</h2>
+<p>When Finn needs to go out:</p>
+<ol>
+  <li>
+    <p>Raise flag</p>
+  </li>
+  <li>
+    <p>When Scott’s flag is lowered, let Finn out</p>
+  </li>
+  <li>
+    <p>When Finn comes in, lower flag</p>
+  </li>
+</ol></section><section id="scotts-protocol"><h2>Scott’s Protocol</h2>
+<p>When Ru needs to go out:</p>
+<ol>
+  <li>
+    <p>Raise flag</p>
+  </li>
+  <li>
+    <p>While Will’s flag is raised:</p>
+
+    <ol>
+      <li>
+        <p>lower flag</p>
+      </li>
+      <li>
+        <p>wait until Will’s flag is lowered</p>
+      </li>
+      <li>
+        <p>raise flag</p>
+      </li>
+    </ol>
+  </li>
+  <li>
+    <p>When Scott’s flag is up and Will’s is down, release Ru</p>
+  </li>
+  <li>
+    <p>When Ru returns, lower flag</p>
+  </li>
+</ol></section><section id="does-third-protocol-work"><h2>Does Third Protocol Work?</h2>
+<ul>
+  <li>Do we get mutual exclusion?</li>
+  <li>Do we get get deadlock-freedom?</li>
+</ul></section><section id="crucial-insight"><h2>Crucial Insight</h2>
+<p>If both Scott and Will:</p>
+<ol>
+  <li>raise flag, then</li>
+  <li>look at other’s flag</li>
+</ol>
+<p>then at least one of us will see other flag raised</p>
+<ul>
+  <li>always check other’s flag <em>before</em> letting dog out</li>
+  <li>both dogs not out at same time</li>
+</ul></section><section id="more-formally"><h2>More Formally</h2>
+<p>If we want to <em>prove</em> mutual exclusion property</p>
+<ul>
+  <li>argue by contradiction</li>
+  <li>suppose that at some time, both dogs were out</li>
+  <li>what could have led us there?</li>
+</ul></section><section id="property-of-both-protocols"><h2>Property of Both Protocols</h2>
+<p>Before letting a dog out, both Scott and Will do:</p>
+<ol>
+  <li>raise flag</li>
+  <li>see other’s flag down</li>
+  <li>let dog out</li>
+</ol></section><section id="impossible-timelines"><h2>(Im)possible Timelines</h2>
+<div style="margin-bottom: 12em"></div></section><section id="conclusion"><h2>Conclusion</h2>
+<p>If both Finn and Ru are in yard at same time, Will or Scott must not have followed the protocol!</p>
+<ul>
+  <li>This establishes mutual exclusion property.</li>
+</ul></section><section id="what-about-deadlock-freedom"><h2>What About Deadlock-Freedom?</h2>
+<p>If both Finn and Ruple want to go out</p>
+<ol>
+  <li>Both Will and Scott raise flags</li>
+  <li>Eventually, Scott sees Will’s flag
+    <ul>
+      <li>lowers his flag (sorry Ru)</li>
+    </ul>
+  </li>
+  <li>Eventually, Will sees Scott’s flag down</li>
+  <li>Finn goes out!</li>
+</ol></section><section id="nice"><h2>Nice!</h2>
+<p>This protocol gives mutual exclusion and deadlock-freedom…</p></section>
+</div></div>
+
+
+	  <script src="/assets/reveal.js-master/dist/reveal.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/math/math.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/zoom/zoom.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/notes/notes.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/search/search.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/markdown/markdown.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/highlight/highlight.js"></script>
+	  <script>
+	    
+
+	    // Also available as an ES module, see:
+	    // https://revealjs.com/initialization/
+	    Reveal.initialize({
+		controls: false,
+		progress: true,
+		center: true,
+		hash: true,
+		transition: 'none',
+		math: {
+		    config: 'TeX-AMS_HTML-full',
+		    TeX: {
+			Macros: {
+			    R: '\\mathbb{R}',
+			    set: [ '\\left\\{#1 \\; ; \\; #2\\right\\}', 2 ]
+			}
+		    }
+		},
+
+
+		// Learn about plugins: https://revealjs.com/plugins/
+		plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath ]
+	    });
+
+	  </script>
+
+	</body>
+</html>
+	  
+
+<!-- <\!-- load the reveal.js css & js (assuming you've put it in assets/)-\-> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/reveal.scss" -->
+<!-- /> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/theme/source/white.scss" -->
+<!-- /> -->
+<!-- <script -->
+<!--   src="/assets/reveal.js-master/js/reveal.js" -->
+<!--   type="text/javascript" -->
+<!-- ></script> -->
+
+<!-- <\!-- configure the presentation, (you can tweak options to suit) -\-> -->
+<!-- <script> -->
+<!--   Reveal.initialize({ -->
+<!--     // Display presentation control arrows -->
+<!--     controls: false, -->
+
+<!--     // Help the user learn the controls by providing hints, for example by -->
+<!--     // bouncing the down arrow when they first encounter a vertical slide -->
+<!--     controlsTutorial: false, -->
+
+<!--     // Determines where controls appear, "edges" or "bottom-right" -->
+<!--     controlsLayout: "bottom-right", -->
+
+<!--     // Visibility rule for backwards navigation arrows; "faded", "hidden" -->
+<!--     // or "visible" -->
+<!--     controlsBackArrows: "faded", -->
+
+<!--     // Display a presentation progress bar -->
+<!--     progress: true, -->
+
+<!--     // Display the page number of the current slide -->
+<!--     slideNumber: false, -->
+
+<!--     // Push each slide change to the browser history -->
+<!--     history: false, -->
+
+<!--     // Enable keyboard shortcuts for navigation -->
+<!--     keyboard: true, -->
+
+<!--     // Enable the slide overview mode -->
+<!--     overview: true -->
+<!--   }); -->
+<!-- </script> -->

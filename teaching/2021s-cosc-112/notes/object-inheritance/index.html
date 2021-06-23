@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<title>Will  Rosenbaum | Object Inheritance</title>
+<meta name="description" content="A blog about mathematics, computer science, etc.
+">
+
+<!-- Open Graph -->
+
+
+<!-- Bootstrap & MDB -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" integrity="sha512-MoRNloxbStBcD8z3M/2BmnT+rg4IsMxPkXaGh2zD6LGNNFE80W3onsAhRcMAMrSoyWL9xD7Ert0men7vR8LUZg==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" integrity="sha512-RO38pBRxYH3SoOprtPTD86JFOclM51/XTIdEPh5j8sj4tp8jmQIx26twG52UaLi//hQldfrh7e51WzP9wuP32Q==" crossorigin="anonymous" />
+
+<!-- Fonts & Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"  integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.0/css/academicons.min.css" integrity="sha512-W4yqoT1+8NLkinBLBZko+dFB2ZbHsYLDdr50VElllRcNt2Q4/GSs6u71UHKxB7S6JEMCp5Ve4xjh3eGQl/HRvg==" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+
+
+
+<!-- Code Syntax Highlighting -->
+<link rel="stylesheet" href="https://gitcdn.link/repo/jwarby/jekyll-pygments-themes/master/github.css" />
+
+<!-- Styles -->
+<link rel="shortcut icon" href="/assets/img/favicon.ico">
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<link rel="canonical" href="/teaching/2021s-cosc-112/notes/object-inheritance/">
+
+<!-- JQuery -->
+<!-- jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+
+
+<!-- Theming-->
+
+  <script src="/assets/js/theme.js"></script>
+  <!-- Load DarkMode JS -->
+<script src="/assets/js/dark_mode.js"></script>
+
+
+
+
+
+
+    
+<!-- MathJax -->
+<script type="text/javascript">
+  window.MathJax = {
+    tex: {
+      tags: 'ams'
+    }
+  };
+</script>
+<script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js"></script>
+<script defer src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+
+  </head>
+
+  <body class="fixed-top-nav ">
+
+    <!-- Header -->
+
+    <header>
+
+    <!-- Nav Bar -->
+    <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top">
+    <div class="container">
+      
+      <a class="navbar-brand title font-weight-lighter" href="https://willrosenbaum.com/">
+       Will   Rosenbaum
+      </a>
+      
+      <!-- Navbar Toggle -->
+      <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar top-bar"></span>
+        <span class="icon-bar middle-bar"></span>
+        <span class="icon-bar bottom-bar"></span>
+      </button>
+      <div class="collapse navbar-collapse text-right" id="navbarNav">
+        <ul class="navbar-nav ml-auto flex-nowrap">
+          <!-- About -->
+          <li class="nav-item ">
+            <a class="nav-link" href="/">
+              about
+              
+            </a>
+          </li>
+          <!-- Other pages -->
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/teaching/">
+                teaching
+                
+              </a>
+          </li>
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/research/">
+                research
+                
+              </a>
+          </li>
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/publications/">
+                publications
+                
+              </a>
+          </li>
+          
+          
+	  
+          <!-- Blog -->
+          <li class="nav-item ">
+            <a class="nav-link" href="/blog/">
+              blog
+              
+            </a>
+          </li>
+          
+
+          
+            <div class = "toggle-container">
+              <a id = "light-toggle">
+                  <i class="fas fa-moon"></i>
+                  <i class="fas fa-sun"></i>
+              </a>
+            </div>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+</header>
+
+
+    <!-- Content -->
+
+    <div class="container mt-5">
+      <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Object Inheritance</h1>
+    <p class="post-description">defining relationships between classes</p>
+  </header>
+
+  <article>
+    <p>It often happens that we would like to define <code class="language-plaintext highlighter-rouge">class</code>es that are closely related to each other: they may store similar data (i.e., have fields of the same names and types), or offer similar functionalities (i.e., have similar methods). Take for example the following two classes:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Person</span> <span class="o">{</span>
+      <span class="kd">private</span> <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
+      <span class="kd">private</span> <span class="kt">int</span> <span class="n">age</span><span class="o">;</span>
+      
+      <span class="kd">public</span> <span class="nf">Person</span> <span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">,</span> <span class="kt">int</span> <span class="n">age</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">age</span> <span class="o">=</span> <span class="n">age</span><span class="o">;</span>
+      <span class="o">}</span>
+    
+      <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getName</span> <span class="o">()</span> <span class="o">{</span><span class="k">return</span> <span class="n">name</span><span class="o">;}</span>
+      <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getAge</span> <span class="o">()</span> <span class="o">{</span><span class="k">return</span> <span class="n">age</span><span class="o">;}</span>
+    
+      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">sayGreeting</span> <span class="o">()</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">name</span> <span class="o">+</span> <span class="s">": Hello there!"</span><span class="o">);</span>
+      <span class="o">}</span>
+    
+      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">greet</span> <span class="o">(</span><span class="nc">Person</span> <span class="n">p</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">name</span> <span class="o">+</span> <span class="s">": Hello, "</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="na">getName</span><span class="o">()</span> <span class="o">+</span> <span class="s">"!"</span><span class="o">);</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Student</span> <span class="o">{</span>
+      <span class="kd">private</span> <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
+      <span class="kd">private</span> <span class="nc">String</span> <span class="n">institution</span><span class="o">;</span>
+      <span class="kd">private</span> <span class="kt">int</span> <span class="n">age</span><span class="o">;</span>
+      
+      <span class="kd">public</span> <span class="nf">Student</span> <span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">,</span> <span class="nc">String</span> <span class="n">major</span><span class="o">,</span> <span class="kt">int</span> <span class="n">age</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">major</span> <span class="o">=</span> <span class="n">institution</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">age</span> <span class="o">=</span> <span class="n">age</span><span class="o">;</span>
+      <span class="o">}</span>
+    
+      <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getName</span> <span class="o">()</span> <span class="o">{</span><span class="k">return</span> <span class="n">name</span><span class="o">;}</span>
+      <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getInstitution</span> <span class="o">()</span> <span class="o">{</span><span class="k">return</span> <span class="n">institution</span><span class="o">;}</span>
+      <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getAge</span> <span class="o">()</span> <span class="o">{</span><span class="k">return</span> <span class="n">age</span><span class="o">;}</span>
+    
+      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">sayGreeting</span> <span class="o">()</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">name</span> <span class="o">+</span> <span class="s">": Can't talk now... I'm on my way to "</span> <span class="o">+</span> <span class="n">institution</span><span class="o">);</span>
+      <span class="o">}</span>
+    
+      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">greet</span> <span class="o">(</span><span class="nc">Student</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">name</span> <span class="o">+</span> <span class="s">": Hey, "</span> <span class="o">+</span> <span class="n">s</span><span class="o">.</span><span class="na">getName</span><span class="o">()</span> <span class="o">+</span> <span class="s">"! Can we talk after the exam?"</span><span class="o">);</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>Notice that these <code class="language-plaintext highlighter-rouge">class</code>es have many features in common:</p>
+
+<ul>
+  <li>fields for <code class="language-plaintext highlighter-rouge">name</code> and <code class="language-plaintext highlighter-rouge">age</code></li>
+  <li>getter methods for <code class="language-plaintext highlighter-rouge">name</code> and <code class="language-plaintext highlighter-rouge">age</code></li>
+  <li>methods called <code class="language-plaintext highlighter-rouge">sayGreeting()</code> and <code class="language-plaintext highlighter-rouge">greet(…)</code></li>
+</ul>
+
+<p>Since there is a lot of similar and duplicated code between the <code class="language-plaintext highlighter-rouge">class</code>es, it would be nice to not have to write this code twice. Thankfully, Java gives us a way of creating new <code class="language-plaintext highlighter-rouge">class</code>es by extending and modifying existing <code class="language-plaintext highlighter-rouge">class</code>se though <em>inheritance</em>.</p>
+
+<h2 id="code-for-this-note">Code for this note</h2>
+
+<p>Note that <code class="language-plaintext highlighter-rouge">PersonTester.java</code> contains the <code class="language-plaintext highlighter-rouge">main</code> method.</p>
+
+<ul>
+  <li><a href="/assets/java/object-inheritance/ACStudent.java"><code class="language-plaintext highlighter-rouge">ACStudent.java</code></a></li>
+  <li><a href="/assets/java/object-inheritance/Being.java"><code class="language-plaintext highlighter-rouge">Being.java</code></a></li>
+  <li><a href="/assets/java/object-inheritance/Employee.java"><code class="language-plaintext highlighter-rouge">Employee.java</code></a></li>
+  <li><a href="/assets/java/object-inheritance/Person.java"><code class="language-plaintext highlighter-rouge">Person.java</code></a></li>
+  <li><a href="/assets/java/object-inheritance/PersonTester.java"><code class="language-plaintext highlighter-rouge">PersonTester.java</code></a></li>
+  <li><a href="/assets/java/object-inheritance/Student.java"><code class="language-plaintext highlighter-rouge">Student.java</code></a></li>
+</ul>
+
+<h2 id="inheritance">Inheritance</h2>
+
+<p>Inheritance allows us to define a new <code class="language-plaintext highlighter-rouge">class</code> as an extension of a previously defined <code class="language-plaintext highlighter-rouge">class</code>. The new <code class="language-plaintext highlighter-rouge">class</code> is known as a <strong>subclass</strong> of the previously defined <code class="language-plaintext highlighter-rouge">class</code>, and the the old is a <strong>superclass</strong> of the new <code class="language-plaintext highlighter-rouge">class</code>. A subclass inherits all of the fields and methods of the superclass by default, although <em>private methods and fields are not accessible to a subclass.</em> In order to define a subclass of an existing class, use the <code class="language-plaintext highlighter-rouge">extends</code> keyword. For example, we can define <code class="language-plaintext highlighter-rouge">Student</code> as a subclass of <code class="language-plaintext highlighter-rouge">Person</code>, by using</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Student</span> <span class="kd">extends</span> <span class="nc">Person</span> <span class="o">{</span>
+      <span class="o">...</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>Once <code class="language-plaintext highlighter-rouge">Person</code> is implemented, we need only implement (1) new functionality that a <code class="language-plaintext highlighter-rouge">Student</code> should offer that is not already present in <code class="language-plaintext highlighter-rouge">Person</code>, and (2) modify any functionality that should be different for a <code class="language-plaintext highlighter-rouge">Student</code> than for a <code class="language-plaintext highlighter-rouge">Person</code>. Note that <code class="language-plaintext highlighter-rouge">Person</code> already has</p>
+
+<ul>
+  <li>fields for <code class="language-plaintext highlighter-rouge">name</code> and <code class="language-plaintext highlighter-rouge">age</code></li>
+  <li>a constructor and the following methods: getters for <code class="language-plaintext highlighter-rouge">name</code> and <code class="language-plaintext highlighter-rouge">age</code>, and methods <code class="language-plaintext highlighter-rouge">sayGreeting()</code> and <code class="language-plaintext highlighter-rouge">greet(Person p)</code>.</li>
+</ul>
+
+<p>Thus in our <code class="language-plaintext highlighter-rouge">Student</code> class, we only need to do the following:</p>
+
+<ol>
+  <li>add a field and getter method for <code class="language-plaintext highlighter-rouge">institution</code>,</li>
+  <li>add a constructor that allows us to set the institution of a student,</li>
+  <li>modify the <code class="language-plaintext highlighter-rouge">sayGreeting()</code> and <code class="language-plaintext highlighter-rouge">greet()</code> methods.</li>
+</ol>
+
+<p>There are a couple things we need to be aware of to complete the implementation. The first is that <code class="language-plaintext highlighter-rouge">private</code> fields/methods from <code class="language-plaintext highlighter-rouge">Person</code> are not accessible to the subclass <code class="language-plaintext highlighter-rouge">Student</code>. Thus we need to use getters/setters (or use the modifier <code class="language-plaintext highlighter-rouge">protected</code> in the <code class="language-plaintext highlighter-rouge">Person</code> class instead of <code class="language-plaintext highlighter-rouge">private</code>—we’ll talk about this later). Since we don’t have access to, for example, <code class="language-plaintext highlighter-rouge">name</code> and <code class="language-plaintext highlighter-rouge">age</code> in <code class="language-plaintext highlighter-rouge">Student</code>’s constructor, we can call the constructor for <code class="language-plaintext highlighter-rouge">Person</code> explicitly using <code class="language-plaintext highlighter-rouge">super(…)</code> where <code class="language-plaintext highlighter-rouge">…</code> refers to whatever arguments we want to pass to the <code class="language-plaintext highlighter-rouge">Person</code> constructor.</p>
+
+<p>Here is a complete implementation of <code class="language-plaintext highlighter-rouge">Student</code> that will give exactly the same functionality as before, but using the fields and methods inherited from the <code class="language-plaintext highlighter-rouge">Person</code> class:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Student</span> <span class="kd">extends</span> <span class="nc">Person</span> <span class="o">{</span>
+      <span class="kd">private</span> <span class="nc">String</span> <span class="n">institution</span><span class="o">;</span>
+      
+      <span class="kd">public</span> <span class="nf">Student</span> <span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">,</span> <span class="nc">String</span> <span class="n">institution</span><span class="o">,</span> <span class="kt">int</span> <span class="n">age</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="n">age</span><span class="o">);</span>    <span class="c1">// call the Person constructor with args name and age</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">institution</span> <span class="o">=</span> <span class="n">institution</span><span class="o">;</span>
+      <span class="o">}</span>
+    
+      <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getInstitution</span> <span class="o">()</span> <span class="o">{</span><span class="k">return</span> <span class="n">institution</span><span class="o">;}</span>
+      
+      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">sayGreeting</span> <span class="o">()</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">getName</span><span class="o">()</span> <span class="o">+</span> <span class="s">": Can't talk now... I'm on my way to "</span> <span class="o">+</span> <span class="n">institution</span><span class="o">);</span>
+      <span class="o">}</span>
+    
+      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">greet</span> <span class="o">(</span><span class="nc">Person</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">getName</span><span class="o">()</span> <span class="o">+</span> <span class="s">": Hey, "</span> <span class="o">+</span> <span class="n">s</span><span class="o">.</span><span class="na">getName</span><span class="o">()</span> <span class="o">+</span> <span class="s">"! Can we talk after the exam?"</span><span class="o">);</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p><strong>Exercise.</strong> Notice that we used the getter methods <code class="language-plaintext highlighter-rouge">getName()</code> in <code class="language-plaintext highlighter-rouge">sayGreeting()</code> and <code class="language-plaintext highlighter-rouge">greet(Person s)</code>, where <code class="language-plaintext highlighter-rouge">Person</code> just uses the field  <code class="language-plaintext highlighter-rouge">name</code>. Modify the code above to use <code class="language-plaintext highlighter-rouge">name</code> instead of <code class="language-plaintext highlighter-rouge">getName()</code> for the greeting methods. What happens when you compile?</p>
+
+<h4 id="the-is-a-rule">The “is a” rule</h4>
+
+<p>Why did we define <code class="language-plaintext highlighter-rouge">Student</code> as a subclass of <code class="language-plaintext highlighter-rouge">Person</code> and not the other way around? Well, because <code class="language-plaintext highlighter-rouge">Student</code> only adds and modifies fields/methods already present in <code class="language-plaintext highlighter-rouge">Person</code>. For a more general principle for deciding when and whether to use inheritance, consider the <strong>is a rule</strong>: Suppose you have to classes <code class="language-plaintext highlighter-rouge">ClassA</code> and <code class="language-plaintext highlighter-rouge">ClassB</code>. Is it aways the case that a <code class="language-plaintext highlighter-rouge">ClassB</code> <em>is a</em> <code class="language-plaintext highlighter-rouge">ClassA</code>? If so then it is probably appropriate to define <code class="language-plaintext highlighter-rouge">ClassB</code> as a subclass of <code class="language-plaintext highlighter-rouge">ClassA</code>. For example every <code class="language-plaintext highlighter-rouge">Student</code> is a <code class="language-plaintext highlighter-rouge">Person</code>, but not every <code class="language-plaintext highlighter-rouge">Person</code> is a <code class="language-plaintext highlighter-rouge">Student</code>. So it would make sense to define a <code class="language-plaintext highlighter-rouge">Student</code> as a subclass of <code class="language-plaintext highlighter-rouge">Person</code>, while the opposite would not make sense.</p>
+
+<p>Inheritance only allows you add and modify functionality to a superclass—you cannot <em>remove</em> a field or method present in a superclass.</p>
+
+<h4 id="keyword-super">Keyword <code class="language-plaintext highlighter-rouge">super</code></h4>
+
+<p>Above we used a method call <code class="language-plaintext highlighter-rouge">super(name, age)</code> to call the constructor of <code class="language-plaintext highlighter-rouge">Student</code>’s superclass, <code class="language-plaintext highlighter-rouge">Person</code>. The keyword <code class="language-plaintext highlighter-rouge">super</code> can be used to access the (overridden) version of method in a superclass. For example, inside <code class="language-plaintext highlighter-rouge">Student</code>, we could use <code class="language-plaintext highlighter-rouge">super.greet(...)</code> to call the <code class="language-plaintext highlighter-rouge">Person</code> version of the <code class="language-plaintext highlighter-rouge">greet</code> method (which was overridden in <code class="language-plaintext highlighter-rouge">Student</code>).</p>
+
+<p><strong>Question.</strong> Suppose we redefine the <code class="language-plaintext highlighter-rouge">greet(Person p)</code> method for <code class="language-plaintext highlighter-rouge">Student</code> as follows:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">greet</span> <span class="o">(</span><span class="nc">Person</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">greet</span><span class="o">(</span><span class="n">s</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Can we talk after the exam?"</span><span class="o">);</span>
+      <span class="o">}</span>
+</code></pre></div></div>
+
+<p>What would be the result of the following code?:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nc">Person</span> <span class="n">alice</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Person</span><span class="o">(</span><span class="s">"Alice"</span><span class="o">,</span> <span class="mi">23</span><span class="o">);</span>
+    <span class="nc">Student</span> <span class="n">bob</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Student</span><span class="o">(</span><span class="s">"Bob"</span><span class="o">,</span> <span class="mi">19</span><span class="o">);</span>
+    <span class="n">bob</span><span class="o">.</span><span class="na">greet</span><span class="o">(</span><span class="n">alice</span><span class="o">);</span>
+</code></pre></div></div>
+
+<h4 id="override"><code class="language-plaintext highlighter-rouge">@Override</code></h4>
+
+<p>In Java, you can use the annotation <code class="language-plaintext highlighter-rouge">@Override</code> before overriding a method from a superclass. For example, in our <code class="language-plaintext highlighter-rouge">Student</code> class we could have written:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Student</span> <span class="kd">extends</span> <span class="nc">Person</span> <span class="o">{</span>
+      <span class="o">...</span>
+      <span class="nd">@Override</span>
+      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">sayGreeting</span> <span class="o">()</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">name</span> <span class="o">+</span> <span class="s">": Can't talk now... I'm on my way to "</span> <span class="o">+</span> <span class="n">institution</span><span class="o">);</span>
+      <span class="o">}</span>
+      
+      <span class="nd">@Override</span>
+      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">greet</span> <span class="o">(</span><span class="nc">Person</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">name</span> <span class="o">+</span> <span class="s">": Hey, "</span> <span class="o">+</span> <span class="n">s</span><span class="o">.</span><span class="na">getName</span><span class="o">()</span> <span class="o">+</span> <span class="s">"! Can we talk after the exam?"</span><span class="o">);</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>The <code class="language-plaintext highlighter-rouge">@Override</code> annotation doesn’t affect how the code runs. Instead, the annotation tells the compiler that we intend for the next method defined to override a method in a superclass. The compiler will then verify that there is indeed a method with the same signature (i.e., name and parameter type list) in a superclass, and the compiler will raise an error if no such method is found. This behavior is incredibly helpful in debugging and maintaining your code.</p>
+
+<p><strong>Exercise.</strong> In the <code class="language-plaintext highlighter-rouge">Person</code> class, rename the method <code class="language-plaintext highlighter-rouge">greet(Person s)</code> to <code class="language-plaintext highlighter-rouge">great(Person s)</code> and compile. What error do you get? Remove the line <code class="language-plaintext highlighter-rouge">@Override</code> and compile again. Do you still get the error? What happens if you define a new method <code class="language-plaintext highlighter-rouge">public void greet (Person p, Person s)</code> for <code class="language-plaintext highlighter-rouge">Student</code> that greets two <code class="language-plaintext highlighter-rouge">Person</code>s and put <code class="language-plaintext highlighter-rouge">@Override</code> before the method definition?</p>
+
+<h4 id="why-should-you-use-inheritance">Why should you use inheritance?</h4>
+
+<ol>
+  <li>Encapsulation. Using inheritance allows you to cut down redundant code. This means when some functionality needs modification, you only need to change it in one place.</li>
+  <li>Writing less code. Often, using inheritance allows to to get more functionality without having to re-write redundant code.</li>
+  <li>More clarity of code. Using <code class="language-plaintext highlighter-rouge">extends</code> makes your intentions more obvious to anyone reading your code (including your future self).</li>
+</ol>
+
+<h2 id="inheritance-diagrams">Inheritance Diagrams</h2>
+
+<p>Now that we’ve seen how inheritance can help us simplify, clarify, and encapsulate our code, we should be eager to apply inheritance whenever it seems appropriate. Above, we had a single (super)class <code class="language-plaintext highlighter-rouge">Person</code> and subclass <code class="language-plaintext highlighter-rouge">Student</code>. But there are many different types of <code class="language-plaintext highlighter-rouge">Person</code> we could envision, and even many types of <code class="language-plaintext highlighter-rouge">Student</code>. We can use inheritance so that a given class may have many subclasses, each of which has subclasses itself. However, <em>each</em> <code class="language-plaintext highlighter-rouge">*class*</code> <em>can extend only a single</em> <code class="language-plaintext highlighter-rouge">*class*</code>.  (Think about why this must be the case!)</p>
+
+<p>For example, we might have a class <code class="language-plaintext highlighter-rouge">ACStudent</code>  that represents a student at Amherst College. For example, consider the definition:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ACStudent</span> <span class="kd">extends</span> <span class="nc">Student</span> <span class="o">{</span>
+      <span class="kd">public</span> <span class="nf">ACStudent</span> <span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">,</span> <span class="kt">int</span> <span class="n">age</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="s">"Amherst College"</span><span class="o">,</span> <span class="n">age</span><span class="o">);</span>
+      <span class="o">}</span>
+    
+      <span class="nd">@Override</span>
+      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">sayGreeting</span> <span class="o">()</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">getName</span><span class="o">()</span> <span class="o">+</span> <span class="s">": Can't talk now... I'm on my way to Val."</span><span class="o">);</span>
+      <span class="o">}</span>
+      
+      <span class="nd">@Override</span>
+      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">greet</span> <span class="o">(</span><span class="nc">Person</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">.</span><span class="na">greet</span><span class="o">(</span><span class="n">s</span><span class="o">);</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Go Mammoths!"</span><span class="o">);</span>
+      <span class="o">}</span>
+      
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>We also might want to make another subclass of <code class="language-plaintext highlighter-rouge">Person</code> for employees:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Employee</span> <span class="kd">extends</span> <span class="nc">Person</span> <span class="o">{</span>
+      <span class="kd">private</span> <span class="nc">String</span> <span class="n">title</span><span class="o">;</span>
+    
+      <span class="kd">public</span> <span class="nf">Employee</span> <span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">,</span> <span class="nc">String</span> <span class="n">title</span><span class="o">,</span> <span class="kt">int</span> <span class="n">age</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kd">super</span><span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="n">age</span><span class="o">);</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">title</span> <span class="o">=</span> <span class="n">title</span><span class="o">;</span>
+      <span class="o">}</span>
+    
+      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">getPaid</span><span class="o">(</span><span class="kt">int</span> <span class="n">amount</span><span class="o">)</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">getName</span><span class="o">()</span> <span class="o">+</span> <span class="s">": I just got paid $"</span> <span class="o">+</span> <span class="n">amount</span> <span class="o">+</span> <span class="s">"!!!"</span><span class="o">);</span>
+      <span class="o">}</span>
+    
+      <span class="nd">@Override</span>
+      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">sayGreeting</span> <span class="o">()</span> <span class="o">{</span>
+        <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">getName</span><span class="o">()</span> <span class="o">+</span> <span class="s">": Hello everyone! I'm a + "</span> <span class="o">+</span> <span class="n">title</span> <span class="o">+</span> <span class="s">"!"</span><span class="o">);</span>
+      <span class="o">}</span>
+    <span class="o">}</span> 
+</code></pre></div></div>
+
+<p><strong>Question.</strong> Suppose we wanted to implement a <code class="language-plaintext highlighter-rouge">StudentEmployee</code> class for student employees. What would be the (conceptual) problem with defining a class that extends both the <code class="language-plaintext highlighter-rouge">Student</code> and <code class="language-plaintext highlighter-rouge">Employee</code> classes? (Hint: how would a <code class="language-plaintext highlighter-rouge">StudentEmployee</code> say a greeting?)</p>
+
+<p>We can represent the relationships between the <code class="language-plaintext highlighter-rouge">class</code>es <code class="language-plaintext highlighter-rouge">Person</code>, <code class="language-plaintext highlighter-rouge">Student</code>, <code class="language-plaintext highlighter-rouge">ACStudent</code>, and <code class="language-plaintext highlighter-rouge">Employee</code> using an <strong>inheritance diagram</strong>. To produce an inheritance diagram, each class is represented by a node labeled with the class’s name. Whenever one class <code class="language-plaintext highlighter-rouge">extends</code> another class, we write the superclass above the subclass and draw a line between the classes. For the classes above we get the following inheritance diagram.</p>
+
+<p><img src="/assets/img/object-inheritance/inheritance-diagram.svg" alt="" width="50%" /></p>
+
+<p>Note that while <code class="language-plaintext highlighter-rouge">ACStudent</code> only extends <code class="language-plaintext highlighter-rouge">Student</code>, both <code class="language-plaintext highlighter-rouge">Student</code> and <code class="language-plaintext highlighter-rouge">Person</code> are superclasses of <code class="language-plaintext highlighter-rouge">ACStudent</code>. In general the superclass relationship is transitive: if <code class="language-plaintext highlighter-rouge">A</code> is a superclass of <code class="language-plaintext highlighter-rouge">B</code> and <code class="language-plaintext highlighter-rouge">B</code> is a superclass of <code class="language-plaintext highlighter-rouge">C</code>, then <code class="language-plaintext highlighter-rouge">A</code> is a superclass of <code class="language-plaintext highlighter-rouge">C</code>.</p>
+
+<p><strong>Exercise.</strong> Write a <code class="language-plaintext highlighter-rouge">StudentEmployee</code> class that extends the <code class="language-plaintext highlighter-rouge">Student</code> class. It should include all of the functionality of both the  <code class="language-plaintext highlighter-rouge">Student</code> and <code class="language-plaintext highlighter-rouge">Employee</code> classes. Update the inheritance diagrams to include your <code class="language-plaintext highlighter-rouge">StudentEmployee</code> class.</p>
+
+<h2 id="method-calls--inheritance">Method Calls &amp; Inheritance</h2>
+
+<p>When we use inheritance, it often happens that we have many methods with the same signature—namely the methods that are overridden. For example, <code class="language-plaintext highlighter-rouge">Person</code>, <code class="language-plaintext highlighter-rouge">Student</code>, and <code class="language-plaintext highlighter-rouge">ACStudent</code> all have methods called <code class="language-plaintext highlighter-rouge">sayGreeting()</code>. Yet for each type the expected behavior is slightly different. Consider the following example:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nc">Person</span> <span class="n">alice</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Person</span><span class="o">(</span><span class="s">"Alice"</span><span class="o">,</span> <span class="mi">23</span><span class="o">);</span>
+    <span class="nc">Student</span> <span class="n">bob</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Student</span><span class="o">(</span><span class="s">"Bob"</span><span class="o">,</span> <span class="s">"UMass"</span><span class="o">,</span> <span class="mi">19</span><span class="o">);</span>
+    <span class="nc">ACStudent</span> <span class="n">eve</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ACStudent</span><span class="o">(</span><span class="s">"Eve"</span><span class="o">,</span> <span class="mi">20</span><span class="o">);</span>
+    
+    <span class="n">alice</span><span class="o">.</span><span class="na">sayGreeting</span><span class="o">();</span> <span class="c1">// prints "Alice: Hello there!"</span>
+    <span class="n">bob</span><span class="o">.</span><span class="na">sayGreeting</span><span class="o">();</span>   <span class="c1">// prints "Bob: Can't talk now... I'm on my way to UMass"</span>
+    <span class="n">eve</span><span class="o">.</span><span class="na">sayGreeting</span><span class="o">();</span>   <span class="c1">// prints "Eve: Can't talk now... I'm on my way to Val. "</span>
+</code></pre></div></div>
+
+<p>That is, the program knows which version of <code class="language-plaintext highlighter-rouge">sayGreeting()</code> to call based on the <code class="language-plaintext highlighter-rouge">class</code> of each instance. All of the (non-overridden) methods for superclasses are also available to to subclasses. For example:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nc">String</span> <span class="n">inst</span><span class="o">;</span>
+    <span class="n">inst</span> <span class="o">=</span> <span class="n">alice</span><span class="o">.</span><span class="na">getInstitution</span><span class="o">();</span> <span class="c1">// ERROR: no such method for Person or superclass</span>
+    <span class="n">inst</span> <span class="o">=</span> <span class="n">bob</span><span class="o">.</span><span class="na">getInstitution</span><span class="o">();</span>   <span class="c1">// calls method defined in Student</span>
+    <span class="n">inst</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="na">getInstitution</span><span class="o">();</span>   <span class="c1">// calls method defined in Student (superclass)</span>
+</code></pre></div></div>
+
+<p>Also:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">alice</span><span class="o">.</span><span class="na">getName</span><span class="o">();</span> <span class="c1">// calls method defined in Person</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">bob</span><span class="o">.</span><span class="na">getName</span><span class="o">();</span>   <span class="c1">// calls method defined in Person (superclass of Student)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">eve</span><span class="o">.</span><span class="na">getName</span><span class="o">();</span>   <span class="c1">// calls method defined in Person (superclass of ACStudent)</span>
+</code></pre></div></div>
+
+<p>Since the there may be many methods with the same signature accessible to an instance of a subclass, Java does a sensible thing to resolve ambiguity: it always calls the method defined in the “closest” superclass with the correct signature. More specifically, consider the call</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">eve</span><span class="o">.</span><span class="na">sayGreeting</span><span class="o">();</span>
+</code></pre></div></div>
+
+<p>Since <code class="language-plaintext highlighter-rouge">eve</code> is an instance of <code class="language-plaintext highlighter-rouge">ACStudent</code> which is a subclass of <code class="language-plaintext highlighter-rouge">Student</code> and <code class="language-plaintext highlighter-rouge">Person</code>, there are three different methods <code class="language-plaintext highlighter-rouge">sayGreeting()</code> visible to to an <code class="language-plaintext highlighter-rouge">ACStudent</code>. Since <code class="language-plaintext highlighter-rouge">ACStudent</code> itself has a method <code class="language-plaintext highlighter-rouge">sayGreeting()</code>, this is the method that actually gets called. If <code class="language-plaintext highlighter-rouge">sayGreeting()</code> had not been overridden in <code class="language-plaintext highlighter-rouge">ACStudent</code>, the method call above would resolve to the version of <code class="language-plaintext highlighter-rouge">sayGreeting()</code> defined in <code class="language-plaintext highlighter-rouge">Student</code> because <code class="language-plaintext highlighter-rouge">ACStudent extends Student</code>. The version of <code class="language-plaintext highlighter-rouge">sayGreeting()</code> for <code class="language-plaintext highlighter-rouge">Person</code> would only get executed by <code class="language-plaintext highlighter-rouge">eve.sayGreeting()</code> if <code class="language-plaintext highlighter-rouge">sayGreeting()</code> was defined neither for <code class="language-plaintext highlighter-rouge">ACStudent</code> nor <code class="language-plaintext highlighter-rouge">Student</code>.</p>
+
+<p><strong>Exercise.</strong> Verify this! Delete the method <code class="language-plaintext highlighter-rouge">sayGreeting()</code> for <code class="language-plaintext highlighter-rouge">ACStudent</code>. What is the output of <code class="language-plaintext highlighter-rouge">eve.sayGreeting()</code>?</p>
+
+<h2 id="abstract-classes">Abstract Classes</h2>
+
+<p>Sometimes we would like to define a <code class="language-plaintext highlighter-rouge">class</code> that captures and consolidates the features of many <code class="language-plaintext highlighter-rouge">class</code>es, but is so general that it doesn’t make sense to implement all of its methods. For example,  every person is a being. But beings include all sorts of other entities: dogs, cats, dragons, etc. All beings have, say, a name and an age. Also, all beings are capable of giving some form of greeting, but printing text to the screen might not be an appropriate representation of all beings’ greetings. For example, a dog might say a greeting by wagging its tail. Since this is very different from a typical greeting for a person, it doesn’t make sense to implement a single greeting method that is applicable to all beings. Yet all beings should offer <em>some</em> form a greeting.</p>
+
+<p>Abstract classes allow us to define a <code class="language-plaintext highlighter-rouge">class</code> and <em>declare</em> its methods without <em>implementing</em> them. For example, we can define an <strong>abstract class</strong> for a <code class="language-plaintext highlighter-rouge">Being</code>  that declares a <code class="language-plaintext highlighter-rouge">sayGreeting()</code> method, but offers no implementation of <code class="language-plaintext highlighter-rouge">sayGreeting()</code>. All (non-abstract) subclasses are required to implement the <code class="language-plaintext highlighter-rouge">sayGreeting()</code> method.</p>
+
+<p>We use the <code class="language-plaintext highlighter-rouge">abstract</code> modifier to declare a method in a <code class="language-plaintext highlighter-rouge">class</code> without implementation. In order to use <code class="language-plaintext highlighter-rouge">abstract</code> inside a class, we also must declare the class itself as <code class="language-plaintext highlighter-rouge">abstract</code>. For example:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="kd">abstract</span> <span class="kd">class</span> <span class="nc">Being</span> <span class="o">{</span>
+      <span class="kd">private</span> <span class="nc">String</span> <span class="n">name</span><span class="o">;</span>
+      <span class="kd">private</span> <span class="kt">int</span> <span class="n">age</span><span class="o">;</span>
+    
+      <span class="kd">public</span> <span class="nf">Being</span><span class="o">(</span><span class="nc">String</span> <span class="n">name</span><span class="o">,</span> <span class="kt">int</span> <span class="n">age</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">age</span> <span class="o">=</span> <span class="n">age</span><span class="o">;</span>
+      <span class="o">}</span>
+    
+      <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getName</span> <span class="o">()</span> <span class="o">{</span> <span class="k">return</span> <span class="n">name</span><span class="o">;</span> <span class="o">}</span>
+      <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getAge</span> <span class="o">()</span> <span class="o">{</span> <span class="k">return</span> <span class="n">age</span><span class="o">;</span> <span class="o">}</span>
+    
+      <span class="c1">// a method declaration without an implementation</span>
+      <span class="kd">public</span> <span class="kd">abstract</span> <span class="nc">String</span> <span class="nf">sayGreeting</span> <span class="o">();</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p><strong>Exercise.</strong> Implement <code class="language-plaintext highlighter-rouge">Person</code> as a subclass of <code class="language-plaintext highlighter-rouge">Being</code>:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Person</span> <span class="kd">extends</span> <span class="nc">Being</span> <span class="o">{</span>
+      <span class="c1">// you provide the details here!!!</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p><strong>Exercise.</strong> Try compiling <code class="language-plaintext highlighter-rouge">Being.java</code> and your new version of  <code class="language-plaintext highlighter-rouge">Person.java</code> with <code class="language-plaintext highlighter-rouge">Person</code>’s implementation of <code class="language-plaintext highlighter-rouge">sayGreeting()</code> commented out. What error do you get?</p>
+
+<p>Since abstract classes are missing implementations of methods they cannot be instantiated—we can only create instances of subclasses of <code class="language-plaintext highlighter-rouge">abstract class</code>es that are not themselves <code class="language-plaintext highlighter-rouge">abstract</code>.</p>
+
+<p><strong>Exercise.</strong> Try creating an instance of a <code class="language-plaintext highlighter-rouge">Being</code> using <code class="language-plaintext highlighter-rouge">Being gaia = new Being("Gaia", 100000000);</code> What error do you get?</p>
+
+<h2 id="vocabulary">Vocabulary</h2>
+
+<ul>
+  <li>inheritance</li>
+  <li>subclass</li>
+  <li>superclass</li>
+  <li><code class="language-plaintext highlighter-rouge">extends</code> keyword</li>
+  <li>override</li>
+  <li><code class="language-plaintext highlighter-rouge">super</code> keyword
+    <ul>
+      <li>for calling a superclass constructor</li>
+      <li>for calling superclass methods</li>
+    </ul>
+  </li>
+  <li><code class="language-plaintext highlighter-rouge">@Override</code> annotation</li>
+  <li>“is a” rule</li>
+  <li>inheritance diagram</li>
+  <li>abstract class</li>
+  <li><code class="language-plaintext highlighter-rouge">abstract</code> keyword</li>
+</ul>
+
+  </article>
+
+</div>
+
+    </div>
+
+    <!-- Footer -->
+
+    
+<footer class="fixed-bottom">
+  <div class="container mt-0">
+    &copy; Copyright 2021 Will  Rosenbaum.
+    
+    
+    
+  </div>
+</footer>
+
+
+
+  </body>
+
+  <!-- Bootsrap & MDB scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.4.4/umd/popper.min.js" integrity="sha512-eUQ9hGdLjBjY3F41CScH3UX+4JDSI9zXeroz7hJ+RteoCaY+GP/LDoM8AO+Pt+DRFw3nXqsjh9Zsts8hnYv8/A==" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha512-M5KW3ztuIICmVIhjSqXe01oV2bpe248gOxqmlcYrEzAvws7Pw3z6BK0iGbrwvdrUQUhi3eXgtxp5I8PDo9YfjQ==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js" integrity="sha512-Mug9KHKmroQFMLm93zGrjhibM2z2Obg9l6qFG2qKjXEXkMp/VDkI4uju9m4QKPjWSwQ6O2qzZEnJDEeCw0Blcw==" crossorigin="anonymous"></script>
+
+  
+<!-- Mansory & imagesLoaded -->
+<script defer src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<script defer src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+<script defer src="/assets/js/mansory.js" type="text/javascript"></script>
+
+
+  
+
+
+<!-- Load Common JS -->
+<script src="/assets/js/common.js"></script>
+
+
+</html>

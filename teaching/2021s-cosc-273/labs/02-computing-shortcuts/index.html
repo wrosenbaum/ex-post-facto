@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<title>Will  Rosenbaum | Lab 02: Computing Shortcuts</title>
+<meta name="description" content="A blog about mathematics, computer science, etc.
+">
+
+<!-- Open Graph -->
+
+
+<!-- Bootstrap & MDB -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" integrity="sha512-MoRNloxbStBcD8z3M/2BmnT+rg4IsMxPkXaGh2zD6LGNNFE80W3onsAhRcMAMrSoyWL9xD7Ert0men7vR8LUZg==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" integrity="sha512-RO38pBRxYH3SoOprtPTD86JFOclM51/XTIdEPh5j8sj4tp8jmQIx26twG52UaLi//hQldfrh7e51WzP9wuP32Q==" crossorigin="anonymous" />
+
+<!-- Fonts & Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"  integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.0/css/academicons.min.css" integrity="sha512-W4yqoT1+8NLkinBLBZko+dFB2ZbHsYLDdr50VElllRcNt2Q4/GSs6u71UHKxB7S6JEMCp5Ve4xjh3eGQl/HRvg==" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+
+
+
+<!-- Code Syntax Highlighting -->
+<link rel="stylesheet" href="https://gitcdn.link/repo/jwarby/jekyll-pygments-themes/master/github.css" />
+
+<!-- Styles -->
+<link rel="shortcut icon" href="/assets/img/favicon.ico">
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<link rel="canonical" href="/teaching/2021s-cosc-273/labs/02-computing-shortcuts/">
+
+<!-- JQuery -->
+<!-- jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+
+
+<!-- Theming-->
+
+  <script src="/assets/js/theme.js"></script>
+  <!-- Load DarkMode JS -->
+<script src="/assets/js/dark_mode.js"></script>
+
+
+
+
+
+
+    
+<!-- MathJax -->
+<script type="text/javascript">
+  window.MathJax = {
+    tex: {
+      tags: 'ams'
+    }
+  };
+</script>
+<script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js"></script>
+<script defer src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+
+  </head>
+
+  <body class="fixed-top-nav ">
+
+    <!-- Header -->
+
+    <header>
+
+    <!-- Nav Bar -->
+    <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top">
+    <div class="container">
+      
+      <a class="navbar-brand title font-weight-lighter" href="https://willrosenbaum.com/">
+       Will   Rosenbaum
+      </a>
+      
+      <!-- Navbar Toggle -->
+      <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar top-bar"></span>
+        <span class="icon-bar middle-bar"></span>
+        <span class="icon-bar bottom-bar"></span>
+      </button>
+      <div class="collapse navbar-collapse text-right" id="navbarNav">
+        <ul class="navbar-nav ml-auto flex-nowrap">
+          <!-- About -->
+          <li class="nav-item ">
+            <a class="nav-link" href="/">
+              about
+              
+            </a>
+          </li>
+          <!-- Other pages -->
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/teaching/">
+                teaching
+                
+              </a>
+          </li>
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/research/">
+                research
+                
+              </a>
+          </li>
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/publications/">
+                publications
+                
+              </a>
+          </li>
+          
+          
+	  
+          <!-- Blog -->
+          <li class="nav-item ">
+            <a class="nav-link" href="/blog/">
+              blog
+              
+            </a>
+          </li>
+          
+
+          
+            <div class = "toggle-container">
+              <a id = "light-toggle">
+                  <i class="fas fa-moon"></i>
+                  <i class="fas fa-sun"></i>
+              </a>
+            </div>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+</header>
+
+
+    <!-- Content -->
+
+    <div class="container mt-5">
+      <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Lab 02: Computing Shortcuts</h1>
+    <p class="post-description">exploiting parallelism to find shortcuts in a network</p>
+  </header>
+
+  <article>
+    <hr />
+
+<p><strong>DUE:</strong> Friday, March 12, 23:59 <a href="https://time.is/Anywhere_on_Earth">AoE</a></p>
+
+<hr />
+
+<h4 id="background">Background</h4>
+
+<p>Suppose we have a network consisting of \(n\) <strong>nodes</strong> and directed <strong>links</strong> or <strong>edges</strong> between each pair of nodes. That is, given nodes \(i\) and \(j\), there is an edge \(e = (i, j)\) from \(i\) to \(j\). For example, the following figure illustrates a network with three nodes, and the arrows indicate the directions of the links: \((i, j)\) is indicated by an arrow from \(i\) to \(j\), while \((j, i)\) is indicated by an arrow from \(j\) to \(i\).</p>
+
+<p><img src="/assets/img/computing-shortcuts/network.png" alt="network" /></p>
+
+<p>Each edge \((i, j)\) has an associated <strong>weight</strong>, \(w(i, j)\) that indicates the cost of moving from node \(i\) to node \(j\) along \((i, j)\). The weights of the edges are indicated in the figure above. For example, \(w(0, 1) = 2\). Given the weights of the edges, it might be the case in order to move from \(i\) to \(j\), it would be less expensive to travel via an intermediate node \(k\), i.e. travel from \(i\) to some \(k\), then from \(k\) to \(j\). Traveling in this way, we incur a cost of \(w(i, k) + w(k, j)\). For example, in the figure above, traveling from \(0\) to \(2\) across the edge \((0, 2)\), we incur a cost of \(w(0, 2) = 6\), while traveling from \(0\) to \(1\) to \(2\) has a cost of \(w(0, 1) + w(1, 2) = 2 + 3 = 5\). Thus, the path \(0, 1, 2\) is a shortcut from \(0\) to \(2\).</p>
+
+<p>In this assignment, you will write a program that, given any network and weights, computes the cheapest route between every pair of nodes along a path of length at most 2 (i.e., with at most a single intermediate node).</p>
+
+<h5 id="network-representation">Network Representation</h5>
+
+<p>We assume that the edge weights are positive real numbers (i.e., decimals). For a network with \(n\) nodes labeled, say \(1, 2, \ldots, n\), we must specify the weights \(w(i, j)\) for all \(i, j \leq n\). By convention, we take \(w(i, i) = 0\) for all \(i\). We can represent the network as an \(n \times n\) <strong>matrix</strong> \(D\)—i.e., a 2 dimensional \(n\) by \(n\) array of numbers. The entry in the \(i\)th row and \(j\)th column, \(d_{ij}\) stores the weight \(w(i, j)\). For example, here is the matrix corresponding to the previous figure:</p>
+
+\[D = 
+\left(
+\begin{array}{ccc}
+0 &amp; 2 &amp; 6\\
+1 &amp; 0 &amp; 3\\
+4 &amp; 5 &amp; 0
+\end{array}
+\right)\]
+
+<p>If \(D\) represents the original matrix of weights, then the shortcut distances can also be represented by a matrix \(R\), where the entry \(r_{ij}\) stores the shortcut distance from node \(i\) to \(j\). More formally,</p>
+
+\[r_{ij} = \min_{k} d_{ik} + d_{kj}.\]
+
+<p>Notice that by taking \(k = i\), we have \(r_{ij} \leq d_{ii} + d_{ik} = d_{ik}\), because we assume \(d_{ii} = 0\). Using the \(D\) from our previous example, we compute the corresponding \(R\):</p>
+
+\[R =
+\left(
+\begin{array}{ccc}
+0 &amp; 2 &amp; 5\\
+1 &amp; 0 &amp; 3\\
+4 &amp; 5 &amp; 0
+\end{array}
+\right).\]
+
+<p>Notice that \(D\) and \(R\) are the same, except that \(d_{0, 2} = 6\), while \(r_{0, 2} = 5\). This corresponds to the shortcut \(0 \to 1 \to 2\) which has weight \(5\).</p>
+
+<p>Internally, we can represent the original matrix as a two dimensional array of <code class="language-plaintext highlighter-rouge">float</code>s, e.g., with <code class="language-plaintext highlighter-rouge">float[][] matrix = new float[n][n];</code>. For the previous examples, we’d store \(D\) as follows.</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[[0.0, 2.0, 6.0],
+ [1.0, 0.0, 3.0],
+ [4.0, 5.0, 0.0]]
+</code></pre></div></div>
+
+<h5 id="a-note-on-efficiency">A Note on Efficiency</h5>
+
+<p>Given an \(n \times n\) matrix \(D\), the resulting shortcut matrix \(R\) can be computed by taking the minimum \(r_{i j} = \min_{k} d_{i k} + d_{k j}\) directly. For each pair \(i, j \leq n\), taking this minimum requires \(n\) additions and comparisons: one addition and comparison for each value of \(k\). Thus the total number of elementary operations (floating point arithmetic, comparisons, etc.) is \(O(n^3)\). Therefore, even for a fairly modest network size of  \(n \approx 1,000\), we already need billions of elementary operations. For a network of size 10,000, we need to perform <em>trillions</em> of operations. For reference, the network of city streets in New York City <a href="https://www1.nyc.gov/html/dot/html/infrastructure/signals.shtml#:~:text=How%20many%20traffic%20signals%20are,and%20545%20in%20Staten%20Island.">contains approximately 12,500 intersections</a> with traffic signals (i.e., nodes), so naively computing shortcuts for New York would already require trillions of operations. (The structure of New York City streets allows for more efficient means of computing shortcuts, but this example shows the scale of a real-world application to finding shorter routes, say, for driving directions.)</p>
+
+<h4 id="program-description">Program Description</h4>
+
+<p>For this assignment, you will write a program that, given a matrix \(D\) (i.e., 2d array) of non-negative weights of edges, computes the shortcut matrix \(R\) as described above. Specifically, you will complete an implementation of the <code class="language-plaintext highlighter-rouge">SquareMatrix</code> class provided below by writing a method <code class="language-plaintext highlighter-rouge">getShortcutMatrixOptimized ()</code>, that returns a <code class="language-plaintext highlighter-rouge">SquareMatrix</code> instance representing the shortcut matrix of this instance. To get started, download the <code class="language-plaintext highlighter-rouge">SquareMatrix.java</code>:</p>
+
+<ul>
+  <li><a href="/assets/java/2021s-cosc-273/lab02-computing-shortcuts/SquareMatrix.java"><code class="language-plaintext highlighter-rouge">SquareMatrix.java</code></a></li>
+</ul>
+
+<p>Notice that there are actually <em>two</em> missing methods! We will code <code class="language-plaintext highlighter-rouge">getShortcutMatrixBaseline()</code> together in class.</p>
+
+<ul>
+  <li>See <a href="#baseline-implementation">baseline implementation</a> below</li>
+</ul>
+
+<h4 id="testing-your-program">Testing Your Program</h4>
+
+<p>Once you/we have implemented <code class="language-plaintext highlighter-rouge">getShortcutMatrixBaseline()</code> and <code class="language-plaintext highlighter-rouge">getShortcutMatrixOptimized()</code>, you can test your code using the following <code class="language-plaintext highlighter-rouge">ShortcutTester</code> program:</p>
+
+<ul>
+  <li><a href="/assets/java/2021s-cosc-273/lab02-computing-shortcuts/ShortcutTester.java"><code class="language-plaintext highlighter-rouge">ShortcutTester.java</code></a></li>
+</ul>
+
+<p>This program will allow you to test the correctness and performance of <code class="language-plaintext highlighter-rouge">getShortcutMatrixOptimized ()</code> compared to <code class="language-plaintext highlighter-rouge">getShortcutMatrixBaseline()</code>. Specifically, the program runs both shortcut computing methods several times on several input sizes and reports (1) the average run-time of the optimized method, (2) the run-time improvement fa compared to baseline, (3) the number of iterations performed per microsecond (where an iteration consists of single \(\min\) computation in the definition of \(r_{ij}\) above), and (4) whether or not the optimized method produces the same output as the baseline (it should!).</p>
+
+<h4 id="hints-and-resources">Hints and Resources</h4>
+
+<p>There are two main ways to improve the performance of <code class="language-plaintext highlighter-rouge">getShortcutMatrixOptimized ()</code> compared to the baseline implementation. The first is to use multithreading. As we saw in <a href="../01-estimating-pi">Lab 01: Estimating Pi</a>, multithreading can give a sizable speedup for performing operations that can be done parallel. <strong>Your optimized method should employ multithreading.</strong> Specifically, think about how to break up the task of computing \(D\) into sub-tasks that can be performed in parallel.</p>
+
+<p>We also saw that depending on your own computer hardware, using different numbers of threads will give the best performance. Specifically, your computer cannot perform more threads in parallel than it has (virtual) cores. Since the number of cores varies from computer to computer, it is helpful to know how many processors are available to your program. Thankfully, Java can tell you using the <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Runtime.html"><code class="language-plaintext highlighter-rouge">Runtime</code> class</a>. Specifically, the <code class="language-plaintext highlighter-rouge">Runtime</code> class provides a method, <code class="language-plaintext highlighter-rouge">availableProcessors()</code> which will return the number of processors available on the machine running the program. Using a number of threads roughly equal to this number will tend to give the best performance (assuming you aren’t concurrently running other computationally intensive tasks). You can get the number of available processors by invoking</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">Runtime</span><span class="o">.</span><span class="na">getRuntime</span><span class="o">().</span><span class="na">availableProcessors</span><span class="o">();</span>
+</code></pre></div></div>
+
+<p>For relatively small instances (\(n\) up to around 1,000 on my computer), multithreading alone leads to a pretty good performance boost. However, the performance is worse on larger instances. In one run, the baseline program took 2.2s on an instance of size 1024, while an instance of size 2048 took 54.7s. Given the basic algorithm we are applying, we would expect that doubling in instance size increases the number of operations performed by a factor of about \(8 (= 2^3)\). However in this case, doubling the instance size led to a factor 25 increase in run-time. The main reason for this unwelcome slow-down comes down to exactly how modern computers access items stored in their memory through a process of <strong>caching</strong>. In class (and in a forthcoming note) will discuss caching and how we can improve the performance of our program by making the program behave in a way consistent with how our system expects our program to behave.</p>
+
+<h4 id="what-to-turn-in">What to Turn In</h4>
+
+<p>Be sure to turn in:</p>
+
+<ol>
+  <li><code class="language-plaintext highlighter-rouge">SquareMatrix.java</code> with <code class="language-plaintext highlighter-rouge">getShortcutMatrixOptimized()</code> implemented and commented.</li>
+  <li>Other <code class="language-plaintext highlighter-rouge">.java</code> files defining other classes (you will probably have one implementing the <code class="language-plaintext highlighter-rouge">Runnable</code> interface).</li>
+  <li>A <code class="language-plaintext highlighter-rouge">README</code> file (plain text or <a href="https://commonmark.org/help/">markdown</a> format) that describes the optimizations you made, and the effect you saw that these optimizations had. Please also mention changes, experiments, or tests you made even if they negatively affected your programs performance. This file need not be more than a couple short paragraphs of texts, but it should document the main parts of your program’s development.</li>
+</ol>
+
+<h4 id="grading">Grading</h4>
+
+<p>Your programs will be graded on a 7 point scale according to the following criteria:</p>
+
+<ul>
+  <li>
+    <p><strong>Correctness</strong> (2 pts). Your program compiles and completes the task as specified in the program description above.</p>
+  </li>
+  <li>
+    <p><strong>Style</strong> (1 pt). Code is reasonably well-organized and readable (to a human). Variables, methods, and classes  have sensible, descriptive names. Code is well-commented.</p>
+  </li>
+  <li>
+    <p><strong>Performance</strong> (2 pts). Code performance is comparable to the instructor’s implementation. Program shows a significant improvement in performance with multiple threads.</p>
+  </li>
+  <li>
+    <p><strong>Documentation</strong> (2 pts). Submission includes a <code class="language-plaintext highlighter-rouge">README</code> file indicating (1) the main optimizations made over the baseline implementation, (2) the effect of these optimizations (individually and together), and (3) any other optimizations tested, whether or not they had a positive, negative, or insignificant effect on the program performance. The document should be concise (not more than a couple short paragraphs are necessary), but it should give an indication of the optimizations you tested, what worked, and what didn’t.</p>
+  </li>
+</ul>
+
+<h4 id="extension-extra-credit">Extension (Extra Credit)</h4>
+
+<p>The program above suggests finding shortcuts consisting of 2 “hops” in a network. However, we might wish to find shortcuts that include 4 hops. For example, maybe we have \(w(1,2) = 6\), while \(w(1,3) = w(3, 4) = w(4, 2) = 1\), so it would be less costly to travel from 1 to 2 along the path \(1 \to 3 \to 4 \to 2\). More generally, we might wish to find the cost of the cheapest path from every node \(i\) to every other node \(j\), no matter how many hops the path contains. This is problem is referred to as the <strong>all pairs shortest paths</strong> problem.</p>
+
+<p>Using your <code class="language-plaintext highlighter-rouge">getShortcutMatrixOptimized()</code> method as a sub-routine, write a method that computes the weight of the cheapest path between every pair of nodes in the network. Your method should return a <code class="language-plaintext highlighter-rouge">SquareMatrix</code> whose \(ij\)-entry is the total weight of the cheapest path from node \(i\) to node \(j\).</p>
+
+<p><strong>Hint.</strong> Suppose <code class="language-plaintext highlighter-rouge">d</code> is the original <code class="language-plaintext highlighter-rouge">SquareMatrix</code>, and</p>
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">r</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="na">getShortcutMatrixOptimized</span><span class="o">()</span>
+</code></pre></div></div>
+<p>What does <code class="language-plaintext highlighter-rouge">r.getShortcutMatrixOptimized()</code> compute? Also, what is the longest length (i.e., maximum number of hops) that a cheapest path from \(i\) to \(j\) could be?</p>
+
+<h4 id="baseline-implementation">Baseline Implementation</h4>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="nc">SquareMatrix</span> <span class="nf">getShortcutMatrixBaseline</span> <span class="o">()</span> <span class="o">{</span>
+
+	<span class="kt">int</span> <span class="n">size</span> <span class="o">=</span> <span class="n">matrix</span><span class="o">.</span><span class="na">length</span><span class="o">;</span>
+	
+	<span class="kt">float</span><span class="o">[][]</span> <span class="n">shortcuts</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">float</span><span class="o">[</span><span class="n">size</span><span class="o">][</span><span class="n">size</span><span class="o">];</span>
+
+	<span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">size</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+	    <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">size</span><span class="o">;</span> <span class="o">++</span><span class="n">j</span><span class="o">)</span> <span class="o">{</span>
+
+		<span class="kt">float</span> <span class="n">min</span> <span class="o">=</span> <span class="nc">Float</span><span class="o">.</span><span class="na">MAX_VALUE</span><span class="o">;</span>
+		
+		<span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">size</span><span class="o">;</span> <span class="o">++</span><span class="n">k</span><span class="o">)</span> <span class="o">{</span>
+		    <span class="kt">float</span> <span class="n">x</span> <span class="o">=</span> <span class="n">matrix</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">k</span><span class="o">];</span>
+		    <span class="kt">float</span> <span class="n">y</span> <span class="o">=</span> <span class="n">matrix</span><span class="o">[</span><span class="n">k</span><span class="o">][</span><span class="n">j</span><span class="o">];</span>
+		    <span class="kt">float</span> <span class="n">z</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="o">;</span>
+
+		    <span class="k">if</span> <span class="o">(</span><span class="n">z</span> <span class="o">&lt;</span> <span class="n">min</span><span class="o">)</span> <span class="o">{</span>
+			<span class="n">min</span> <span class="o">=</span> <span class="n">z</span><span class="o">;</span>
+		    <span class="o">}</span>
+		<span class="o">}</span>
+
+		<span class="n">shortcuts</span><span class="o">[</span><span class="n">i</span><span class="o">][</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="n">min</span><span class="o">;</span>
+	    <span class="o">}</span>
+	<span class="o">}</span>
+	
+	<span class="k">return</span> <span class="k">new</span> <span class="nf">SquareMatrix</span><span class="o">(</span><span class="n">shortcuts</span><span class="o">);</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+  </article>
+
+</div>
+
+    </div>
+
+    <!-- Footer -->
+
+    
+<footer class="fixed-bottom">
+  <div class="container mt-0">
+    &copy; Copyright 2021 Will  Rosenbaum.
+    
+    
+    
+  </div>
+</footer>
+
+
+
+  </body>
+
+  <!-- Bootsrap & MDB scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.4.4/umd/popper.min.js" integrity="sha512-eUQ9hGdLjBjY3F41CScH3UX+4JDSI9zXeroz7hJ+RteoCaY+GP/LDoM8AO+Pt+DRFw3nXqsjh9Zsts8hnYv8/A==" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha512-M5KW3ztuIICmVIhjSqXe01oV2bpe248gOxqmlcYrEzAvws7Pw3z6BK0iGbrwvdrUQUhi3eXgtxp5I8PDo9YfjQ==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js" integrity="sha512-Mug9KHKmroQFMLm93zGrjhibM2z2Obg9l6qFG2qKjXEXkMp/VDkI4uju9m4QKPjWSwQ6O2qzZEnJDEeCw0Blcw==" crossorigin="anonymous"></script>
+
+  
+<!-- Mansory & imagesLoaded -->
+<script defer src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<script defer src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+<script defer src="/assets/js/mansory.js" type="text/javascript"></script>
+
+
+  
+
+
+<!-- Load Common JS -->
+<script src="/assets/js/common.js"></script>
+
+
+</html>

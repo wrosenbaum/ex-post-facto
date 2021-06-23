@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta charset="utf-8">
+
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reset.css">
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reveal.css">
+		<link rel="stylesheet" href="/assets/css/condensation.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="/assets/reveal.js-master/plugin/highlight/monokai.css" id="highlight-theme">
+		<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700" rel="stylesheet">
+
+	</head>
+
+	<body>
+
+
+	  <!-- this is where the reveailfy filter gets applied -->
+	  <div class="reveal"><div class="slides">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section id="lecture-19-stacks"><h1>Lecture 19: Stacks</h1></section><section id="overview"><h2>Overview</h2>
+<ol>
+  <li>Interfaces</li>
+  <li>Stacks</li>
+  <li>Stack Interface</li>
+  <li>Stack Implementation</li>
+</ol></section><section id="last-time"><h2>Last Time</h2>
+<ul>
+  <li>Introduced <code>interface</code>s</li>
+  <li>Saw the <code>Comparable&lt;T&gt;</code> interface:
+    <pre><code class="language-java">public interface Comparable&lt;T&gt; {
+  int compareTo (T t);
+}
+</code></pre>
+  </li>
+  <li>Updated <code>Animal</code> to implement <code>Comparable&lt;Animal&gt;</code>:
+    <pre><code class="language-java">public abstract class Animal implements Comparable&lt;Animal&gt; {
+  ...
+  public int compareTo (Animal a) {
+      if (this.getSpecies().equals(a.getSpecies())) {
+          return this.name.compareTo(a.name);
+      }
+
+      return this.getSpecies().compareTo(a.getSpecies());
+  }
+}
+</code></pre>
+  </li>
+  <li>
+<code>Animal</code>s can now be sorted!</li>
+</ul></section><section id="sorted-zoo-example"><h2>Sorted Zoo Example</h2></section><section id="why-interfaces"><h2>Why Interfaces?</h2>
+<p>An <code>interface</code> is a <em>contract:</em></p>
+<ol>
+  <li>In order to implement the <code>interface</code>, you must provide certain functionality</li>
+  <li>If you provide that functionality, I can write code that uses the functionality to perform some task
+    <ul>
+      <li>I don’t need to know <em>how</em> you provide functionality</li>
+    </ul>
+  </li>
+</ol>
+<p>Sorting example:</p>
+<ul>
+  <li>We wrote code to store a sorted list of items</li>
+  <li>Works for <em>any</em> class implementing <code>Comparable</code>
+</li>
+  <li>The <code>class</code> determines what is <em>meant</em> by comparison</li>
+</ul></section><section id="good-design"><h2>Good Design</h2>
+<p><em>Separate interface from implementation</em></p>
+<ul>
+  <li>Better encapsulation</li>
+  <li>Explicit functionality of the class</li>
+  <li>Explicit requirements to use existing functionality</li>
+  <li>Can provide different implementations of same interface
+    <ul>
+      <li>sort by species/name? sort by age? by height?</li>
+      <li>different implementations might be appropriate for different contexts</li>
+    </ul>
+  </li>
+</ul></section><section id="previously"><h2>Previously</h2>
+<p>We’ve seen some data structures:</p>
+<ul>
+  <li>array
+    <ul>
+      <li>access elements by index</li>
+    </ul>
+  </li>
+  <li>linked list
+    <ul>
+      <li>access elements by reference</li>
+    </ul>
+  </li>
+</ul>
+<p>Data structures specify:</p>
+<ol>
+  <li>how data is stored</li>
+  <li>how data is accessed</li>
+  <li>how data is modified</li>
+</ol></section><section id="abstract-data-types"><h2>Abstract Data Types</h2>
+<p>Used linked list data structure to <em>implement</em></p>
+<ol>
+  <li>
+<code>GenericList</code>
+    <ul>
+      <li>store a collection of elements</li>
+      <li>
+<code>add</code> and <code>remove</code>
+</li>
+      <li>iterate over elements</li>
+    </ul>
+  </li>
+  <li>
+<code>SortedList</code>
+    <ul>
+      <li>store a <em>sorted</em> collection of elements</li>
+      <li>
+<code>insert</code> and <code>remove</code>
+</li>
+      <li>iterate over elements</li>
+    </ul>
+  </li>
+</ol>
+<p>Abstract data type specifies interaction (i.e., interface), not implementation</p></section><section id="up-next"><h2>Up Next</h2>
+<p>Two fundamental abstract data types</p>
+<ol>
+  <li>Stack</li>
+  <li>Queue</li>
+</ol>
+<p>We’ll consider</p>
+<ul>
+  <li>implementations</li>
+  <li>applications</li>
+</ul></section><section id="a-problem"><h2>A Problem</h2>
+<p>Learning a new subject:</p>
+<ol>
+  <li>Find a book, start reading</li>
+  <li>Realize I am missing some background for the book</li>
+  <li>Look up references
+    <ul>
+      <li>repeat step 1 with new book</li>
+    </ul>
+  </li>
+</ol>
+<p>Eventually, my desk is covered with books!</p>
+<ul>
+  <li>How do I keep track of everything?</li>
+</ul></section><section id="my-problem-illustrated"><h2>My Problem, Illustrated</h2>
+<p><img src="/assets/img/stacks/book-1.png" alt="" width="100%"></p></section><section id="get-stuck-get-another-book"><h2>Get Stuck, Get Another Book</h2>
+<p><img src="/assets/img/stacks/book-2.png" alt="" width="100%"></p></section><section id="get-stuck-get-yet-another-book"><h2>Get Stuck, Get Yet Another Book</h2>
+<p><img src="/assets/img/stacks/book-3.png" alt="" width="100%"></p></section><section id="and-another"><h2>And Another</h2>
+<p><img src="/assets/img/stacks/book-4.png" alt="" width="100%"></p></section><section id="lesson-learned-see-previous-book"><h2>Lesson Learned: See Previous Book</h2>
+<p><img src="/assets/img/stacks/book-5.png" alt="" width="100%"></p></section><section id="another-lesson-learned"><h2>Another Lesson Learned</h2>
+<p><img src="/assets/img/stacks/book-6.png" alt="" width="100%"></p></section><section id="stuck-again-get-another-book"><h2>Stuck Again; Get Another Book</h2>
+<p><img src="/assets/img/stacks/book-7.png" alt="" width="100%"></p></section><section id="lesson-learned"><h2>Lesson Learned</h2>
+<p><img src="/assets/img/stacks/book-8.png" alt="" width="100%"></p></section><section id="lesson-learned-back-to-start"><h2>Lesson Learned: Back to Start</h2>
+<p><img src="/assets/img/stacks/book-9.png" alt="" width="100%"></p></section><section id="keeping-organized"><h2>Keeping Organized</h2>
+<p>Store books in a stack on my desk:</p>
+<ul>
+  <li>Most recently accessed on top</li>
+  <li>Book below is book I was reading when I got stuck</li>
+  <li>…</li>
+</ul>
+<p>Successively removing books allows backtracking</p>
+<ul>
+  <li>Only ever add/remove top book on a stack</li>
+</ul></section><section id="a-new-abstract-data-type"><h2>A New Abstract Data Type</h2>
+<p>Introducing the <strong>stack</strong>!</p>
+<ul>
+  <li>Store a collection of items</li>
+  <li>Supported operations:
+    <ul>
+      <li>
+<em>push</em> a new item on top of the stack</li>
+      <li>
+<em>peek</em> at the item currently on top</li>
+      <li>
+<em>pop</em> remove and return the item currently on top</li>
+    </ul>
+  </li>
+</ul></section><section id="stack-operations"><h2>Stack Operations</h2>
+<p><img src="/assets/img/stacks/book-1.png" alt="" width="100%"></p>
+<p>Push <em>Sequential…Algorithms</em> onto stack</p></section><section id="stack-operations-1"><h2>Stack Operations</h2>
+<p><img src="/assets/img/stacks/book-2.png" alt="" width="100%"></p>
+<p>Push <em>Art of Multiprocessor Programming</em> onto stack</p></section><section id="stack-operations-2"><h2>Stack Operations</h2>
+<p><img src="/assets/img/stacks/book-3.png" alt="" width="100%"></p>
+<p>Push <em>Java Concurrency in Practice</em> onto stack</p></section><section id="stack-operations-3"><h2>Stack Operations</h2>
+<p><img src="/assets/img/stacks/book-3.png" alt="" width="100%"></p>
+<p>Peek returns <em>Java Concurrency in Practice</em></p></section><section id="stack-operations-4"><h2>Stack Operations</h2>
+<p><img src="/assets/img/stacks/book-2.png" alt="" width="100%"></p>
+<p>Pop returns &amp; removes <em>Java Concurrency in Practice</em></p></section><section id="stack-operations-5"><h2>Stack Operations</h2>
+<p><img src="/assets/img/stacks/book-1.png" alt="" width="100%"></p>
+<p>Pop returns &amp; removes <em>Art of Multiprocessor Programming</em></p></section><section id="stacks-in-programming"><h2>Stacks in Programming</h2>
+<p>Stacks are useful in computing!</p>
+<ul>
+  <li>Executing method calls</li>
+  <li>Search with backtracking</li>
+  <li>Evaluating arithmetic expressions</li>
+  <li>…</li>
+</ul></section><section id="a-stack-interface-in-java"><h2>A Stack Interface in Java</h2>
+<pre><code class="language-java">public interface SimpleStack&lt;T&gt; {
+    // push a new item on the top of the stack
+    public void push(T item);
+
+    // return the item currently at the top of the stack
+    public T peek();
+
+    // remove and return the item currently at the top of the stack
+    public T pop();
+
+    // check if the stack is empty
+    public boolean isEmpty();
+}
+</code></pre></section><section id="activity"><h2>Activity</h2>
+<p>How might we implement a stack?</p></section><section id="representing-stack-as-linked-list"><h2>Representing Stack as Linked List</h2>
+<p>How to store items?</p>
+<div style="margin-bottom: 18em"></div></section><section id="representing-stack-as-linked-list-1"><h2>Representing Stack as Linked List</h2>
+<p>How to push?</p>
+<div style="margin-bottom: 18em"></div></section><section id="representing-stack-as-linked-list-2"><h2>Representing Stack as Linked List</h2>
+<p>How to pop?</p>
+<div style="margin-bottom: 18em"></div></section><section id="representing-stack-as-linked-list-3"><h2>Representing Stack as Linked List</h2>
+<p>How to code it?</p>
+<pre><code class="language-java">public class StackList&lt;T&gt; implements SimpleStack&lt;T&gt;, Iterable&lt;T&gt; {
+    // fields?
+    ...
+    
+    public void push(T item) {
+        ...	
+    }
+    
+    public T peek() {
+        ...	
+    }
+    
+    public T pop() {
+        ...
+    }
+
+
+    class Node {
+	T item;
+	Node next;
+
+	public Node (T item) {
+	    this.item = item;
+	    next = null;
+	}
+    }
+
+}
+</code></pre></section>
+</div></div>
+
+
+	  <script src="/assets/reveal.js-master/dist/reveal.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/math/math.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/zoom/zoom.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/notes/notes.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/search/search.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/markdown/markdown.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/highlight/highlight.js"></script>
+	  <script>
+	    
+
+	    // Also available as an ES module, see:
+	    // https://revealjs.com/initialization/
+	    Reveal.initialize({
+		controls: false,
+		progress: true,
+		center: true,
+		hash: true,
+		transition: 'none',
+		math: {
+		    config: 'TeX-AMS_HTML-full',
+		    TeX: {
+			Macros: {
+			    R: '\\mathbb{R}',
+			    set: [ '\\left\\{#1 \\; ; \\; #2\\right\\}', 2 ]
+			}
+		    }
+		},
+
+
+		// Learn about plugins: https://revealjs.com/plugins/
+		plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath ]
+	    });
+
+	  </script>
+
+	</body>
+</html>
+	  
+
+<!-- <\!-- load the reveal.js css & js (assuming you've put it in assets/)-\-> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/reveal.scss" -->
+<!-- /> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/theme/source/white.scss" -->
+<!-- /> -->
+<!-- <script -->
+<!--   src="/assets/reveal.js-master/js/reveal.js" -->
+<!--   type="text/javascript" -->
+<!-- ></script> -->
+
+<!-- <\!-- configure the presentation, (you can tweak options to suit) -\-> -->
+<!-- <script> -->
+<!--   Reveal.initialize({ -->
+<!--     // Display presentation control arrows -->
+<!--     controls: false, -->
+
+<!--     // Help the user learn the controls by providing hints, for example by -->
+<!--     // bouncing the down arrow when they first encounter a vertical slide -->
+<!--     controlsTutorial: false, -->
+
+<!--     // Determines where controls appear, "edges" or "bottom-right" -->
+<!--     controlsLayout: "bottom-right", -->
+
+<!--     // Visibility rule for backwards navigation arrows; "faded", "hidden" -->
+<!--     // or "visible" -->
+<!--     controlsBackArrows: "faded", -->
+
+<!--     // Display a presentation progress bar -->
+<!--     progress: true, -->
+
+<!--     // Display the page number of the current slide -->
+<!--     slideNumber: false, -->
+
+<!--     // Push each slide change to the browser history -->
+<!--     history: false, -->
+
+<!--     // Enable keyboard shortcuts for navigation -->
+<!--     keyboard: true, -->
+
+<!--     // Enable the slide overview mode -->
+<!--     overview: true -->
+<!--   }); -->
+<!-- </script> -->

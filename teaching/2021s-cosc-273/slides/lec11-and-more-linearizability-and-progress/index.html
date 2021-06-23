@@ -1,0 +1,584 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta charset="utf-8">
+
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reset.css">
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reveal.css">
+		<link rel="stylesheet" href="/assets/css/condensation.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="/assets/reveal.js-master/plugin/highlight/monokai.css" id="highlight-theme">
+		<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700" rel="stylesheet">
+
+	</head>
+
+	<body>
+
+
+	  <!-- this is where the reveailfy filter gets applied -->
+	  <div class="reveal"><div class="slides">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ## An Atomic Primitive -->
+
+<!-- `AtomicInteger` class: -->
+
+<!-- ```java -->
+<!-- boolean compareAndSet(int expectedValue, int newValue); -->
+<!-- ``` -->
+
+<!-- Specification: -->
+
+<!-- - if `ai`'s value is `expectedValue`, then -->
+<!--     + after call, `ai`'s value is `newValue` -->
+<!-- 	+ method returns `true` -->
+<!-- - if `ai`'s value is not `expectedValue`, then -->
+<!--     + after call, `ai`'s value is unchanged -->
+<!-- 	+ method returns `false` -->
+
+<!-- ## A Silly Counter -->
+
+<!-- ```java -->
+<!-- public class SillyCounter { -->
+
+<!--     AtomicInteger ai = new AtomicInteger(0); -->
+
+<!--     public void increment (int amt) { -->
+<!--         int val = ai.get(); -->
+<!--         while (!ai.compareAndSet(val, val + amt)) { -->
+<!--             val = ai.get(); -->
+<!--         } -->
+<!--     } -->
+
+<!--     public int read () { -->
+<!--         return ai.get(); -->
+<!--     } -->
+
+<!-- } -->
+<!-- ``` -->
+
+<!-- ## Does `SillyCounter` Work? -->
+
+<!-- ```java -->
+<!-- public class SillyCounter { -->
+
+<!--     AtomicInteger ai = new AtomicInteger(0); -->
+
+<!--     public void increment (int amt) { -->
+<!--         int val = ai.get(); -->
+<!--         while (!ai.compareAndSet(val, val + amt)) { -->
+<!--             val = ai.get(); -->
+<!--         } -->
+<!--     } -->
+
+<!--     public int read () { -->
+<!--         return ai.get(); -->
+<!--     } -->
+
+<!-- } -->
+<!-- ``` -->
+
+<!-- <div style="margin-bottom: 8em"></div> -->
+
+<!-- ## Is `SillyCounter` Lock-free? -->
+
+<!-- ```java -->
+<!--     public void increment (int amt) { -->
+<!--         int val = ai.get(); -->
+<!--         while (!ai.compareAndSet(val, val + amt)) { -->
+<!--             val = ai.get(); -->
+<!--         } -->
+<!--     } -->
+<!-- ``` -->
+
+<!-- <div style="margin-bottom: 12em"></div> -->
+
+<!-- ## Is `SillyCounter` Wait-free? -->
+
+<!-- ```java -->
+<!--     public void increment (int amt) { -->
+<!--         int val = ai.get(); -->
+<!--         while (!ai.compareAndSet(val, val + amt)) { -->
+<!--             val = ai.get(); -->
+<!--         } -->
+<!--     } -->
+<!-- ``` -->
+
+<!-- <div style="margin-bottom: 12em"></div> -->
+
+<!-- ## Properties of Nonblocking Progress -->
+
+<!-- - Progress is guaranteed even if some thread stalls -->
+<!--     + e.g., scheduler stops scheduling a thread's method call -->
+<!-- - Wait-freedom gives *maximal progress* -->
+<!-- - Lock-freedom gives *minimal progress* -->
+<!--     + starvation can still occur -->
+<!-- - Actual progress depends on *scheduler* -->
+<!--     + determines which threads make steps -->
+
+<!-- <div style="margin-bottom: 4em"></div> -->
+
+<!-- ## Blocking Progress Conditions -->
+
+<!-- - **starvation-free**: whenever *all* pending methods take steps, *every* method call completes in a finite number of steps -->
+<!--     + maximal (blocking) progress -->
+
+<!-- <div style="margin-bottom: 4em"></div> -->
+
+<!-- - **deadlock-free**: whenever *all* pending method calls take steps, *some* method call completes in a finite number of steps -->
+<!--     + minimal (blocking) progress -->
+
+<!-- <div style="margin-bottom: 4em"></div> -->
+
+<!-- ## Blocking vs Nonblocking Progess -->
+
+<!-- Nonblocking progress -->
+
+<!-- - guarantees progress for *any* scheduler -->
+<!-- - valid even if a process crashes -->
+
+<!-- <div style="margin-bottom: 4em"></div> -->
+
+<!-- Blocking progress -->
+
+<!-- - progress only guaranteed for *fair* schedulers -->
+<!-- - if a process crashes, progress not guaranteed -->
+
+<!-- <div style="margin-bottom: 4em"></div> -->
+
+<!-- ## Which is Better? -->
+
+<!-- ```java -->
+<!-- public class SillyCounter { -->
+<!--     private AtomicInteger ai = new AtomicInteger(0); -->
+<!--     public void increment (int amt) { -->
+<!--         int val = ai.get(); -->
+<!--         while (!ai.compareAndSet(val, val + amt)) { -->
+<!--             val = ai.get(); -->
+<!--         } -->
+<!--     } -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- Or -->
+
+<!-- ```java -->
+<!-- public class LockedCounter { -->
+<!--     private Lock lock = new StarvationFreeLock(); -->
+<!--     int count = 0; -->
+<!--     public void increment (int amt) { -->
+<!--         lock.lock() -->
+<!--         try { -->
+<!--             count += amt; -->
+<!--         } finally { -->
+<!--             lock.unlock(); -->
+<!--         } -->
+<!--     } -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- ## Scheduling w/ 2 Threads -->
+
+<!-- ```java -->
+<!-- public class SillyCounter { -->
+<!--     private AtomicInteger ai = new AtomicInteger(0); -->
+<!--     public void increment (int amt) { -->
+<!--         int val = ai.get(); -->
+<!--         while (!ai.compareAndSet(val, val + amt)) { -->
+<!--             val = ai.get(); -->
+<!--         } -->
+<!--     } -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- What happens to thread 1 if scheduler stops scheduling steps of thread 2? -->
+
+<!-- <div style="margin-bottom: 6em"></div> -->
+
+<!-- ## Scheduling w/ 2 Threads -->
+
+<!-- ```java -->
+<!-- public class LockedCounter { -->
+<!--     private Lock lock = new StarvationFreeLock(); -->
+<!--     int count = 0; -->
+<!--     public void increment (int amt) { -->
+<!--         lock.lock() -->
+<!--         try { -->
+<!--             count += amt; -->
+<!--         } finally { -->
+<!--             lock.unlock(); -->
+<!--         } -->
+<!--     } -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- What happens to thread 1 if scheduler stops scheduling steps of thread 2? -->
+
+<!-- <div style="margin-bottom: 6em"></div> -->
+
+<!-- ## Scheduling w/ 2 Threads -->
+
+<!-- ```java -->
+<!-- public class SillyCounter { -->
+<!--     private AtomicInteger ai = new AtomicInteger(0); -->
+<!--     public void increment (int amt) { -->
+<!--         int val = ai.get(); -->
+<!--         while (!ai.compareAndSet(val, val + amt)) { -->
+<!--             val = ai.get(); -->
+<!--         } -->
+<!--     } -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- Is thread 1 guaranteed to make progress under *fair* scheduler? -->
+
+<!-- <div style="margin-bottom: 6em"></div> -->
+
+<!-- ## Scheduling w/ 2 Threads -->
+
+<!-- ```java -->
+<!-- public class LockedCounter { -->
+<!--     private Lock lock = new StarvationFreeLock(); -->
+<!--     int count = 0; -->
+<!--     public void increment (int amt) { -->
+<!--         lock.lock() -->
+<!--         try { -->
+<!--             count += amt; -->
+<!--         } finally { -->
+<!--             lock.unlock(); -->
+<!--         } -->
+<!--     } -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- Is thread 1 guaranteed to make progress under *fair* scheduler? -->
+
+<!-- <div style="margin-bottom: 6em"></div> -->
+
+<!-- ## So -->
+
+<!-- - With an unfair scheduler (or when threads can be interrupted), lock-freedom (nonblocking) might be better -->
+<!--     + guarantees some progress -->
+<!-- - With a fair scheduler (threads will not be interrupted), starvation-freedom (blocking) might be better -->
+<!--     + with fairness assumption, *every* thread is guaranteed progress -->
+
+<!-- Nonblocking is not strictly superior to blocking! -->
+
+<!-- ## Progress and Correctness Conditions are Indpendent -->
+
+<!-- - Can have a data structure that is... -->
+<!--     + ...sequentially consistent and wait-free -->
+<!-- 	+ ...linearizable and lock-free -->
+<!-- 	+ ...sequentially consistent and deadlock-free -->
+<!-- 	+ ... -->
+
+<!-- - Different implementations have different trade-offs -->
+
+<!-- - Which implementation is best depends on application: -->
+<!--     + how much synchronization is required? -->
+<!-- 	    + how frequently is contention expected? -->
+<!-- 	+ what correctness guarantee is required? -->
+
+<!-- ## Coming Up -->
+
+<!-- Implementations! -->
+
+<!-- - locks -->
+<!-- - data structures -->
+
+<section id="lecture-11-and-more-linearizability-and-progress"><h1>Lecture 11: And More Linearizability and Progress</h1></section><section id="overview"><h2>Overview</h2>
+<ol>
+  <li>Counter, Revisited, Again</li>
+  <li>Progress Condiditions</li>
+</ol></section><section id="a-counter"><h2>A Counter</h2>
+<p>For two threads:</p>
+<pre><code class="language-java">public class TwoCounter {
+    int[] counts = new int[2];
+	
+    public void increment (int amt) {
+        int i = ThreadID.get(); // thread IDs are 0 and 1
+        int count = counts[i];
+        counts[i] = count + amt;		
+    }
+	
+    public int read () {
+        int count = counts[0];
+        count = count + counts[1];
+        return count;
+    }	
+}
+</code></pre></section><section id="is-twocounter-linearizable"><h2>Is <code>TwoCounter</code> Linearizable?</h2>
+<pre><code class="language-java">public class TwoCounter {
+    int[] counts = new int[2];
+	
+    public void increment (int amt) {
+        int i = ThreadID.get(); // thread IDs are 0 and 1
+        int count = counts[i];
+        counts[i] = count + amt;		
+    }
+	
+    public int read () {
+        int count = counts[0];
+        count = count + counts[1];
+        return count;
+    }	
+}
+</code></pre>
+<div style="margin-bottom: 6em"></div></section><section id="linearization-point"><h2>Linearization Point?</h2>
+<pre><code class="language-java">    public int read () {
+        int count = counts[0];
+        count = count + counts[1];
+        return count;
+    }	
+</code></pre>
+<div style="margin-bottom: 12em"></div></section><section id="more-threads"><h2>More Threads!</h2>
+<pre><code class="language-java">public class ThreeCounter {
+    int[] counts = new int[3];
+	
+    public void increment (int amt) {
+        int i = ThreadID.get(); // thread IDs are 0, 1, and 2
+        int count = counts[i];
+        counts[i] = count + amt;		
+    }
+	
+    public int read () {
+        int count = counts[0];
+        count = count + counts[1];
+        count = count + counts[2];		
+        return count;
+    }	
+}
+</code></pre>
+<p>Is <code>ThreeCounter</code> Linearizable?</p>
+<div style="margin-bottom: 4em"></div></section><section id="is-threecounter-linearizable"><h2>Is <code>ThreeCounter</code> Linearizable?</h2>
+<pre><code class="language-java">    public int read () {
+        int count = counts[0];
+        count = count + counts[1];
+        count = count + counts[2];		
+        return count;
+    }	
+</code></pre>
+<div style="margin-bottom: 18em"></div></section><section id="conclusion"><h2>Conclusion</h2>
+<ul>
+  <li>Linearizability is…
+    <ul>
+      <li>…a reasonable correctness condition</li>
+      <li>…nonblocking</li>
+      <li>…compositional</li>
+      <li>…subtle to reason about</li>
+    </ul>
+  </li>
+</ul>
+<p>You will work through more problems on linearizability on Homework 3 and Quiz 3.</p></section><section id="progress-conditions"><h1>Progress Conditions</h1></section><section id="is-nonblocking-property-practical"><h2>Is Nonblocking Property Practical?</h2>
+<p>Nonblocking property $\implies$ <em>existence</em> of consistent response to pending method calls</p>
+<ul>
+  <li>Does not ensure that such a response can be <em>found</em> easily</li>
+</ul>
+<div style="margin-bottom: 8em"></div></section><section id="scheduler"><h2>Scheduler</h2>
+<p>Given a set of (concurrent) method calls a <strong>scheduler</strong> chooses sequence of methods that make steps</p>
+<ul>
+  <li>in computers, OS is typically scheduler</li>
+  <li>scheduler may be fair, may not be</li>
+  <li>want progress guarantees independent of scheduler</li>
+</ul>
+<div style="margin-bottom: 6em"></div></section><section id="nonblocking-progress-conditions"><h2>Nonblocking Progress Conditions</h2>
+<p>Conditions for implementations:</p>
+<ul>
+  <li>
+<strong>Wait-freedom</strong>: pending method invocation always completes in a finite number of steps</li>
+</ul>
+<div style="margin-bottom: 6em"></div>
+<ul>
+  <li>
+<strong>Lock-freedom</strong>: among all pending method calls, some method completes in a finite number of steps</li>
+</ul>
+<div style="margin-bottom: 6em"></div></section><section id="question"><h2>Question</h2>
+<p>Is <code>TwoCounter</code> lock-fee? Wait-free?</p>
+<pre><code class="language-java">public class TwoCounter {
+    int[] counts = new int[2];
+	
+    public void increment (int amt) {
+        int i = ThreadID.get(); // thread IDs are 0 and 1
+        int count = counts[i];
+        counts[i] = count + amt;
+    }
+	
+    public int read () {
+        int count = counts[0];
+        count = count + counts[1];
+        return count;
+    }
+}
+</code></pre>
+<div style="margin-bottom: 6em"></div></section>
+</div></div>
+
+
+	  <script src="/assets/reveal.js-master/dist/reveal.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/math/math.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/zoom/zoom.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/notes/notes.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/search/search.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/markdown/markdown.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/highlight/highlight.js"></script>
+	  <script>
+	    
+
+	    // Also available as an ES module, see:
+	    // https://revealjs.com/initialization/
+	    Reveal.initialize({
+		controls: false,
+		progress: true,
+		center: true,
+		hash: true,
+		transition: 'none',
+		math: {
+		    config: 'TeX-AMS_HTML-full',
+		    TeX: {
+			Macros: {
+			    R: '\\mathbb{R}',
+			    set: [ '\\left\\{#1 \\; ; \\; #2\\right\\}', 2 ]
+			}
+		    }
+		},
+
+
+		// Learn about plugins: https://revealjs.com/plugins/
+		plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath ]
+	    });
+
+	  </script>
+
+	</body>
+</html>
+	  
+
+<!-- <\!-- load the reveal.js css & js (assuming you've put it in assets/)-\-> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/reveal.scss" -->
+<!-- /> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/theme/source/white.scss" -->
+<!-- /> -->
+<!-- <script -->
+<!--   src="/assets/reveal.js-master/js/reveal.js" -->
+<!--   type="text/javascript" -->
+<!-- ></script> -->
+
+<!-- <\!-- configure the presentation, (you can tweak options to suit) -\-> -->
+<!-- <script> -->
+<!--   Reveal.initialize({ -->
+<!--     // Display presentation control arrows -->
+<!--     controls: false, -->
+
+<!--     // Help the user learn the controls by providing hints, for example by -->
+<!--     // bouncing the down arrow when they first encounter a vertical slide -->
+<!--     controlsTutorial: false, -->
+
+<!--     // Determines where controls appear, "edges" or "bottom-right" -->
+<!--     controlsLayout: "bottom-right", -->
+
+<!--     // Visibility rule for backwards navigation arrows; "faded", "hidden" -->
+<!--     // or "visible" -->
+<!--     controlsBackArrows: "faded", -->
+
+<!--     // Display a presentation progress bar -->
+<!--     progress: true, -->
+
+<!--     // Display the page number of the current slide -->
+<!--     slideNumber: false, -->
+
+<!--     // Push each slide change to the browser history -->
+<!--     history: false, -->
+
+<!--     // Enable keyboard shortcuts for navigation -->
+<!--     keyboard: true, -->
+
+<!--     // Enable the slide overview mode -->
+<!--     overview: true -->
+<!--   }); -->
+<!-- </script> -->

@@ -1,0 +1,618 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta charset="utf-8">
+
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reset.css">
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reveal.css">
+		<link rel="stylesheet" href="/assets/css/condensation.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="/assets/reveal.js-master/plugin/highlight/monokai.css" id="highlight-theme">
+		<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700" rel="stylesheet">
+
+	</head>
+
+	<body>
+
+
+	  <!-- this is where the reveailfy filter gets applied -->
+	  <div class="reveal"><div class="slides">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section id="lab-week-05-executors-and-fractals"><h1>Lab Week 05: Executors and Fractals</h1></section><section id="announcements"><h2>Announcements</h2>
+<ol>
+  <li>I owe you feedback!</li>
+  <li>Homework 02 posted, due Friday
+    <ul>
+      <li>fairly brief (3 questions)</li>
+    </ul>
+  </li>
+  <li>Accountability groups</li>
+</ol></section><section>
+<img src="/assets/img/2021-03/WiCS-slide.png">
+</section><section id="outline"><h2>Outline</h2>
+<ol>
+  <li>Threads and Executors</li>
+  <li>The Mandelbrot Set</li>
+  <li>Lab 03: Drawing the Mandelbrot Set</li>
+</ol></section><section id="previously"><h2>Previously</h2>
+<ul>
+  <li>Created <code>Thread</code>s and ran them in parallel
+    <ul>
+      <li>implmenet <code>Runnable</code> interface</li>
+      <li>create and <code>start</code> instances</li>
+      <li>
+<code>join</code> to wait until threads finish</li>
+    </ul>
+  </li>
+</ul></section><section id="drawbacks"><h2>Drawbacks</h2>
+<ul>
+  <li>Creating new <code>Thread</code>s has significant overhead
+    <ul>
+      <li>best performance by balancing number of threads/processors available</li>
+    </ul>
+  </li>
+  <li>Need to explicitly partition into relatively few pieces
+    <ul>
+      <li>partitioning may be unnatural</li>
+      <li>partition may be unbalanced:
+        <ul>
+          <li>don’t know in advance how long computations will take</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+<p>When tasks are fairly homogenous (e.g., computing $\pi$, shortcuts) previous approach is good</p></section><section id="a-sometimes-better-way"><h2>A (Sometimes) Better Way</h2>
+<p>A nice Java feature: <strong>thread pools</strong></p>
+<ul>
+  <li>Create a (relatively small) pool of threads</li>
+  <li>Assign tasks to the pool</li>
+  <li>Available threads process tasks
+    <ul>
+      <li>if all threads occupied, tasks stored in a queue</li>
+      <li>as threads are completed, threads in pool are reused</li>
+    </ul>
+  </li>
+</ul>
+<div style="margin-bottom: 8em"></div></section><section id="when-are-thread-pools-better"><h2>When are Thread Pools Better?</h2>
+<ul>
+  <li>Many smaller tasks</li>
+  <li>Fixed partition of problem may be unbalanced</li>
+  <li>“Online” problems: set of tasks not known in advance
+    <ul>
+      <li>e.g., processing requests for web server</li>
+    </ul>
+  </li>
+</ul></section><section id="thread-pools-in-java"><h2>Thread Pools in Java</h2>
+<ul>
+  <li>Implement <code>Executor</code> interface
+    <ul>
+      <li>
+<code>void execute(Runnable command)</code> method</li>
+    </ul>
+  </li>
+  <li>More control of task handling: <code>ExecutorService</code> interface:
+    <ul>
+      <li>submit tasks</li>
+      <li>wait for tasks to complete</li>
+      <li>shut down pool (don’t accept new tasks)</li>
+    </ul>
+  </li>
+</ul></section><section id="built-in-executorservice-implementations"><h2>Built-in <code>ExecutorService</code> Implementations</h2>
+<p>From <code>java.util.concurrent.Executors</code>:</p>
+<ul>
+  <li>
+<code>newFixedThreadPool(int nThreads)</code>
+    <ul>
+      <li>make a pool with a fixed number of threads</li>
+    </ul>
+  </li>
+  <li>
+<code>newSingleThreadExecutor()</code>
+    <ul>
+      <li>make a pool with a single thread</li>
+    </ul>
+  </li>
+  <li>
+<code>newCachedThreadPool()</code>
+    <ul>
+      <li>make pool that creates new threads as needed (reuses old if available)</li>
+    </ul>
+  </li>
+  <li>…</li>
+</ul></section><section id="using-thread-pools-1"><h2>Using Thread Pools 1</h2>
+<p>Define tasks</p>
+<pre><code class="language-java">public class MyTask implements Runnable {
+    ...
+    public void run () {
+        ...
+    }
+}
+</code></pre></section><section id="using-thread-pools-2"><h2>Using Thread Pools 2</h2>
+<p>Create a pool, e.g., fixed thread pool</p>
+<pre><code class="language-java">int nThreads = ...;
+
+ExecutorService pool = Exercutors.newFixedThreadPool(nThreads);
+</code></pre>
+<p>Create and execute tasks</p>
+<pre><code class="language-java">MyTask task = new MyTask(...);
+
+pool.execute(task);
+</code></pre></section><section id="using-thread-pools-3"><h2>Using Thread Pools 3</h2>
+<p>Shutting down the pool</p>
+<pre><code class="language-java">pool.shutdown();
+</code></pre>
+<p>Wait for all pending processes to complete (like <code>join()</code> method)</p>
+<pre><code class="language-java">try {
+
+    pool.awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+
+} catch (InterruptedException e) {
+
+    // do nothing
+
+}
+</code></pre></section><section id="example"><h2>Example</h2>
+<p>Shortcuts from Lab 02:</p>
+<pre><code class="language-java">	for (int i = 0; i &lt; size; ++i) {
+	    for (int j = 0; j &lt; size; ++j) {
+
+		float min = Float.MAX_VALUE;
+		
+		for (int k = 0; k &lt; size; ++k) {
+		    float x = matrix[i][k];
+		    float y = matrix[k][j];
+		    float z = x + y;
+
+		    if (z &lt; min) {
+			min = z;
+		    }
+		}
+
+		shortcuts[i][j] = min;
+	    }
+	}
+</code></pre></section><section id="a-small-task"><h2>A Small Task</h2>
+<p>For fixed row <code>i</code>, col <code>j</code>:</p>
+<pre><code class="language-java">		float min = Float.MAX_VALUE;
+		
+		for (int k = 0; k &lt; size; ++k) {
+		    float x = matrix[i][k];
+		    float y = matrix[k][j];
+		    float z = x + y;
+
+		    if (z &lt; min) {
+			min = z;
+		    }
+		}
+		shortcuts[i][j] = min;
+</code></pre></section><section id="two-approaches"><h2>Two Approaches</h2>
+<p>Approach 1:</p>
+<ul>
+  <li>Make a separate thread for each task
+    <ul>
+      <li>need <code>size * size</code> threads</li>
+    </ul>
+  </li>
+</ul>
+<p>Approach 2:</p>
+<ul>
+  <li>Make a thread pool and let the pool decide
+    <ul>
+      <li>choose pool size from <code>availableProcessors()</code>
+</li>
+    </ul>
+  </li>
+</ul></section><section id="try-it-yourself"><h2>Try it Yourself</h2>
+<ul>
+  <li><a href="/assets/java/matrix-executors/ShortcutTester.java">ShortcutTester.java</a></li>
+  <li><a href="/assets/java/matrix-executors/SquareMatrix.java">SquareMatrix.java</a></li>
+  <li><a href="/assets/java/matrix-executors/MatrixTask.java">MatrixTask.java</a></li>
+</ul></section><section id="test-them"><h2>Test Them</h2>
+<ul>
+  <li>Which method is faster? How much?</li>
+</ul>
+<div style="margin-bottom: 6em"></div>
+<ul>
+  <li>How does pool performance compare to previous multithreaded version (without optimizing cache locality)?</li>
+</ul>
+<div style="margin-bottom: 8em"></div></section><section id="the-mandelbrot-set"><h2>The Mandelbrot Set</h2>
+<p><img src="/assets/img/mandelbrot/mandelbrot-color.png" alt="" width="50%"></p></section><section id="complex-numbers"><h2>Complex Numbers</h2>
+<p>Recall:</p>
+<ul>
+  <li>the imaginary number $i$ satisfies $i^2 = -1$</li>
+  <li>complex numbers are number of the form $a + b i$ where $a$ and $b$ are real</li>
+  <li>complex arithmetic:
+    <ul>
+      <li>$(a + b i) + (c + d i) = (a + c) + (b + d) i$</li>
+      <li>$(a + b i) \cdot (c + d i) = (a c - b d) + (a d + b c) i$</li>
+    </ul>
+  </li>
+  <li>modulus (or length):
+    <ul>
+      <li>$|a + b i| = \sqrt{a^2 + b^2}$</li>
+    </ul>
+  </li>
+</ul></section><section id="complex-plane"><h2>Complex Plane</h2>
+<p>Associate complex number $a + b i$ with point $(a, b)$ in plane</p>
+<div style="margin-bottom: 16em"></div></section><section id="iterated-operations"><h2>Iterated Operations</h2>
+<p>Fix a complex number $c$</p>
+<ul>
+  <li>Define sequence $z_1, z_2, z_3, \ldots$ by
+    <ul>
+      <li>$z_1 = c$</li>
+      <li>for $n &gt; 1$, $z_{n} = z_{n-1}^2 + c$</li>
+    </ul>
+  </li>
+  <li>What happens for different values of $c$?</li>
+</ul>
+<div style="margin-bottom: 12em"></div></section><section id="mandelbrot-set"><h2>Mandelbrot Set</h2>
+<p>The <strong>Mandelbrot set</strong> is the set of complex numbers $c$ such that the sequence $z_1, z_2, \ldots$ remains <em>bounded</em> (i.e., $|z_n|$ does not grow indefinitely)</p>
+<p><img src="/assets/img/mandelbrot/mandelbrot-bw.png" alt="" width="50%"></p></section><section id="computing-the-mandelbrot-set"><h2>Computing the Mandelbrot Set</h2>
+<p>Choose parameters:</p>
+<ul>
+  <li>$N$ number of iterations</li>
+  <li>$M$ maximum modulus</li>
+</ul>
+<p>Given a complex number $c$:</p>
+<ul>
+  <li>compute $z_1 = c, z_2 = z_1^2 + c,\ldots$ until
+    <ol>
+      <li>$|z_n| \geq M$
+        <ul>
+          <li>stop because sequence appears unbounded</li>
+        </ul>
+      </li>
+      <li>$N$th iteration
+        <ul>
+          <li>stop because sequence appears bounded</li>
+        </ul>
+      </li>
+    </ol>
+  </li>
+  <li>if $N$th iteration reached $c$ is likely in Mandelbrot set</li>
+</ul></section><section id="illustration"><h2>Illustration</h2>
+<div style="margin-bottom: 18em"></div></section><section id="drawing-the-mandelbrot-set"><h2>Drawing the Mandelbrot Set</h2>
+<ul>
+  <li>Choose a region consisting of $a + b i$ with
+    <ul>
+      <li>$x_{min} \leq a \leq x_{max}$</li>
+      <li>$y_{min} \leq b \leq y_{max}$</li>
+    </ul>
+  </li>
+  <li>Make a grid in the region</li>
+  <li>For each point in grid, determine if in Mandelbrot set</li>
+  <li>Color accordingly</li>
+</ul>
+<div style="margin-bottom: 8em"></div></section><section id="counting-iterations"><h2>Counting Iterations</h2>
+<p>Given a complex number $c$:</p>
+<ul>
+  <li>compute $z_1 = c, z_2 = z_1^2 + c,\ldots$ until
+    <ol>
+      <li>$|z_n| \geq M$
+        <ul>
+          <li>stop because sequence appears unbounded</li>
+        </ul>
+      </li>
+      <li>$N$th iteration
+        <ul>
+          <li>stop because sequence appears bounded</li>
+        </ul>
+      </li>
+    </ol>
+  </li>
+  <li>if $N$th iteration reached $c$ is likely in Mandelbrot set</li>
+</ul></section><section id="color-by-escape-time"><h2>Color by Escape Time</h2>
+<ol>
+  <li>Color black in case 2 (point is in Mandelbrot set)</li>
+  <li>Change color based on $n$ in case 1:
+    <ul>
+      <li>smaller $n$ are “farther” from Mandelbrot set</li>
+      <li>larger $n$ are “closer”</li>
+    </ul>
+  </li>
+</ol>
+<div style="margin-bottom: 12em"></div></section><section id="why-thread-pools"><h2>Why Thread Pools?</h2>
+<p><img src="/assets/img/mandelbrot/mandelbrot-color.png" alt="" width="50%"></p></section><section id="partitions"><h2>Partitions?</h2>
+<p><img src="/assets/img/mandelbrot/zoom-1.png" alt="" width="20%">
+<img src="/assets/img/mandelbrot/zoom-2.png" alt="" width="20%"></p>
+<p><img src="/assets/img/mandelbrot/zoom-3.png" alt="" width="20%">
+<img src="/assets/img/mandelbrot/zoom-4.png" alt="" width="20%"></p></section><section id="your-task"><h2>Your Task</h2>
+<p>Basic task:</p>
+<ul>
+  <li>Use executor framework to compute Mandelbrot set as quickly as possible!</li>
+</ul>
+<p>Going Farther:</p>
+<ul>
+  <li>Nice color map</li>
+  <li>Animate zoom</li>
+</ul></section><section id="what-to-code"><h2>What To Code:</h2>
+<ul>
+  <li>Complete <code>MandelbrotFrame.java</code>
+</li>
+  <li>Write separate <code>class MTask</code>
+</li>
+</ul></section>
+</div></div>
+
+
+	  <script src="/assets/reveal.js-master/dist/reveal.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/math/math.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/zoom/zoom.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/notes/notes.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/search/search.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/markdown/markdown.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/highlight/highlight.js"></script>
+	  <script>
+	    
+
+	    // Also available as an ES module, see:
+	    // https://revealjs.com/initialization/
+	    Reveal.initialize({
+		controls: false,
+		progress: true,
+		center: true,
+		hash: true,
+		transition: 'none',
+		math: {
+		    config: 'TeX-AMS_HTML-full',
+		    TeX: {
+			Macros: {
+			    R: '\\mathbb{R}',
+			    set: [ '\\left\\{#1 \\; ; \\; #2\\right\\}', 2 ]
+			}
+		    }
+		},
+
+
+		// Learn about plugins: https://revealjs.com/plugins/
+		plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath ]
+	    });
+
+	  </script>
+
+	</body>
+</html>
+	  
+
+<!-- <\!-- load the reveal.js css & js (assuming you've put it in assets/)-\-> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/reveal.scss" -->
+<!-- /> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/theme/source/white.scss" -->
+<!-- /> -->
+<!-- <script -->
+<!--   src="/assets/reveal.js-master/js/reveal.js" -->
+<!--   type="text/javascript" -->
+<!-- ></script> -->
+
+<!-- <\!-- configure the presentation, (you can tweak options to suit) -\-> -->
+<!-- <script> -->
+<!--   Reveal.initialize({ -->
+<!--     // Display presentation control arrows -->
+<!--     controls: false, -->
+
+<!--     // Help the user learn the controls by providing hints, for example by -->
+<!--     // bouncing the down arrow when they first encounter a vertical slide -->
+<!--     controlsTutorial: false, -->
+
+<!--     // Determines where controls appear, "edges" or "bottom-right" -->
+<!--     controlsLayout: "bottom-right", -->
+
+<!--     // Visibility rule for backwards navigation arrows; "faded", "hidden" -->
+<!--     // or "visible" -->
+<!--     controlsBackArrows: "faded", -->
+
+<!--     // Display a presentation progress bar -->
+<!--     progress: true, -->
+
+<!--     // Display the page number of the current slide -->
+<!--     slideNumber: false, -->
+
+<!--     // Push each slide change to the browser history -->
+<!--     history: false, -->
+
+<!--     // Enable keyboard shortcuts for navigation -->
+<!--     keyboard: true, -->
+
+<!--     // Enable the slide overview mode -->
+<!--     overview: true -->
+<!--   }); -->
+<!-- </script> -->

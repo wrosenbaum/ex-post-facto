@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<title>Will  Rosenbaum | Multithreading</title>
+<meta name="description" content="A blog about mathematics, computer science, etc.
+">
+
+<!-- Open Graph -->
+
+
+<!-- Bootstrap & MDB -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" integrity="sha512-MoRNloxbStBcD8z3M/2BmnT+rg4IsMxPkXaGh2zD6LGNNFE80W3onsAhRcMAMrSoyWL9xD7Ert0men7vR8LUZg==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" integrity="sha512-RO38pBRxYH3SoOprtPTD86JFOclM51/XTIdEPh5j8sj4tp8jmQIx26twG52UaLi//hQldfrh7e51WzP9wuP32Q==" crossorigin="anonymous" />
+
+<!-- Fonts & Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"  integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.0/css/academicons.min.css" integrity="sha512-W4yqoT1+8NLkinBLBZko+dFB2ZbHsYLDdr50VElllRcNt2Q4/GSs6u71UHKxB7S6JEMCp5Ve4xjh3eGQl/HRvg==" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+
+
+
+<!-- Code Syntax Highlighting -->
+<link rel="stylesheet" href="https://gitcdn.link/repo/jwarby/jekyll-pygments-themes/master/github.css" />
+
+<!-- Styles -->
+<link rel="shortcut icon" href="/assets/img/favicon.ico">
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<link rel="canonical" href="/teaching/2021s-cosc-273/notes/multithreading/">
+
+<!-- JQuery -->
+<!-- jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+
+
+<!-- Theming-->
+
+  <script src="/assets/js/theme.js"></script>
+  <!-- Load DarkMode JS -->
+<script src="/assets/js/dark_mode.js"></script>
+
+
+
+
+
+
+    
+<!-- MathJax -->
+<script type="text/javascript">
+  window.MathJax = {
+    tex: {
+      tags: 'ams'
+    }
+  };
+</script>
+<script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js"></script>
+<script defer src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+
+  </head>
+
+  <body class="fixed-top-nav ">
+
+    <!-- Header -->
+
+    <header>
+
+    <!-- Nav Bar -->
+    <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top">
+    <div class="container">
+      
+      <a class="navbar-brand title font-weight-lighter" href="https://willrosenbaum.com/">
+       Will   Rosenbaum
+      </a>
+      
+      <!-- Navbar Toggle -->
+      <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar top-bar"></span>
+        <span class="icon-bar middle-bar"></span>
+        <span class="icon-bar bottom-bar"></span>
+      </button>
+      <div class="collapse navbar-collapse text-right" id="navbarNav">
+        <ul class="navbar-nav ml-auto flex-nowrap">
+          <!-- About -->
+          <li class="nav-item ">
+            <a class="nav-link" href="/">
+              about
+              
+            </a>
+          </li>
+          <!-- Other pages -->
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/teaching/">
+                teaching
+                
+              </a>
+          </li>
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/research/">
+                research
+                
+              </a>
+          </li>
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/publications/">
+                publications
+                
+              </a>
+          </li>
+          
+          
+	  
+          <!-- Blog -->
+          <li class="nav-item ">
+            <a class="nav-link" href="/blog/">
+              blog
+              
+            </a>
+          </li>
+          
+
+          
+            <div class = "toggle-container">
+              <a id = "light-toggle">
+                  <i class="fas fa-moon"></i>
+                  <i class="fas fa-sun"></i>
+              </a>
+            </div>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+</header>
+
+
+    <!-- Content -->
+
+    <div class="container mt-5">
+      <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Multithreading</h1>
+    <p class="post-description"></p>
+  </header>
+
+  <article>
+    <h2 id="sequential-and-multithreaded-programs">Sequential and Multithreaded Programs</h2>
+
+<p>Typically, when learning how to program for the first time, we write programs that are <strong>sequential.</strong> That is, a program executes a sequence of operations in some prescribed order. For example, consider the following program (<a href="/assets/java/multithreading/HelloThreads.java">source code here</a>):</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">HelloWorld</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+    
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">printHello</span><span class="o">()</span> <span class="o">{</span>
+	    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Hello, world! ("</span> <span class="o">+</span> <span class="o">++</span><span class="n">count</span> <span class="o">+</span> <span class="s">")"</span><span class="o">);</span>
+    <span class="o">}</span>
+    
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+	    <span class="n">printHello</span><span class="o">();</span>
+	    <span class="n">printHello</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>When we run the program with <code class="language-plaintext highlighter-rouge">java HelloWorld</code>, your computer executes the commands the order prescribed by the code. When the <code class="language-plaintext highlighter-rouge">main</code> method is executed, the program first executes the first line—a call to <code class="language-plaintext highlighter-rouge">printHello()</code>. When that method call completes, the second call to <code class="language-plaintext highlighter-rouge">printHello()</code> is executed. As a result, we get the following output:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>% java HelloWorld
+Hello, world! (1)
+Hello, world! (2)
+</code></pre></div></div>
+
+<p>This output will be the same for anyone executing this program on any machine, because the code unambiguously specifies the operations to be performed as well as the order in which the operations should be performed.</p>
+
+<p>Modern computers, however, have the ability to perform multiple operations—and indeed multiple sequences of operations—independently in parallel. This is done through a process called <strong>multithreading</strong>. Informally, a <strong>thread</strong> is a single sequence of operations to be performed in order. The <code class="language-plaintext highlighter-rouge">HelloWorld</code> program above is <strong>single-threaded</strong>. In fact, all programs written in Java are single-threaded, unless you explicitly make them multithreaded. (Of course, you may inadvertently write a multithreaded program by using a tool or library for Java that uses multithreading.)</p>
+
+<p>This note will guide you through the basics of writing simple multithreaded programs in Java.</p>
+
+<h3 id="why-write-multithreaded-programs">Why Write Multithreaded Programs?</h3>
+
+<p>One of the main reasons you’d want to write multithreaded programs is performance. If a program must perform two tasks that can be done independently, then multithreading may allow a computer to perform those tasks at the same time. If the tasks take roughly the same time to complete, then by creating one thread to complete each task the program could run in roughly half the time. Typically, we will not get a \(k\)-fold increase in performance by using \(k\) threads, but for some problems we can come close to this best-possible scenario. Oracle (the main developer of Java) lists some more specific <a href="https://docs.oracle.com/cd/E19455-01/806-3461/6jck06gqj/index.html">benefits of multithreading here</a>.</p>
+
+<h4 id="terminology">Terminology</h4>
+
+<p>We use the words “multithreaded,” “concurrent,” and “parallel,” to describe different aspects of tasks and (executions of) programs. A program or procedure is <strong>multithreaded</strong> if it is contains multiple <em>logically independent</em> sequences of operations—i.e., threads. Multiple threads in a program are executed <strong>concurrently</strong> if multiple threads are active at the same time. That is, the execution of at least one thread is started before the execution of another thread finishes. Finally, a concurrent execution is a <strong>parallel</strong> execution if the concurrent executions of threads are actively evaluated at the same time.</p>
+
+<p>For a concrete example illustrating the difference between these terms, consider the following procedure for making a Spanish tortilla:</p>
+
+<ol>
+  <li>Slice onions.</li>
+  <li>Slice potatoes.</li>
+  <li>Fry onions and potatoes in olive oil.</li>
+  <li>Beat eggs.</li>
+  <li>Drain onions and potatoes and add to eggs.</li>
+  <li>Fry egg mixture in olive oil, flipping half way through.</li>
+</ol>
+
+<p>The instructions (i.e., program) are multithreaded. For example steps 1,2, and 4 are logically independent and can be performed in any order. Moreover these steps can be performed concurrently, even by a single cook: I can start slicing one onion, then slice a potato, then go back to slicing onions, etc. While these tasks are being performed concurrently (I started slicing potatoes before I finished slicing onions), this execution is not a parallel execution because I am only actively slicing one ingredient at a time. If another person joins me in the kitchen so that I slice onions <em>while</em> my companion slices the potatoes, then the concurrent execution of the procedure becomes a parallel execution as well. Note that the concurrent execution with me cooking by myself isn’t any faster than a sequential execution in which I finish slicing onions before I start slicing potatoes, etc. It is only when another cook joins me—i.e., a parallel execution—in which I am actually able to make my tortilla faster.</p>
+
+<h3 id="limits-and-subtleties-of-multithreading">Limits and Subtleties of Multithreading</h3>
+
+<p>While multithreading can improve the performance of our programs (sometimes significantly), multithreading has limitations. First of all, the benefits of multithreading are limited by the performance of the hardware (i.e., computer) on which we run a multithreaded program. Most modern computers can execute multiple threads concurrently using multi-core processors: my 2019-era MacBook pro has 4 physical and 8 virtual cores; <a href="https://www.raspberrypi.org/products/raspberry-pi-3-model-a-plus/">this $25 Raspberry Pi</a> microcomputer has 4 cores; even <a href="https://www.raspberrypi.org/products/raspberry-pi-pico/">this $4 Raspberry Pi microcontroller</a> has 2 cores. Thus, while a multithreaded program I run on my laptop may be able to perform 8 times as many operations per second as a single threaded program, multithreading alone cannot improve the performance of my program by more than a factor of 8.</p>
+
+<p>Another system-level issue affecting the performance of multithreaded programs is the computational overhead of creating and destroying threads. In Java, each thread is an instance of the <code class="language-plaintext highlighter-rouge">Thread</code> an class. Every time we create a new thread, the computer must allocate the resources to create the thread before it can be executed. For simple tasks, this overhead may actually be larger than the cost of performing the task itself. Thus increasing the number of threads may actually give worse performance.</p>
+
+<p>But even in an idealized world where our computer can run as many threads concurrently as we want and the overhead of creating those threads is negligible, the benefits of parallelism (i.e., being able to execute multiple threads concurrently) are limited for many problems. Some tasks are inherently sequential; all steps must be completed in a prescribed order. For such problems multithreading cannot improve the performance (and will typically degrade the performance). <a href="https://en.wikipedia.org/wiki/Amdahl%27s_law">Amdahl’s Law</a>—which we will discuss soon—gives a quantitative upper bound on the amount by which parallelism can speed up the execution of a given tasks.</p>
+
+<p><strong>Example.</strong> Consider the problem educating college students. If we want to award a student an undergrad degree in computer science, say, to a student, that student must take several courses, many of which cannot be taken at the same time. Even if a student has the capacity to take many classes at once, they must follow the progression of completing COSC 111 before COSC 112, etc. Thus, the <strong>speed</strong> at which a student can complete their degree is limited to around 1 degree per 4 years. Adding more processors—i.e., professors—will not improve this time-to-degree. On the other hand, having more professors will allow a school to educate more students simultaneously. The speed of educating a single student does not increase by having more professors, but the <strong>throughput</strong> of the college increases. For example, Amherst College and its 300 academic staff produce roughly 450 graduates a year, while UMass and its 1,300 academic staff produce roughly 6,000 bachelors degrees per year. Amherst College and UMass Amherst operate at the same speed—4 years per student—but UMass’s throughput of 6,000 degrees per year is more than 13 times Amherst College’s throughput.</p>
+
+<p>The final challenge of writing multithreaded programs is primarily conceptual. Simply put, multithreaded programs are difficult to reason about (and debug!). Unlike sequential programs, the order in which operations occur across different threads is not under the control of the programmer. Thus, a correct program for performing a task must be correct <em>for every possible execution</em> of the program. This issue becomes tremendously subtle when different threads must access shared resources (e.g., a memory location or data structure). As we will see, even the basic problem of deciding which of two threads can access a shared bit of memory at a given time requires sophisticated reasoning.</p>
+
+<p>Most of this course is devoted to appreciating, understanding, and taming the wilderness of multithreaded programming. To get started, we should write our first multithreaded program.</p>
+
+<h2 id="threads-in-java">Threads in Java</h2>
+
+<p>In Java, threads are instances of the <code class="language-plaintext highlighter-rouge">Thread</code> class (or subclasses thereof). You can read the <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html">full documentation here</a>. There are several ways to create threads for performing a task in Java. The two most straightforward are:</p>
+
+<ol>
+  <li>Create a class that implements <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Runnable.html">the <code class="language-plaintext highlighter-rouge">Runnable</code> interface</a>.</li>
+  <li>Define a subclass of <code class="language-plaintext highlighter-rouge">Thread</code>.</li>
+</ol>
+
+<p>In either case, we must define a method <code class="language-plaintext highlighter-rouge">void run()</code>. This is the method that will get called when we start a thread—you can think of <code class="language-plaintext highlighter-rouge">run</code> as the thread equivalent of the <code class="language-plaintext highlighter-rouge">main</code> method in a program. Here, we will focus on first method.</p>
+
+<h3 id="hello-threads">Hello, Threads!</h3>
+
+<p>We are now ready to introduce our first multithreaded program: <code class="language-plaintext highlighter-rouge">HelloThreads</code> (<a href="/assets/java/multithreading/HelloThreads.java">source code here</a>). Here is a basic version:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">HelloThreads</span> <span class="kd">implements</span> <span class="nc">Runnable</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">NUM_THREADS</span> <span class="o">=</span> <span class="mi">4</span><span class="o">;</span>  <span class="c1">// number of threads to run</span>
+
+    <span class="kd">private</span> <span class="nc">String</span> <span class="n">message</span><span class="o">;</span>                   <span class="c1">// message printed by this</span>
+
+    <span class="c1">// constructor sets the message to be displayed by this thread</span>
+    <span class="kd">public</span> <span class="nf">HelloThreads</span> <span class="o">(</span><span class="nc">String</span> <span class="n">message</span><span class="o">)</span> <span class="o">{</span>
+	    <span class="k">this</span><span class="o">.</span><span class="na">message</span> <span class="o">=</span> <span class="n">message</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="c1">// the run method required by the Runnable interface</span>
+    <span class="c1">// this is the code that gets executed when we start the thread</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span> <span class="o">()</span> <span class="o">{</span>
+	    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">message</span><span class="o">);</span>
+    <span class="o">}</span>
+    
+    
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span> <span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+	
+    	<span class="c1">// make an array of threads</span>
+	<span class="nc">Thread</span><span class="o">[]</span> <span class="n">threads</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Thread</span><span class="o">[</span><span class="no">NUM_THREADS</span><span class="o">];</span>
+
+        <span class="c1">// initialize threads with a welcome message</span>
+	<span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="no">NUM_THREADS</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+	    <span class="n">threads</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Thread</span><span class="o">(</span><span class="k">new</span> <span class="nc">HelloThreads</span><span class="o">(</span><span class="s">"Hello from thread "</span> <span class="o">+</span> <span class="n">i</span><span class="o">));</span>
+    	<span class="o">}</span>
+
+	<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Say hello, threads!"</span><span class="o">);</span>
+
+        <span class="c1">// start all of the threads</span>
+        <span class="k">for</span> <span class="o">(</span><span class="nc">Thread</span> <span class="n">t</span> <span class="o">:</span> <span class="n">threads</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">t</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+        <span class="o">}</span>
+
+	<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Goodbye, threads!"</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>When I run this program, I get the following output:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>% java HelloThreads
+Say hello, threads!
+Hello from thread 0
+Hello from thread 1
+Hello from thread 2
+Goodbye, threads!
+Hello from thread 3
+</code></pre></div></div>
+
+<p>Already, we can see something strange is going on. Threads 0, 1, and 2 printed their message before the final line, but then <code class="language-plaintext highlighter-rouge">Goodbye, threads!</code> is printed <em>before</em> thread 3 prints its greeting. Unlike our sequential <code class="language-plaintext highlighter-rouge">HelloWorld</code> program <strong>statements in the multithreaded program may not be executed in the same order in which they appear in the control flow of the program.</strong> We have no control over the relative order that different threads perform their operations (though <em>within each thread</em>, the statements will be executed in the order prescribed by the program). By setting <code class="language-plaintext highlighter-rouge">NUM_THREADS</code> to 8, I get the following output:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Say hello, threads!
+Hello from thread 0
+Hello from thread 1
+Hello from thread 3
+Hello from thread 2
+Hello from thread 4
+Hello from thread 5
+Goodbye, threads!
+Hello from thread 6
+Hello from thread 7
+</code></pre></div></div>
+
+<p>This looks even worse! The threads didn’t even print their messages in the same order they were started. Not only that, but when I run the same program again (without modification), I get the following output:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Say hello, threads!
+Hello from thread 0
+Hello from thread 1
+Hello from thread 2
+Goodbye, threads!
+Hello from thread 6
+Hello from thread 5
+Hello from thread 3
+Hello from thread 4
+Hello from thread 7
+</code></pre></div></div>
+
+<p>This behavior again shows that multithreaded programs are inherently different from sequential programs: <strong>two different executions of the same program may give different results.</strong> This behavior is to be expected, however. Since the threads are being executed independently in parallel, we should not expect them to perform their tasks in any particular fixed order.</p>
+
+<h4 id="waiting-for-threads-to-complete">Waiting for threads to complete</h4>
+
+<p>One thing that is problematic with the execution above is that we say goodbye to the threads before they all have terminated. Often, we will want to wait until we know a thread has finished its task before moving on. We can wait until a task completes by using the <code class="language-plaintext highlighter-rouge">join</code> method.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">Thread</span> <span class="n">t</span><span class="o">;</span>
+<span class="o">...</span>
+<span class="n">t</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+<span class="o">...</span>
+<span class="n">t</span><span class="o">.</span><span class="na">join</span><span class="o">();</span>
+
+<span class="c1">// any code after this will only be executed</span>
+<span class="c1">// after t finishes</span>
+
+</code></pre></div></div>
+
+<p>From <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Thread.html#join()">the documentation</a>, we see that <code class="language-plaintext highlighter-rouge">join()</code> throws an <code class="language-plaintext highlighter-rouge">InterruptedException</code>, which we need to handle. (This exception gets thrown if a thread is interrupted—something we’ll talk about later. For our purposes, we can safely ignore such an exception.) Our new <code class="language-plaintext highlighter-rouge">main</code> method is now</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span> <span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+	<span class="c1">// make an array of threads</span>
+	<span class="nc">Thread</span><span class="o">[]</span> <span class="n">threads</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Thread</span><span class="o">[</span><span class="no">NUM_THREADS</span><span class="o">];</span>
+
+	<span class="c1">// initialize threads with a welcome message</span>
+	<span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="no">NUM_THREADS</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+	    <span class="n">threads</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Thread</span><span class="o">(</span><span class="k">new</span> <span class="nc">HelloThreads</span><span class="o">(</span><span class="s">"Hello from thread "</span> <span class="o">+</span> <span class="n">i</span><span class="o">));</span>
+	<span class="o">}</span>
+
+	<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Say hello, threads!"</span><span class="o">);</span>
+
+	<span class="c1">// start all of the threads</span>
+	<span class="k">for</span> <span class="o">(</span><span class="nc">Thread</span> <span class="n">t</span> <span class="o">:</span> <span class="n">threads</span><span class="o">)</span> <span class="o">{</span>
+	    <span class="n">t</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+	<span class="o">}</span>
+
+    <span class="c1">// wait for all threads to complete</span>
+	<span class="k">for</span> <span class="o">(</span><span class="nc">Thread</span> <span class="n">t</span> <span class="o">:</span> <span class="n">threads</span><span class="o">)</span> <span class="o">{</span>
+	    <span class="k">try</span> <span class="o">{</span>
+		    <span class="n">t</span><span class="o">.</span><span class="na">join</span><span class="o">();</span>
+	    <span class="o">}</span>
+	    <span class="k">catch</span> <span class="o">(</span><span class="nc">InterruptedException</span> <span class="n">ignored</span><span class="o">)</span> <span class="o">{</span>
+		    <span class="c1">// don't care if t was interrupted</span>
+	    <span class="o">}</span>
+	<span class="o">}</span>
+
+	<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Goodbye, threads!"</span><span class="o">);</span>
+
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>Now when I run this program, I get the following output:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Say hello, threads!
+Hello from thread 0
+Hello from thread 1
+Hello from thread 2
+Hello from thread 3
+Goodbye, threads!
+</code></pre></div></div>
+
+<p>We are still not guaranteed anything about the relative order of the messages printed by the individual threads. However, it will always be the case that <code class="language-plaintext highlighter-rouge">Goodbye, threads!</code> is printed <em>after</em> the messages from all threads.</p>
+
+<h4 id="getting-output-from-threads">Getting output from threads</h4>
+
+<p>We run threads using the <code class="language-plaintext highlighter-rouge">start()</code> method, and we can wait until a thread finishes by using the <code class="language-plaintext highlighter-rouge">join()</code> method. However, these methods neither take any arguments, nor return any values. So how can we get output from a thread, or get a thread to modify data that we will use later in our program?</p>
+
+<p>In order to access data produced by a thread, we need to create an object <em>before</em> starting the thread. We can then pass (a reference to) the object to the constructor for our thread’s class. The following program <code class="language-plaintext highlighter-rouge">SharedArray.java</code> illustrates how multiple threads can access the same array (<a href="/assets/java/multithreading/SharedArray.java">source code here</a>).</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.Arrays</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">SharedArray</span> <span class="kd">implements</span> <span class="nc">Runnable</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">NUM_THREADS</span> <span class="o">=</span> <span class="mi">4</span><span class="o">;</span>  <span class="c1">// number of threads to run</span>
+
+    <span class="kd">private</span> <span class="kt">int</span> <span class="n">id</span><span class="o">;</span>                           <span class="c1">// thread id</span>
+    <span class="kd">private</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">array</span><span class="o">;</span>                      <span class="c1">// array</span>
+
+
+    <span class="kd">public</span> <span class="nf">SharedArray</span> <span class="o">(</span><span class="kt">int</span> <span class="n">id</span><span class="o">,</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">array</span><span class="o">)</span> <span class="o">{</span>
+    	<span class="k">this</span><span class="o">.</span><span class="na">id</span> <span class="o">=</span> <span class="n">id</span><span class="o">;</span>
+    	<span class="k">this</span><span class="o">.</span><span class="na">array</span> <span class="o">=</span> <span class="n">array</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span> <span class="o">()</span> <span class="o">{</span>
+	<span class="c1">// set the value of array[id] to be this id</span>
+	<span class="n">array</span><span class="o">[</span><span class="n">id</span><span class="o">]</span> <span class="o">=</span> <span class="n">id</span><span class="o">;</span>
+    <span class="o">}</span>
+    
+    
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span> <span class="o">(</span><span class="nc">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+	<span class="c1">// the shared array with one index for each thread</span>
+	<span class="kt">int</span><span class="o">[]</span> <span class="n">shared</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="no">NUM_THREADS</span><span class="o">];</span>
+	
+	<span class="c1">// make an array of threads</span>
+	<span class="nc">Thread</span><span class="o">[]</span> <span class="n">threads</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Thread</span><span class="o">[</span><span class="no">NUM_THREADS</span><span class="o">];</span>
+
+        <span class="c1">// initialize threads with a welcome message</span>
+	<span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="no">NUM_THREADS</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+	    <span class="n">threads</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Thread</span><span class="o">(</span><span class="k">new</span> <span class="nc">SharedArray</span><span class="o">(</span><span class="n">i</span><span class="o">,</span> <span class="n">shared</span><span class="o">));</span>
+	<span class="o">}</span>
+
+    	<span class="c1">// start all of the threads</span>
+	<span class="k">for</span> <span class="o">(</span><span class="nc">Thread</span> <span class="n">t</span> <span class="o">:</span> <span class="n">threads</span><span class="o">)</span> <span class="o">{</span>
+	    <span class="n">t</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+	<span class="o">}</span>
+
+    	<span class="c1">// wait for all threads to complete</span>
+	<span class="k">for</span> <span class="o">(</span><span class="nc">Thread</span> <span class="n">t</span> <span class="o">:</span> <span class="n">threads</span><span class="o">)</span> <span class="o">{</span>
+	    <span class="k">try</span> <span class="o">{</span>
+		    <span class="n">t</span><span class="o">.</span><span class="na">join</span><span class="o">();</span>
+            <span class="o">}</span>
+    	    <span class="k">catch</span> <span class="o">(</span><span class="nc">InterruptedException</span> <span class="n">ignored</span><span class="o">)</span> <span class="o">{</span>
+     		<span class="c1">// don't care if t was interrupted</span>
+	    <span class="o">}</span>
+    	<span class="o">}</span>
+	
+	<span class="c1">// print the contents of the array to the terminal </span>
+	<span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"sharedArray = "</span> <span class="o">+</span> <span class="nc">Arrays</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span><span class="n">shared</span><span class="o">));</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div></div>
+
+<p>Note that a <em>single</em> <code class="language-plaintext highlighter-rouge">int[] shared</code> is created in the <code class="language-plaintext highlighter-rouge">main</code> method. This same array (or rather, a reference to the array) is passed to the constructor of each <code class="language-plaintext highlighter-rouge">SharedArray</code> in</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	<span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="no">NUM_THREADS</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+	        <span class="n">threads</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Thread</span><span class="o">(</span><span class="k">new</span> <span class="nc">SharedArray</span><span class="o">(</span><span class="n">i</span><span class="o">,</span> <span class="n">shared</span><span class="o">));</span>
+	<span class="o">}</span>
+</code></pre></div></div>
+
+<p>In each <code class="language-plaintext highlighter-rouge">SharedArray</code> instance created, the local variable <code class="language-plaintext highlighter-rouge">array</code> references the <code class="language-plaintext highlighter-rouge">int[] shared</code> created in <code class="language-plaintext highlighter-rouge">main</code>. Therefore, when <code class="language-plaintext highlighter-rouge">run()</code> is invoked for each thread, all threads modify <code class="language-plaintext highlighter-rouge">shared</code> from the main method.</p>
+
+<p><strong>Caution.</strong> It is potentially dangerous to have multiple threads modifying the same object (in this case <code class="language-plaintext highlighter-rouge">shared</code>)! There is nothing stopping different threads from accessing the same entry in the array, thereby leading to unpredictable/unintended behavior. We will spend a significant a significant amount of time understanding how to create objects that are “thread-safe,” meaning that they behave predictably when accessed by mutiple threads concurrently.</p>
+
+
+  </article>
+
+</div>
+
+    </div>
+
+    <!-- Footer -->
+
+    
+<footer class="fixed-bottom">
+  <div class="container mt-0">
+    &copy; Copyright 2021 Will  Rosenbaum.
+    
+    
+    
+  </div>
+</footer>
+
+
+
+  </body>
+
+  <!-- Bootsrap & MDB scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.4.4/umd/popper.min.js" integrity="sha512-eUQ9hGdLjBjY3F41CScH3UX+4JDSI9zXeroz7hJ+RteoCaY+GP/LDoM8AO+Pt+DRFw3nXqsjh9Zsts8hnYv8/A==" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha512-M5KW3ztuIICmVIhjSqXe01oV2bpe248gOxqmlcYrEzAvws7Pw3z6BK0iGbrwvdrUQUhi3eXgtxp5I8PDo9YfjQ==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js" integrity="sha512-Mug9KHKmroQFMLm93zGrjhibM2z2Obg9l6qFG2qKjXEXkMp/VDkI4uju9m4QKPjWSwQ6O2qzZEnJDEeCw0Blcw==" crossorigin="anonymous"></script>
+
+  
+<!-- Mansory & imagesLoaded -->
+<script defer src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<script defer src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+<script defer src="/assets/js/mansory.js" type="text/javascript"></script>
+
+
+  
+
+
+<!-- Load Common JS -->
+<script src="/assets/js/common.js"></script>
+
+
+</html>

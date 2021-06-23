@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta charset="utf-8">
+
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reset.css">
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reveal.css">
+		<link rel="stylesheet" href="/assets/css/condensation.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="/assets/reveal.js-master/plugin/highlight/monokai.css" id="highlight-theme">
+		<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700" rel="stylesheet">
+
+	</head>
+
+	<body>
+
+
+	  <!-- this is where the reveailfy filter gets applied -->
+	  <div class="reveal"><div class="slides">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section id="welcome-to-cosc-112"><h1>Welcome to COSC 112!</h1></section><section id="outline"><h2>Outline</h2>
+<ul>
+  <li>Introductions</li>
+  <li>Lab Section Plan</li>
+  <li>Lab 01: Hello, Graphics!</li>
+</ul>
+<p>(general course introduction in lecture)</p></section><section id="introductions"><h1>Introductions</h1></section><section id="your-professor"><h2>Your Professor</h2>
+<ul>
+  <li><a href="https://www.willrosenbaum.com">Will Rosenbaum</a></li>
+  <li>Originally from Seattle</li>
+  <li>Undregrad at Reed College in Portland, OR</li>
+  <li>PhD in Mathematics from UCLA</li>
+  <li>Postdocs at
+    <ul>
+      <li>Tel Aviv University</li>
+      <li>Max Planck Institute for Informatics (Saarbruecken, Germany)</li>
+    </ul>
+  </li>
+  <li>Started at Amherst last fall</li>
+</ul></section><section id="my-research"><h2>My Research</h2>
+<ul>
+  <li>Theoretical Computer Science
+    <ul>
+      <li>Interface between math and CS</li>
+    </ul>
+  </li>
+  <li>Theory of Distributed Systems
+    <ul>
+      <li>What can systems of interacting processors (broadly construed) compute?</li>
+    </ul>
+  </li>
+  <li>Research Questions
+    <ul>
+      <li>How efficiently can a computational task be performed in principle?</li>
+      <li>What resources (time, memory, communication) are required to perform tasks?</li>
+      <li>What tasks <em>cannot</em> be solved efficiently?</li>
+    </ul>
+  </li>
+</ul></section><section id="outside-of-work"><h2>Outside of Work</h2>
+<ul>
+  <li>Spend most time with family: Alivia, Ione (daughter), Finnegan (dog), Pip &amp; Posy (cats)</li>
+  <li>Hobbies: cooking, playing piano, hiking</li>
+</ul></section><section id="meet-your-tas"><h2>Meet your TAs</h2>
+<ul>
+  <li>Section 1:
+    <ul>
+      <li>Quentin Jeyaretnam &amp; Hasham Warrich</li>
+    </ul>
+  </li>
+  <li>Section 2:
+    <ul>
+      <li>Sarah Park &amp; Naya Burshan</li>
+    </ul>
+  </li>
+  <li>Evening TA Session (MW, 7:00–9:00 pm)
+    <ul>
+      <li>Nico Ardila, Hasham Warrich, Faith Merritt</li>
+    </ul>
+  </li>
+</ul></section><section id="meet-each-other"><h2>Meet Each Other!</h2>
+<ul>
+  <li>Introduce Yourselves
+    <ul>
+      <li>Name</li>
+      <li>Where from</li>
+      <li>Year</li>
+      <li>Major and/or interests</li>
+    </ul>
+  </li>
+</ul></section><section id="lab-sessions"><h1>Lab Sessions</h1></section><section id="purpose"><h2>Purpose</h2>
+<ul>
+  <li>Informal discussion (small groups)</li>
+  <li>Get questions answered</li>
+  <li>Help getting started</li>
+  <li>Troubleshooting</li>
+</ul></section><section id="lab-structure"><h2>Lab Structure</h2>
+<ul>
+  <li>Brief orientation</li>
+  <li>Questions</li>
+  <li>Small group discussion</li>
+  <li>Brief recap</li>
+</ul></section><section id="lab-01-hello-graphics"><h1>Lab 01: Hello, Graphics!</h1></section><section id="graphical-programming"><h2>Graphical Programming</h2>
+<ul>
+  <li>A program that produces simple graphics</li>
+  <li>Java tools
+    <ul>
+      <li>Abstract Window Toolkit (AWT): basic graphical constructs</li>
+      <li>Tools for window-based applications</li>
+    </ul>
+  </li>
+  <li>You’ll mostly be looking at <code>Graphics</code> class
+    <ul>
+      <li><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.desktop/java/awt/Graphics.html"><code>Graphics</code> documentation</a></li>
+    </ul>
+  </li>
+</ul></section><section id="example-output"><h2>Example Output</h2>
+<p><img src="/assets/img/2021s-cosc-112/lab01-hello-graphics/dog-grid.png" alt="" width="75%"></p></section><section id="hellographicsjava"><h2><code>HelloGraphics.java</code></h2>
+<pre><code class="language-java">import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Dimension;
+import javax.swing.JPanel;
+import javax.swing.JFrame;
+
+public class HelloGraphics extends JPanel{
+    public static final int BOX_WIDTH = 1024;
+    public static final int BOX_HEIGHT = 768;
+    public static final Color MAMMOTH_PURPLE = new Color(63, 31, 105);
+    public static final Color SPRING_LEAF = new Color(91, 161, 81);
+
+    public HelloGraphics(){
+        this.setPreferredSize(new Dimension(BOX_WIDTH, BOX_HEIGHT));
+    }
+    
+    //Your drawing method(s) here
+        
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        //Your code here: feel free to remove what is below
+	
+        g.setColor(MAMMOTH_PURPLE);
+        g.fillRect(0, 0, BOX_WIDTH, BOX_HEIGHT);
+
+	g.setColor(Color.WHITE);
+	g.setFont(new Font("Times New Roman", Font.BOLD, 48));
+	g.drawString("Protect the herd!", 50, 50);
+
+	g.setColor(SPRING_LEAF);
+	g.drawLine(50, 55, 500, 55);
+
+        g.setColor(Color.GREEN);
+        g.fillOval(50, 100, 30, 20);
+
+        g.setColor(Color.RED);
+        g.fillRect(100, 100, 20, 30);
+
+        g.setColor(Color.BLUE);
+        g.drawRoundRect(300, 200, 100, 200, 50, 100);
+
+        g.setColor(Color.ORANGE);
+        g.drawArc(200, 100, 200, 300, 90, 140);
+    }
+    
+    public static void main(String args[]){
+        JFrame frame = new JFrame("Hello, Graphics!");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setContentPane(new HelloGraphics());
+        frame.pack();
+        frame.setVisible(true);
+    }
+}
+</code></pre></section><section id="where-to-start"><h2>Where to Start</h2>
+<ul>
+  <li><a href="/assets/java/2021s-cosc-112/lab01-hello-graphics/HelloGraphics.java">Download and Run <code>HelloGraphics.java</code></a></li>
+  <li>Demo with IntelliJ
+    <ul>
+      <li>Running program</li>
+      <li>Program structure</li>
+      <li>Adding a method (drawX)</li>
+    </ul>
+  </li>
+</ul></section><section id="questions"><h2>Questions?</h2></section><section id="discuss"><h2>Discuss!</h2>
+<ul>
+  <li>What are you going to draw?</li>
+  <li>How?</li>
+  <li>What difficulties do you anticipate?</li>
+</ul></section>
+</div></div>
+
+
+	  <script src="/assets/reveal.js-master/dist/reveal.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/math/math.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/zoom/zoom.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/notes/notes.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/search/search.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/markdown/markdown.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/highlight/highlight.js"></script>
+	  <script>
+	    
+
+	    // Also available as an ES module, see:
+	    // https://revealjs.com/initialization/
+	    Reveal.initialize({
+		controls: false,
+		progress: true,
+		center: true,
+		hash: true,
+		transition: 'none',
+		math: {
+		    config: 'TeX-AMS_HTML-full',
+		    TeX: {
+			Macros: {
+			    R: '\\mathbb{R}',
+			    set: [ '\\left\\{#1 \\; ; \\; #2\\right\\}', 2 ]
+			}
+		    }
+		},
+
+
+		// Learn about plugins: https://revealjs.com/plugins/
+		plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath ]
+	    });
+
+	  </script>
+
+	</body>
+</html>
+	  
+
+<!-- <\!-- load the reveal.js css & js (assuming you've put it in assets/)-\-> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/reveal.scss" -->
+<!-- /> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/theme/source/white.scss" -->
+<!-- /> -->
+<!-- <script -->
+<!--   src="/assets/reveal.js-master/js/reveal.js" -->
+<!--   type="text/javascript" -->
+<!-- ></script> -->
+
+<!-- <\!-- configure the presentation, (you can tweak options to suit) -\-> -->
+<!-- <script> -->
+<!--   Reveal.initialize({ -->
+<!--     // Display presentation control arrows -->
+<!--     controls: false, -->
+
+<!--     // Help the user learn the controls by providing hints, for example by -->
+<!--     // bouncing the down arrow when they first encounter a vertical slide -->
+<!--     controlsTutorial: false, -->
+
+<!--     // Determines where controls appear, "edges" or "bottom-right" -->
+<!--     controlsLayout: "bottom-right", -->
+
+<!--     // Visibility rule for backwards navigation arrows; "faded", "hidden" -->
+<!--     // or "visible" -->
+<!--     controlsBackArrows: "faded", -->
+
+<!--     // Display a presentation progress bar -->
+<!--     progress: true, -->
+
+<!--     // Display the page number of the current slide -->
+<!--     slideNumber: false, -->
+
+<!--     // Push each slide change to the browser history -->
+<!--     history: false, -->
+
+<!--     // Enable keyboard shortcuts for navigation -->
+<!--     keyboard: true, -->
+
+<!--     // Enable the slide overview mode -->
+<!--     overview: true -->
+<!--   }); -->
+<!-- </script> -->

@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta charset="utf-8">
+
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reset.css">
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reveal.css">
+		<link rel="stylesheet" href="/assets/css/condensation.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="/assets/reveal.js-master/plugin/highlight/monokai.css" id="highlight-theme">
+		<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700" rel="stylesheet">
+
+	</head>
+
+	<body>
+
+
+	  <!-- this is where the reveailfy filter gets applied -->
+	  <div class="reveal"><div class="slides">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section id="lab-week-7-generating-prime-numbers"><h1>Lab Week 7: Generating Prime Numbers</h1></section><section id="schedule"><h2>Schedule</h2>
+<ol>
+  <li>Quiz 03: Finish by Wednesday (March 31)</li>
+  <li>Homework 02: Due Friday (April 2)</li>
+  <li>Final project preliminary proposal: Due next Friday (April 9)</li>
+  <li>Lab 04: Due following Friday (April 16)</li>
+</ol>
+<p>Also: Only 5 labs/homework assignments</p></section><section id="overview"><h2>Overview</h2>
+<ol>
+  <li>Prime numbers</li>
+  <li>Generating Primes</li>
+  <li>Your Task</li>
+</ol></section><section id="prime-numbers"><h1>Prime Numbers</h1></section><section id="recall"><h2>Recall</h2>
+<p>The natural numbers $0, 1, 2, 3, \ldots$</p>
+<p>Given natural numbers $n$, $d$:</p>
+<ul>
+  <li>$d$ is a <strong>divisor</strong> of $n$ if $n = d \cdot q$ for some natural number $q$
+    <ul>
+      <li>$q$ is the <strong>quotient</strong> of $n$ and $d$</li>
+      <li>$n$ is a <strong>multiple</strong> of $d$</li>
+    </ul>
+  </li>
+  <li>
+    <p>$d$ is a <strong>proper divisor</strong> of $n$ if it is a divisor and $d \neq 1, n$</p>
+  </li>
+  <li>In Java
+    <ul>
+      <li>
+<code>(n % d == 0)</code> returns <code>true</code> if and only if <code>d</code> divides <code>n</code>
+</li>
+    </ul>
+  </li>
+</ul></section><section id="prime-definitions"><h2>Prime Definitions</h2>
+<p>A natural number $p &gt; 1$ is <strong>prime</strong> if it has no proper divisors.</p>
+<ul>
+  <li>A natural number $n &gt; 1$ that is not prime is <strong>composite</strong>
+</li>
+</ul>
+<p>Examples:</p>
+<ul>
+  <li>
+    <p>$2, 3, 5, 7, 11, 17, 19$ are prime</p>
+  </li>
+  <li>
+    <p>$4, 6, 8, 9, 10, 12, 14, 15, 16, 18, 20$ are composite</p>
+  </li>
+</ul></section><section id="who-cares"><h2>Who Cares?</h2>
+<ul>
+  <li>Mathematicians
+    <ul>
+      <li>primes are atomic building blocks of natural numbers</li>
+      <li>understanding how prime numbers are distributed is a central goal of number theory</li>
+    </ul>
+  </li>
+  <li>Cryptographers
+    <ul>
+      <li>large prime numbers are essential for RSA encryption</li>
+    </ul>
+  </li>
+  <li>Everyone
+    <ul>
+      <li>RSA encryption is most widely used public key encryption</li>
+      <li>used for secure communication everywhere</li>
+    </ul>
+  </li>
+</ul></section><section id="testing-if-a-number-is-prime"><h2>Testing if a Number is Prime</h2>
+<p>Method 1: Trial Division</p>
+<ul>
+  <li>Check all numbers less than <code>n</code> to see if <code>n</code> is divisble by them:</li>
+</ul>
+<pre><code class="language-java">public boolean isPrime(int n) {
+    if (n &lt;= 1) return false;
+	
+    for (int d = 2; d &lt; n; ++d) {
+        if (n % d == 0)
+            return false;
+    }
+	
+    return true;
+}
+</code></pre></section><section id="example"><h2>Example</h2>
+<p>Is 91 prime?</p>
+<div style="margin-bottom: 12em"></div></section><section id="is-trial-division-efficient"><h2>Is Trial Division Efficient?</h2>
+<p>Can we improve trial division?</p>
+<ul>
+  <li>Do we have to check all possible divisors up to <code>n-1</code>?</li>
+</ul>
+<div style="margin-bottom: 12em"></div></section><section id="making-things-more-efficient"><h2>Making Things More Efficient</h2>
+<p><strong>Claim 1.</strong> If <code>n</code> is composite, then it has a divisor at most <code>Math.sqrt(n)</code>.</p>
+<p><strong>Why?</strong></p>
+<div style="margin-bottom: 8em"></div>
+<p><strong>Conclusion.</strong> Only need to check divisors up to <code>Math.sqrt(n)</code></p></section><section id="a-faster-procedure"><h2>A Faster Procedure</h2>
+<pre><code class="language-java">public boolean isPrime(int n) {
+    if (n &lt;= 1) return false;
+	
+    for (int d = 2; d * d &lt;= n; ++d) {
+        if (n % d == 0)
+            return false;
+    }
+	
+    return true;
+}
+</code></pre></section><section id="can-procedure-be-improved-more"><h2>Can Procedure Be Improved More?</h2>
+<p><strong>Claim 2.</strong> If <code>n</code> is composite, then it has a <em>prime</em> divisor at most <code>Math.sqrt(n)</code>.</p>
+<p>So we only need to check <em>primes</em> up to <code>Math.sqrt(n)</code></p>
+<p>Example:</p>
+<ul>
+  <li>To determine if a number less than…
+    <ul>
+      <li>…100 is prime, need only check divisibility by $2, 3, 5, 7$</li>
+      <li>…1,000 is prime, need only check divisibility by $2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31$</li>
+      <li>…1,000,000 is prime, need only check divisibility by primes up to 1,000</li>
+    </ul>
+  </li>
+</ul></section><section id="generating-primes"><h2>Generating Primes</h2>
+<p>Suppose we want to generate <em>all</em> primes up to $N$…</p>
+<p>How should we do this?</p>
+<div style="margin-bottom: 12em"></div></section><section id="sieve-of-eratosthenes"><h2>Sieve of Eratosthenes</h2>
+<ol>
+  <li>Write numbers <code>2</code> through <code>N</code>
+</li>
+  <li>Read numbers in order:
+    <ul>
+      <li>if a number is not crossed out, circle it
+        <ul>
+          <li>it is prime!</li>
+        </ul>
+      </li>
+      <li>then cross out all multiples</li>
+    </ul>
+  </li>
+</ol>
+<p>Example</p>
+<pre><code class="language-text">
+02 03 04 05 06 07 08 09 10
+
+11 12 13 14 15 16 17 18 19
+
+20 21 22 23 24 25 26 27 28
+
+29 30 31 32 33 34 35 36 37
+
+</code></pre></section><section id="observationoptimization"><h2>Observation/Optimization</h2>
+<p>In SoE, once we find primes up to <code>Math.sqrt(N)</code>, we can stop!</p>
+<p>Why?</p>
+<div style="margin-bottom: 12em"></div></section><section id="eratosthenes-in-code"><h2>Eratosthenes in Code</h2>
+<ol>
+  <li>Make boolean array <code>isPrime</code> of size <code>N</code>
+    <ul>
+      <li>interpretation: <code>isPrime[i] == true</code> if <code>i</code> is prime</li>
+    </ul>
+  </li>
+  <li>Initialize <code>isPrime[i]</code> to <code>true</code> for all <code>i &gt;= 2</code>
+</li>
+  <li>Iterate over indices <code>i</code> up to <code>Math.sqrt(N)</code>:
+    <ul>
+      <li>if <code>isPrime[i]</code>:
+        <ul>
+          <li>set <code>isPrime[j] = false</code> for all <code>j</code> that are multiples of <code>i</code>
+</li>
+        </ul>
+      </li>
+      <li>otherwise, do nothing</li>
+    </ul>
+  </li>
+</ol>
+<p>When done: <code>isPrime[i]</code> is true precisely for primes</p></section><section id="eratosthenes-in-java"><h2>Eratosthenes in Java</h2>
+<pre><code class="language-java">boolean[] isPrime = new boolean[N];
+
+for (int i = 2; i &lt; N; ++i) {
+    isPrime[i] = true;
+}
+
+for (int i = 2; i &lt; N; ++i) {
+    if (isPrime[i]) {
+        for (int j = 2 * i; j &lt; N; j += i) {
+            isPrime[j] = false;		
+        }
+    }
+}
+</code></pre></section><section id="how-fast-is-this"><h2>How Fast is This?</h2>
+<p>Test it for yourself!</p>
+<ul>
+  <li><a href="/assets/java/primes/Primes.java">Download <code>Primes.java</code></a></li>
+</ul>
+<p>Note: some small optimizations in <code>Primes.java</code></p></section><section id="lab-04-primes"><h1>Lab 04: Primes</h1></section><section id="your-task"><h2>Your Task</h2>
+<p>Write a program that computes an array <code>int[] primes</code> of consecutive primes as quickly as possible.</p>
+<p>To test your program, I will</p>
+<ul>
+  <li>run the program for 1 second</li>
+  <li>read <code>primes[0], primes[1], ...</code>
+</li>
+  <li>stop reading at the first index that is not prime, or the primes are out of order
+    <ul>
+      <li>e.g., if <code>primes[0] = 3</code>, I stop reading at index <code>0</code>
+</li>
+    </ul>
+  </li>
+  <li>your program performance is determined by the highest index read</li>
+</ul></section><section id="conceptual-challenges"><h2>Conceptual Challenges</h2>
+<ol>
+  <li>Generating primes faster
+    <ul>
+      <li>use parallelism!</li>
+    </ul>
+  </li>
+  <li>Dealing with unknown termination time
+    <ul>
+      <li>task will be interrupted</li>
+      <li>must start writing primes before all primes found</li>
+    </ul>
+  </li>
+  <li>Writing primes <em>in order</em>
+    <ul>
+      <li>requires coordination between threads</li>
+    </ul>
+  </li>
+</ol></section><section id="technical-challenges"><h2>Technical Challenges</h2>
+<ol>
+  <li>Handling interruptions gracefully</li>
+  <li>Using shared data structure to coordinate between threads</li>
+  <li>Having concurrent threads with different roles
+    <ul>
+      <li>e.g., producers and consumers</li>
+    </ul>
+  </li>
+</ol></section><section id="a-parallel-activity"><h2>A Parallel Activity</h2>
+<p>As noted earlier:</p>
+<ol>
+  <li>A number up to 100 is prime if and only if it has no prime divisor under 10</li>
+  <li>Primes under 10 are 2, 3, 5, 7</li>
+</ol>
+<p>Let’s compute primes up to 100 in parallel!</p>
+<ul>
+  <li>Each breakout room will test 10 numbers for primality</li>
+  <li>Room 01: 10–19</li>
+  <li>Room 02: 20–29</li>
+  <li>…</li>
+</ul>
+<p>You’ll have 2 minutes!</p></section><section id="primes-up-to-100"><h2>Primes up to 100:</h2>
+<pre><code class="language-text">00-09:
+
+10-19:
+
+20-29:
+
+30-39:
+
+40-49:
+
+50-59:
+
+60-69:
+
+70-79:
+
+80-89:
+
+90-99:
+</code></pre></section><section id="suggestion"><h2>Suggestion</h2>
+<p>Your program can use similar ideas to this activity:</p>
+<ul>
+  <li>Small tasks to find primes</li>
+  <li>Other task(s) to write primes in order when found</li>
+</ul></section>
+</div></div>
+
+
+	  <script src="/assets/reveal.js-master/dist/reveal.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/math/math.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/zoom/zoom.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/notes/notes.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/search/search.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/markdown/markdown.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/highlight/highlight.js"></script>
+	  <script>
+	    
+
+	    // Also available as an ES module, see:
+	    // https://revealjs.com/initialization/
+	    Reveal.initialize({
+		controls: false,
+		progress: true,
+		center: true,
+		hash: true,
+		transition: 'none',
+		math: {
+		    config: 'TeX-AMS_HTML-full',
+		    TeX: {
+			Macros: {
+			    R: '\\mathbb{R}',
+			    set: [ '\\left\\{#1 \\; ; \\; #2\\right\\}', 2 ]
+			}
+		    }
+		},
+
+
+		// Learn about plugins: https://revealjs.com/plugins/
+		plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath ]
+	    });
+
+	  </script>
+
+	</body>
+</html>
+	  
+
+<!-- <\!-- load the reveal.js css & js (assuming you've put it in assets/)-\-> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/reveal.scss" -->
+<!-- /> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/theme/source/white.scss" -->
+<!-- /> -->
+<!-- <script -->
+<!--   src="/assets/reveal.js-master/js/reveal.js" -->
+<!--   type="text/javascript" -->
+<!-- ></script> -->
+
+<!-- <\!-- configure the presentation, (you can tweak options to suit) -\-> -->
+<!-- <script> -->
+<!--   Reveal.initialize({ -->
+<!--     // Display presentation control arrows -->
+<!--     controls: false, -->
+
+<!--     // Help the user learn the controls by providing hints, for example by -->
+<!--     // bouncing the down arrow when they first encounter a vertical slide -->
+<!--     controlsTutorial: false, -->
+
+<!--     // Determines where controls appear, "edges" or "bottom-right" -->
+<!--     controlsLayout: "bottom-right", -->
+
+<!--     // Visibility rule for backwards navigation arrows; "faded", "hidden" -->
+<!--     // or "visible" -->
+<!--     controlsBackArrows: "faded", -->
+
+<!--     // Display a presentation progress bar -->
+<!--     progress: true, -->
+
+<!--     // Display the page number of the current slide -->
+<!--     slideNumber: false, -->
+
+<!--     // Push each slide change to the browser history -->
+<!--     history: false, -->
+
+<!--     // Enable keyboard shortcuts for navigation -->
+<!--     keyboard: true, -->
+
+<!--     // Enable the slide overview mode -->
+<!--     overview: true -->
+<!--   }); -->
+<!-- </script> -->

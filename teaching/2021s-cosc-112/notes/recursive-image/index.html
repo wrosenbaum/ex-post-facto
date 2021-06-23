@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<title>Will  Rosenbaum | A Recursive Image</title>
+<meta name="description" content="A blog about mathematics, computer science, etc.
+">
+
+<!-- Open Graph -->
+
+
+<!-- Bootstrap & MDB -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" integrity="sha512-MoRNloxbStBcD8z3M/2BmnT+rg4IsMxPkXaGh2zD6LGNNFE80W3onsAhRcMAMrSoyWL9xD7Ert0men7vR8LUZg==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" integrity="sha512-RO38pBRxYH3SoOprtPTD86JFOclM51/XTIdEPh5j8sj4tp8jmQIx26twG52UaLi//hQldfrh7e51WzP9wuP32Q==" crossorigin="anonymous" />
+
+<!-- Fonts & Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"  integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.0/css/academicons.min.css" integrity="sha512-W4yqoT1+8NLkinBLBZko+dFB2ZbHsYLDdr50VElllRcNt2Q4/GSs6u71UHKxB7S6JEMCp5Ve4xjh3eGQl/HRvg==" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+
+
+
+<!-- Code Syntax Highlighting -->
+<link rel="stylesheet" href="https://gitcdn.link/repo/jwarby/jekyll-pygments-themes/master/github.css" />
+
+<!-- Styles -->
+<link rel="shortcut icon" href="/assets/img/favicon.ico">
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<link rel="canonical" href="/teaching/2021s-cosc-112/notes/recursive-image/">
+
+<!-- JQuery -->
+<!-- jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+
+
+<!-- Theming-->
+
+  <script src="/assets/js/theme.js"></script>
+  <!-- Load DarkMode JS -->
+<script src="/assets/js/dark_mode.js"></script>
+
+
+
+
+
+
+    
+<!-- MathJax -->
+<script type="text/javascript">
+  window.MathJax = {
+    tex: {
+      tags: 'ams'
+    }
+  };
+</script>
+<script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js"></script>
+<script defer src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+
+  </head>
+
+  <body class="fixed-top-nav ">
+
+    <!-- Header -->
+
+    <header>
+
+    <!-- Nav Bar -->
+    <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top">
+    <div class="container">
+      
+      <a class="navbar-brand title font-weight-lighter" href="https://willrosenbaum.com/">
+       Will   Rosenbaum
+      </a>
+      
+      <!-- Navbar Toggle -->
+      <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar top-bar"></span>
+        <span class="icon-bar middle-bar"></span>
+        <span class="icon-bar bottom-bar"></span>
+      </button>
+      <div class="collapse navbar-collapse text-right" id="navbarNav">
+        <ul class="navbar-nav ml-auto flex-nowrap">
+          <!-- About -->
+          <li class="nav-item ">
+            <a class="nav-link" href="/">
+              about
+              
+            </a>
+          </li>
+          <!-- Other pages -->
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/teaching/">
+                teaching
+                
+              </a>
+          </li>
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/research/">
+                research
+                
+              </a>
+          </li>
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/publications/">
+                publications
+                
+              </a>
+          </li>
+          
+          
+	  
+          <!-- Blog -->
+          <li class="nav-item ">
+            <a class="nav-link" href="/blog/">
+              blog
+              
+            </a>
+          </li>
+          
+
+          
+            <div class = "toggle-container">
+              <a id = "light-toggle">
+                  <i class="fas fa-moon"></i>
+                  <i class="fas fa-sun"></i>
+              </a>
+            </div>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+</header>
+
+
+    <!-- Content -->
+
+    <div class="container mt-5">
+      <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">A Recursive Image</h1>
+    <p class="post-description">A guide to your first recursive graphical program.</p>
+  </header>
+
+  <article>
+    <p>This note give an explanation of a simple recursive graphics program, <code class="language-plaintext highlighter-rouge">Recursion.java</code>. Download the code below to follow along.</p>
+
+<ul>
+  <li><a href="/assets/java/recursive-image/Recursion.java"><code class="language-plaintext highlighter-rouge">Recursion.java</code></a></li>
+</ul>
+
+<p><strong>NOTE.</strong> The exercises suggested here are for your own edification. You do not need to do them or turn anything in. However, doing these exercises will be instructive.</p>
+
+<h2 id="what-does-the-program-do">What does the program do?</h2>
+
+<p>Before looking at the code, here is the output the program generates:</p>
+
+<p><img src="/assets/img/recursive-image/recursion.png" alt="" width="75%" /></p>
+
+<p>It consists of a sequence of nested squares, each with the word “RECURSION!” written at the bottom.</p>
+
+<h2 id="how-is-the-picture-generated-without-code">How is the picture generated (without code)?</h2>
+
+<p>Before going through the code, we should understand how <em>conceptually</em> to draw the figure. A good place to start is the following exercise: Suppose you are talking to a friend on the phone. How would you describe the image to them? How would you explain how to draw the picture for themself?</p>
+
+<p>Here’s how I’d probably explain it. In order to draw the figure:</p>
+
+<ol>
+  <li>Draw a rectangle.</li>
+  <li>At the bottom of the rectangle, write the word “RECURSION!”.</li>
+  <li>Draw a smaller rectangle inside the larger rectangle.</li>
+  <li>Repeat steps 2 through 4 for the smaller rectangle until you can’t draw any smaller.</li>
+</ol>
+
+<p>Following instructions 1 through 3 once, you’d draw a figure like the following:</p>
+
+<p><img src="/assets/img/recursive-image/recursion-depth-0.png" alt="" width="75%" /></p>
+
+<p>Now performing steps 2 and 3 again, we’d get the following figure:</p>
+
+<p><img src="/assets/img/recursive-image/recursion-depth-1.png" alt="" width="75%" /></p>
+
+<p>Continuing this process indefinitely, we’d produce the original figure.
+Now the “trick” is to see that the process described above has a simple recursive description. Namely, in order to draw the figure, we should (1) draw a rectangle, (2) print the text at the bottom of the rectangle, and (3) draw a smaller version of the <em>same figure</em> above the text.</p>
+
+<p>A little more formally, we could start to structure our code with a method <code class="language-plaintext highlighter-rouge">drawFigure</code> as follows.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kt">void</span> <span class="nf">drawFigure</span><span class="o">(...)</span> <span class="o">{</span>
+        <span class="c1">// code to draw rectangle and text</span>
+        <span class="o">...</span>
+    
+        <span class="c1">// draw a smaller figure above the text</span>
+        <span class="n">drawFigure</span><span class="o">(...);</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>What arguments do we need to send to the method <code class="language-plaintext highlighter-rouge">drawFigure</code> in order for it to do its job? At a minimum, we must tell the method where to draw the rectangle and text, as well as how large they should be. Additionally, we need to pass a <code class="language-plaintext highlighter-rouge">GraphicsObject</code> to the method, so that the program knows which window to draw the figure on. Finally, it might be useful to keep track of the depth of recursion, in case we want to stop drawing at a pre-specified depth.</p>
+
+<p>So the <em>signature</em> of the method <code class="language-plaintext highlighter-rouge">drawFigure</code> should be something like</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">drawFigure</span><span class="o">(</span><span class="nc">Graphics</span> <span class="n">g</span><span class="o">,</span> <span class="kt">int</span> <span class="n">x</span><span class="o">,</span> <span class="kt">int</span> <span class="n">y</span><span class="o">,</span> <span class="kt">int</span> <span class="n">width</span><span class="o">,</span> <span class="kt">int</span> <span class="n">height</span><span class="o">,</span> <span class="kt">int</span> <span class="n">curDepth</span><span class="o">)</span>
+</code></pre></div></div>
+
+<p>We must also specify the dimensions and location of the smaller figure to be drawn. However, instead of passing these as explicit parameters, we can compute them from the current values of <code class="language-plaintext highlighter-rouge">x</code>, <code class="language-plaintext highlighter-rouge">y</code>, <code class="language-plaintext highlighter-rouge">width</code>, and <code class="language-plaintext highlighter-rouge">height</code>.</p>
+
+<h2 id="looking-at-the-code">Looking at the code</h2>
+
+<p>Now that we’ve described how we plan to generate the picture, let’s look at the actual code. A bunch of the code is the standard graphics setup. The first interesting lines are</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">BOX_WIDTH</span> <span class="o">=</span> <span class="mi">512</span><span class="o">;</span>
+        <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">int</span> <span class="no">BOX_HEIGHT</span> <span class="o">=</span> <span class="mi">768</span><span class="o">;</span>
+    
+        <span class="c1">// relative size of recursive image</span>
+        <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">double</span> <span class="no">RATIO</span> <span class="o">=</span> <span class="mf">3.0</span> <span class="o">/</span> <span class="mi">4</span><span class="o">;</span>
+    
+        <span class="c1">// ratio of text size to box height</span>
+        <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">double</span> <span class="no">TEXT_RATIO</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="mi">16</span><span class="o">;</span>
+    
+        <span class="c1">// ratio of text margins to box width</span>
+        <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">double</span> <span class="no">TEXT_MARGIN_RATIO</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="mi">16</span><span class="o">;</span>
+    
+        <span class="c1">// message to be printed</span>
+        <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">String</span> <span class="no">MESSAGE</span> <span class="o">=</span> <span class="s">"RECURSION!"</span><span class="o">;</span>
+</code></pre></div></div>
+
+<p>The constant <code class="language-plaintext highlighter-rouge">RATIO</code> determines the relative size of one step of the drawing and the next recursive step. For example, if we draw a rectangle with width <code class="language-plaintext highlighter-rouge">width</code>, then the next recursive call should have width <code class="language-plaintext highlighter-rouge">width * RATIO</code>. Since <code class="language-plaintext highlighter-rouge">RATIO</code> has type <code class="language-plaintext highlighter-rouge">double</code> and a width should be an <code class="language-plaintext highlighter-rouge">int</code> (since it is a number of pixels), we need to cast the result to an <code class="language-plaintext highlighter-rouge">int</code> type with as follows.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kt">int</span> <span class="n">newWidth</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="o">(</span><span class="n">width</span> <span class="o">*</span> <span class="no">RATIO</span><span class="o">);</span>
+</code></pre></div></div>
+
+<p>Similarly, the other constants define the sizes of different parts of the figure relative to the current rectangle being drawn.</p>
+
+<p><strong>Exercise.</strong> Play around with the constant values and see how it changes the image!</p>
+
+<p>Next we see a method that draws a box and text with the following code.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="cm">/* 
+         *  method drawTextBox(Graphics g, int x, int y, int width, int
+         *  height) draws a rectangle with text at the bottom. x and y are
+         *  the coordinates of the upper left corner of the rectangle;
+         *  width and height specify the width and height of the box.
+         */</span>
+        <span class="kd">private</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">drawTextBox</span><span class="o">(</span><span class="nc">Graphics</span> <span class="n">g</span><span class="o">,</span> <span class="kt">int</span> <span class="n">x</span><span class="o">,</span> <span class="kt">int</span> <span class="n">y</span><span class="o">,</span> <span class="kt">int</span> <span class="n">width</span><span class="o">,</span> <span class="kt">int</span> <span class="n">height</span><span class="o">)</span> <span class="o">{</span>
+    
+        <span class="c1">// draw a rectangle</span>
+        <span class="n">g</span><span class="o">.</span><span class="na">setColor</span><span class="o">(</span><span class="nc">Color</span><span class="o">.</span><span class="na">BLACK</span><span class="o">);</span>
+        <span class="n">g</span><span class="o">.</span><span class="na">drawRect</span><span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">y</span><span class="o">,</span> <span class="n">width</span><span class="o">,</span> <span class="n">height</span><span class="o">);</span>
+    
+        <span class="c1">// determine the text size</span>
+        <span class="kt">int</span> <span class="n">textSize</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="o">(</span><span class="n">height</span> <span class="o">*</span> <span class="no">TEXT_RATIO</span><span class="o">);</span>
+    
+        <span class="c1">// determine the text margins</span>
+        <span class="kt">int</span> <span class="n">textMargin</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="o">(</span><span class="n">width</span> <span class="o">*</span> <span class="no">TEXT_MARGIN_RATIO</span><span class="o">);</span>
+    
+        <span class="c1">// coordinates to print message</span>
+        <span class="kt">int</span> <span class="n">xCoord</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">textMargin</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">yCoord</span> <span class="o">=</span> <span class="n">y</span> <span class="o">+</span> <span class="n">height</span> <span class="o">-</span> <span class="n">textMargin</span><span class="o">;</span>
+    
+        <span class="c1">// set up the font</span>
+        <span class="n">g</span><span class="o">.</span><span class="na">setColor</span><span class="o">(</span><span class="nc">Color</span><span class="o">.</span><span class="na">BLACK</span><span class="o">);</span>
+        <span class="n">g</span><span class="o">.</span><span class="na">setFont</span><span class="o">(</span><span class="k">new</span> <span class="nc">Font</span><span class="o">(</span><span class="s">"Times New Roman"</span><span class="o">,</span> <span class="nc">Font</span><span class="o">.</span><span class="na">BOLD</span><span class="o">,</span> <span class="n">textSize</span><span class="o">));</span>
+    
+        <span class="c1">// print the text</span>
+        <span class="n">g</span><span class="o">.</span><span class="na">drawString</span><span class="o">(</span><span class="no">MESSAGE</span><span class="o">,</span> <span class="n">xCoord</span><span class="o">,</span> <span class="n">yCoord</span><span class="o">);</span>
+        <span class="o">}</span>
+</code></pre></div></div>
+
+<p>There really isn’t anything exciting happening here—most of the work is going into formatting to make sure the text prints in the correct place relative to the rectangle. Nonetheless, it is important to get all of this functioning correctly. I wrote the <code class="language-plaintext highlighter-rouge">drawTextBox</code> method first to make sure it looked right before trying to implement any of the recursive stuff.
+Next, we come to the method where all of the magic happens, <code class="language-plaintext highlighter-rouge">drawFigure</code>.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="kd">private</span> <span class="kt">void</span> <span class="nf">drawFigure</span><span class="o">(</span><span class="nc">Graphics</span> <span class="n">g</span><span class="o">,</span> <span class="kt">int</span> <span class="n">x</span><span class="o">,</span> <span class="kt">int</span> <span class="n">y</span><span class="o">,</span> <span class="kt">int</span> <span class="n">width</span><span class="o">,</span> <span class="kt">int</span> <span class="n">height</span><span class="o">,</span> <span class="kt">int</span> <span class="n">curDepth</span><span class="o">)</span> <span class="o">{</span>
+    
+        <span class="n">drawTextBox</span><span class="o">(</span><span class="n">g</span><span class="o">,</span> <span class="n">x</span><span class="o">,</span> <span class="n">y</span><span class="o">,</span> <span class="n">width</span><span class="o">,</span> <span class="n">height</span><span class="o">);</span>
+    
+        <span class="c1">// draw a smaller figure if the new figure will have width at</span>
+        <span class="c1">// least 1 pixel</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">width</span> <span class="o">*</span> <span class="no">RATIO</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">xMargin</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="o">(</span><span class="n">width</span> <span class="o">*</span> <span class="o">(</span><span class="mi">1</span> <span class="o">-</span> <span class="no">RATIO</span><span class="o">)</span> <span class="o">/</span> <span class="mi">2</span><span class="o">);</span>
+            <span class="kt">int</span> <span class="n">yMargin</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="o">(</span><span class="n">height</span> <span class="o">*</span> <span class="o">(</span><span class="mi">1</span> <span class="o">-</span> <span class="no">RATIO</span><span class="o">)</span> <span class="o">/</span> <span class="mi">2</span><span class="o">);</span>
+            <span class="kt">int</span> <span class="n">newWidth</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="o">(</span><span class="n">width</span> <span class="o">*</span> <span class="no">RATIO</span><span class="o">);</span>
+            <span class="kt">int</span> <span class="n">newHeight</span> <span class="o">=</span> <span class="o">(</span><span class="kt">int</span><span class="o">)</span> <span class="o">(</span><span class="n">height</span> <span class="o">*</span> <span class="no">RATIO</span><span class="o">);</span>
+    
+            <span class="n">drawFigure</span><span class="o">(</span><span class="n">g</span><span class="o">,</span> <span class="n">x</span> <span class="o">+</span> <span class="n">xMargin</span><span class="o">,</span> <span class="n">y</span> <span class="o">+</span> <span class="n">yMargin</span><span class="o">,</span> <span class="n">newWidth</span><span class="o">,</span> <span class="n">newHeight</span><span class="o">,</span> <span class="n">curDepth</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+    
+        <span class="o">}</span>
+        <span class="o">}</span>
+</code></pre></div></div>
+
+<p>The first thing <code class="language-plaintext highlighter-rouge">drawFigure</code> does is draw a text box with the right parameters. The next lines</p>
+
+<ol>
+  <li>determine whether or not to draw a smaller figure</li>
+  <li>determine the right location and size of the smaller figure to be drawn</li>
+  <li>recursively calls <code class="language-plaintext highlighter-rouge">drawFigure</code> to make the smaller figure</li>
+</ol>
+
+<p>The last thing our code does is make the initial call to <code class="language-plaintext highlighter-rouge">drawFigure</code>. This is done in the <code class="language-plaintext highlighter-rouge">paintComponent</code> method:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="n">drawFigure</span><span class="o">(</span><span class="n">g</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="mi">0</span><span class="o">,</span> <span class="no">BOX_WIDTH</span><span class="o">,</span> <span class="no">BOX_HEIGHT</span><span class="o">,</span> <span class="mi">0</span><span class="o">);</span>
+</code></pre></div></div>
+
+<p>Note that the initial depth of this call is 0, and the depth increases with each subsequent call.</p>
+
+<p><strong>Design tip</strong>
+We could have designed a single method that both recursively called itself, and drew the boxes and text. Instead, I chose to make two different methods: one recursive <code class="language-plaintext highlighter-rouge">drawFigure</code> and another “helper method” <code class="language-plaintext highlighter-rouge">drawTextBox</code> that handles the actual drawing and formatting. In general, it is good practice to favor writing a few simple methods instead of a single long method. Have your code more compartmentalized makes it easier to read, understand, and modify. Having short, simple methods is especially helpful if you are using recursion, because even a very simple recursive function can have incredibly complicated behavior.</p>
+
+<h2 id="modifications">Modifications</h2>
+
+<p>If you want to practice, here are a couple of simple modifications you can make to the <code class="language-plaintext highlighter-rouge">Recursion.java</code> program.</p>
+
+<p><strong>Exercise.</strong> Change the code so that in addition to the message “RECURSION!”, each line also prints the depth of recursion of the call to <code class="language-plaintext highlighter-rouge">drawFigure</code> in which the text was printed. The new output looks like this:</p>
+
+<p><img src="/assets/img/recursive-image/recursion-with-depth.png" alt="" width="75%" /></p>
+
+<p><strong>Exercise.</strong> Change the code so that the program stops printing at a depth specified by the user via a command line argument. For example,</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    java Recursion 3
+</code></pre></div></div>
+
+<p>will generate</p>
+
+<p><img src="/assets/img/recursive-image/recursion-fixed-depth.png" alt="" width="75%" /></p>
+
+  </article>
+
+</div>
+
+    </div>
+
+    <!-- Footer -->
+
+    
+<footer class="fixed-bottom">
+  <div class="container mt-0">
+    &copy; Copyright 2021 Will  Rosenbaum.
+    
+    
+    
+  </div>
+</footer>
+
+
+
+  </body>
+
+  <!-- Bootsrap & MDB scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.4.4/umd/popper.min.js" integrity="sha512-eUQ9hGdLjBjY3F41CScH3UX+4JDSI9zXeroz7hJ+RteoCaY+GP/LDoM8AO+Pt+DRFw3nXqsjh9Zsts8hnYv8/A==" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha512-M5KW3ztuIICmVIhjSqXe01oV2bpe248gOxqmlcYrEzAvws7Pw3z6BK0iGbrwvdrUQUhi3eXgtxp5I8PDo9YfjQ==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js" integrity="sha512-Mug9KHKmroQFMLm93zGrjhibM2z2Obg9l6qFG2qKjXEXkMp/VDkI4uju9m4QKPjWSwQ6O2qzZEnJDEeCw0Blcw==" crossorigin="anonymous"></script>
+
+  
+<!-- Mansory & imagesLoaded -->
+<script defer src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<script defer src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+<script defer src="/assets/js/mansory.js" type="text/javascript"></script>
+
+
+  
+
+
+<!-- Load Common JS -->
+<script src="/assets/js/common.js"></script>
+
+
+</html>

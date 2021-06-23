@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta charset="utf-8">
+
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reset.css">
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reveal.css">
+		<link rel="stylesheet" href="/assets/css/condensation.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="/assets/reveal.js-master/plugin/highlight/monokai.css" id="highlight-theme">
+		<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700" rel="stylesheet">
+
+	</head>
+
+	<body>
+
+
+	  <!-- this is where the reveailfy filter gets applied -->
+	  <div class="reveal"><div class="slides">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- # Extending our Zoo -->
+
+<!-- ## Previously -->
+
+<!-- Stored `zoo` as an array of `Animal`s: -->
+
+<!-- ```java -->
+<!-- Animal[] zoo = new Animal[ZOO_SIZE]; -->
+
+<!-- for (int i = 0; i < ZOO_SIZE; i++) { -->
+<!--     Animal[i] = new ...; -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- Problem: -->
+
+<!-- - We need to specify `ZOO_SIZE` in advance! -->
+<!-- - But we may want to add/remove `Animal`s from our `zoo` -->
+
+<!-- How can we make our zoo *dynamic*? -->
+
+<!-- ## A `zoo` Array in Memory -->
+
+<!-- How is `Animal[] zoo` actually stored in our computer's memory? -->
+
+<!-- <div style="margin-bottom: 18em"></div> -->
+
+<!-- ## Another Way to Store a Zoo -->
+
+<!-- Think Locally! -->
+
+<!-- - Consider an actual zoo -->
+<!-- - Each animal is in some kind of enclosure -->
+<!-- - Each enclosure has: -->
+<!--     + a sign indicating what animal(s) are there -->
+<!-- 	+ another sign pointing to next enclosure -->
+<!-- - This is enough information to navigate the zoo and see all animals -->
+
+<!-- <div style="margin-bottom: 8em"></div> -->
+
+<!-- ## Representing a `Zoo` in Java -->
+
+<!-- High level picture---a **Linked List**: -->
+
+<!-- <div style="margin-bottom: 18em"></div> -->
+
+<!-- ## Thinking `class`es -->
+
+<!-- What do we need? -->
+
+<!-- 1. `class Node` representing enclosure -->
+<!--     + stores (reference to) an `Animal` -->
+<!-- 	+ stores (reference to) next `Node` -->
+<!-- 2. `class Zoo` -->
+<!--     + stores (reference to) first `Node` (if any) -->
+<!-- 	+ stores (reference to) last `Nodes` (if any) -->
+<!-- 	+ implements desired operations: -->
+<!-- 	    - feed `Animal`s -->
+<!-- 		- add an `Animal` -->
+<!-- 		- remove an `Animal` -->
+<!-- 		- ... -->
+
+<!-- ## Implementing `Node` -->
+
+<!-- ```java -->
+<!-- class Node { -->
+<!--     private Animal animal; -->
+<!--     private Node next; -->
+
+<!--     public Node (Animal animal) { -->
+<!-- 	this.animal = animal; -->
+<!-- 	next = null; -->
+<!--     } -->
+
+<!--     public void setNext (Node nd) { -->
+<!-- 	next = nd; -->
+<!--     } -->
+
+<!--     public Node getNext () { -->
+<!-- 	return Next; -->
+<!--     } -->
+
+<!--     public Animal getAnimal () { -->
+<!-- 	return animal; -->
+<!--     } -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- ## Making the `Zoo` Class -->
+
+<!-- ```java -->
+<!-- public class Zoo { -->
+<!--     private Node head = null; -->
+<!--     private Node tail = null; -->
+
+<!--     public void add (Animal a) {...} -->
+
+<!--     public void feedAnimals () {...} -->
+
+<!--     public void remove (Animal a) {...} -->
+
+<!--     public boolean contains (Animal a) {...} -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- ## How to Implement `add`? -->
+
+<!-- `add`ing in pictures: -->
+
+<!-- <div style="margin-bottom: 18em"></div> -->
+
+<!-- ## How to Implement `feedAnimals`? -->
+
+<!-- <div style="margin-bottom: 18em"></div> -->
+
+<!-- ## How to Implement  `remove`? -->
+
+<!-- <div style="margin-bottom: 18em"></div> -->
+
+<!-- ## How to Implement `contains`? -->
+
+<!-- <div style="margin-bottom: 18em"></div> -->
+
+<!-- ## Another Question -->
+
+<!-- With the array `Animal[] zoo` we could access all of the `Animal`s easily: -->
+
+<!-- ```java -->
+<!-- Animal[] zoo; -->
+<!-- ... -->
+<!-- for (int i = 0; i < zoo.length; i++) { -->
+<!--    // do something with zoo[i] -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- How could we do something similar with the `Zoo` class? -->
+
+<!-- <div style="margin-bottom: 8em"></div> -->
+
+<!-- ## Coming Up -->
+
+<!-- - Generics -->
+<!-- - Interfaces -->
+<!-- - Iterators -->
+
+<section id="lecture-14-objects-and-lists"><h1>Lecture 14: Objects and Lists</h1></section><section id="overview"><h2>Overview</h2>
+<ol>
+  <li>
+<code>Object</code> Inheritance</li>
+  <li>Representing Lists of Objects</li>
+</ol></section><section id="last-time"><h2>Last Time</h2>
+<ul>
+  <li>Casting objects as other types</li>
+  <li>Class hierarchies</li>
+  <li>The <code>Object</code> class
+    <ul>
+      <li>every <code>class</code> is a subclass of <code>Object</code>
+</li>
+    </ul>
+  </li>
+</ul></section><section id="why-is-object-inheritance-good"><h2>Why is <code>Object</code> Inheritance Good?</h2>
+<p><code>Object</code> has the following methods (among others):</p>
+<ul>
+  <li><code>boolean equals(Object obj)</code></li>
+  <li><code>String toString()</code></li>
+  <li>…</li>
+</ul>
+<p>Therefore, <em>every</em> class in Java has these methods</p></section><section id="testing-methods-with-animal"><h2>Testing Methods with <code>Animal</code>
+</h2>
+<pre><code class="language-java">Animal a = new Elephant("Alice");
+Animal b = new Elephant("Alice");
+</code></pre>
+<p>What is the behavior of…</p>
+<ul>
+  <li>… <code>a.equals(b)</code>?</li>
+  <li>… <code>a.toString()</code>?</li>
+</ul>
+<p>Let’s see!</p>
+<div style="margin-bottom: 6em"></div></section><section id="overriding-default-behavior"><h2>Overriding Default Behavior</h2>
+<ul>
+  <li>default <code>a.equals(b)</code> is equivalent to <code>a == b</code>
+</li>
+  <li>default <code>a.toString()</code> prints address (not meaningful)</li>
+</ul>
+<p>How <em>should</em> we…</p>
+<ul>
+  <li>… check equality of <code>Animal</code>s?</li>
+  <li>… represent an <code>Animal</code> as a <code>String</code>?</li>
+</ul>
+<div style="margin-bottom: 8em"></div></section>
+</div></div>
+
+
+	  <script src="/assets/reveal.js-master/dist/reveal.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/math/math.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/zoom/zoom.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/notes/notes.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/search/search.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/markdown/markdown.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/highlight/highlight.js"></script>
+	  <script>
+	    
+
+	    // Also available as an ES module, see:
+	    // https://revealjs.com/initialization/
+	    Reveal.initialize({
+		controls: false,
+		progress: true,
+		center: true,
+		hash: true,
+		transition: 'none',
+		math: {
+		    config: 'TeX-AMS_HTML-full',
+		    TeX: {
+			Macros: {
+			    R: '\\mathbb{R}',
+			    set: [ '\\left\\{#1 \\; ; \\; #2\\right\\}', 2 ]
+			}
+		    }
+		},
+
+
+		// Learn about plugins: https://revealjs.com/plugins/
+		plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath ]
+	    });
+
+	  </script>
+
+	</body>
+</html>
+	  
+
+<!-- <\!-- load the reveal.js css & js (assuming you've put it in assets/)-\-> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/reveal.scss" -->
+<!-- /> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/theme/source/white.scss" -->
+<!-- /> -->
+<!-- <script -->
+<!--   src="/assets/reveal.js-master/js/reveal.js" -->
+<!--   type="text/javascript" -->
+<!-- ></script> -->
+
+<!-- <\!-- configure the presentation, (you can tweak options to suit) -\-> -->
+<!-- <script> -->
+<!--   Reveal.initialize({ -->
+<!--     // Display presentation control arrows -->
+<!--     controls: false, -->
+
+<!--     // Help the user learn the controls by providing hints, for example by -->
+<!--     // bouncing the down arrow when they first encounter a vertical slide -->
+<!--     controlsTutorial: false, -->
+
+<!--     // Determines where controls appear, "edges" or "bottom-right" -->
+<!--     controlsLayout: "bottom-right", -->
+
+<!--     // Visibility rule for backwards navigation arrows; "faded", "hidden" -->
+<!--     // or "visible" -->
+<!--     controlsBackArrows: "faded", -->
+
+<!--     // Display a presentation progress bar -->
+<!--     progress: true, -->
+
+<!--     // Display the page number of the current slide -->
+<!--     slideNumber: false, -->
+
+<!--     // Push each slide change to the browser history -->
+<!--     history: false, -->
+
+<!--     // Enable keyboard shortcuts for navigation -->
+<!--     keyboard: true, -->
+
+<!--     // Enable the slide overview mode -->
+<!--     overview: true -->
+<!--   }); -->
+<!-- </script> -->

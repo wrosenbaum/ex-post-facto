@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<title>Will  Rosenbaum | Project 3: Stable Matchings</title>
+<meta name="description" content="A blog about mathematics, computer science, etc.
+">
+
+<!-- Open Graph -->
+
+
+<!-- Bootstrap & MDB -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" integrity="sha512-MoRNloxbStBcD8z3M/2BmnT+rg4IsMxPkXaGh2zD6LGNNFE80W3onsAhRcMAMrSoyWL9xD7Ert0men7vR8LUZg==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" integrity="sha512-RO38pBRxYH3SoOprtPTD86JFOclM51/XTIdEPh5j8sj4tp8jmQIx26twG52UaLi//hQldfrh7e51WzP9wuP32Q==" crossorigin="anonymous" />
+
+<!-- Fonts & Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"  integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.0/css/academicons.min.css" integrity="sha512-W4yqoT1+8NLkinBLBZko+dFB2ZbHsYLDdr50VElllRcNt2Q4/GSs6u71UHKxB7S6JEMCp5Ve4xjh3eGQl/HRvg==" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+
+
+
+<!-- Code Syntax Highlighting -->
+<link rel="stylesheet" href="https://gitcdn.link/repo/jwarby/jekyll-pygments-themes/master/github.css" />
+
+<!-- Styles -->
+<link rel="shortcut icon" href="/assets/img/favicon.ico">
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<link rel="canonical" href="/teaching/2021s-cosc-112/projects/03-stable-matchings/">
+
+<!-- JQuery -->
+<!-- jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+
+
+<!-- Theming-->
+
+  <script src="/assets/js/theme.js"></script>
+  <!-- Load DarkMode JS -->
+<script src="/assets/js/dark_mode.js"></script>
+
+
+
+
+
+
+    
+<!-- MathJax -->
+<script type="text/javascript">
+  window.MathJax = {
+    tex: {
+      tags: 'ams'
+    }
+  };
+</script>
+<script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js"></script>
+<script defer src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+
+  </head>
+
+  <body class="fixed-top-nav ">
+
+    <!-- Header -->
+
+    <header>
+
+    <!-- Nav Bar -->
+    <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top">
+    <div class="container">
+      
+      <a class="navbar-brand title font-weight-lighter" href="https://willrosenbaum.com/">
+       Will   Rosenbaum
+      </a>
+      
+      <!-- Navbar Toggle -->
+      <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar top-bar"></span>
+        <span class="icon-bar middle-bar"></span>
+        <span class="icon-bar bottom-bar"></span>
+      </button>
+      <div class="collapse navbar-collapse text-right" id="navbarNav">
+        <ul class="navbar-nav ml-auto flex-nowrap">
+          <!-- About -->
+          <li class="nav-item ">
+            <a class="nav-link" href="/">
+              about
+              
+            </a>
+          </li>
+          <!-- Other pages -->
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/teaching/">
+                teaching
+                
+              </a>
+          </li>
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/research/">
+                research
+                
+              </a>
+          </li>
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/publications/">
+                publications
+                
+              </a>
+          </li>
+          
+          
+	  
+          <!-- Blog -->
+          <li class="nav-item ">
+            <a class="nav-link" href="/blog/">
+              blog
+              
+            </a>
+          </li>
+          
+
+          
+            <div class = "toggle-container">
+              <a id = "light-toggle">
+                  <i class="fas fa-moon"></i>
+                  <i class="fas fa-sun"></i>
+              </a>
+            </div>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+</header>
+
+
+    <!-- Content -->
+
+    <div class="container mt-5">
+      <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Project 3: Stable Matchings</h1>
+    <p class="post-description">finding optimal allocations for matching markets</p>
+  </header>
+
+  <article>
+    <h2 id="matching-markets-and-preferences">Matching Markets and Preferences</h2>
+
+<p>Consider the problem of college admissions. The situation is as follows: prospective students pick one or more colleges that they might like to attend, and send in applications. Once the colleges receive all of their applications, they process the applications to decide who to admit. When a prospective student is accepted to more than one college, they should decide which college to attend based upon their own preferences.</p>
+
+<p>College admissions are an example of what is referred to as a (2-sided)  <strong>matching market</strong> in economics. More generally, in a 2-sided matching market, there are two sets of <strong>agents</strong>—in this case, prospective students and colleges. The goal of the matching market is to match agents between the two sets so as to achieve some common goal. In the case of college admissions, each student would like to attend their most favored school, while each college would like their most favored applicants to attend. How can we assign prospective students to colleges in such a way that both students and colleges are reasonably satisfied? What features should a “good” matching exhibit?</p>
+
+<p>To make these questions more precise, we can model the colleges and prospective students in terms of their <strong>preferences</strong>. That is, assume that each prospective student has their own ranking of the colleges that they apply to, from most to least preferred. Similarly, each college ranks all of its applicants. These rankings are totally subjective—students don’t have to agree on their relative rankings of colleges and colleges don’t need to agree on their relative rankings of students. Given any two colleges to which a student applies, that student should be able to determine which they prefer. Similarly given any two applicants, each college should be able to determine which student it prefers.</p>
+
+<p>There are many real-life matching markets with the same features of college admissions described above. For the remainder of this note, we will focus on another such problem: that of assigning medical residents to hospitals. When a medical student completes medical school, they typically apply to a residency at a hospital to complete their training. As in the case of college admissions, medical residents have preferences about which hospital they would like to do their residency. Similarly, the hospitals have preferences over which residents they’d like to invite. Unlike college admissions, however, there is a centralized authority that matches residents and hospitals: the <a href="https://www.nrmp.org/">National Resident Matching Program</a> (NRMP). Prospective residents submit their preferences directly to the NRMP, as do the hospitals participating in the match. The NRMP then determines the “best” matching, and residents are assigned to hospitals according to this matching. In this project, you will implement a variant of the algorithm used by the NRMP to match residents to hospitals based on the preferences of all parties involved. For simplicity, we will assume that every hospital will accept only a single resident.</p>
+
+<h2 id="blocking-pairs-and-stability">Blocking Pairs and Stability</h2>
+
+<p>The main goal of the NRMP is to achieve <em>stability.</em> Informally, stability means that if a resident, Alice, is assigned to hospital \(A\), but prefers hospital \(B\), then it should be the case that hospital \(B\) has a resident that it prefers to Alice. Otherwise, Alice and hospital \(B\) would have a mutual incentive to abandon their assignments and Alice would complete her residency at hospital \(B\) instead of her assigned hospital, \(A\). This situation is formalized by the notion of a “blocking pair:” we say that a resident \(a\) and hospital \(B\) form a <strong>blocking pair</strong> if the following conditions hold:</p>
+
+<ol>
+  <li>resident \(a\) is not assigned to hospital \(B\),</li>
+  <li>resident \(a\) prefers hospital \(B\) to her assigned hospital, and</li>
+  <li>hospital \(B\) prefers resident \(a\) to its assigned resident.</li>
+</ol>
+
+<p>A matching between residents and hospitals is <strong>stable</strong> if there are no blocking pairs. In this way, under a stable matching, no resident and hospital has an incentive to deviate. The <strong>stable matching problem</strong> (a.k.a. stable marriage problem) is the problem of finding a stable matching.</p>
+
+<hr />
+
+<p><strong>Example 1</strong>
+Consider a matching market with two prospective residents—<code class="language-plaintext highlighter-rouge">a</code> and <code class="language-plaintext highlighter-rouge">b</code>—two hospitals <code class="language-plaintext highlighter-rouge">A</code> and <code class="language-plaintext highlighter-rouge">B</code>. We express each agent’s preferences as an ordered list, where most preferred matches appear first. For example, we can express <code class="language-plaintext highlighter-rouge">a</code>’s preferences as <code class="language-plaintext highlighter-rouge">a : A B</code> to indicate that <code class="language-plaintext highlighter-rouge">a</code>’s most preferred hospital is <code class="language-plaintext highlighter-rouge">A</code>, and <code class="language-plaintext highlighter-rouge">a</code>’s less preferred hospital is <code class="language-plaintext highlighter-rouge">B</code>. Below, we describe a complete <strong>instance</strong> of the stable matching problem by listing all agents (residents and hospitals), as well as preference lists indicating each agent’s preferences:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    hospitals
+    A B
+    residents
+    a b
+    preferences
+    a: A B
+    b: A B
+    A: a b
+    B: a b
+</code></pre></div></div>
+
+<p>In the instance above, both residents <code class="language-plaintext highlighter-rouge">a</code> and <code class="language-plaintext highlighter-rouge">b</code> prefer hospital <code class="language-plaintext highlighter-rouge">A</code> to <code class="language-plaintext highlighter-rouge">B</code>, and both hospitals prefer resident <code class="language-plaintext highlighter-rouge">a</code> to <code class="language-plaintext highlighter-rouge">b</code>. Suppose, however, that we match resident <code class="language-plaintext highlighter-rouge">a</code> to hospital <code class="language-plaintext highlighter-rouge">B</code> and resident <code class="language-plaintext highlighter-rouge">b</code> to hospital <code class="language-plaintext highlighter-rouge">A</code>, as indicated below.</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    matching 1
+    (a, B)
+    (b, A)
+</code></pre></div></div>
+
+<p>Notice that <code class="language-plaintext highlighter-rouge">a</code> prefers <code class="language-plaintext highlighter-rouge">A</code> to their assigned hospital, and the feeling is mutual: hospital <code class="language-plaintext highlighter-rouge">A</code> prefers <code class="language-plaintext highlighter-rouge">a</code> to its assigned resident. Thus the pair <code class="language-plaintext highlighter-rouge">(a, A)</code> is a blocking pair, so that matching above is <em>not stable.</em> On the other hand, consider the matching</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    matching 2
+    (a, A)
+    (b, B)
+</code></pre></div></div>
+
+<p>In <code class="language-plaintext highlighter-rouge">matching 2</code>, resident <code class="language-plaintext highlighter-rouge">b</code> prefers <code class="language-plaintext highlighter-rouge">A</code> to their assigned hospital (<code class="language-plaintext highlighter-rouge">B</code>), but the feeling is <em>not</em> mutual: hospital <code class="language-plaintext highlighter-rouge">A</code> prefers its resident (<code class="language-plaintext highlighter-rouge">a</code>) to <code class="language-plaintext highlighter-rouge">b</code>. Therefore, the pair <code class="language-plaintext highlighter-rouge">(b, A)</code> is not a blocking pair. Similarly, hospital <code class="language-plaintext highlighter-rouge">B</code> prefers resident <code class="language-plaintext highlighter-rouge">a</code> to <code class="language-plaintext highlighter-rouge">b</code>, but resident <code class="language-plaintext highlighter-rouge">a</code> prefers her assigned hospital (<code class="language-plaintext highlighter-rouge">A</code>) to <code class="language-plaintext highlighter-rouge">B</code>. Therefore, <code class="language-plaintext highlighter-rouge">(a, B)</code> is also not a blocking pair. Thus, <code class="language-plaintext highlighter-rouge">matching 2</code> is stable.</p>
+
+<hr />
+
+<p><strong>Exercise 1</strong> 
+Consider the following stable matching instance.</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    hospitals
+    A B
+    residents
+    a b
+    preferences
+    a: A B
+    b: B A
+    A: b a
+    B: a b
+</code></pre></div></div>
+
+<p>Consider the matchings <code class="language-plaintext highlighter-rouge">matching 1</code> and <code class="language-plaintext highlighter-rouge">matching 2</code> listed below:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    matching 1
+    (a, A)
+    (b, B)
+    matching 2
+    (a, B)
+    (b, A)
+</code></pre></div></div>
+
+<p>Which, if any, of the two matchings are stable?</p>
+
+<hr />
+
+<p>In the examples above, we were able to find stable matchings. However, it should not be obvious at this point that a stable matching will <em>always</em> exist. That is, it could be the case that for some choice of resident/hospital preferences there will be blocking pairs no matter how we assign residents to hospitals. Remarkably, in 1962, mathematician/economists <a href="https://en.wikipedia.org/wiki/David_Gale">David Gale</a> and <a href="https://en.wikipedia.org/wiki/Lloyd_Shapley">Lloyd Shapley</a> proved that this is never the case: no matter how the residents rank hospitals and vice versa, there is always a stable matching between residents and hospitals. Moreover, Gale and Shapley devised an efficient algorithm for finding a stable matching, assuming that each resident provides a ranked list of hospitals indicating their preferences, and similarly each hospital provides a ranked list of prospective residents.</p>
+
+<h2 id="a-stable-matching-algorithm">A Stable Matching Algorithm</h2>
+
+<p>Here we introduce a variant of Gale and Shapley’s algorithm described by McVitie and Wilson in 1971. At a high level, the algorithm proceeds as follows. Imagine that all of the residents and (representatives of) the hospitals meet in some centralized location to determine the matching assignment. Suppose the residents arrive one-by-one in some (arbitrary) order. When the first resident, say <code class="language-plaintext highlighter-rouge">a</code>, arrives, they <strong>propose</strong> to their most most preferred hospital—call it hospital <code class="language-plaintext highlighter-rouge">A</code>. Since hospital <code class="language-plaintext highlighter-rouge">A</code> has not received any other proposals yet, <code class="language-plaintext highlighter-rouge">A</code>  does not refuse <code class="language-plaintext highlighter-rouge">a</code>‘s proposal. Nor does hospital <code class="language-plaintext highlighter-rouge">A</code> accept <code class="language-plaintext highlighter-rouge">a</code>’s proposal, because a preferred resident may come along and propose to <code class="language-plaintext highlighter-rouge">A</code> at a later time. Instead, <code class="language-plaintext highlighter-rouge">a</code> and <code class="language-plaintext highlighter-rouge">A</code> are provisionally matched, and the final decision is deferred until later.</p>
+
+<p>When the next resident, say <code class="language-plaintext highlighter-rouge">b</code>, arrives <code class="language-plaintext highlighter-rouge">b</code> proposes to their first choice hospital. If it is a hospital other than <code class="language-plaintext highlighter-rouge">A</code>, say <code class="language-plaintext highlighter-rouge">B</code>, then <code class="language-plaintext highlighter-rouge">b</code> and <code class="language-plaintext highlighter-rouge">B</code> are provisionally matched. If, on the other hand, <code class="language-plaintext highlighter-rouge">A</code> is also <code class="language-plaintext highlighter-rouge">b</code>’s first choice, then <code class="language-plaintext highlighter-rouge">A</code> has to make a decision: does it want to keep its provisional resident, <code class="language-plaintext highlighter-rouge">a</code>, or reject <code class="language-plaintext highlighter-rouge">a</code> and acquire <code class="language-plaintext highlighter-rouge">b</code> as its provisional resident? Specifically, hospital <code class="language-plaintext highlighter-rouge">A</code> does the following:</p>
+
+<ul>
+  <li>If <code class="language-plaintext highlighter-rouge">A</code> prefers <code class="language-plaintext highlighter-rouge">a</code> to <code class="language-plaintext highlighter-rouge">b</code>, then <code class="language-plaintext highlighter-rouge">A</code> keeps <code class="language-plaintext highlighter-rouge">a</code> as its provisional resident and sends <code class="language-plaintext highlighter-rouge">b</code> a <strong>rejection.</strong></li>
+  <li>If, on the other hand, <code class="language-plaintext highlighter-rouge">A</code> prefers <code class="language-plaintext highlighter-rouge">b</code> to <code class="language-plaintext highlighter-rouge">a</code>, then <code class="language-plaintext highlighter-rouge">A</code> adopts <code class="language-plaintext highlighter-rouge">b</code> as its provisional match and sends <code class="language-plaintext highlighter-rouge">a</code> a rejection.</li>
+</ul>
+
+<p>After the step above, one of the two residents <code class="language-plaintext highlighter-rouge">a</code> and <code class="language-plaintext highlighter-rouge">b</code> is rejected. Upon rejection, an agent proposes to their next most favored hospital.</p>
+
+<p>In McVitie and Wilson’s algorithm, the process above is repeated for each resident. That is, whenever a resident arrives, they propose to their most favored hospital. The hospitals respond to proposals as follows:</p>
+
+<p>Whenever a hospital receives a <strong>proposal</strong> it does the following:</p>
+
+<ol>
+  <li>if the hospital does not have a (provisional) match yet, the proposing resident is provisionally assigned to the hospital</li>
+  <li>if the hospital already has a provisional resident, it chooses between between its provisional resident and the new proposal
+    <ul>
+      <li>the preferred resident is provisionally matched with the hospital</li>
+      <li>the other resident is <strong>refused</strong></li>
+    </ul>
+  </li>
+</ol>
+
+<p>The residents respond to refusals as follows:</p>
+
+<p>Whenever a resident receives a <strong>refusal</strong> from a hospital, they pick the next hospital on their list (immediately following the hospital from which they received a rejection), and send a proposal to that hospital.</p>
+
+<ul>
+  <li>if a resident is refused from all hospitals, then they stop participating in the matching process and leave without finding a match</li>
+</ul>
+
+<p>Following the rules above, when a new resident arrives, their initial proposal may lead to a long sequence of proposals and refusals. All of these proposals and refusals should be resolved before the next resident arrives and makes their first proposal.</p>
+
+<p>Once all residents have arrived and all proposals and refusals have been processed, the provisional matches are finalized.</p>
+
+<hr />
+
+<p><strong>Example 2.</strong> 
+Consider again the matching instance from Example 1 above:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    hospitals
+    A B
+    residents
+    a b
+    preferences
+    a: A B
+    b: A B
+    A: a b
+    B: a b
+</code></pre></div></div>
+
+<p>Applying McVitie and Wilson’s procedure, we get the following result:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    resident a arrives
+      a proposes to hospital A
+      A provisionally accepts a's proposal
+    resident b arrives
+      b proposes to hospital A
+      A refuses b's proposal
+      b proposes to hospital B
+      B provisionally accepts b's proposal
+    all provisional matches are finalized:
+    (a, A), (b, B) is the final stable matching 
+</code></pre></div></div>
+
+<p>In this case, we see that algorithm produces the same matching that we identified as stable in Example 1.</p>
+
+<hr />
+
+<p><strong>Example 3.</strong>
+Consider the following matching instance with 3 hospitals and residents:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    hospitals
+    A B C
+    residents
+    a b c
+    preferences
+    a: B A C
+    b: B A C
+    c: A B C
+    A: b a c
+    B: c b a
+    C: c b a
+</code></pre></div></div>
+
+<p>Applying McVitie and Wilson’s algorithm, we get the following execution:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    resident a arrives
+      a sends B proposal
+      B provisionally accepts a's proposal
+    resident b arrives
+      b sends B proposal
+      B sends a refusal, provisionally accepts b's proposal
+      a sends A proposal
+      A provisionally accepts a's proposal
+    resident c arrives
+      c sends A proposal
+      A sends c refusal
+      c sends B proposal
+      B sends b refusal, provisionally accepts c's proposal
+      b sends A proposal
+      A sends a refusal, provisionally accepts b's proposal
+      a sends C proposal
+      C provisionally accepts a's proposal
+    all provisional matches are finalized:
+    (a, C), (b, A), (c, B) is the final stable matching
+</code></pre></div></div>
+
+<p>Observe that once again, the produced matching is stable. Resident <code class="language-plaintext highlighter-rouge">a</code> is matched with their least preferred hospital, <code class="language-plaintext highlighter-rouge">C</code>, but hospitals <code class="language-plaintext highlighter-rouge">A</code> and <code class="language-plaintext highlighter-rouge">B</code> are both assigned residents they prefer to <code class="language-plaintext highlighter-rouge">a</code>. Similarly, resident <code class="language-plaintext highlighter-rouge">b</code> prefers hospital <code class="language-plaintext highlighter-rouge">B</code> to their assigned hospital (<code class="language-plaintext highlighter-rouge">A</code>), but hospital <code class="language-plaintext highlighter-rouge">B</code> prefers its resident <code class="language-plaintext highlighter-rouge">c</code> to <code class="language-plaintext highlighter-rouge">b</code>. Finally, resident <code class="language-plaintext highlighter-rouge">c</code> prefers <code class="language-plaintext highlighter-rouge">A</code> to their assigned hospital (<code class="language-plaintext highlighter-rouge">B</code>), but <code class="language-plaintext highlighter-rouge">A</code> prefers its resident <code class="language-plaintext highlighter-rouge">b</code> to <code class="language-plaintext highlighter-rouge">c</code>.</p>
+
+<hr />
+
+<p><strong>Exercise 3.</strong> 
+Repeat McVitie and Wilson’s procedure for finding a matching for the instance in Example 3, except have the residents arrive in a different order. That is, suppose resident <code class="language-plaintext highlighter-rouge">c</code> arrives first (making the first proposal), followed by resident <code class="language-plaintext highlighter-rouge">b</code>, followed by resident <code class="language-plaintext highlighter-rouge">a</code>. Does your procedure yield the same stable matching, or a different one?</p>
+
+<hr />
+
+<p><strong>Exercise 4.</strong>
+Consider the following instance:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    hospitals
+    A B C
+    residents
+    a b c
+    preferences
+    a: A B C
+    b: B A C
+    c: A B C
+    A: b a c
+    B: a b c
+    C: a b c
+</code></pre></div></div>
+
+<ol>
+  <li>Use McVitie and Wilson’s algorithm to find a stable matching.</li>
+  <li>Find a different stable matching.</li>
+  <li>Which of the two stable matchings do the residents prefer? Which do the hospitals prefer?</li>
+  <li>(Bonus challenge!) Suppose all of the agent’s preferences are as above and known to everyone. It is also known that McVitie and Wilson’s algorithm will be used to compute the matching. Can the hospital mis-report (i.e., lie about) their preferences in order to ensure that the hospitals get their preferred stable matching? That is, every hospital should have either the same or preferable resident to the matching you found for part 1, (and at least one hospital should have a strictly preferred resident to its resident from part 1).</li>
+</ol>
+
+<hr />
+
+<h2 id="your-assignment">Your Assignment</h2>
+
+<p>In this project, you will implement McVitie and Wilson’s algorithm for finding a stable matching given the preference lists of all agents (i.e., hospitals and residents). Specifically your program will be able to do the following:</p>
+
+<ol>
+  <li>Read preferences from a file formatted as in the examples above and create a corresponding instance of the stable matching problem.</li>
+  <li>Compute and print a stable matching for the instance using McVitie and Wilson’s algorithm.</li>
+  <li>Read a proposed matching from a file and determine if the matching is stable. If the matching is not stable, your program should report a blocking pair.</li>
+</ol>
+
+<h2 id="getting-started">Getting Started</h2>
+
+<p>Before writing any code, I strongly recommend doing the exercises above by hand to make sure you understand all of the concepts and procedures involved. Once you’re confident with the conceptual material, download the following code to start programming:</p>
+
+<ul>
+  <li><a href="/assets/java/2021s-cosc-112/StableMatchings.zip"><code class="language-plaintext highlighter-rouge">StableMatchings.zip</code></a></li>
+</ul>
+
+<p>The program should compile and run (<code class="language-plaintext highlighter-rouge">main</code> is located in <code class="language-plaintext highlighter-rouge">SMTester.java</code>).  However, the main functionality still needs to be implemented.</p>
+
+<h2 id="to-complete-the-project">To Complete the Project</h2>
+
+<p>To complete the project, you need to finish the implementations of <code class="language-plaintext highlighter-rouge">Agent.java</code> and <code class="language-plaintext highlighter-rouge">SMInstance.java</code>. These files represent, respectively, an <code class="language-plaintext highlighter-rouge">Agent</code> with preferences (a ranking) over other <code class="language-plaintext highlighter-rouge">Agents</code>, and a stable matching instance that stores. Specifically, you must write the following methods (whose functionalities are described in the comments in the code provided):</p>
+
+<ul>
+  <li>In <code class="language-plaintext highlighter-rouge">Agent.java</code>:
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">boolean prefers(Agent a, Agent b)</code></li>
+      <li><code class="language-plaintext highlighter-rouge">void proposal(Agent a)</code></li>
+      <li><code class="language-plaintext highlighter-rouge">void refusal()</code></li>
+    </ul>
+  </li>
+  <li>In <code class="language-plaintext highlighter-rouge">SMInstance.java</code>:
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">void computeStableMatching()</code></li>
+      <li><code class="language-plaintext highlighter-rouge">Matching getMatching()</code></li>
+      <li><code class="language-plaintext highlighter-rouge">void setMatching(Matching matching)</code></li>
+      <li><code class="language-plaintext highlighter-rouge">Pair&lt;Agent&gt; getBlockingPair()</code></li>
+      <li><code class="language-plaintext highlighter-rouge">boolean isStable()</code></li>
+    </ul>
+  </li>
+</ul>
+
+<p>None of the methods above require a lot of code, but the behavior of some methods is subtle.</p>
+
+<h2 id="testing-your-solution">Testing Your Solution</h2>
+
+<p>To get you started with testing, the included file <code class="language-plaintext highlighter-rouge">SMTester.java</code> and associated <code class="language-plaintext highlighter-rouge">.txt</code> files will check that your code works with a few small examples. A correct solution generates the following output:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Current SMInstance:
+hospitals
+A B 
+residents
+a b 
+preferences
+A: a b 
+B: a b 
+a: A B 
+b: A B 
+
+Testing the stability of the following matching:
+(a, B)
+(b, A)
+
+The matching is not stable: (a, A) is a blocking pair!
+
+Testing the stability of the following matching:
+(a, A)
+(b, B)
+
+The matching is stable!
+Current SMInstance:
+hospitals
+A B C 
+residents
+a b c 
+preferences
+A: b a c 
+B: c b a 
+C: c b a 
+a: B A C 
+b: B A C 
+c: A B C 
+
+Computing stable matching...
+(a, C)
+(b, A)
+(c, B)
+
+Current SMInstance:
+hospitals
+A B C D E 
+residents
+a b c d e 
+preferences
+A: a b c d e 
+B: b a c d e 
+C: d b a c e 
+D: e b a c d 
+E: d a b c e 
+a: B D E A C 
+b: B D C A E 
+c: C A B D E 
+d: D A B C E 
+e: B C E D A 
+
+Computing stable matching...
+(a, D)
+(b, B)
+(c, C)
+(d, A)
+(e, E)
+</code></pre></div></div>
+
+<p>To test individual methods in your solution, please download and run the following programs provided in <a href="/assets/java/2021s-cosc-112/StableMatchings.zip"><code class="language-plaintext highlighter-rouge">StableMatchings.zip</code></a>. You can test one method at a time by commenting out the other test in the <code class="language-plaintext highlighter-rouge">main</code> method of the two programs.</p>
+
+<h2 id="what-to-submit">What To Submit</h2>
+
+<p>Please submit everything you need for your program to run to the Moodle submission link by <strong>5:00 pm EST on Friday May 28</strong>. When you submit, please respond to the usual survey asking about your experience with the project.</p>
+
+<h2 id="grading">Grading</h2>
+
+<p>The project will be graded out of 5 points (plus possible extra credit). The first 3 points are based on the usual rubric:</p>
+
+<ul>
+  <li><strong>3</strong> Everything compiles and runs as specified in this document (i.e., the program computes stable matchings); code is fairly readable and contains comments briefly describing the main functionality of methods defined/larger chunks of code.</li>
+  <li><strong>2</strong> The program produces more-or-less correct output, but is sloppy/hard to read; comments may be there, but are not helpful.</li>
+  <li><strong>1</strong> Program compiles, but is far from producing the expected output and/or does not run as specified; comments unhelpful or absent.</li>
+  <li><strong>0</strong> Program doesn’t compile or outputs garbage; no comments explaining why.</li>
+</ul>
+
+<p>You will additionally receive 2 points for your program passing all of the tests in <code class="language-plaintext highlighter-rouge">AgentTester.java</code> and <code class="language-plaintext highlighter-rouge">SMInstanceTester.java</code> java.</p>
+
+<p>Additionally, you may receive extra credit for submitting your project up to 4 days early and for implementing any of the extensions suggested below. <strong>If you implement an extension, please include a</strong> <code class="language-plaintext highlighter-rouge">**README.txt**</code> <strong>file with your submission describing the extension.</strong></p>
+
+<h2 id="extensions">Extensions</h2>
+
+<ul>
+  <li>Modify your program so that it computes more than one stable matching, if another stable matching exists. To this end, the McVitie-Wilson algorithm with the residents proposing to hospitals always computes the best matching for the residents. How might you find the best stable matching for the hospitals (which is necessarily different from the resident-optimal solution when multiple stable matchings exist)?</li>
+  <li>Implement McVitie and Wilson’s algorithm that finds <em>all</em> stable matchings for a given instance. See McVitie and Wilson’s paper linked to from the course Moodle site for details of the algorithm.</li>
+  <li>Make program handle exceptions. Specifically, the program should verify that the preferences read from a file are valid in the following sense: every agent listed in some agent’s preferences is contained in the list of agents at the beginning of the file. Further, the preferences should be symmetric in the sense that if agent <code class="language-plaintext highlighter-rouge">a</code> appears in <code class="language-plaintext highlighter-rouge">A</code>’s preference list, then <code class="language-plaintext highlighter-rouge">A</code> appears in <code class="language-plaintext highlighter-rouge">a</code>’s preference list as well.</li>
+  <li>Make a graphical interface for your program. It should illustrate an instance of the problem graphically and animate proposals/refusals in some way.</li>
+  <li>As mentioned above, McVitie and Wilson’s algorithm always finds the best stable matching for the residents (when the residents propose to hospitals), assuming all preference lists are listed faithfully. However, if the hospitals lie about (i.e., misreport) their true preferences, it could be the case that the algorithm finds a stable matching that is better for the hospitals in the sense that some hospital is matched with a resident they strictly prefer to their original resident, and no hospital is matched with a resident that is strictly worse than their original resident. Find a stable matching instance \(I\) such that the hospitals can misreport their preferences such that McVitie and Wilson’s algorithm will compute a matching that is still stable for \(I\), but is better for the hospitals than the stable matching if the hospitals truthfully report their preferences.</li>
+  <li>Suppose each hospital can have two residents. How would you modify McVitie and Wilson’s algorithm to find a stable matching? Implement your variant.</li>
+  <li>Give an argument that the matching produced by McVitie and Wilson’s algorithm does not contain any blocking pairs. (Hint. Argue by contradiction. Suppose \((a, A)\) is a blocking pair. Since \(a\) proposed to hospitals from most to least preferred, they must have proposed to \(A\) and been rejected…)</li>
+</ul>
+
+
+  </article>
+
+</div>
+
+    </div>
+
+    <!-- Footer -->
+
+    
+<footer class="fixed-bottom">
+  <div class="container mt-0">
+    &copy; Copyright 2021 Will  Rosenbaum.
+    
+    
+    
+  </div>
+</footer>
+
+
+
+  </body>
+
+  <!-- Bootsrap & MDB scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.4.4/umd/popper.min.js" integrity="sha512-eUQ9hGdLjBjY3F41CScH3UX+4JDSI9zXeroz7hJ+RteoCaY+GP/LDoM8AO+Pt+DRFw3nXqsjh9Zsts8hnYv8/A==" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha512-M5KW3ztuIICmVIhjSqXe01oV2bpe248gOxqmlcYrEzAvws7Pw3z6BK0iGbrwvdrUQUhi3eXgtxp5I8PDo9YfjQ==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js" integrity="sha512-Mug9KHKmroQFMLm93zGrjhibM2z2Obg9l6qFG2qKjXEXkMp/VDkI4uju9m4QKPjWSwQ6O2qzZEnJDEeCw0Blcw==" crossorigin="anonymous"></script>
+
+  
+<!-- Mansory & imagesLoaded -->
+<script defer src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<script defer src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+<script defer src="/assets/js/mansory.js" type="text/javascript"></script>
+
+
+  
+
+
+<!-- Load Common JS -->
+<script src="/assets/js/common.js"></script>
+
+
+</html>

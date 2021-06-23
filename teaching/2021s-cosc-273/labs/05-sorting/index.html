@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<title>Will  Rosenbaum | Lab 05: Sorting</title>
+<meta name="description" content="A blog about mathematics, computer science, etc.
+">
+
+<!-- Open Graph -->
+
+
+<!-- Bootstrap & MDB -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" integrity="sha512-MoRNloxbStBcD8z3M/2BmnT+rg4IsMxPkXaGh2zD6LGNNFE80W3onsAhRcMAMrSoyWL9xD7Ert0men7vR8LUZg==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" integrity="sha512-RO38pBRxYH3SoOprtPTD86JFOclM51/XTIdEPh5j8sj4tp8jmQIx26twG52UaLi//hQldfrh7e51WzP9wuP32Q==" crossorigin="anonymous" />
+
+<!-- Fonts & Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"  integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.0/css/academicons.min.css" integrity="sha512-W4yqoT1+8NLkinBLBZko+dFB2ZbHsYLDdr50VElllRcNt2Q4/GSs6u71UHKxB7S6JEMCp5Ve4xjh3eGQl/HRvg==" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+
+
+
+<!-- Code Syntax Highlighting -->
+<link rel="stylesheet" href="https://gitcdn.link/repo/jwarby/jekyll-pygments-themes/master/github.css" />
+
+<!-- Styles -->
+<link rel="shortcut icon" href="/assets/img/favicon.ico">
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<link rel="canonical" href="/teaching/2021s-cosc-273/labs/05-sorting/">
+
+<!-- JQuery -->
+<!-- jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+
+
+<!-- Theming-->
+
+  <script src="/assets/js/theme.js"></script>
+  <!-- Load DarkMode JS -->
+<script src="/assets/js/dark_mode.js"></script>
+
+
+
+
+
+
+    
+<!-- MathJax -->
+<script type="text/javascript">
+  window.MathJax = {
+    tex: {
+      tags: 'ams'
+    }
+  };
+</script>
+<script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js"></script>
+<script defer src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+
+  </head>
+
+  <body class="fixed-top-nav ">
+
+    <!-- Header -->
+
+    <header>
+
+    <!-- Nav Bar -->
+    <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top">
+    <div class="container">
+      
+      <a class="navbar-brand title font-weight-lighter" href="https://willrosenbaum.com/">
+       Will   Rosenbaum
+      </a>
+      
+      <!-- Navbar Toggle -->
+      <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar top-bar"></span>
+        <span class="icon-bar middle-bar"></span>
+        <span class="icon-bar bottom-bar"></span>
+      </button>
+      <div class="collapse navbar-collapse text-right" id="navbarNav">
+        <ul class="navbar-nav ml-auto flex-nowrap">
+          <!-- About -->
+          <li class="nav-item ">
+            <a class="nav-link" href="/">
+              about
+              
+            </a>
+          </li>
+          <!-- Other pages -->
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/teaching/">
+                teaching
+                
+              </a>
+          </li>
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/research/">
+                research
+                
+              </a>
+          </li>
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/publications/">
+                publications
+                
+              </a>
+          </li>
+          
+          
+	  
+          <!-- Blog -->
+          <li class="nav-item ">
+            <a class="nav-link" href="/blog/">
+              blog
+              
+            </a>
+          </li>
+          
+
+          
+            <div class = "toggle-container">
+              <a id = "light-toggle">
+                  <i class="fas fa-moon"></i>
+                  <i class="fas fa-sun"></i>
+              </a>
+            </div>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+</header>
+
+
+    <!-- Content -->
+
+    <div class="container mt-5">
+      <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Lab 05: Sorting</h1>
+    <p class="post-description">sorting faster than ever before</p>
+  </header>
+
+  <article>
+    <hr />
+
+<p><strong>This Assignment is Optional.</strong> If you would like to receive credit for the assignment, please submit it by Wednesday, May 19th, 23:59 AoE.</p>
+
+<hr />
+
+<h2 id="background">Background</h2>
+
+<p>Sorting is a fundamental task in computer science. As such, most general-purpose programming languages provide a built-in sorting function. For example, Java provides the <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/Arrays.html#sort(double%5B%5D,int,int)"><code class="language-plaintext highlighter-rouge">Arrays.sort(...)</code> method</a>. The <code class="language-plaintext highlighter-rouge">sort</code> method will takes an array numbers (<code class="language-plaintext highlighter-rouge">int</code>, <code class="language-plaintext highlighter-rouge">double</code>, <code class="language-plaintext highlighter-rouge">float</code>, etc.) and sorts the array in-place in ascending order. For example, after calling</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">double</span><span class="o">[]</span> <span class="n">data</span> <span class="o">=</span> <span class="o">{</span><span class="mf">4.0</span><span class="o">,</span> <span class="mf">2.0</span><span class="o">,</span> <span class="mf">3.0</span><span class="o">,</span> <span class="mf">1.0</span><span class="o">};</span>
+<span class="nc">Arrays</span><span class="o">.</span><span class="na">sort</span><span class="o">(</span><span class="n">data</span><span class="o">)</span>
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">data</code> will store the values <code class="language-plaintext highlighter-rouge">{1.0, 2.0. 3.0, 4.0}</code>. The <code class="language-plaintext highlighter-rouge">Arrays.sort</code> method is quite efficient: on my laptop, it sorts a random array of 10 million <code class="language-plaintext highlighter-rouge">double</code>s in about 1 second. Nonetheless, there is always room for improvement!</p>
+
+<h2 id="your-task">Your Task</h2>
+
+<p>In this lab, you will use multithreading and parallelism in order to implement a faster sorting procedure than <code class="language-plaintext highlighter-rouge">Arrays.sort</code> (at least for large arrays). Specifically, you should implement a method <code class="language-plaintext highlighter-rouge">Sorting.parallelSort(double[] data)</code> that sorts an array of <code class="language-plaintext highlighter-rouge">double</code>s in place. To get started, download the following archive, which includes a program <code class="language-plaintext highlighter-rouge">SortingTester.java</code> to test your implementation.</p>
+
+<ul>
+  <li><a href="/assets/java/2021s-cosc-273/lab04-sorting/Sorting.zip"><code class="language-plaintext highlighter-rouge">Sorting.zip</code></a></li>
+</ul>
+
+<h2 id="grading">Grading</h2>
+
+<p>Your program will be graded on a 6 point scale according to the following criteria:</p>
+
+<ul>
+  <li><strong>Correctness</strong> (2 pts). Your program employs multithreading and sorts all tested inputs correctly.
+    <ul>
+      <li><strong>Note.</strong> Be sure to test your program on “easy” inputs such as those repeated values.</li>
+    </ul>
+  </li>
+  <li>
+    <p><strong>Performance</strong> (2 pts). Your program sorts large randomly generated inputs significantly faster than the provided baseline implementation. Your program should run at least twice as fast as <code class="language-plaintext highlighter-rouge">Arrays.sort()</code> on arrays of aroud 10 million entries.</p>
+  </li>
+  <li><strong>Style &amp; Documentation</strong> (2 pts). Code is well-organized and commented. Submission includes a <code class="language-plaintext highlighter-rouge">README</code> file that describes your program at a high level, and briefly discusses optimizations and tests performed.</li>
+</ul>
+
+<h2 id="suggestions-and-resources">Suggestions and Resources</h2>
+
+<p>Many of the fastest practical sorting algorithms use some variant of <a href="https://en.wikipedia.org/wiki/Quicksort">quicksort</a>. We briefly describe a high-level description of quicksort. For simplicity we assume that elements in the array are pair-wise distinct (i.e., not value is repeated), but your program should handle the case where repeated values are allowed.</p>
+
+<ol>
+  <li>Choose a <code class="language-plaintext highlighter-rouge">pivot</code> element in the array—typically either some fixed element or the a random element in the array.</li>
+  <li>Reorder the array so that
+    <ul>
+      <li><code class="language-plaintext highlighter-rouge">pivot</code> is at index <code class="language-plaintext highlighter-rouge">p</code> and</li>
+      <li>all elements at indices <code class="language-plaintext highlighter-rouge">i &lt; p</code> are smaller than <code class="language-plaintext highlighter-rouge">pivot</code></li>
+      <li>all elements at indices <code class="language-plaintext highlighter-rouge">i &gt; p</code> are greater than <code class="language-plaintext highlighter-rouge">pivot</code></li>
+    </ul>
+  </li>
+  <li>Recursively sort
+    <ul>
+      <li>the sub-array from indices <code class="language-plaintext highlighter-rouge">0</code> to <code class="language-plaintext highlighter-rouge">p-1</code></li>
+      <li>the sub-array from indices <code class="language-plaintext highlighter-rouge">p+1</code> to <code class="language-plaintext highlighter-rouge">n</code> (where <code class="language-plaintext highlighter-rouge">n</code> is the original size of the array).</li>
+    </ul>
+  </li>
+</ol>
+
+<p>The recursive sorting in step 3 can again be performed using quicksort. To this end, it is useful to define the general method to take three parameters: the array <code class="language-plaintext highlighter-rouge">data</code> to be sorted, as well as indices <code class="language-plaintext highlighter-rouge">i</code> and <code class="language-plaintext highlighter-rouge">j</code>. A call to <code class="language-plaintext highlighter-rouge">quicksort(data, i, j)</code> will return an array such that the elements of <code class="language-plaintext highlighter-rouge">data</code> with indices <code class="language-plaintext highlighter-rouge">i, i+1,..., j-1</code> are sorted, while the remaining entries are unchanged.</p>
+
+<p>For our purposes, the quicksort algorithm is appealing for two reasons. First, it sorts elements in-place. That is, all of the operations can be performed on the original array without duplicating data. (In particular, this is true of step 2). Second, the sub-steps of step 3 of the procedure can be performed in parallel.</p>
+
+<p>For a detailed account of implementing and parallelizing quicksort (and other sorting algorithms), see</p>
+
+<ul>
+  <li><em>Sorting and Selection</em> in <em>Sequential and Parallel Data Structures and Algorithms</em> (book chapter <a href="https://people.mpi-inf.mpg.de/~mehlhorn/ToolboxNew.html">available here</a>).</li>
+</ul>
+
+<p>Since quicksort follows a divide-and-conquer approach, you may find the following documentation/tutorial helpful:</p>
+
+<ul>
+  <li><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/ForkJoinPool.html">Class <code class="language-plaintext highlighter-rouge">ForkJoinPool</code></a></li>
+  <li><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/RecursiveAction.html">Class <code class="language-plaintext highlighter-rouge">RecursiveAction</code></a></li>
+  <li><a href="http://tutorials.jenkov.com/java-util-concurrent/java-fork-and-join-forkjoinpool.html">A brief tutorial on <code class="language-plaintext highlighter-rouge">ForkJoinPool</code>s</a></li>
+</ul>
+
+<p>Note that there are many different variants of quicksort. Exactly which version you use and how it is implemented can have a significant impact on your program’s performance.</p>
+
+<h5 id="tips">Tips</h5>
+
+<ol>
+  <li>
+    <p>For reasonably small arrays, <code class="language-plaintext highlighter-rouge">Arrays.sort()</code> is likely to be faster than a more complex multi-threaded procedure. You may freely use <code class="language-plaintext highlighter-rouge">Arrays.sort()</code> as a sub-routine/base case for your sorting procedure.</p>
+  </li>
+  <li>
+    <p>If you choose to implement quicksort, the most costly part of the execution is the “reordering” step (step 2). Even though the procedure can be conceptually simple, there are a lot of opportunities for inefficiency. In particular, for a large array you will want to consider the cache performance and memory access pattern to the input.</p>
+  </li>
+</ol>
+
+  </article>
+
+</div>
+
+    </div>
+
+    <!-- Footer -->
+
+    
+<footer class="fixed-bottom">
+  <div class="container mt-0">
+    &copy; Copyright 2021 Will  Rosenbaum.
+    
+    
+    
+  </div>
+</footer>
+
+
+
+  </body>
+
+  <!-- Bootsrap & MDB scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.4.4/umd/popper.min.js" integrity="sha512-eUQ9hGdLjBjY3F41CScH3UX+4JDSI9zXeroz7hJ+RteoCaY+GP/LDoM8AO+Pt+DRFw3nXqsjh9Zsts8hnYv8/A==" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha512-M5KW3ztuIICmVIhjSqXe01oV2bpe248gOxqmlcYrEzAvws7Pw3z6BK0iGbrwvdrUQUhi3eXgtxp5I8PDo9YfjQ==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js" integrity="sha512-Mug9KHKmroQFMLm93zGrjhibM2z2Obg9l6qFG2qKjXEXkMp/VDkI4uju9m4QKPjWSwQ6O2qzZEnJDEeCw0Blcw==" crossorigin="anonymous"></script>
+
+  
+<!-- Mansory & imagesLoaded -->
+<script defer src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<script defer src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+<script defer src="/assets/js/mansory.js" type="text/javascript"></script>
+
+
+  
+
+
+<!-- Load Common JS -->
+<script src="/assets/js/common.js"></script>
+
+
+</html>

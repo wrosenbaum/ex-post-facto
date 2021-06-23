@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta charset="utf-8">
+
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reset.css">
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reveal.css">
+		<link rel="stylesheet" href="/assets/css/condensation.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="/assets/reveal.js-master/plugin/highlight/monokai.css" id="highlight-theme">
+		<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700" rel="stylesheet">
+
+	</head>
+
+	<body>
+
+
+	  <!-- this is where the reveailfy filter gets applied -->
+	  <div class="reveal"><div class="slides">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ## Coding So Far -->
+
+<!-- 1. Statements, blocks, control flow (conditionals and iteration) -->
+<!-- 2. Methods: **procedural programming** -->
+<!--     + encapsulate code in methods -->
+<!-- 	+ methods recieve input (arguments), perform operations, (maybe) produduce output (`return`) -->
+<!-- 	+ when a method returns, all its resources (local variables) go away -->
+
+<!-- ## Procedural Programming -->
+
+<!-- Design Principle: -->
+
+<!-- - Break a large task into smaller sub-tasks -->
+<!--     + write a method for each sub-task -->
+
+<!-- - Makes code better: -->
+<!--     + shows *intent* -->
+<!-- 	+ easier to maintain (one error, one bug) -->
+<!-- 	+ makes code easier to read/understand -->
+
+<!-- Methods allow for **encapsulation**: write a single piece of code that can be used by many parts of a program. -->
+
+<!-- ## Object Orientation -->
+
+<!-- Idea: encapsulate code in **objects** -->
+
+<!-- 1. Create object **instances** -->
+<!--     + each instance is like its own program -->
+<!-- 2. Instances are **persistent** -->
+<!--     + once an instance is created, it remains indefinitely -->
+<!-- 3. Instances have internal **state** -->
+<!--     + *instance variables*  -->
+<!-- 4. Instances can change internal state -->
+<!--     + *instance methods* are specific to each instance -->
+<!-- 5. Instances can interact -->
+<!--     + call methods on an instance  -->
+
+<!-- ## Object Oriented Design -->
+
+<!-- A different way to conceptualize a program: -->
+
+<!-- - Think in terms of interacting objects -->
+
+<!-- Advantages: -->
+
+<!-- - More conceptual structure -->
+<!-- - Better encapsulation -->
+<!-- - Separate **interface** from **implementation** -->
+<!--     + don't need to understand how an object works (internally) to use the object -->
+
+<!-- ## An Object -->
+
+<!-- Forget about programming for a moment -->
+
+<!-- <iframe width="560" height="315" src="https://www.youtube.com/embed/RyCnHyUKt5M" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> -->
+
+<!-- ## Describe the Object -->
+
+<!-- ## What is it? -->
+
+<!-- <div style="margin-bottom: 12em"></div> -->
+
+<!-- ## How do You *Interact* With it? -->
+
+<!-- <div style="margin-bottom: 12em"></div> -->
+
+<!-- ## What Functionality Does it Offer? -->
+
+<!-- <div style="margin-bottom: 12em"></div> -->
+
+<!-- ## What is its Internal State? -->
+
+<!-- <div style="margin-bottom: 12em"></div> -->
+
+<!-- ## What *Limitations* Does it Have? -->
+
+<!-- <div style="margin-bottom: 12em"></div> -->
+
+<!-- ## How Can We Represent it in Code? -->
+
+<!-- We will define a `Counter` object! -->
+
+<!-- - Internal state: -->
+<!--     + store count as an `int` -->
+
+<!-- - Instance methods: -->
+<!--     + get count -->
+<!-- 	+ increment counter -->
+<!-- 	+ reset -->
+
+<!-- - Constructor -->
+
+<!-- Code it together! -->
+
+<!-- ## The Completed Object -->
+
+<!-- ```java -->
+<!-- public class Counter { -->
+<!--     private int count; -->
+
+<!-- 	// constructor defines how to initialize instance -->
+<!--     public Counter () { -->
+<!-- 	    count = 0; -->
+<!-- 	} -->
+
+<!-- 	// getter method for count -->
+<!-- 	public int getCount () { -->
+<!-- 	    return count; -->
+<!-- 	} -->
+
+<!-- 	// increment the counter -->
+<!-- 	public void increment () { -->
+<!-- 	    count++; -->
+<!-- 	} -->
+
+<!-- 	// reset the counter -->
+<!-- 	public void reset () { -->
+<!-- 	    count = 0; -->
+<!-- 	} -->
+<!-- } -->
+<!-- ``` -->
+
+<!-- ## sdf -->
+<section id="lecture-04-recursion-iii"><h1>Lecture 04: Recursion III</h1></section><section id="outline"><h2>Outline</h2>
+<ol>
+  <li>Tower of Hanoi
+    <ul>
+      <li>recursive strategy</li>
+      <li>in code</li>
+    </ul>
+  </li>
+  <li>Concluding Thoughts on Recursion</li>
+  <li>Preview: Defining New Objects</li>
+</ol></section><section id="last-time-tower-of-hanoi"><h2>Last Time: Tower of Hanoi</h2></section><section id="setup"><h2>Setup</h2>
+<p><img src="/assets/img/hanoi/initial.png" alt="" width="100%"></p></section><section id="goal"><h2>Goal</h2>
+<p><img src="/assets/img/hanoi/goal.png" alt="" width="100%"></p></section><section id="rules"><h2>Rules</h2>
+<p><img src="/assets/img/hanoi/first-move.png" alt="" width="45%">
+<img src="/assets/img/hanoi/illegal.png" alt="" width="45%"></p></section><section id="a-program"><h2>A Program</h2>
+<p>Want:</p>
+<ul>
+  <li>A program that generates instructions for a solution</li>
+  <li>Example solution for 2 disks</li>
+</ul>
+<pre><code class="language-text">Move disk from peg 1 to peg 2
+Move disk from peg 1 to peg 3
+Move disk from peg 2 to peg 3
+</code></pre></section><section id="solution-for-3-disks"><h2>Solution for 3 Disks?</h2>
+<div style="margin-bottom: 12em"></div></section><section id="moving-the-largest-disk"><h2>Moving the Largest Disk</h2>
+<p>How to move largest disk from peg 1 to peg 3?</p>
+<div style="margin-bottom: 12em"></div></section><section id="solving-in-3-steps-1"><h2>Solving in 3 Steps (1)</h2>
+<p>Step 1: Move subtower to peg 2</p>
+<p><img src="/assets/img/hanoi/step-1.png" alt="" width="100%"></p></section><section id="solving-in-3-steps-2"><h2>Solving in 3 Steps (2)</h2>
+<p>Step 2: Move bottom disk to peg 3</p>
+<p><img src="/assets/img/hanoi/step-2.png" alt="" width="100%"></p></section><section id="solving-in-3-steps-3"><h2>Solving in 3 Steps (3)</h2>
+<p>Step 3: Move subtower to peg 3</p>
+<p><img src="/assets/img/hanoi/step-3.png" alt="" width="100%"></p></section><section id="moving-a-sub-tower"><h2>Moving a Sub-Tower</h2>
+<p>How do we move \(m\) disks from peg \(i\) to peg \(j\)?</p>
+<div style="margin-bottom: 12em"></div></section><section id="a-general-procedure"><h2>A General Procedure</h2>
+<p>To move \(m\) disks from peg \(i\) to \(j\):</p>
+<ol>
+  <li>move \(m - 1\) disks from \(i\) to \(k\) (other peg)</li>
+  <li>move one disk from \(i\) to \(j\)</li>
+  <li>move \(m - 1\) disks from \(k\) to \(j\)</li>
+</ol>
+<p>What is missing?</p></section><section id="base-case"><h2>Base Case!</h2>
+<p>If \(m = 1\), just print</p>
+<pre><code class="language-text">Move disk from peg i to peg j
+</code></pre></section><section id="lets-try-it-in-code"><h2>Let’s try it in code!</h2>
+<p><a href="">TowerOfHanoi.java</a></p></section><section id="how-efficient-is-our-solution"><h2>How Efficient is our Solution?</h2>
+<pre><code class="language-java">void move (int m, int from, int to, int other) {
+    if (m == 1) {
+        System.out.println("Move disk from " + from + " to " + to);
+        return;
+    }
+	
+	move(m - 1, from, other, to);
+	move(1, from, to, other);
+	move(m - 1, other, to, from);		
+}
+</code></pre>
+<div style="margin-bottom: 12em"></div></section><section id="counting-recursive-calls"><h2>Counting Recursive Calls</h2>
+<p>If \(f(m )\) is number of instructions printed to move \(m\) disks:</p>
+<ul>
+  <li>\(f(m) = 2 \cdot f(m-1) + f(1)\), and \(f(1) = 1\)</li>
+  <li>So we get:
+    <ul>
+      <li>$f(1) = 1$</li>
+      <li>$f(2) = 2 \cdot f(1) + 1 = 3$</li>
+      <li>$f(3) = 2 \cdot f(2) + 1 = 7$</li>
+      <li>$\vdots$</li>
+      <li>$f(m) = 2^m - 1$</li>
+    </ul>
+  </li>
+  <li>This is a lot of instructions!
+    <ul>
+      <li>$f(10) \approx 1,000$, $f(20) \approx 1,000,000$, $f(30) \approx 1,000,000,000$</li>
+    </ul>
+  </li>
+</ul></section><section id="but"><h2>But…</h2>
+<p>Solving Tower of Hanoi with $m$ disks <em>requires</em> $2^m - 1$ instructions!</p>
+<ul>
+  <li>The solution generated by our program is optimal</li>
+  <li>Requires only 5 lines of code!</li>
+</ul></section><section id="concluding-thoughts-on-recursion"><h1>Concluding Thoughts on Recursion</h1></section><section id="factorial"><h2>Factorial</h2>
+<pre><code class="language-java">private static int factorial(int n) {
+    if (n == 1) return 1;
+    return n * factorial(n - 1);
+}
+</code></pre></section><section id="fibonacci"><h2>Fibonacci</h2>
+<pre><code class="language-java">private static int fibonacci (int n) {
+    if (n &lt;= 2) return 1;
+    return fibonacci(n - 1) + fibonacci(n - 2);
+}
+</code></pre></section><section id="tower-of-hanoi"><h2>Tower of Hanoi</h2>
+<pre><code class="language-java">private static void move (int num, int from, int to, int other) {
+    if (num == 1) {
+        System.out.println("Move disk from " + from + " to " + to + "." );
+        return;
+    }
+    move(num - 1, from, other, to);
+    move(1, from, to, other);
+    move(num - 1, other, to, from);
+}
+</code></pre></section><section id="evaluation"><h2>Evaluation</h2>
+<ol>
+  <li>Factorial: simple code and efficient execution</li>
+  <li>Fibonacci: simple code, but inefficient execution</li>
+  <li>ToH: surprisingly simple; perhaps mysterious; large solution
+    <ul>
+      <li>but solution is still optimal</li>
+    </ul>
+  </li>
+</ol></section><section id="moral"><h2>Moral</h2>
+<p>Recursion is…</p>
+<ul>
+  <li>subtle</li>
+  <li>sometimes efficient, sometimes not</li>
+  <li>powerful</li>
+  <li>miraculous</li>
+  <li>confusing</li>
+</ul></section><section id="how-confusing"><h2>How Confusing?</h2>
+<pre><code class="language-java">public static long collatz (long n) {
+    if (n == 1) return 1;
+    if (n % 2 == 0) return collatz (n / 2);
+    else return collatz (3 * n + 1);
+}
+</code></pre>
+<div style="margin-bottom: 12em"></div></section><section id="insanity"><h2>Insanity</h2>
+<pre><code class="language-java">public static long collatz (long n) {
+    if (n == 1) return 1;
+    if (n % 2 == 0) return collatz (n / 2);
+    else return collatz (3 * n + 1);
+}
+</code></pre>
+<ul>
+  <li><strong>It is not known if this method has an infinite loop for some value of <code>n</code></strong></li>
+  <li>This is not for lack of interest in the problem:
+    <ul>
+      <li>Worked on by some of the most celebrated mathematicians of the last century</li>
+    </ul>
+  </li>
+</ul></section><section id="up-next-defining-new-objects"><h1>Up Next: Defining New Objects</h1></section>
+</div></div>
+
+
+	  <script src="/assets/reveal.js-master/dist/reveal.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/math/math.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/zoom/zoom.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/notes/notes.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/search/search.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/markdown/markdown.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/highlight/highlight.js"></script>
+	  <script>
+	    
+
+	    // Also available as an ES module, see:
+	    // https://revealjs.com/initialization/
+	    Reveal.initialize({
+		controls: false,
+		progress: true,
+		center: true,
+		hash: true,
+		transition: 'none',
+		math: {
+		    config: 'TeX-AMS_HTML-full',
+		    TeX: {
+			Macros: {
+			    R: '\\mathbb{R}',
+			    set: [ '\\left\\{#1 \\; ; \\; #2\\right\\}', 2 ]
+			}
+		    }
+		},
+
+
+		// Learn about plugins: https://revealjs.com/plugins/
+		plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath ]
+	    });
+
+	  </script>
+
+	</body>
+</html>
+	  
+
+<!-- <\!-- load the reveal.js css & js (assuming you've put it in assets/)-\-> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/reveal.scss" -->
+<!-- /> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/theme/source/white.scss" -->
+<!-- /> -->
+<!-- <script -->
+<!--   src="/assets/reveal.js-master/js/reveal.js" -->
+<!--   type="text/javascript" -->
+<!-- ></script> -->
+
+<!-- <\!-- configure the presentation, (you can tweak options to suit) -\-> -->
+<!-- <script> -->
+<!--   Reveal.initialize({ -->
+<!--     // Display presentation control arrows -->
+<!--     controls: false, -->
+
+<!--     // Help the user learn the controls by providing hints, for example by -->
+<!--     // bouncing the down arrow when they first encounter a vertical slide -->
+<!--     controlsTutorial: false, -->
+
+<!--     // Determines where controls appear, "edges" or "bottom-right" -->
+<!--     controlsLayout: "bottom-right", -->
+
+<!--     // Visibility rule for backwards navigation arrows; "faded", "hidden" -->
+<!--     // or "visible" -->
+<!--     controlsBackArrows: "faded", -->
+
+<!--     // Display a presentation progress bar -->
+<!--     progress: true, -->
+
+<!--     // Display the page number of the current slide -->
+<!--     slideNumber: false, -->
+
+<!--     // Push each slide change to the browser history -->
+<!--     history: false, -->
+
+<!--     // Enable keyboard shortcuts for navigation -->
+<!--     keyboard: true, -->
+
+<!--     // Enable the slide overview mode -->
+<!--     overview: true -->
+<!--   }); -->
+<!-- </script> -->

@@ -1,0 +1,707 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta charset="utf-8">
+
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reset.css">
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reveal.css">
+		<link rel="stylesheet" href="/assets/css/condensation.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="/assets/reveal.js-master/plugin/highlight/monokai.css" id="highlight-theme">
+		<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700" rel="stylesheet">
+
+	</head>
+
+	<body>
+
+
+	  <!-- this is where the reveailfy filter gets applied -->
+	  <div class="reveal"><div class="slides">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section id="lecture-02-limitations-of-distributed-control-and-parallelism"><h1>Lecture 02: Limitations of Distributed Control and Parallelism</h1></section><section id="outline"><h2>Outline</h2>
+<ol>
+  <li>Problems with Distributed Control &amp; Braess’s Paradox</li>
+  <li>Limits of Parallelism &amp; Amdahl’s Law</li>
+</ol></section><section id="distributed-control"><h1>Distributed Control</h1></section><section id="a-distributed-problem"><h2>A Distributed Problem</h2>
+<ul>
+  <li>All processors/agents may not be under centralized control</li>
+  <li>Agents may have individual <em>incentives</em>
+</li>
+  <li>Each agent acts autonomously to maximize their <em>utility</em>
+    <ul>
+      <li>e.g., tuning internet routers to maximize internet speed</li>
+      <li>choosing driving routes to minimize commute time</li>
+    </ul>
+  </li>
+</ul></section><section id="traffic-routing"><h2>Traffic Routing</h2>
+<p>Two types of roads</p>
+<ul>
+  <li>Country road: fixed maximum speed</li>
+  <li>Freeway: congestion decreases speed
+    <ul>
+      <li>more cars \(\implies\) longer commutes</li>
+      <li>travel time proportional to number of cars on road</li>
+    </ul>
+  </li>
+</ul></section><section id="example"><h2>Example</h2>
+<ul>
+  <li>100 cars want to travel from city A to city D</li>
+  <li>2 possible routes:
+    <ul>
+      <li>northern route through city B</li>
+      <li>southern route through city C</li>
+    </ul>
+  </li>
+  <li>Freeways from A to B and from C to D</li>
+  <li>Country roads from A to C and B to D</li>
+</ul></section><section id="a-simple-map"><h2>A Simple Map</h2>
+<svg width="800" height="500" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <line x1="100" y1="250" x2="400" y2="50" stroke="blue" stroke-width="10"></line>
+  <line x1="100" y1="250" x2="400" y2="450" stroke="red" stroke-width="10"></line>
+  <line x1="400" y1="50" x2="700" y2="250" stroke="red" stroke-width="10"></line>
+  <line x1="400" y1="450" x2="700" y2="250" stroke="blue" stroke-width="10"></line>
+  
+  <circle cx="100" cy="250" r="25" stroke="black" stroke-width="5" fill="white"></circle>
+  <circle cx="400" cy="50" r="25" stroke="black" stroke-width="5" fill="white"></circle>
+  <circle cx="400" cy="450" r="25" stroke="black" stroke-width="5" fill="white"></circle>
+  <circle cx="700" cy="250" r="25" stroke="black" stroke-width="5" fill="white"></circle>
+  
+  <text text-anchor="middle" alignment-baseline="middle" x="100" y="250">A</text>
+  <text text-anchor="middle" alignment-baseline="middle" x="400" y="50">B</text>
+  <text text-anchor="middle" alignment-baseline="middle" x="400" y="450">C</text>
+  <text text-anchor="middle" alignment-baseline="middle" x="700" y="250">D</text>
+  
+  <text text-anchor="middle" alignment-baseline="middle" x="250" y="100">x_B</text>
+  <text text-anchor="middle" alignment-baseline="middle" x="250" y="400">1.01</text>
+  <text text-anchor="middle" alignment-baseline="middle" x="550" y="100">1.01</text>
+  <text text-anchor="middle" alignment-baseline="middle" x="550" y="400">x_C</text>
+</svg><p>Blue = freeway, Red = country road</p></section><section id="commute-times"><h2>Commute Times</h2>
+<ul>
+  <li>Commute time on (blue) freeways = proportion of cars on freeway
+    <ul>
+      <li>e.g., if 60 cars take freeway from A to B, commute time from A to B is 0.6 hr</li>
+    </ul>
+  </li>
+  <li>Commute time on (red) country roads constant: 1.01 hr</li>
+</ul></section><section id="question-1"><h2>Question 1</h2>
+<svg width="800" height="500" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <line x1="100" y1="250" x2="400" y2="50" stroke="blue" stroke-width="10"></line>
+  <line x1="100" y1="250" x2="400" y2="450" stroke="red" stroke-width="10"></line>
+  <line x1="400" y1="50" x2="700" y2="250" stroke="red" stroke-width="10"></line>
+  <line x1="400" y1="450" x2="700" y2="250" stroke="blue" stroke-width="10"></line>
+  
+  <circle cx="100" cy="250" r="25" stroke="black" stroke-width="5" fill="white"></circle>
+  <circle cx="400" cy="50" r="25" stroke="black" stroke-width="5" fill="white"></circle>
+  <circle cx="400" cy="450" r="25" stroke="black" stroke-width="5" fill="white"></circle>
+  <circle cx="700" cy="250" r="25" stroke="black" stroke-width="5" fill="white"></circle>
+  
+  <text text-anchor="middle" alignment-baseline="middle" x="100" y="250">A</text>
+  <text text-anchor="middle" alignment-baseline="middle" x="400" y="50">B</text>
+  <text text-anchor="middle" alignment-baseline="middle" x="400" y="450">C</text>
+  <text text-anchor="middle" alignment-baseline="middle" x="700" y="250">D</text>
+  
+  <text text-anchor="middle" alignment-baseline="middle" x="250" y="100">x_B</text>
+  <text text-anchor="middle" alignment-baseline="middle" x="250" y="400">1.01</text>
+  <text text-anchor="middle" alignment-baseline="middle" x="550" y="100">1.01</text>
+  <text text-anchor="middle" alignment-baseline="middle" x="550" y="400">x_C</text>
+</svg><p>Which route, if I <em>know</em> how many cars are taking each route?</p></section><section id="question-2"><h2>Question 2</h2>
+<svg width="800" height="500" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <line x1="100" y1="250" x2="400" y2="50" stroke="blue" stroke-width="10"></line>
+  <line x1="100" y1="250" x2="400" y2="450" stroke="red" stroke-width="10"></line>
+  <line x1="400" y1="50" x2="700" y2="250" stroke="red" stroke-width="10"></line>
+  <line x1="400" y1="450" x2="700" y2="250" stroke="blue" stroke-width="10"></line>
+  
+  <circle cx="100" cy="250" r="25" stroke="black" stroke-width="5" fill="white"></circle>
+  <circle cx="400" cy="50" r="25" stroke="black" stroke-width="5" fill="white"></circle>
+  <circle cx="400" cy="450" r="25" stroke="black" stroke-width="5" fill="white"></circle>
+  <circle cx="700" cy="250" r="25" stroke="black" stroke-width="5" fill="white"></circle>
+  
+  <text text-anchor="middle" alignment-baseline="middle" x="100" y="250">A</text>
+  <text text-anchor="middle" alignment-baseline="middle" x="400" y="50">B</text>
+  <text text-anchor="middle" alignment-baseline="middle" x="400" y="450">C</text>
+  <text text-anchor="middle" alignment-baseline="middle" x="700" y="250">D</text>
+  
+  <text text-anchor="middle" alignment-baseline="middle" x="250" y="100">x_B</text>
+  <text text-anchor="middle" alignment-baseline="middle" x="250" y="400">1.01</text>
+  <text text-anchor="middle" alignment-baseline="middle" x="550" y="100">1.01</text>
+  <text text-anchor="middle" alignment-baseline="middle" x="550" y="400">x_C</text>
+</svg><p>How to choose a route if I don’t know how many cars take each route?</p></section><section id="observations"><h2>Observations</h2>
+<ol>
+  <li>
+    <p>If I choose route randomly, my average commute time is 1.51 hr, regardless of what everyone else does.</p>
+  </li>
+  <li>
+    <p>Centralized control can guarantee that everyone’s commute is exactly 1.51 hr:</p>
+    <ul>
+      <li>route 50 cars through B and 50 cars through C</li>
+    </ul>
+  </li>
+</ol></section><section id="the-free-market"><h2>The Free Market</h2>
+<p>Elon Musk thinks this map is ridiculous!</p>
+<svg width="400" height="250" version="1.1" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 800 500">
+  <line x1="100" y1="250" x2="400" y2="50" stroke="blue" stroke-width="10"></line>
+  <line x1="100" y1="250" x2="400" y2="450" stroke="red" stroke-width="10"></line>
+  <line x1="400" y1="50" x2="700" y2="250" stroke="red" stroke-width="10"></line>
+  <line x1="400" y1="450" x2="700" y2="250" stroke="blue" stroke-width="10"></line>
+  
+  <circle cx="100" cy="250" r="25" stroke="black" stroke-width="5" fill="white"></circle>
+  <circle cx="400" cy="50" r="25" stroke="black" stroke-width="5" fill="white"></circle>
+  <circle cx="400" cy="450" r="25" stroke="black" stroke-width="5" fill="white"></circle>
+  <circle cx="700" cy="250" r="25" stroke="black" stroke-width="5" fill="white"></circle>
+  
+  <text text-anchor="middle" alignment-baseline="middle" x="100" y="250">A</text>
+  <text text-anchor="middle" alignment-baseline="middle" x="400" y="50">B</text>
+  <text text-anchor="middle" alignment-baseline="middle" x="400" y="450">C</text>
+  <text text-anchor="middle" alignment-baseline="middle" x="700" y="250">D</text>
+  
+  <text text-anchor="middle" alignment-baseline="middle" x="250" y="100">x_B</text>
+  <text text-anchor="middle" alignment-baseline="middle" x="250" y="400">1.01</text>
+  <text text-anchor="middle" alignment-baseline="middle" x="550" y="100">1.01</text>
+  <text text-anchor="middle" alignment-baseline="middle" x="550" y="400">x_C</text>
+</svg><blockquote>
+  <p>“We will build a hyperloop connecting cities B and C!!! The commute will be free and (almost) instantaneous!!!”</p>
+</blockquote></section><section id="the-new-picture"><h2>The New Picture</h2>
+<svg width="800" height="500" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <line x1="100" y1="250" x2="400" y2="50" stroke="blue" stroke-width="10"></line>
+  <line x1="100" y1="250" x2="400" y2="450" stroke="red" stroke-width="10"></line>
+  <line x1="400" y1="50" x2="700" y2="250" stroke="red" stroke-width="10"></line>
+  <line x1="400" y1="450" x2="700" y2="250" stroke="blue" stroke-width="10"></line>
+  <line x1="400" y1="50" x2="400" y2="450" stroke="gray" stroke-width="10"></line>
+  
+  <circle cx="100" cy="250" r="25" stroke="black" stroke-width="5" fill="white"></circle>
+  <circle cx="400" cy="50" r="25" stroke="black" stroke-width="5" fill="white"></circle>
+  <circle cx="400" cy="450" r="25" stroke="black" stroke-width="5" fill="white"></circle>
+  <circle cx="700" cy="250" r="25" stroke="black" stroke-width="5" fill="white"></circle>
+  
+  <text text-anchor="middle" alignment-baseline="middle" x="100" y="250">A</text>
+  <text text-anchor="middle" alignment-baseline="middle" x="400" y="50">B</text>
+  <text text-anchor="middle" alignment-baseline="middle" x="400" y="450">C</text>
+  <text text-anchor="middle" alignment-baseline="middle" x="700" y="250">D</text>
+  
+  <text text-anchor="middle" alignment-baseline="middle" x="250" y="100">x_B</text>
+  <text text-anchor="middle" alignment-baseline="middle" x="250" y="400">1.01</text>
+  <text text-anchor="middle" alignment-baseline="middle" x="550" y="100">1.01</text>
+  <text text-anchor="middle" alignment-baseline="middle" x="550" y="400">x_C</text>
+  <text text-anchor="middle" alignment-baseline="middle" x="450" y="250">0</text>
+</svg></section><section id="what-is-the-best-strategy"><h2>What is the Best Strategy?</h2>
+<p>Previously:</p>
+<ul>
+  <li>Choosing B/C route randomly gives expected commute time of 1.51 hr</li>
+  <li>Centralized control guaranteed commute times of 1.51 hr</li>
+</ul>
+<p>These options are still viable, but now get more choices:</p>
+<ul>
+  <li>A to B to C to D: commute time \(X_B + X_C\)</li>
+  <li>A to C to B to D: commute time 2.02</li>
+</ul>
+<p>Which route should you choose? What is the aggregate behavior?</p></section><section id="best-strategy"><h2>Best Strategy?</h2>
+<svg width="800" height="500" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <line x1="100" y1="250" x2="400" y2="50" stroke="blue" stroke-width="10"></line>
+  <line x1="100" y1="250" x2="400" y2="450" stroke="red" stroke-width="10"></line>
+  <line x1="400" y1="50" x2="700" y2="250" stroke="red" stroke-width="10"></line>
+  <line x1="400" y1="450" x2="700" y2="250" stroke="blue" stroke-width="10"></line>
+  <line x1="400" y1="50" x2="400" y2="450" stroke="gray" stroke-width="10"></line>
+  
+  <circle cx="100" cy="250" r="25" stroke="black" stroke-width="5" fill="white"></circle>
+  <circle cx="400" cy="50" r="25" stroke="black" stroke-width="5" fill="white"></circle>
+  <circle cx="400" cy="450" r="25" stroke="black" stroke-width="5" fill="white"></circle>
+  <circle cx="700" cy="250" r="25" stroke="black" stroke-width="5" fill="white"></circle>
+  
+  <text text-anchor="middle" alignment-baseline="middle" x="100" y="250">A</text>
+  <text text-anchor="middle" alignment-baseline="middle" x="400" y="50">B</text>
+  <text text-anchor="middle" alignment-baseline="middle" x="400" y="450">C</text>
+  <text text-anchor="middle" alignment-baseline="middle" x="700" y="250">D</text>
+  
+  <text text-anchor="middle" alignment-baseline="middle" x="250" y="100">x_B</text>
+  <text text-anchor="middle" alignment-baseline="middle" x="250" y="400">1.01</text>
+  <text text-anchor="middle" alignment-baseline="middle" x="550" y="100">1.01</text>
+  <text text-anchor="middle" alignment-baseline="middle" x="550" y="400">x_C</text>
+  <text text-anchor="middle" alignment-baseline="middle" x="450" y="250">0</text>
+</svg><p>Which route should you choose? What is the aggregate behavior?</p></section><section id="dominant-strategy"><h2>Dominant Strategy</h2>
+<p>Observation:</p>
+<ul>
+  <li>\(X_B, X_C \leq 1\) no matter what</li>
+</ul>
+<p>Independent of everyone else’s choices, your fastest route is A to B to C to D:</p>
+<ul>
+  <li>Total cost: \(X_B + X_C\)</li>
+</ul>
+<p>This is the <em>dominant strategy</em></p></section><section id="collective-behavior"><h2>Collective Behavior</h2>
+<p>If everyone chooses according to self interest:</p>
+<ul>
+  <li>all cars commute A to B to C to D</li>
+  <li>
+\[X_B = X_C = 1\]
+  </li>
+  <li>everyone’s commute takes 2 hours!</li>
+</ul>
+<p>Without the hyperloop, expected commute time was 1.51 hours…</p>
+<ul>
+  <li>adding the hyperloop <strong>increased</strong> commute times</li>
+</ul>
+<p>In real life: closing Times Square to car traffic in NYC <em>decreased</em> avg. commute time in Manhattan. (<a href="https://blogs.cornell.edu/info2040/2018/09/16/braess-paradox-and-times-squares-pedestrian-plaza/">source</a>)</p></section><section id="the-price-of-anarchy"><h2>The Price of Anarchy</h2>
+<p>With hyperloop and everyone choosing their fastest route:</p>
+<ul>
+  <li>commute time is 2 hr for everyone</li>
+</ul>
+<p>Optimal global strategy</p>
+<ul>
+  <li>send half of cars A, B, D and half A, C, D</li>
+  <li>commute time is 1.51 hr for everyone</li>
+</ul>
+<p><strong>Rational, self-interested distributed control leads to 33% worse efficiency for everyone!</strong> This is the <a href="https://en.wikipedia.org/wiki/Price_of_anarchy">Price of Anarchy</a>.</p></section><section id="the-morals"><h2>The Morals</h2>
+<ol>
+  <li>
+    <p>Having more options can lead to worse outcomes, even when everyone acts rationally in their self interest.</p>
+  </li>
+  <li>
+    <p>Individual rational behavior can lead to worse outcomes for everyone than centralized control.</p>
+    <ul>
+      <li>
+<a href="https://en.wikipedia.org/wiki/Tragedy_of_the_commons">“Tragedy of the Commons”</a> scenario</li>
+      <li>see also <a href="https://en.wikipedia.org/wiki/Prisoner%27s_dilemma">“Prisoner’s Dilemma”</a>
+</li>
+    </ul>
+  </li>
+</ol></section><section id="covid-as-tragedy-of-the-commons"><h2>COVID as Tragedy of the Commons</h2>
+<ul>
+  <li>
+    <p>Hard to assess global ramifications of individual behavior</p>
+  </li>
+  <li>
+    <p>Situations where everyone</p>
+
+    <ol>
+      <li>has perfect information</li>
+      <li>has good intentions</li>
+      <li>assesses their individual risks rationally</li>
+    </ol>
+  </li>
+</ul>
+<p>can lead to disasterous outcomes</p>
+<ul>
+  <li>This issue is inherent to distributed systems, and not merely a result of human or political flaws</li>
+</ul></section><section id="computational-limits-of-parallelism"><h1>Computational Limits of Parallelism</h1></section><section id="limits-of-parallelism"><h2>Limits of Parallelism</h2>
+<p>How much can parallelism speed up computation?</p>
+<ul>
+  <li>Sometimes a lot
+    <ul>
+      <li>Monte Carlo simulation to estimate \(\pi\)</li>
+      <li>other “embarrassinlgy parallel” tasks</li>
+    </ul>
+  </li>
+  <li>Sometimes not?
+    <ul>
+      <li>given a program and a number \(T\), determine if the program terminates after at most \(T\) steps</li>
+      <li>this problem is <strong>conjectured</strong> not to be parallelizable</li>
+    </ul>
+  </li>
+</ul></section><section id="quantifying-speedup"><h2>Quantifying Speedup</h2>
+<p>Consider a program consisting of</p>
+<ul>
+  <li>\(N\) elementary operations,</li>
+  <li>takes time \(T\) to run sequentially</li>
+</ul>
+<p>Suppose:</p>
+<ul>
+  <li>a fraction \(p\) of operations can be performed in parallel</li>
+  <li>(remaining \(1 - p\) fraction must be performed sequentially)</li>
+</ul>
+<p>Question: how long to complete computation with \(n\) parallel machines?</p></section><section id="idea"><h2>Idea</h2>
+<p>With \(n\) parallel machines:</p>
+<ul>
+  <li>perform \(p\)-fraction of parallelizable ops in parallel on all \(n\) machines
+    <ul>
+      <li>total time \(T \cdot \frac{p}{n}\)</li>
+    </ul>
+  </li>
+  <li>perform remaining ops sequentially on a single machine
+    <ul>
+      <li>total time \(T \cdot (1 - p)\)</li>
+    </ul>
+  </li>
+</ul>
+<p>Total time: \(T \cdot (1 - p) + T \cdot \frac{p}{n} = T \cdot \left(1 - p + \frac p n\right)\)</p></section><section id="how-much-improvement"><h2>How Much Improvement?</h2>
+<p>The <strong>speedup</strong> is the ratio of the original time \(T\) to the parallel time \(T \cdot \left(1 - p + \frac p n\right)\):</p>
+<ul>
+  <li>
+\[S = \frac{1}{1 - p + \frac p n}\]
+  </li>
+</ul>
+<p>This is the best performance improvement possible <strong>in principle</strong></p>
+<ul>
+  <li>may not be achievable in practice!</li>
+</ul></section><section id="example-1"><h2>Example</h2>
+<p>1 person can chop 1 onion per minute</p>
+<p>Recipe calls for:</p>
+<ul>
+  <li>chop 6 onions</li>
+  <li>saute onions for 4 minutes</li>
+</ul>
+<p>Note:</p>
+<ul>
+  <li>chopping onions can be done in parallel</li>
+  <li>sauteing
+    <ul>
+      <li>takes 4 minutes no matter what</li>
+      <li>must be accomplished after chopping</li>
+    </ul>
+  </li>
+</ul></section><section id="example-continued"><h2>Example (continued)</h2>
+<p>How much can the cooking process be sped up by \(n\) cooks?</p>
+<div style="margin-bottom: 12em"></div></section><section id="example-continued-1"><h2>Example (continued)</h2>
+<ul>
+  <li>For one chef, \(T = 6 + 4 = 10\)</li>
+  <li>Only chopping onions is parallelizable, so \(p = 6 / 10 = 0.6\)</li>
+  <li>Amdahl’s Law:
+    <ul>
+      <li>
+\[S = \frac{1}{1 - p - \frac{p}{n}} = \frac{1}{0.4 + \frac 1 n 0.6}\]
+      </li>
+    </ul>
+  </li>
+  <li>So:
+    <ul>
+      <li>
+\[n = 2 \implies S = 1.43\]
+      </li>
+      <li>
+\[n = 3 \implies S = 1.67\]
+      </li>
+      <li>
+\[n = 6 \implies S = 2\]
+      </li>
+    </ul>
+  </li>
+  <li>Always have \(S &lt; 1 / (1 - p) = 2.5\)</li>
+</ul></section><section id="speedup-improvement-by-adding-more-processors"><h2>Speedup Improvement by Adding More Processors</h2>
+<ul>
+  <li>Second processor: 43%</li>
+  <li>Third processor: 17%</li>
+  <li>Fourth processor: 9%</li>
+  <li>Fifth processor: 6%</li>
+  <li>Sixth processor 4%</li>
+</ul></section><section id="latency-vs-number-of-processors"><h2>Latency vs Number of Processors</h2>
+<p>How does latency \(T\) scale with \(n\)?</p>
+<ul>
+  <li>Adding more processors has <em>declining marginal utility</em>:
+    <ul>
+      <li>each additional processor has a smaller effect on total performance</li>
+      <li>at some point, adding more processors to a computation is wasteful</li>
+    </ul>
+  </li>
+  <li>Another consideration:
+    <ul>
+      <li>after parallel ops have been performed, extra processors are idle (potentially wasteful!)</li>
+    </ul>
+  </li>
+</ul></section><section id="a-remark"><h2>A Remark</h2>
+<p>The proportion of parallelizable operations $p$ is not always obvious from problem statement</p>
+<ul>
+  <li>Amdahl’s law a valuable heuristic for general phenomena:
+    <ol>
+      <li>an \(n\)-fold increase in parallel processing power does not typically give an \(n\)-fold speedup in computations</li>
+      <li>adding new parallel processors becomes less helpful the more parallel processors you already have</li>
+    </ol>
+  </li>
+  <li>Often helpful to think about scheduling subtasks (not individual operations)</li>
+  <li>May have relationships between tasks (e.g., one must be performed before another)</li>
+</ul></section><section id="homework-assignment-1"><h2>Homework Assignment 1</h2>
+<ul>
+  <li>You’ll be asked to take a more nuanced approach to computing an optimal <em>schedule</em> for parallel processing</li>
+</ul></section>
+</div></div>
+
+
+	  <script src="/assets/reveal.js-master/dist/reveal.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/math/math.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/zoom/zoom.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/notes/notes.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/search/search.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/markdown/markdown.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/highlight/highlight.js"></script>
+	  <script>
+	    
+
+	    // Also available as an ES module, see:
+	    // https://revealjs.com/initialization/
+	    Reveal.initialize({
+		controls: false,
+		progress: true,
+		center: true,
+		hash: true,
+		transition: 'none',
+		math: {
+		    config: 'TeX-AMS_HTML-full',
+		    TeX: {
+			Macros: {
+			    R: '\\mathbb{R}',
+			    set: [ '\\left\\{#1 \\; ; \\; #2\\right\\}', 2 ]
+			}
+		    }
+		},
+
+
+		// Learn about plugins: https://revealjs.com/plugins/
+		plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath ]
+	    });
+
+	  </script>
+
+	</body>
+</html>
+	  
+
+<!-- <\!-- load the reveal.js css & js (assuming you've put it in assets/)-\-> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/reveal.scss" -->
+<!-- /> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/theme/source/white.scss" -->
+<!-- /> -->
+<!-- <script -->
+<!--   src="/assets/reveal.js-master/js/reveal.js" -->
+<!--   type="text/javascript" -->
+<!-- ></script> -->
+
+<!-- <\!-- configure the presentation, (you can tweak options to suit) -\-> -->
+<!-- <script> -->
+<!--   Reveal.initialize({ -->
+<!--     // Display presentation control arrows -->
+<!--     controls: false, -->
+
+<!--     // Help the user learn the controls by providing hints, for example by -->
+<!--     // bouncing the down arrow when they first encounter a vertical slide -->
+<!--     controlsTutorial: false, -->
+
+<!--     // Determines where controls appear, "edges" or "bottom-right" -->
+<!--     controlsLayout: "bottom-right", -->
+
+<!--     // Visibility rule for backwards navigation arrows; "faded", "hidden" -->
+<!--     // or "visible" -->
+<!--     controlsBackArrows: "faded", -->
+
+<!--     // Display a presentation progress bar -->
+<!--     progress: true, -->
+
+<!--     // Display the page number of the current slide -->
+<!--     slideNumber: false, -->
+
+<!--     // Push each slide change to the browser history -->
+<!--     history: false, -->
+
+<!--     // Enable keyboard shortcuts for navigation -->
+<!--     keyboard: true, -->
+
+<!--     // Enable the slide overview mode -->
+<!--     overview: true -->
+<!--   }); -->
+<!-- </script> -->

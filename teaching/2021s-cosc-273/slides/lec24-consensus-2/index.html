@@ -1,0 +1,712 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta charset="utf-8">
+
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reset.css">
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reveal.css">
+		<link rel="stylesheet" href="/assets/css/condensation.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="/assets/reveal.js-master/plugin/highlight/monokai.css" id="highlight-theme">
+		<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700" rel="stylesheet">
+
+	</head>
+
+	<body>
+
+
+	  <!-- this is where the reveailfy filter gets applied -->
+	  <div class="reveal"><div class="slides">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ## Outline of Proof of FLP -->
+
+<!-- Assume only 2 processes, $P_0$ and $P_1$ -->
+
+<!-- 1. Start from a critical execution $E$ -->
+<!--     + $E$ is bivalent, but any extension is univalent -->
+<!-- 2. Consider all possibilities for next step: -->
+<!--     + both threads `read` for next step -->
+<!-- 	+ one thread `read`s, the other `write`s -->
+<!-- 	+ both threads `write` -->
+<!-- 3. Show that in any case, we contradict either criticality of `E` or correctness of protocol -->
+
+<!-- ## Assumptions -->
+
+<!-- Without loss of generality: -->
+
+<!-- 1. There are two processes $P_0$ and $P_1$ -->
+<!-- 2. $E$ is a critical state -->
+<!--     + if $P_0$ has next step, resulting execution is $0$-valent -->
+<!-- 	+ if $P_1$ has next step, resulting execution is $1$-valent -->
+
+<!-- ## Case 1: `read`/`read` -->
+
+<!-- Assumption: next operations for both $P_0$ and $P_1$ are `read` -->
+
+<!-- - Start from critical state $E$ -->
+<!--     + if $P_0$ steps next, output is `0` -->
+<!-- 	+ if $P_1$ steps next, output is `1` -->
+
+<!-- ## `read`/`read` -->
+
+<!-- ![](/assets/img/consensus/critical.png){: width="100%"} -->
+
+<!-- ## `read`/`read` Next Step -->
+
+<!-- ![](/assets/img/consensus/read-read-1.png){: width="100%"} -->
+
+<!-- ## `read`/`read` Problem -->
+
+<!-- ![](/assets/img/consensus/read-read-2.png){: width="100%"} -->
+
+<!-- ## Case 2: `read`/`write` -->
+
+<!-- Assumption:  -->
+<!-- - $P_0$'s next step is `read` -->
+<!-- - $P_1$'s next step is `write` -->
+
+<!-- - Start from critical state $E$ -->
+<!--    + if $P_0$'s `read` step is next, output is `0` -->
+<!--    + if $P_1$'s `write` step is next, output is `1` -->
+
+<!-- ## `read`/`write` Setup -->
+
+<!-- ![](/assets/img/consensus/read-write-1.png){: width="100%"} -->
+
+<!-- ## `read`/`write` Next Step -->
+
+<!-- ![](/assets/img/consensus/read-write-2.png){: width="100%"} -->
+
+<!-- ## `read`/`write` Indistinguishable -->
+
+<!-- ![](/assets/img/consensus/read-write-3.png){: width="100%"} -->
+
+<!-- ## `read`/`write` $P_1$ Runs Alone -->
+
+<!-- ![](/assets/img/consensus/read-write-3.png){: width="100%"} -->
+
+<!-- ## Case 3: `write`/`write` -->
+
+<!-- Assumption: next operation for both $P_0$ and $P_1$ is `write` -->
+
+<!-- Subcases: -->
+<!-- - Sub-case a: write to different registers -->
+<!-- - Sub-case b: write to same register -->
+
+<!-- ## `write`/`write` Different Registers -->
+
+<!-- ![](/assets/img/consensus/diff-write-write-1.png){: width="100%"} -->
+
+<!-- ## `write`/`write` Next Step -->
+
+<!-- ![](/assets/img/consensus/diff-write-write-2.png){: width="100%"} -->
+
+<!-- ## `write`/`write` Indistinguishable -->
+
+<!-- ![](/assets/img/consensus/diff-write-write-3.png){: width="100%"} -->
+
+<!-- ## `write`/`write` Same Register -->
+
+<!-- ![](/assets/img/consensus/same-write-write-1.png){: width="100%"} -->
+
+<!-- ## `write`/`write` Next Step -->
+
+<!-- ![](/assets/img/consensus/same-write-write-2.png){: width="100%"} -->
+
+<!-- ## `write`/`write` Indistinguishable -->
+
+<!-- ![](/assets/img/consensus/same-write-write-3.png){: width="100%"} -->
+
+<!-- ## Conclusion -->
+
+<!-- In general: -->
+
+<!-- - Indistinguishable executions produce same output -->
+
+<!-- Assuming a wait-free consensus protocol using only read/write registers: -->
+
+<!-- 1. Showed there is a bivalent initial state -->
+<!-- 2. Showed there is a critical execution -->
+<!-- 3. Given a critical execution -->
+<!--     + found indistinguishable states that must give different outputs -->
+<!-- 	+ this is a contradiction! -->
+
+<!-- **Remark.** 1 and 2 hold for all protocols; 3 assumes *only* read/write registers -->
+
+<!-- ## Consensus is Impossible? -->
+
+<!-- Well not quite! -->
+
+<!-- - We just proved impossibility in our computational model! -->
+<!--     + atomic read/write registers -->
+<!-- 	+ wait-free (or faults) -->
+<!-- 	+ nasty scheduler! -->
+<!-- - Does the model reflect reality? -->
+<!--     + we have stronger primitives! -->
+<!-- 	+ we might have better schedulers -->
+<!-- 	+ faults could be *worse* -->
+<!-- 	    - Byzantine faults -->
+
+<!-- ## Next Time -->
+
+<!-- Tying things together! -->
+
+<section id="lecture-24-consensus-2"><h1>Lecture 24: Consensus 2</h1></section><section id="reminder"><h2>Reminder</h2>
+<p>Final Project: Short video due next Wednesday</p>
+<ul>
+  <li>Not more than 10 minutes</li>
+  <li>Simple presentation, audience = classmates
+    <ol>
+      <li>Describe problem you solved</li>
+      <li>Overview of solution method (sequential)</li>
+      <li>Opportunities for parallelism</li>
+      <li>Challenges and/or successes</li>
+    </ol>
+  </li>
+  <li>Don’t need final results!</li>
+  <li>Simplest method: record in Zoom</li>
+</ul></section><section id="last-time"><h2>Last Time</h2>
+<p>Introduced the consensus problem:</p>
+<ul>
+  <li>$n$ processes, each with private input</li>
+  <li>some processes may crash</li>
+  <li>must produce output satisfying following properties
+    <ul>
+      <li>
+<strong>Agreement</strong>: all processes output the same value</li>
+      <li>
+<strong>Validity</strong>: if all systems have the same input, they all output that value</li>
+      <li>
+<strong>Termination</strong>: all (non-faulty) processes decide on an output and terminate after a finite number of steps</li>
+    </ul>
+  </li>
+</ul></section><section id="our-goal"><h2>Our Goal</h2>
+<p><strong>Theorem</strong> (FLP, 1985). There is no algorithm that achieves consensus in the presence of even a single faulty process.</p>
+<ul>
+  <li>Special case: there is no <em>wait-free</em> protocol for consensus for any $n &gt; 1$
+    <ul>
+      <li>wait-free is stronger assumption than termination</li>
+    </ul>
+  </li>
+  <li>Consider <em>binary consensus</em> all inputs 0/1</li>
+</ul></section><section id="roadmap"><h2>Roadmap</h2>
+<ol>
+  <li>Model
+    <ul>
+      <li>atomic read/write registers</li>
+    </ul>
+  </li>
+  <li>Bivalent executions
+    <ul>
+      <li>executions that can be <em>extended</em> to produce output 0 or 1</li>
+    </ul>
+  </li>
+  <li>Critical executions
+    <ul>
+      <li>if any processor takes a step, then output is determined</li>
+    </ul>
+  </li>
+  <li>Proof of FLP result</li>
+</ol></section><section id="executions"><h2>Executions</h2>
+<p>An <strong>execution</strong> $E$ of algorithm $A$ specifies</p>
+<ul>
+  <li>Inputs of all processes</li>
+  <li>Sequence of steps taken by processes
+    <ul>
+      <li>read</li>
+      <li>write</li>
+      <li>terminate</li>
+      <li>crash</li>
+    </ul>
+  </li>
+</ul>
+<p>Executions may be incomplete</p>
+<ul>
+  <li>Not all nodes have terminated/crashed yet
+    <ul>
+      <li>encodes current state/history of execution</li>
+    </ul>
+  </li>
+</ul>
+<p>Executions may be <strong>extended</strong> by scheduling more steps</p></section><section id="example-algorithm"><h2>Example Algorithm</h2>
+<p>Default to <code>0</code>: output <code>0</code> unless all processes have input <code>1</code></p>
+<pre><code class="language-java">int in = getLocalInput();
+int i = ThreadId.get();
+
+write(i, in); // write my value to register i
+
+if (in == 0) return 0;
+
+for (int j = 0; j &lt; nProcesses; j++) {
+    // wait until register j has been written	
+    while (read(j) != 0 &amp;&amp; read(j) != 1) { };
+	
+    if (read(j) == 0) return 0;
+}
+
+// all processors have in == 1
+return 1;
+</code></pre></section><section id="example-of-execution-e"><h2>Example of Execution $E$</h2>
+<p><img src="/assets/img/consensus/dz-01.png" alt="" width="100%"></p></section><section id="e-step-01"><h2>$E$ Step 01</h2>
+<p><img src="/assets/img/consensus/dz-02.png" alt="" width="100%"></p></section><section id="e-step-02"><h2>$E$ Step 02</h2>
+<p><img src="/assets/img/consensus/dz-03.png" alt="" width="100%"></p></section><section id="e-step-03"><h2>$E$ Step 03</h2>
+<p><img src="/assets/img/consensus/dz-04.png" alt="" width="100%"></p></section><section id="e-step-04"><h2>$E$ Step 04</h2>
+<p><img src="/assets/img/consensus/dz-05.png" alt="" width="100%"></p></section><section id="e-step-05"><h2>$E$ Step 05</h2>
+<p><img src="/assets/img/consensus/dz-06.png" alt="" width="100%"></p></section><section id="e-step-06"><h2>$E$ Step 06</h2>
+<p><img src="/assets/img/consensus/dz-07.png" alt="" width="100%"></p></section><section id="extending-executions"><h2>Extending Executions</h2>
+<p>In $E$, no process has terminated yet</p>
+<ul>
+  <li>We can consider <strong>extensions</strong> of a given execution</li>
+  <li>Start with $E$, and perform more steps</li>
+</ul></section><section id="e-step-06-1"><h2>$E’$ Step 06</h2>
+<p><img src="/assets/img/consensus/dz-07.png" alt="" width="100%"></p></section><section id="e-step-07"><h2>$E’$ Step 07</h2>
+<p><img src="/assets/img/consensus/dz-08.png" alt="" width="100%"></p></section><section id="e-step-08"><h2>$E’$ Step 08</h2>
+<p><img src="/assets/img/consensus/dz-09.png" alt="" width="100%"></p></section><section id="e-step-09"><h2>$E’$ Step 09</h2>
+<p><img src="/assets/img/consensus/dz-10.png" alt="" width="100%"></p></section><section id="e-step-10"><h2>$E’$ Step 10</h2>
+<p><img src="/assets/img/consensus/dz-11.png" alt="" width="100%"></p></section><section id="note"><h2>Note</h2>
+<p>We can consider many different extensions of $E$</p></section><section id="extension-e-of-e"><h2>Extension $E’$ of $E$</h2>
+<p><img src="/assets/img/consensus/dz-11.png" alt="" width="100%"></p></section><section id="alternate-extension-e"><h2>Alternate extension $E’’$</h2>
+<p><img src="/assets/img/consensus/dz-alt.png" alt="" width="100%"></p></section><section id="indistinguishable-executions"><h2>Indistinguishable Executions</h2>
+<ul>
+  <li>$E$ and $E’$ are executions</li>
+  <li>they are <strong>indistinguishable</strong> at process $P_i$ if in $E$ and $E’$:
+    <ol>
+      <li>$P_i$ has same input</li>
+      <li>sequence of read/write operations performed by $P_i$ are same</li>
+      <li>the sequence of values read and written by $P_i$ are the same</li>
+    </ol>
+  </li>
+</ul></section><section id="e-for-p1"><h2>$E’$ for <code>P1</code>
+</h2>
+<p><img src="/assets/img/consensus/dz-p1.png" alt="" width="100%"></p></section><section id="e-for-p1-1"><h2>$E’’$ for <code>P1</code>
+</h2>
+<p><img src="/assets/img/consensus/dz-p1-alt.png" alt="" width="100%"></p></section><section id="first-important-observation"><h2>First Important Observation</h2>
+<p><strong>Lemma 1.</strong> If executions $E$ and $E’$ are indistinguishable to process $P_i$ then:</p>
+<ol>
+  <li>If $P_i$ has not yet terminated, then $P_i$’s next step will be the same in any extension</li>
+  <li>If $P_i$ has terminated, then $P_i$’s output is the same in $E$ and $E’$</li>
+</ol></section><section id="properties-of-consensus-protocols"><h2>Properties of Consensus Protocols</h2>
+<p>Main argument for FLP:</p>
+<ol>
+  <li>Describe properties that any hypothetical consensus protocol must have
+    <ul>
+      <li>
+<em>bivalent</em> executions</li>
+      <li>
+<em>critical</em> executions</li>
+    </ul>
+  </li>
+  <li>Use these properties to show that with only read/write registers there are indistinguishable executions that must give different outputs
+    <ul>
+      <li>this contradicts Lemma 1</li>
+    </ul>
+  </li>
+</ol></section><section id="bivalent-executions"><h2>Bivalent Executions</h2>
+<ul>
+  <li>Consider a (hypothetical) wait-free consensus protocol $A$</li>
+  <li>Let $E$ be an execution of $A$</li>
+</ul>
+<p>We say that $E$ is…</p>
+<ol>
+  <li>
+<strong>$0$-valent</strong> if in every extension of $E$, all processes output $0$</li>
+  <li>
+<strong>$1$-valent</strong> if in every extension of $E$, all processes output $1$</li>
+  <li>
+<strong>univalent</strong> if it is $0$- or $1$-valent</li>
+  <li>
+<strong>bivalent</strong> if there exist
+    <ul>
+      <li>an extension $E’$ of $E$ in which all processes output $0$</li>
+      <li>an extension $E’’$ of $E$ in which all processes output $1$</li>
+    </ul>
+  </li>
+</ol></section><section id="second-important-observation"><h2>Second Important Observation</h2>
+<p><strong>Lemma 2.</strong> Suppose $A$ solves consensus. Then there is a bivalent initial state.</p>
+<ul>
+  <li>Here an <em>initial state</em> is an execution in which no process has yet taken a step
+    <ul>
+      <li>the execution consists of only inputs for each process</li>
+    </ul>
+  </li>
+</ul></section><section id="proof-of-lemma-2"><h2>Proof of Lemma 2</h2>
+<p>Must show: there is a bivalent initial state</p>
+<p>Argument:</p>
+<ul>
+  <li>by contradiction: suppose no bivalent initial state</li>
+  <li>consider sequence of initial states</li>
+  <li>show some are $0$-valent, some are $1$-valent</li>
+  <li>show that some must be bivalent</li>
+</ul></section><section id="e_1-is-0-valent-why"><h2>$E_1$ is $0$-valent (Why?)</h2>
+<p><img src="/assets/img/consensus/univalent-0.png" alt="" width="100%"></p></section><section id="e_5-is-1-valent"><h2>$E_5$ is $1$-valent</h2>
+<p><img src="/assets/img/consensus/univalent-1.png" alt="" width="100%"></p></section><section id="more-initial-states"><h2>More Initial States</h2>
+<p><img src="/assets/img/consensus/bivalent-1.png" alt="" width="100%"></p></section><section id="assume-all-univalent"><h2>Assume: All Univalent</h2>
+<p><img src="/assets/img/consensus/bivalent-2.png" alt="" width="100%"></p></section><section id="adjacent-pair-different-valency"><h2>Adjacent Pair, Different Valency</h2>
+<p><img src="/assets/img/consensus/bivalent-3.png" alt="" width="100%"></p></section><section id="all-extensions-of-e_2-return-0"><h2>All Extensions of $E_2$ Return $0$</h2>
+<p><img src="/assets/img/consensus/bivalent-4.png" alt="" width="100%"></p></section><section id="all-extensions-of-e_3-return-1"><h2>All Extensions of $E_3$ Return $1$</h2>
+<p><img src="/assets/img/consensus/bivalent-5.png" alt="" width="100%"></p></section><section id="e_2-and-e_3-indistinguishable"><h2>$E_2’$ and $E_3’$ Indistinguishable</h2>
+<p><img src="/assets/img/consensus/bivalent-6.png" alt="" width="100%"></p></section><section id="e_2-and-e_3-bivalent"><h2>$E_2$ and $E_3$ Bivalent</h2>
+<p><img src="/assets/img/consensus/bivalent-7.png" alt="" width="100%"></p></section><section id="note-1"><h2>Note</h2>
+<p>Don’t need to assume $P_2$ crashes</p>
+<ul>
+  <li>just assume first step of $P_2$ is scheduled after some other thread outputs</li>
+  <li>this is possible because we assume $A$ is wait-free
+    <ul>
+      <li>some process guaranteed to terminate even if one is not scheduled</li>
+    </ul>
+  </li>
+</ul>
+<p>Mere possibility of a crash together with wait-free assumption implies existence a bivalent initial state</p>
+<ul>
+  <li>same holds if we require only termination with one fault</li>
+</ul></section><section id="critical-executions"><h2>Critical Executions</h2>
+<p>An execution $E$ is <strong>critical</strong> if:</p>
+<ol>
+  <li>$E$ is bivalent</li>
+  <li>Extending $E$ by any single step of any process results in a univalent execution</li>
+</ol></section><section id="important-obvservation-3"><h2>Important Obvservation 3</h2>
+<p><strong>Lemma 3.</strong> Every consensus protocol has a critical execution.</p></section><section id="proof-of-lemma-3"><h2>Proof of Lemma 3</h2>
+<p>Consider a bivalent initial state $E_0$</p>
+<ul>
+  <li>Such a state exists by Lemma 2</li>
+  <li>If $E_0$ is critical, we’re done</li>
+  <li>Otherwise form $E_0, E_1, E_2, \ldots$ where
+    <ol>
+      <li>each $E_{i+1}$ extends $E_i$ by single step</li>
+      <li>each $E_i$ is bivalent</li>
+    </ol>
+  </li>
+  <li>By <em>wait-freedom</em>, the sequence must be finite</li>
+  <li>So it has a final $E$ where every extension is univalent
+    <ul>
+      <li>$E$ is critical!</li>
+    </ul>
+  </li>
+</ul></section><section id="properties-of-consensus"><h2>Properties of Consensus</h2>
+<p><strong>Lemma 2.</strong> Every consensus protocol has a bivalent initial state.</p>
+<p><strong>Lemma 3.</strong> Every consensus protocol has a citical execution $E$.</p>
+<p>So far: Have not used any properties of atomic read/write registers</p>
+<ul>
+  <li>These properties hold for all consensus protocols
+    <ul>
+      <li>even if other atomic operations are supported</li>
+    </ul>
+  </li>
+</ul></section>
+</div></div>
+
+
+	  <script src="/assets/reveal.js-master/dist/reveal.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/math/math.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/zoom/zoom.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/notes/notes.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/search/search.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/markdown/markdown.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/highlight/highlight.js"></script>
+	  <script>
+	    
+
+	    // Also available as an ES module, see:
+	    // https://revealjs.com/initialization/
+	    Reveal.initialize({
+		controls: false,
+		progress: true,
+		center: true,
+		hash: true,
+		transition: 'none',
+		math: {
+		    config: 'TeX-AMS_HTML-full',
+		    TeX: {
+			Macros: {
+			    R: '\\mathbb{R}',
+			    set: [ '\\left\\{#1 \\; ; \\; #2\\right\\}', 2 ]
+			}
+		    }
+		},
+
+
+		// Learn about plugins: https://revealjs.com/plugins/
+		plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath ]
+	    });
+
+	  </script>
+
+	</body>
+</html>
+	  
+
+<!-- <\!-- load the reveal.js css & js (assuming you've put it in assets/)-\-> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/reveal.scss" -->
+<!-- /> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/theme/source/white.scss" -->
+<!-- /> -->
+<!-- <script -->
+<!--   src="/assets/reveal.js-master/js/reveal.js" -->
+<!--   type="text/javascript" -->
+<!-- ></script> -->
+
+<!-- <\!-- configure the presentation, (you can tweak options to suit) -\-> -->
+<!-- <script> -->
+<!--   Reveal.initialize({ -->
+<!--     // Display presentation control arrows -->
+<!--     controls: false, -->
+
+<!--     // Help the user learn the controls by providing hints, for example by -->
+<!--     // bouncing the down arrow when they first encounter a vertical slide -->
+<!--     controlsTutorial: false, -->
+
+<!--     // Determines where controls appear, "edges" or "bottom-right" -->
+<!--     controlsLayout: "bottom-right", -->
+
+<!--     // Visibility rule for backwards navigation arrows; "faded", "hidden" -->
+<!--     // or "visible" -->
+<!--     controlsBackArrows: "faded", -->
+
+<!--     // Display a presentation progress bar -->
+<!--     progress: true, -->
+
+<!--     // Display the page number of the current slide -->
+<!--     slideNumber: false, -->
+
+<!--     // Push each slide change to the browser history -->
+<!--     history: false, -->
+
+<!--     // Enable keyboard shortcuts for navigation -->
+<!--     keyboard: true, -->
+
+<!--     // Enable the slide overview mode -->
+<!--     overview: true -->
+<!--   }); -->
+<!-- </script> -->

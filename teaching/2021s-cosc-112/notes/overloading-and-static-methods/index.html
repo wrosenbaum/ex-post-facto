@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<title>Will  Rosenbaum | Overloading and Static Methods</title>
+<meta name="description" content="A blog about mathematics, computer science, etc.
+">
+
+<!-- Open Graph -->
+
+
+<!-- Bootstrap & MDB -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" integrity="sha512-MoRNloxbStBcD8z3M/2BmnT+rg4IsMxPkXaGh2zD6LGNNFE80W3onsAhRcMAMrSoyWL9xD7Ert0men7vR8LUZg==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" integrity="sha512-RO38pBRxYH3SoOprtPTD86JFOclM51/XTIdEPh5j8sj4tp8jmQIx26twG52UaLi//hQldfrh7e51WzP9wuP32Q==" crossorigin="anonymous" />
+
+<!-- Fonts & Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"  integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.0/css/academicons.min.css" integrity="sha512-W4yqoT1+8NLkinBLBZko+dFB2ZbHsYLDdr50VElllRcNt2Q4/GSs6u71UHKxB7S6JEMCp5Ve4xjh3eGQl/HRvg==" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+
+
+
+<!-- Code Syntax Highlighting -->
+<link rel="stylesheet" href="https://gitcdn.link/repo/jwarby/jekyll-pygments-themes/master/github.css" />
+
+<!-- Styles -->
+<link rel="shortcut icon" href="/assets/img/favicon.ico">
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<link rel="canonical" href="/teaching/2021s-cosc-112/notes/overloading-and-static-methods/">
+
+<!-- JQuery -->
+<!-- jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+
+
+<!-- Theming-->
+
+  <script src="/assets/js/theme.js"></script>
+  <!-- Load DarkMode JS -->
+<script src="/assets/js/dark_mode.js"></script>
+
+
+
+
+
+
+    
+<!-- MathJax -->
+<script type="text/javascript">
+  window.MathJax = {
+    tex: {
+      tags: 'ams'
+    }
+  };
+</script>
+<script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js"></script>
+<script defer src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+
+  </head>
+
+  <body class="fixed-top-nav ">
+
+    <!-- Header -->
+
+    <header>
+
+    <!-- Nav Bar -->
+    <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top">
+    <div class="container">
+      
+      <a class="navbar-brand title font-weight-lighter" href="https://willrosenbaum.com/">
+       Will   Rosenbaum
+      </a>
+      
+      <!-- Navbar Toggle -->
+      <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar top-bar"></span>
+        <span class="icon-bar middle-bar"></span>
+        <span class="icon-bar bottom-bar"></span>
+      </button>
+      <div class="collapse navbar-collapse text-right" id="navbarNav">
+        <ul class="navbar-nav ml-auto flex-nowrap">
+          <!-- About -->
+          <li class="nav-item ">
+            <a class="nav-link" href="/">
+              about
+              
+            </a>
+          </li>
+          <!-- Other pages -->
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/teaching/">
+                teaching
+                
+              </a>
+          </li>
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/research/">
+                research
+                
+              </a>
+          </li>
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/publications/">
+                publications
+                
+              </a>
+          </li>
+          
+          
+	  
+          <!-- Blog -->
+          <li class="nav-item ">
+            <a class="nav-link" href="/blog/">
+              blog
+              
+            </a>
+          </li>
+          
+
+          
+            <div class = "toggle-container">
+              <a id = "light-toggle">
+                  <i class="fas fa-moon"></i>
+                  <i class="fas fa-sun"></i>
+              </a>
+            </div>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+</header>
+
+
+    <!-- Content -->
+
+    <div class="container mt-5">
+      <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Overloading and Static Methods</h1>
+    <p class="post-description">notes on overloading methods and static methods</p>
+  </header>
+
+  <article>
+    <h2 id="background">Background</h2>
+
+<p>In class, we defined a simple <code class="language-plaintext highlighter-rouge">Fraction</code> class to store and manipulate fractional values. Specifically, a <code class="language-plaintext highlighter-rouge">Fraction</code>  represents a fraction as a numerator and denominator. We implemented methods for adding and multiplying fractions. Here is the code we wrote:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Fraction</span> <span class="o">{</span>
+    
+        <span class="kd">private</span> <span class="kt">int</span> <span class="n">num</span><span class="o">;</span>
+        <span class="kd">private</span> <span class="kt">int</span> <span class="n">den</span><span class="o">;</span>
+    
+        <span class="kd">public</span> <span class="nf">Fraction</span> <span class="o">(</span><span class="kt">int</span> <span class="n">numerator</span><span class="o">,</span> <span class="kt">int</span> <span class="n">denominator</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">num</span> <span class="o">=</span> <span class="n">numerator</span><span class="o">;</span>
+            <span class="n">den</span> <span class="o">=</span> <span class="n">denominator</span><span class="o">;</span>
+            <span class="n">reduce</span><span class="o">();</span>
+        <span class="o">}</span>
+        
+        <span class="c1">// public getters for numerator and denominator</span>
+        <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getNum</span><span class="o">()</span> <span class="o">{</span><span class="k">return</span> <span class="n">num</span><span class="o">;}</span>
+        <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getDen</span><span class="o">()</span> <span class="o">{</span><span class="k">return</span> <span class="n">den</span><span class="o">;}</span>
+    
+        <span class="c1">// get a double approximating the value of the Fraction</span>
+        <span class="kd">public</span> <span class="kt">double</span> <span class="nf">getDouble</span><span class="o">()</span> <span class="o">{</span> <span class="k">return</span> <span class="o">(</span><span class="kt">double</span><span class="o">)</span> <span class="n">num</span> <span class="o">/</span> <span class="n">den</span><span class="o">;}</span>
+        
+        <span class="c1">// get a String representing the fraction</span>
+        <span class="kd">public</span> <span class="nc">String</span> <span class="nf">getString</span> <span class="o">()</span> <span class="o">{</span><span class="k">return</span> <span class="o">(</span><span class="n">num</span> <span class="o">+</span> <span class="s">" / "</span> <span class="o">+</span> <span class="n">den</span><span class="o">);}</span>
+        
+    
+        <span class="c1">// make a new Fraction that is the sum of this and f, and return</span>
+        <span class="c1">// the result</span>
+        <span class="kd">public</span> <span class="nc">Fraction</span> <span class="nf">plus</span> <span class="o">(</span><span class="nc">Fraction</span> <span class="n">f</span><span class="o">)</span> <span class="o">{</span>
+            <span class="c1">// sum numerator</span>
+            <span class="kt">int</span> <span class="n">sumNum</span> <span class="o">=</span> <span class="n">num</span> <span class="o">*</span> <span class="n">f</span><span class="o">.</span><span class="na">getDen</span><span class="o">()</span> <span class="o">+</span> <span class="n">f</span><span class="o">.</span><span class="na">getNum</span><span class="o">()</span> <span class="o">*</span> <span class="n">den</span><span class="o">;</span>
+    
+            <span class="c1">// sum denominator</span>
+            <span class="kt">int</span> <span class="n">sumDen</span> <span class="o">=</span> <span class="n">den</span> <span class="o">*</span> <span class="n">f</span><span class="o">.</span><span class="na">getDen</span><span class="o">();</span>
+    
+            <span class="k">return</span> <span class="k">new</span> <span class="nf">Fraction</span><span class="o">(</span><span class="n">sumNum</span><span class="o">,</span> <span class="n">sumDen</span><span class="o">);</span>
+        <span class="o">}</span>
+    
+        <span class="c1">// make a new Fraction that is the product of this and f, and</span>
+        <span class="c1">// return the result</span>
+        <span class="kd">public</span> <span class="nc">Fraction</span> <span class="nf">times</span> <span class="o">(</span><span class="nc">Fraction</span> <span class="n">f</span><span class="o">)</span> <span class="o">{</span>
+            <span class="kt">int</span> <span class="n">prodNum</span> <span class="o">=</span> <span class="n">num</span> <span class="o">*</span> <span class="n">f</span><span class="o">.</span><span class="na">getNum</span><span class="o">();</span>
+            <span class="kt">int</span> <span class="n">prodDen</span> <span class="o">=</span> <span class="n">den</span> <span class="o">*</span> <span class="n">f</span><span class="o">.</span><span class="na">getDen</span><span class="o">();</span>
+    
+            <span class="k">return</span> <span class="k">new</span> <span class="nf">Fraction</span><span class="o">(</span><span class="n">prodNum</span><span class="o">,</span> <span class="n">prodDen</span><span class="o">);</span>
+    
+        <span class="o">}</span>
+    
+        <span class="c1">// compute the greatest common divisor of two ints</span>
+        <span class="c1">// this is utter magic</span>
+        <span class="kd">private</span> <span class="kt">int</span> <span class="nf">gcd</span> <span class="o">(</span><span class="kt">int</span> <span class="n">n</span><span class="o">,</span> <span class="kt">int</span> <span class="n">m</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(</span><span class="n">m</span> <span class="o">==</span> <span class="mi">0</span><span class="o">)</span> <span class="k">return</span> <span class="n">n</span><span class="o">;</span>
+            <span class="k">return</span> <span class="nf">gcd</span><span class="o">(</span><span class="n">m</span><span class="o">,</span> <span class="n">n</span> <span class="o">%</span> <span class="n">m</span><span class="o">);</span>
+        <span class="o">}</span>
+    
+        <span class="c1">// reduce Fraction to lowest terms by dividing numerator and</span>
+        <span class="c1">// denominator by the greatest common divisor</span>
+        <span class="kd">private</span> <span class="kt">void</span> <span class="nf">reduce</span> <span class="o">()</span> <span class="o">{</span>
+            
+            <span class="kt">int</span> <span class="n">div</span> <span class="o">=</span> <span class="n">gcd</span><span class="o">(</span><span class="n">num</span><span class="o">,</span> <span class="n">den</span><span class="o">);</span>
+            
+            <span class="n">num</span> <span class="o">/=</span> <span class="n">div</span><span class="o">;</span>
+            <span class="n">den</span> <span class="o">/=</span> <span class="n">div</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>In writing the class above, we made a few design decisions that might make the class a little annoying to work with. For example:</p>
+
+<ol>
+  <li>To construct a new <code class="language-plaintext highlighter-rouge">Fraction</code>, you need to pass in a value for the numerator and a denominator. Perhaps the user would prefer to pass in a <code class="language-plaintext highlighter-rouge">Fraction</code> instance, or just an <code class="language-plaintext highlighter-rouge">int</code>, or even pass no arguments so the <code class="language-plaintext highlighter-rouge">Fraction</code>  takes some standard default value.</li>
+  <li>When adding two <code class="language-plaintext highlighter-rouge">Fraction</code>s, we have to pass in a <code class="language-plaintext highlighter-rouge">Fraction</code> object as a parameter to the <code class="language-plaintext highlighter-rouge">plus</code> method. What if we want to add an integer? Or a fraction with a known numerator and denominator, but we don’t want to create a new <code class="language-plaintext highlighter-rouge">Fraction</code> object to pass to the <code class="language-plaintext highlighter-rouge">plus</code> method?</li>
+</ol>
+
+<p>In this note, we will address these questions, and show how to extend the <code class="language-plaintext highlighter-rouge">Fraction</code> class in such a way that will make it more flexible for the user. Our starting point will be the <code class="language-plaintext highlighter-rouge">FractionBasic</code> class (the same as our
+<code class="language-plaintext highlighter-rouge">Fraction</code> class above, just with a different name to avoid confusion).</p>
+
+<ul>
+  <li><a href="/assets/java/overloading-and-static-methods/FractionBasic.java">Download <code class="language-plaintext highlighter-rouge">FractionBasic.java</code></a></li>
+</ul>
+
+<h2 id="overloading-methods">Overloading Methods</h2>
+
+<p>In Java, a <strong>method declaration</strong> consists of:</p>
+
+<ol>
+  <li>modifiers (e.g., <code class="language-plaintext highlighter-rouge">public</code>, <code class="language-plaintext highlighter-rouge">private</code>, <code class="language-plaintext highlighter-rouge">static</code>)</li>
+  <li>a return type</li>
+  <li>a name</li>
+  <li>a parameter list</li>
+  <li>an exception list (we haven’t seen these yet, but we’ll discuss later)</li>
+  <li>the method body</li>
+</ol>
+
+<p>Together, these features specify the behavior of a method. However, sometimes we’d like to have two or more methods that perform similar operations, but require different arguments/parameters.</p>
+
+<p>For example, in our <code class="language-plaintext highlighter-rouge">Fraction</code> class, we might want to be able to add a <code class="language-plaintext highlighter-rouge">Fraction</code> to another <code class="language-plaintext highlighter-rouge">Fraction</code> <em>or</em> add an <code class="language-plaintext highlighter-rouge">int</code> to a <code class="language-plaintext highlighter-rouge">Fraction</code>. We could do this by defining different methods that both “add”, but require different arguments as follows:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="nc">Fraction</span> <span class="nf">plusFraction</span> <span class="o">(</span><span class="nc">Fraction</span> <span class="n">f</span><span class="o">)</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+    <span class="kd">public</span> <span class="nc">Fraction</span> <span class="nf">plusInt</span> <span class="o">(</span><span class="kt">int</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+</code></pre></div></div>
+
+<p>But this approach would be cumbersome to use if we need a method with a different name every time we want to provide another way of adding <code class="language-plaintext highlighter-rouge">Fraction</code> s. For example, we might end up having a method with name like:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="nc">Fraction</span> <span class="nf">plusPairOfIntsRepresentingAFraction</span> <span class="o">(</span><span class="kt">int</span> <span class="n">numerator</span><span class="o">,</span> <span class="kt">int</span> <span class="n">denominator</span><span class="o">)</span> <span class="o">{...}</span>
+</code></pre></div></div>
+
+<p>While the name is descriptive, it would be a pain to type out every time we want to add! Instead, since all of these methods perform addition, it would be great to give them the same name. And we can!</p>
+
+<p>The <strong>signature</strong> of a method consists of (1) the method name, and (2) the list of <em>types</em> represented in the parameter list. Java determines which code to execute during a method call based on the call’s signature, and not just from the method’s name. Thus, we can give multiple methods the same name, so long as they differ in their argument type list. <strong>Method overloading</strong> is the process of writing multiple methods with the same name, but different signatures (i.e., different lists of parameter types). Most of the time, overloading is not necessary (except in the case of constructors, where we are not free to choose the name of the method), but overloading can lead to simpler, more readable and usable code.</p>
+
+<h5 id="overloading-constructors">Overloading constructors</h5>
+
+<p>As mentioned above, we <em>must</em> use method overloading if we want to define constructors for a class that take different types of arguments (because a constructor is required to have the same name as its class). For example, the constructor for our <code class="language-plaintext highlighter-rouge">Fraction</code> class above takes two <code class="language-plaintext highlighter-rouge">int</code> s as its parameters: the numerator and denominator of the fraction. However, we might want to have constructors that initialize a <code class="language-plaintext highlighter-rouge">Fraction</code> with a default value, or an integer value. Thus, we could define, for example:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">class</span> <span class="nc">Fraction</span> <span class="o">{</span>
+      <span class="kd">private</span> <span class="kt">int</span> <span class="n">num</span><span class="o">;</span>
+      <span class="kd">private</span> <span class="kt">int</span> <span class="n">den</span><span class="o">;</span>
+    
+      <span class="c1">// initialize with a default value of 0</span>
+      <span class="kd">public</span> <span class="nf">Fraction</span> <span class="o">()</span> <span class="o">{</span>
+        <span class="n">num</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="n">den</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>   
+      <span class="o">}</span> 
+    
+      <span class="c1">// initialize with a value of numerator / 1</span>
+      <span class="kd">public</span> <span class="nf">Fraction</span> <span class="o">(</span><span class="kt">int</span> <span class="n">numerator</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">num</span> <span class="o">=</span> <span class="n">numerator</span><span class="o">;</span>
+        <span class="n">den</span> <span class="o">=</span> <span class="mi">1</span><span class="o">;</span>
+      <span class="o">}</span>
+    
+      <span class="c1">// initialize with a value of numerator / denominator</span>
+      <span class="kd">public</span> <span class="nf">Fraction</span> <span class="o">(</span><span class="kt">int</span> <span class="n">numerator</span><span class="o">,</span> <span class="kt">int</span> <span class="n">denominator</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">num</span> <span class="o">=</span> <span class="n">numerator</span><span class="o">;</span>
+        <span class="n">den</span> <span class="o">=</span> <span class="n">denominator</span><span class="o">;</span>
+      <span class="o">}</span>
+      <span class="o">...</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p><strong>Exercise.</strong> Define a constructor for <code class="language-plaintext highlighter-rouge">Fraction</code> that takes another <code class="language-plaintext highlighter-rouge">Fraction f</code> as a parameter, and sets the value of the new <code class="language-plaintext highlighter-rouge">Fraction</code> to the same value stored in <code class="language-plaintext highlighter-rouge">f</code>.</p>
+
+<h5 id="overloaded-addition">Overloaded addition</h5>
+
+<p>Similar to the constructor overloading shown above, we can overload the arithmetic operations such as <code class="language-plaintext highlighter-rouge">plus</code>. Again, we might wish to (1) add a <code class="language-plaintext highlighter-rouge">Fraction</code>, (2) add an <code class="language-plaintext highlighter-rouge">int</code>, or (3) add a pair of <code class="language-plaintext highlighter-rouge">int</code>s representing the numerator and denominator of a fraction. Thus we could define</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1">// make a new Fraction that is the sum of this and f, and return the result</span>
+    <span class="kd">public</span> <span class="nc">Fraction</span> <span class="nf">plus</span> <span class="o">(</span><span class="nc">Fraction</span> <span class="n">f</span><span class="o">)</span> <span class="o">{</span>
+        <span class="kt">int</span> <span class="n">sumNum</span> <span class="o">=</span> <span class="n">num</span> <span class="o">*</span> <span class="n">f</span><span class="o">.</span><span class="na">getDen</span><span class="o">()</span> <span class="o">+</span> <span class="n">f</span><span class="o">.</span><span class="na">getNum</span><span class="o">()</span> <span class="o">*</span> <span class="n">den</span><span class="o">;</span>
+        <span class="kt">int</span> <span class="n">sumDen</span> <span class="o">=</span> <span class="n">den</span> <span class="o">*</span> <span class="n">f</span><span class="o">.</span><span class="na">getDen</span><span class="o">();</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">Fraction</span><span class="o">(</span><span class="n">sumNum</span><span class="o">,</span> <span class="n">sumDen</span><span class="o">);</span>
+    <span class="o">}</span>
+    
+    <span class="c1">// make a new Fraction that is the sum of this and int value, and return the result</span>
+    <span class="kd">public</span> <span class="nc">Fraction</span> <span class="nf">plus</span> <span class="o">(</span><span class="kt">int</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+      <span class="kt">int</span> <span class="n">sumNum</span> <span class="o">=</span> <span class="n">num</span> <span class="o">+</span> <span class="n">value</span> <span class="o">*</span> <span class="n">den</span><span class="o">;</span>
+      <span class="kt">int</span> <span class="n">sumDen</span> <span class="o">=</span> <span class="n">den</span><span class="o">;</span>
+      <span class="k">return</span> <span class="k">new</span> <span class="nf">Fraction</span><span class="o">(</span><span class="n">sumNum</span><span class="o">,</span> <span class="n">sumDen</span><span class="o">);</span>
+    <span class="o">}</span>
+    
+    <span class="c1">// make a new Fraction that is the sum of this and (numerator / denominator), </span>
+    <span class="c1">// and return the result</span>
+    <span class="kd">public</span> <span class="nc">Fraction</span> <span class="nf">plus</span> <span class="o">(</span><span class="kt">int</span> <span class="n">numerator</span><span class="o">,</span> <span class="kt">int</span> <span class="n">denominator</span><span class="o">)</span> <span class="o">{</span>
+      <span class="kt">int</span> <span class="n">sumNum</span> <span class="o">=</span> <span class="n">num</span> <span class="o">*</span> <span class="n">denominator</span> <span class="o">+</span> <span class="n">numerator</span> <span class="o">*</span> <span class="n">den</span><span class="o">;</span>
+      <span class="kt">int</span> <span class="n">sumDen</span> <span class="o">=</span> <span class="n">den</span> <span class="o">*</span> <span class="n">denominator</span><span class="o">;</span>
+      <span class="k">return</span> <span class="k">new</span> <span class="nf">Fraction</span><span class="o">(</span><span class="n">sumNum</span><span class="o">,</span> <span class="n">sumDen</span><span class="o">);</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>Notice that the code in all of the three methods above is very similar. This is potentially problematic for two reasons: (1) it means we’ve wasted our time writing almost the same function 3 times, and (2) if we need to change how addition is implemented, then we may need to change the code in 3 places rather than 1. This mean modifying and debugging the code will be three times as much work! A better practice would be to write a single method—the most “general” method—and simply have the other versions of <code class="language-plaintext highlighter-rouge">plus</code> call that method. For us, the third version of <code class="language-plaintext highlighter-rouge">plus</code> is the most general, and a better implementation of the code above would be:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="c1">// make a new Fraction that is the sum of this and f, and return the result</span>
+    <span class="kd">public</span> <span class="nc">Fraction</span> <span class="nf">plus</span> <span class="o">(</span><span class="nc">Fraction</span> <span class="n">f</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nf">plus</span><span class="o">(</span><span class="n">f</span><span class="o">.</span><span class="na">getNum</span><span class="o">(),</span> <span class="n">f</span><span class="o">.</span><span class="na">getDen</span><span class="o">());</span>
+    <span class="o">}</span>
+    
+    <span class="c1">// make a new Fraction that is the sum of this and int value, and return the result</span>
+    <span class="kd">public</span> <span class="nc">Fraction</span> <span class="nf">plus</span> <span class="o">(</span><span class="kt">int</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">return</span> <span class="nf">plus</span><span class="o">(</span><span class="n">value</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
+    <span class="o">}</span>
+    
+    <span class="c1">// make a new Fraction that is the sum of this and (numerator / denominator), </span>
+    <span class="c1">// and return the result</span>
+    <span class="kd">public</span> <span class="nc">Fraction</span> <span class="nf">plus</span> <span class="o">(</span><span class="kt">int</span> <span class="n">numerator</span><span class="o">,</span> <span class="kt">int</span> <span class="n">denominator</span><span class="o">)</span> <span class="o">{</span>
+      <span class="kt">int</span> <span class="n">sumNum</span> <span class="o">=</span> <span class="n">num</span> <span class="o">*</span> <span class="n">denominator</span> <span class="o">+</span> <span class="n">numerator</span> <span class="o">*</span> <span class="n">den</span><span class="o">;</span>
+      <span class="kt">int</span> <span class="n">sumDen</span> <span class="o">=</span> <span class="n">den</span> <span class="o">*</span> <span class="n">denominator</span><span class="o">;</span>
+      <span class="k">return</span> <span class="k">new</span> <span class="nf">Fraction</span><span class="o">(</span><span class="n">sumNum</span><span class="o">,</span> <span class="n">sumDen</span><span class="o">);</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>The third implementation of <code class="language-plaintext highlighter-rouge">plus</code> stays the same, but the first two become trivial.</p>
+
+<h5 id="explicit-and-implicit-parameters-keyword-this">Explicit and implicit parameters; keyword <code class="language-plaintext highlighter-rouge">this</code></h5>
+
+<p>In the declaration of an instance method, the parameters appearing in the declaration are known as <strong>explicit parameters</strong>. Additionally, an <strong>implicit parameter</strong> gets passed to the method that consists of a reference to the object on which the method is invoked. The implicit parameter can be accessed using the keyword <code class="language-plaintext highlighter-rouge">this</code>. Thus, you can use <code class="language-plaintext highlighter-rouge">this</code>  to refer to member variables and methods of an instance. For example, consider the <code class="language-plaintext highlighter-rouge">plus</code> method defined above:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="nc">Fraction</span> <span class="nf">plus</span> <span class="o">(</span><span class="nc">Fraction</span> <span class="n">f</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="nf">plus</span><span class="o">(</span><span class="n">f</span><span class="o">.</span><span class="na">getNum</span><span class="o">(),</span> <span class="n">f</span><span class="o">.</span><span class="na">getDen</span><span class="o">());</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>The method calls the <code class="language-plaintext highlighter-rouge">plus(int ..., int ...)</code> function for the same instance on which <code class="language-plaintext highlighter-rouge">plus(f)</code> is called. We could equivalently have written</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="nc">Fraction</span> <span class="nf">plus</span> <span class="o">(</span><span class="nc">Fraction</span> <span class="n">f</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">plus</span><span class="o">(</span><span class="n">f</span><span class="o">.</span><span class="na">getNum</span><span class="o">(),</span> <span class="n">f</span><span class="o">.</span><span class="na">getDen</span><span class="o">());</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>The two versions of <code class="language-plaintext highlighter-rouge">plus (Fraction f)</code> are completely equivalent. The only difference is that in the second version, using <code class="language-plaintext highlighter-rouge">this</code> emphasizes to the person reading your code that you are calling the <code class="language-plaintext highlighter-rouge">plus(int, int)</code> method on the same <code class="language-plaintext highlighter-rouge">Fraction</code> instance on which <code class="language-plaintext highlighter-rouge">plus(Fraction)</code> was called.</p>
+
+<p>Within <code class="language-plaintext highlighter-rouge">plus (int, int)</code>, we can also us <code class="language-plaintext highlighter-rouge">this</code> to refer to the values of <code class="language-plaintext highlighter-rouge">num</code> and <code class="language-plaintext highlighter-rouge">den</code>, so that</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="nc">Fraction</span> <span class="nf">plus</span> <span class="o">(</span><span class="kt">int</span> <span class="n">numerator</span><span class="o">,</span> <span class="kt">int</span> <span class="n">denominator</span><span class="o">)</span> <span class="o">{</span>
+      <span class="kt">int</span> <span class="n">sumNum</span> <span class="o">=</span> <span class="n">num</span> <span class="o">*</span> <span class="n">denominator</span> <span class="o">+</span> <span class="n">numerator</span> <span class="o">*</span> <span class="n">den</span><span class="o">;</span>
+      <span class="kt">int</span> <span class="n">sumDen</span> <span class="o">=</span> <span class="n">den</span> <span class="o">*</span> <span class="n">denominator</span><span class="o">;</span>
+      <span class="k">return</span> <span class="k">new</span> <span class="nf">Fraction</span><span class="o">(</span><span class="n">sumNum</span><span class="o">,</span> <span class="n">sumDen</span><span class="o">);</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>becomes</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="nc">Fraction</span> <span class="nf">plus</span> <span class="o">(</span><span class="kt">int</span> <span class="n">numerator</span><span class="o">,</span> <span class="kt">int</span> <span class="n">denominator</span><span class="o">)</span> <span class="o">{</span>
+      <span class="kt">int</span> <span class="n">sumNum</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">num</span> <span class="o">*</span> <span class="n">denominator</span> <span class="o">+</span> <span class="n">numerator</span> <span class="o">*</span> <span class="k">this</span><span class="o">.</span><span class="na">den</span><span class="o">;</span>
+      <span class="kt">int</span> <span class="n">sumDen</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">den</span> <span class="o">*</span> <span class="n">denominator</span><span class="o">;</span>
+      <span class="k">return</span> <span class="k">new</span> <span class="nf">Fraction</span><span class="o">(</span><span class="n">sumNum</span><span class="o">,</span> <span class="n">sumDen</span><span class="o">);</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>Again, there is no difference between these two method definitions as far as the Java compiler is concerned. The difference is merely stylistic. The latter is arguable more transparent in that it reminds the reader/user/programmer that <code class="language-plaintext highlighter-rouge">num</code> and <code class="language-plaintext highlighter-rouge">den</code> are instance variables for this <code class="language-plaintext highlighter-rouge">Fraction</code> instance. On the other hand, adding the keyword <code class="language-plaintext highlighter-rouge">this</code> everywhere makes for more text on the screen, and might not actually make things clearer for the reader/coder.</p>
+
+<p>There are two usage cases where <code class="language-plaintext highlighter-rouge">this</code> is frequently—–if not universally—–used. The first case is when you want the name of an argument passed to a method to be the same as the a member variable for the class. For example, our <code class="language-plaintext highlighter-rouge">Fraction</code> class has two instance variables <code class="language-plaintext highlighter-rouge">num</code> and <code class="language-plaintext highlighter-rouge">den</code> storing the numerator and denominator (respectively) of the fraction. We can call the parameters of  <code class="language-plaintext highlighter-rouge">plus(int, int)</code> <code class="language-plaintext highlighter-rouge">num</code> and <code class="language-plaintext highlighter-rouge">den</code> in order to be consistent with the usage of these names: they represent the numerator and denominator of the fraction being added to <code class="language-plaintext highlighter-rouge">this</code>. We can then reference <code class="language-plaintext highlighter-rouge">this</code>’s member variables using <code class="language-plaintext highlighter-rouge">this.num</code> and <code class="language-plaintext highlighter-rouge">this.den</code>. The resulting method would be</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="nc">Fraction</span> <span class="nf">plus</span> <span class="o">(</span><span class="kt">int</span> <span class="n">num</span><span class="o">,</span> <span class="kt">int</span> <span class="n">den</span><span class="o">)</span> <span class="o">{</span>
+      <span class="kt">int</span> <span class="n">sumNum</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">num</span> <span class="o">*</span> <span class="n">den</span> <span class="o">+</span> <span class="n">num</span> <span class="o">*</span> <span class="k">this</span><span class="o">.</span><span class="na">den</span><span class="o">;</span>
+      <span class="kt">int</span> <span class="n">sumDen</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">den</span> <span class="o">*</span> <span class="n">den</span><span class="o">;</span>
+      <span class="k">return</span> <span class="k">new</span> <span class="nf">Fraction</span><span class="o">(</span><span class="n">sumNum</span><span class="o">,</span> <span class="n">sumDen</span><span class="o">);</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>Again, there is no difference in the behavior of this version of <code class="language-plaintext highlighter-rouge">plus</code> and the previous one. The only advantage is that by re-using the variable names <code class="language-plaintext highlighter-rouge">num</code> and <code class="language-plaintext highlighter-rouge">den</code>, we ensure naming consistency: variables with the same names have the same semantic interpretation (i.e., <code class="language-plaintext highlighter-rouge">num</code> always refers to a numerator, <code class="language-plaintext highlighter-rouge">den</code> always refers to a denominator, and we don’t need other variable names to denote numerators and denominators). In the example above, we <em>must</em> use <code class="language-plaintext highlighter-rouge">this.num</code> and <code class="language-plaintext highlighter-rouge">this.den</code> to refer to the member variables of the <code class="language-plaintext highlighter-rouge">Fraction</code>, as <code class="language-plaintext highlighter-rouge">num</code> and <code class="language-plaintext highlighter-rouge">den</code> are now the local variables passed to the method.</p>
+
+<p>It is especially common to use the <code class="language-plaintext highlighter-rouge">this.memberVariable</code> pattern in constructors. For example, we could have written our third constructor for <code class="language-plaintext highlighter-rouge">Fraction</code> as</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="nf">Fraction</span> <span class="o">(</span><span class="kt">int</span> <span class="n">num</span><span class="o">,</span> <span class="kt">int</span> <span class="n">den</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">this</span><span class="o">.</span><span class="na">num</span> <span class="o">=</span> <span class="n">num</span><span class="o">;</span>
+      <span class="k">this</span><span class="o">.</span><span class="na">den</span> <span class="o">=</span> <span class="n">den</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>The second usage case where it is common to see <code class="language-plaintext highlighter-rouge">this</code> used is to call a constructor with a different signature from within a constructor. You can call a constructor for an instance using <code class="language-plaintext highlighter-rouge">this(&lt;arguments&gt;)</code>. Using this pattern, we can often avoid writing redundant code in different constructors. For example, we could define the three constructors for our <code class="language-plaintext highlighter-rouge">Fraction</code> class as follows:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="nf">Fraction</span> <span class="o">()</span> <span class="o">{</span>
+      <span class="c1">// call the constructor Fraction(int, int) with args 0 and 1</span>
+      <span class="k">this</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">)</span> 
+    <span class="o">}</span> 
+    
+    <span class="kd">public</span> <span class="nf">Fraction</span> <span class="o">(</span><span class="kt">int</span> <span class="n">num</span><span class="o">)</span> <span class="o">{</span>
+      <span class="c1">// call the constructor Fraction(int, int) with args num and 1</span>
+      <span class="k">this</span><span class="o">(</span><span class="n">num</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
+    <span class="o">}</span>
+    
+    <span class="c1">// initialize with a value of num / den</span>
+    <span class="kd">public</span> <span class="nf">Fraction</span> <span class="o">(</span><span class="kt">int</span> <span class="n">num</span><span class="o">,</span> <span class="kt">int</span> <span class="n">den</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">this</span><span class="o">.</span><span class="na">num</span> <span class="o">=</span> <span class="n">num</span><span class="o">;</span>
+      <span class="k">this</span><span class="o">.</span><span class="na">den</span> <span class="o">=</span> <span class="n">den</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>The constructors defined above compartmentalize the code so that all of the important stuff happens only in the third constructor. Thus, the constructor definitions as above are potentially easier to understand than the original version.</p>
+
+<h2 id="static-fields-and-methods">Static Fields and Methods</h2>
+
+<p>So far, we have focused our attention instance variables and methods. These are variables and methods that are specific to each <em>instance</em> of a class. For example, each instance of our <code class="language-plaintext highlighter-rouge">Fraction</code> class stores its own <code class="language-plaintext highlighter-rouge">num</code> and <code class="language-plaintext highlighter-rouge">den</code> variables. When we add two fractions using <code class="language-plaintext highlighter-rouge">f.plus(g)</code>, we are calling the <code class="language-plaintext highlighter-rouge">plus</code> method <em>for</em> <code class="language-plaintext highlighter-rouge">f</code> with argument <code class="language-plaintext highlighter-rouge">g</code>; for a <code class="language-plaintext highlighter-rouge">Fraction</code>  <code class="language-plaintext highlighter-rouge">h</code>  not equal to <code class="language-plaintext highlighter-rouge">f</code> , calling <code class="language-plaintext highlighter-rouge">h.plus(g)</code> will give a different result from <code class="language-plaintext highlighter-rouge">f.plus(g)</code>.</p>
+
+<p>Often it is useful to have <strong>class variables</strong> and <strong>class methods</strong>. These are variables and methods defined for the entire class rather than individual instances. For example, we might want to define a class method <code class="language-plaintext highlighter-rouge">add</code> for our <code class="language-plaintext highlighter-rouge">Fraction</code> that adds two <code class="language-plaintext highlighter-rouge">Fraction</code>s. Such a class would be called as follows:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nc">Fraction</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">f</span><span class="o">,</span> <span class="n">g</span><span class="o">)</span> <span class="c1">// return a new Fraction representing the sum of f and g</span>
+</code></pre></div></div>
+
+<p>Class methods and variables are declared using the <code class="language-plaintext highlighter-rouge">static</code> keyword. Thus, a method providing the functionality above could be declared as follows:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">Fraction</span> <span class="nf">add</span> <span class="o">(</span><span class="nc">Fraction</span> <span class="n">f</span><span class="o">,</span> <span class="nc">Fraction</span> <span class="n">g</span><span class="o">)</span> <span class="o">{</span>
+      <span class="kt">int</span> <span class="n">newNum</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="na">getNum</span><span class="o">()</span> <span class="o">*</span> <span class="n">g</span><span class="o">.</span><span class="na">getDen</span><span class="o">()</span> <span class="o">+</span> <span class="n">f</span><span class="o">.</span><span class="na">getDen</span><span class="o">()</span> <span class="o">*</span> <span class="n">g</span><span class="o">.</span><span class="na">getNum</span><span class="o">();</span>
+      <span class="kt">int</span> <span class="n">newDen</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="na">getDen</span><span class="o">()</span> <span class="o">*</span> <span class="n">g</span><span class="o">.</span><span class="na">getDen</span><span class="o">();</span>
+      <span class="k">return</span> <span class="k">new</span> <span class="nf">Fraction</span><span class="o">(</span><span class="n">newDen</span><span class="o">,</span> <span class="n">newNum</span><span class="o">);</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>This code looks suspiciously similar to our various versions of <code class="language-plaintext highlighter-rouge">plus</code>. Since we’ve already implemented <code class="language-plaintext highlighter-rouge">plus</code>, it would be best simply to call the appropriate method! Here is a better implementation of <code class="language-plaintext highlighter-rouge">add</code>:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="kd">static</span> <span class="nc">Fraction</span> <span class="nf">add</span> <span class="o">(</span><span class="nc">Fraction</span> <span class="n">f</span><span class="o">,</span> <span class="nc">Fraction</span> <span class="n">g</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">return</span> <span class="n">f</span><span class="o">.</span><span class="na">plus</span><span class="o">(</span><span class="n">g</span><span class="o">);</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>Note that we could also have defined <code class="language-plaintext highlighter-rouge">public static Fraction add (…)</code> <em>first</em> and then defined the various versions of <code class="language-plaintext highlighter-rouge">plus</code> in terms of <code class="language-plaintext highlighter-rouge">add</code>. Again, the best practice is to implement only one of these methods directly and have all of the other related methods simply call the “general” method.</p>
+
+<p>We might also want some class variables for <code class="language-plaintext highlighter-rouge">Fraction</code>. Specifically, it may be useful to have constants representing commonly used values, such as zero and one. Since these values are constant (i.e., they should not be modified in any way), we use the additional modifier <code class="language-plaintext highlighter-rouge">final</code> to their declaration.</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">Fraction</span> <span class="no">ZERO</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Fraction</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="nc">Fraction</span> <span class="no">ONE</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Fraction</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
+</code></pre></div></div>
+
+<p>We can now access these constant values using  <code class="language-plaintext highlighter-rouge">Fraction.ZERO</code> and <code class="language-plaintext highlighter-rouge">Fraction.ONE</code>.</p>
+
+<h2 id="exercises">Exercises</h2>
+
+<ol>
+  <li>Write yet another constructor for <code class="language-plaintext highlighter-rouge">Fraction</code> that takes a <code class="language-plaintext highlighter-rouge">Fraction f</code> as an argument and initializes the fraction to have the same value as <code class="language-plaintext highlighter-rouge">f</code>. Your constructor should call one of the other constructors above instead of assigning values directly.</li>
+  <li>Suppose you wanted to write yet another version of <code class="language-plaintext highlighter-rouge">plus</code> that adds the reciprocal of an integer value <code class="language-plaintext highlighter-rouge">n</code> to <code class="language-plaintext highlighter-rouge">this</code>. What would be the problem with further overloading <code class="language-plaintext highlighter-rouge">plus</code> as follows (in addition to the versions of <code class="language-plaintext highlighter-rouge">plus</code> defined above)?
+ public Fraction plus (int reciprocal) { return this.plus(1, reciprocal); }</li>
+  <li>Define a public instance method <code class="language-plaintext highlighter-rouge">plusEquals</code> that takes a <code class="language-plaintext highlighter-rouge">Fraction</code> as an argument and adds the value of the argument to the instance calling <code class="language-plaintext highlighter-rouge">plusEquals</code>.
+    <ul>
+      <li>Can your method call one of the versions of <code class="language-plaintext highlighter-rouge">plus</code> already defined?</li>
+      <li>Could you define an equivalent class method for <code class="language-plaintext highlighter-rouge">plusEquals</code>?</li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="vocabulary">Vocabulary</h2>
+
+<ul>
+  <li>method declaration</li>
+  <li>method signature</li>
+  <li>method overloading</li>
+  <li>explicit parameter</li>
+  <li>implicit parameter</li>
+  <li><code class="language-plaintext highlighter-rouge">this</code> keyword</li>
+  <li>class variable</li>
+  <li>class method</li>
+  <li><code class="language-plaintext highlighter-rouge">static</code> keyword</li>
+  <li><code class="language-plaintext highlighter-rouge">final</code> keyword</li>
+</ul>
+
+<h2 id="solutions">Solutions</h2>
+
+<p>See the code below for the implementations suggested in the exercises above.</p>
+
+<ol>
+  <li>The problem is that we’ve already defined <code class="language-plaintext highlighter-rouge">public Fraction plus (int value)</code>, which adds the integer <code class="language-plaintext highlighter-rouge">value</code> to the fraction. This function has the same signature as our <code class="language-plaintext highlighter-rouge">public Fraction plus (int reciprocal)</code>: the signature only consists of the method name and the argument <em>type</em> list. Since both methods called <code class="language-plaintext highlighter-rouge">plus</code> take a single <code class="language-plaintext highlighter-rouge">int</code> as their argument, the compiler would not be able to distinguish which method, say, <code class="language-plaintext highlighter-rouge">f.plus(2)</code> refers to. Notice that if you try to define two methods with the same signature, you will get an error when you compile:
+ Fraction.java:58: error: method plus(int) is already defined in class Fraction
+         public Fraction plus (int reciprocal) {
+                         ^
+ 1 error</li>
+</ol>
+
+<p>3a. In principle, you could use <code class="language-plaintext highlighter-rouge">plus</code> as follows:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">plusEquals</span><span class="o">(</span><span class="nc">Fraction</span> <span class="n">f</span><span class="o">)</span> <span class="o">{</span>
+      <span class="nc">Fraction</span> <span class="n">g</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">plus</span><span class="o">(</span><span class="n">f</span><span class="o">);</span>
+      <span class="k">this</span><span class="o">.</span><span class="na">num</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="na">getNum</span><span class="o">();</span>
+      <span class="k">this</span><span class="o">.</span><span class="na">den</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="na">getDen</span><span class="o">();</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>However, this approach is wasteful, as it creates a new <code class="language-plaintext highlighter-rouge">Fraction</code> (namely <code class="language-plaintext highlighter-rouge">g</code>), that is immediately forgotten. A better approach (and the one implemented in <code class="language-plaintext highlighter-rouge">Fraction.java</code> below) is to modify <code class="language-plaintext highlighter-rouge">this.num</code> and <code class="language-plaintext highlighter-rouge">this.den</code> directly without creating a new <code class="language-plaintext highlighter-rouge">Fraction</code> object.</p>
+
+<p>Once <code class="language-plaintext highlighter-rouge">plusEquals</code> is implemented, however, we could go back and define <code class="language-plaintext highlighter-rouge">plus</code> in terms of <code class="language-plaintext highlighter-rouge">plusEquals</code>. For example, by writing</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">plus</span> <span class="o">(</span><span class="kt">int</span> <span class="n">num</span><span class="o">,</span> <span class="kt">int</span> <span class="n">den</span><span class="o">)</span> <span class="o">{</span>
+      <span class="c1">// make a new Fraction with value num / den</span>
+      <span class="nc">Fraction</span> <span class="n">f</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Fraction</span><span class="o">(</span><span class="n">num</span><span class="o">,</span> <span class="n">den</span><span class="o">);</span>
+    
+      <span class="c1">// add value of this to f</span>
+      <span class="n">f</span><span class="o">.</span><span class="na">plusEquals</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+    
+      <span class="k">return</span> <span class="n">f</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>Since the implementation of <code class="language-plaintext highlighter-rouge">plus</code> above uses <code class="language-plaintext highlighter-rouge">plusEquals</code>, we maintain the property that all addition operations are handled by a single function, <code class="language-plaintext highlighter-rouge">plusEquals</code>. Again, this feature is helpful for debugging, maintaining, and modifying code. Also there aren’t any “extra” <code class="language-plaintext highlighter-rouge">Fraction</code> s created as <code class="language-plaintext highlighter-rouge">plus</code> is supposed to return a new <code class="language-plaintext highlighter-rouge">Fraction</code> anyway.</p>
+
+<p>3b. Since <code class="language-plaintext highlighter-rouge">plusEquals</code> modifies the value of an <em>instance</em> of <code class="language-plaintext highlighter-rouge">Fraction</code>, it would not make sense to have a class method with the same functionality.</p>
+
+<ul>
+  <li><a href="/assets/java/overloading-and-static-methods/Fraction.java">Download <code class="language-plaintext highlighter-rouge">Fraction.java</code></a></li>
+</ul>
+
+  </article>
+
+</div>
+
+    </div>
+
+    <!-- Footer -->
+
+    
+<footer class="fixed-bottom">
+  <div class="container mt-0">
+    &copy; Copyright 2021 Will  Rosenbaum.
+    
+    
+    
+  </div>
+</footer>
+
+
+
+  </body>
+
+  <!-- Bootsrap & MDB scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.4.4/umd/popper.min.js" integrity="sha512-eUQ9hGdLjBjY3F41CScH3UX+4JDSI9zXeroz7hJ+RteoCaY+GP/LDoM8AO+Pt+DRFw3nXqsjh9Zsts8hnYv8/A==" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha512-M5KW3ztuIICmVIhjSqXe01oV2bpe248gOxqmlcYrEzAvws7Pw3z6BK0iGbrwvdrUQUhi3eXgtxp5I8PDo9YfjQ==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js" integrity="sha512-Mug9KHKmroQFMLm93zGrjhibM2z2Obg9l6qFG2qKjXEXkMp/VDkI4uju9m4QKPjWSwQ6O2qzZEnJDEeCw0Blcw==" crossorigin="anonymous"></script>
+
+  
+<!-- Mansory & imagesLoaded -->
+<script defer src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<script defer src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+<script defer src="/assets/js/mansory.js" type="text/javascript"></script>
+
+
+  
+
+
+<!-- Load Common JS -->
+<script src="/assets/js/common.js"></script>
+
+
+</html>

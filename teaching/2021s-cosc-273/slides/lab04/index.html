@@ -1,0 +1,460 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta charset="utf-8">
+
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reset.css">
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reveal.css">
+		<link rel="stylesheet" href="/assets/css/condensation.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="/assets/reveal.js-master/plugin/highlight/monokai.css" id="highlight-theme">
+		<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700" rel="stylesheet">
+
+	</head>
+
+	<body>
+
+
+	  <!-- this is where the reveailfy filter gets applied -->
+	  <div class="reveal"><div class="slides">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section id="lab-week-04-cache-locality"><h1>Lab Week 04: Cache Locality</h1></section><section id="outline"><h2>Outline</h2>
+<ol>
+  <li>Cache Hierarchies</li>
+  <li>Activity: Effects on Performance</li>
+  <li>Improving Performance</li>
+  <li>Relation to Lab 02: Computing Shortcuts</li>
+</ol></section><section id="cache-hierarchies"><h1>Cache Hierarchies</h1></section><section id="so-far"><h2>So Far</h2>
+<p>We’ve assumed:</p>
+<ul>
+  <li>Processors read from and write to registers (variables)</li>
+  <li>These actions are
+    <ul>
+      <li>atomic</li>
+      <li>efficient (effectively instantaneous)</li>
+    </ul>
+  </li>
+</ul></section><section id="idealized-picture"><h2>Idealized Picture</h2>
+<p><img src="/assets/img/cache-hierarchy/idealized-cpu.png" alt="" width="100%"></p></section><section id="unfortunately"><h2>Unfortunately</h2>
+<p>Computer architechture is not so simple!</p>
+<ul>
+  <li>Accessing main memory (RAM) directly is costly
+    <ul>
+      <li>can be 100s of CPU cycles to read/write a value!</li>
+    </ul>
+  </li>
+  <li>Use hierarchy of smaller, faster memory locations:
+    <ul>
+      <li><strong>caching</strong></li>
+      <li>different <em>levels</em> of cache: L1, L2, L3</li>
+      <li>cache memory integrated into CPU $\implies$ faster access</li>
+    </ul>
+  </li>
+</ul></section><section id="a-more-accurate-picture"><h2>A More Accurate Picture</h2>
+<p><img src="/assets/img/cache-hierarchy/cache-cpu.png" alt="" width="75%"></p></section><section id="how-memory-is-accessed"><h2>How Memory is Accessed</h2>
+<p>When reading or writing:</p>
+<ul>
+  <li>Look for symbol (variable) successively deeper memory locations
+    <ul>
+      <li>L1, L2, L3, main memory</li>
+    </ul>
+  </li>
+  <li>Fetch symbol/value into L1 cache and do manipulations here</li>
+  <li>When a cache becomes full, push its contents to a deeper level</li>
+  <li>Periodically push changes down the heirarchy</li>
+</ul></section><section id="memory-access-illustrated"><h2>Memory Access Illustrated</h2>
+<p><img src="/assets/img/cache-hierarchy/cache-cpu.png" alt="" width="75%"></p></section><section id="why-is-caching-done-efficiency"><h2>Why Is Caching Done? Efficiency!</h2>
+<p><img src="/assets/img/cache-hierarchy/cache-speed.png" alt="" width="75%"></p></section><section id="why-caching-is-efficient"><h2>Why Caching Is Efficient</h2>
+<p>Heuristic:</p>
+<ul>
+  <li>Most programs read/write to a relatively small number of memory locations often</li>
+  <li>These values remain in low levels of the hierarchy</li>
+  <li>Most commonly performed operation are performed efficiently</li>
+</ul></section><section id="why-caching-is-problematic"><h2>Why Caching is Problematic</h2>
+<p>Cache (in)consistency</p>
+<ul>
+  <li>L1, L2 cache <em>for each</em> core</li>
+  <li>Multiple cores modify same variable concurrently</li>
+  <li>Only version stored in local cache modified quickly</li>
+  <li>Same variable has multiple values simultaneously!</li>
+</ul>
+<p>Takes time to propogate changes to values</p>
+<ul>
+  <li>Shared changes only occur periodically!</li>
+</ul></section><section id="counter-example-revisited"><h2>
+<code>Counter</code> Example Revisited</h2>
+<p>Previously, we saw</p>
+<ul>
+  <li>2 threads simultaneously increment <code>Counter</code> object</li>
+  <li>Result: ~1/2 of increments seemed to be performed</li>
+</ul>
+<p>Makes sense with cache</p>
+<ul>
+  <li>Each thread incremented variable in its local L1 cache</li>
+  <li>Local and shared values only periodically compared for consistency</li>
+  <li>Values may still be equal due to parallel increment!</li>
+</ul></section><section id="prefetching"><h2>Prefetching</h2>
+<p>Heuristic:</p>
+<ul>
+  <li>Most programs access memory <em>linearly</em> (in order)</li>
+  <li>If I access <code>arr[i]</code>, likely next access is <code>arr[i+1]</code>
+    <ul>
+      <li>or at least <code>arr[i+c]</code> for some small <code>c</code>
+</li>
+    </ul>
+  </li>
+</ul>
+<p>Fetch many values from higher levels at a time</p>
+<ul>
+  <li>If <code>arr[i]</code> is fetched from high level, also fetch <code>arr[i+1]...arr[i+c]</code>
+</li>
+  <li>Don’t wait for request for those memory locations</li>
+  <li>Often, variables are already in low-level cache when needed!</li>
+</ul></section><section id="moral"><h2>Moral</h2>
+<ul>
+  <li>Your computer expects your program to access memory in order</li>
+  <li>When your program <em>does</em> access memory in order, it often will run more efficiently
+    <ul>
+      <li>effect may be large!</li>
+    </ul>
+  </li>
+</ul>
+<p>So write write programs that access memory linearly!</p></section><section id="example-reading-from-an-array"><h2>Example: Reading from an Array</h2>
+<ul>
+  <li>
+<code>float[] arr</code> a reasonably large array</li>
+  <li>
+<code>int[] indices</code> indices of <code>arr</code> to be accessed
+    <pre><code class="language-java">  float sum = 0;
+  for (int i : indices)
+      sum += arr[i];
+</code></pre>
+  </li>
+  <li>this may run much faster for
+    <pre><code class="language-java">  indices = {0, 1, 2, 3, ...}
+</code></pre>
+    <p>than</p>
+    <pre><code class="language-java">  indices = {2743, 1, 9932, 4952,...}
+</code></pre>
+    <p>How much faster?</p>
+  </li>
+</ul></section><section id="effects-on-single-core-performance"><h1>Effects on Single-Core Performance</h1></section><section id="activity"><h2>Activity</h2>
+<p>Investigate how much access order effects efficiency of a program</p>
+<ul>
+  <li>Fix number of accesses (~1B)</li>
+  <li>Vary size of array being accessed
+    <ul>
+      <li>larger arrays cannot fit in low level cache</li>
+    </ul>
+  </li>
+  <li>Compare linear access with random access</li>
+</ul>
+<p><a href="https://docs.google.com/document/d/10JgyKqMsLKpqtkI2Yi-5UEYbdAZgC6ogqHxBkeeASe0/edit?usp=sharing"><strong>view activity instructions here</strong></a></p></section><section id="questions"><h1>Questions</h1></section><section id="comparison-of-linear-vs-random-access-runtime"><h2>Comparison of Linear vs Random Access Runtime?</h2>
+<p>How did array size affect run-time?</p>
+<div style="margin-bottom: 12em"></div></section><section id="effeciency-of-re-sorting-random-access-array"><h2>Effeciency of Re-sorting Random Access Array?</h2>
+<div style="margin-bottom: 12em"></div></section><section id="improving-performance"><h1>Improving Performance</h1></section><section id="moral-1"><h2>Moral</h2>
+<p>If access pattern</p>
+<ol>
+  <li>is known in advance and</li>
+  <li>is non-linear</li>
+</ol>
+<p>may be more efficient to reorganize data structure so that access pattern is linear</p></section><section id="computing-shortcuts"><h1>Computing Shortcuts</h1></section><section id="array-access"><h2>Array Access</h2>
+<p>Heuristic:</p>
+<ul>
+  <li>Array elements stored sequentially in memory</li>
+</ul></section><section id="2d-array-access-rows-before-cols"><h2>2D Array Access: Rows before Cols</h2>
+<p><img src="/assets/img/cache-hierarchy/matrix.png" alt="" width="100%"></p></section><section id="2d-array-access-cols-before-rows"><h2>2D Array Access: Cols before Rows</h2>
+<p><img src="/assets/img/cache-hierarchy/matrix.png" alt="" width="100%"></p></section><section id="access-pattern-for-main-loop"><h2>Access Pattern for Main Loop</h2>
+<pre><code class="language-java">for (int i = 0; i &lt; size; ++i) {
+    for (int j = 0; j &lt; size; ++j) {
+        float min = Float.MAX_VALUE;		
+        for (int k = 0; k &lt; size; ++k) {
+            float x = matrix[i][k];
+            float y = matrix[k][j];
+            float z = x + y;
+            if (z &lt; min) {
+                min = z;
+            }
+        }
+			
+        shortcuts[i][j] = min;
+    }
+}
+</code></pre></section><section id="result-of-optimizing-access-pattern"><h2>Result of Optimizing Access Pattern</h2>
+<pre><code class="language-text">|------|------------------|-------------|------------------|---------|
+| size | avg runtime (ms) | improvement | iteration per us | passed? |
+|------|------------------|-------------|------------------|---------|
+|  128 |               10 |        1.07 |              201 |     yes |
+|  256 |               42 |        1.23 |              396 |     yes |
+|  512 |              317 |        0.75 |              422 |     yes |
+| 1024 |              680 |        6.91 |             1578 |     yes |
+| 2048 |             6249 |        9.98 |             1374 |     yes |
+| 4096 |            57592 |       11.05 |             1193 |     yes |
+|------|------------------|-------------|------------------|---------|
+</code></pre>
+<p>Up to 11x speedup, <em>before multithreading</em></p></section><section id="combining-multithreading-with-cache-locality-optimization"><h2>Combining Multithreading with Cache Locality Optimization</h2>
+<pre><code class="language-text">|------|------------------|-------------|------------------|---------|
+| size | avg runtime (ms) | improvement | iteration per us | passed? |
+|------|------------------|-------------|------------------|---------|
+|  128 |               24 |        0.80 |               86 |     yes |
+|  256 |                6 |       18.94 |             2623 |     yes |
+|  512 |               21 |       13.11 |             6132 |     yes |
+| 1024 |              157 |       31.70 |             6828 |     yes |
+| 2048 |             1123 |       55.11 |             7647 |     yes |
+|------|------------------|-------------|------------------|---------|
+</code></pre></section><section id="even-better-results-on-romulusremus"><h2>Even Better Results on Romulus/Remus</h2>
+<pre><code class="language-text">|------|------------------|-------------|------------------|---------|
+| size | avg runtime (ms) | improvement | iteration per us | passed? |
+|------|------------------|-------------|------------------|---------|
+|  128 |              310 |        0.04 |                6 |     yes |
+|  256 |               52 |        1.14 |              317 |     yes |
+|  512 |               18 |       14.71 |             7105 |     yes |
+| 1024 |               87 |       57.84 |            12257 |     yes |
+| 2048 |              464 |      146.15 |            18478 |     yes |
+| 4096 |             3120 |      190.11 |            22020 |     yes |
+|------|------------------|-------------|------------------|---------|
+</code></pre></section>
+</div></div>
+
+
+	  <script src="/assets/reveal.js-master/dist/reveal.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/math/math.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/zoom/zoom.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/notes/notes.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/search/search.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/markdown/markdown.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/highlight/highlight.js"></script>
+	  <script>
+	    
+
+	    // Also available as an ES module, see:
+	    // https://revealjs.com/initialization/
+	    Reveal.initialize({
+		controls: false,
+		progress: true,
+		center: true,
+		hash: true,
+		transition: 'none',
+		math: {
+		    config: 'TeX-AMS_HTML-full',
+		    TeX: {
+			Macros: {
+			    R: '\\mathbb{R}',
+			    set: [ '\\left\\{#1 \\; ; \\; #2\\right\\}', 2 ]
+			}
+		    }
+		},
+
+
+		// Learn about plugins: https://revealjs.com/plugins/
+		plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath ]
+	    });
+
+	  </script>
+
+	</body>
+</html>
+	  
+
+<!-- <\!-- load the reveal.js css & js (assuming you've put it in assets/)-\-> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/reveal.scss" -->
+<!-- /> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/theme/source/white.scss" -->
+<!-- /> -->
+<!-- <script -->
+<!--   src="/assets/reveal.js-master/js/reveal.js" -->
+<!--   type="text/javascript" -->
+<!-- ></script> -->
+
+<!-- <\!-- configure the presentation, (you can tweak options to suit) -\-> -->
+<!-- <script> -->
+<!--   Reveal.initialize({ -->
+<!--     // Display presentation control arrows -->
+<!--     controls: false, -->
+
+<!--     // Help the user learn the controls by providing hints, for example by -->
+<!--     // bouncing the down arrow when they first encounter a vertical slide -->
+<!--     controlsTutorial: false, -->
+
+<!--     // Determines where controls appear, "edges" or "bottom-right" -->
+<!--     controlsLayout: "bottom-right", -->
+
+<!--     // Visibility rule for backwards navigation arrows; "faded", "hidden" -->
+<!--     // or "visible" -->
+<!--     controlsBackArrows: "faded", -->
+
+<!--     // Display a presentation progress bar -->
+<!--     progress: true, -->
+
+<!--     // Display the page number of the current slide -->
+<!--     slideNumber: false, -->
+
+<!--     // Push each slide change to the browser history -->
+<!--     history: false, -->
+
+<!--     // Enable keyboard shortcuts for navigation -->
+<!--     keyboard: true, -->
+
+<!--     // Enable the slide overview mode -->
+<!--     overview: true -->
+<!--   }); -->
+<!-- </script> -->

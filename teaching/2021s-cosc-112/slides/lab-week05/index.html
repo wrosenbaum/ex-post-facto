@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta charset="utf-8">
+
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reset.css">
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reveal.css">
+		<link rel="stylesheet" href="/assets/css/condensation.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="/assets/reveal.js-master/plugin/highlight/monokai.css" id="highlight-theme">
+		<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700" rel="stylesheet">
+
+	</head>
+
+	<body>
+
+
+	  <!-- this is where the reveailfy filter gets applied -->
+	  <div class="reveal"><div class="slides">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section id="lab-03-bouncing-disks"><h1>Lab 03: Bouncing Disks</h1></section><section id="announcements"><h2>Announcements</h2>
+<ol>
+  <li>Accountability Group Assignments
+    <ul>
+      <li>arrange to meet this week</li>
+    </ul>
+  </li>
+  <li>Quiz 02 is actually happening this week
+    <ul>
+      <li>on objects and memory</li>
+    </ul>
+  </li>
+  <li>Rest of week:
+    <ul>
+      <li>finishing objects and memory</li>
+      <li>starting object inheritance</li>
+    </ul>
+  </li>
+</ol></section><section>
+<img src="/assets/img/2021-03/WiCS-slide.png">
+</section><section id="lab-03-bouncing-disks-1"><h2>Lab 03: Bouncing Disks</h2>
+<p>Two new features:</p>
+<ol>
+  <li>Object instances represented in graphical form
+    <ul>
+      <li><code>BouncingDisk</code></li>
+    </ul>
+  </li>
+  <li>Animation
+    <ul>
+      <li>draw/update loop</li>
+    </ul>
+  </li>
+</ol></section><section id="quick-demo"><h2>Quick Demo</h2></section><section id="bouncing-disk"><h2>Bouncing Disk</h2>
+<p>A <code>BouncingDisk</code> stores</p>
+<ul>
+  <li>position</li>
+  <li>velocity</li>
+  <li>radius</li>
+  <li>color</li>
+</ul>
+<p>Primary instance methods</p>
+<ul>
+  <li>draw itself on a <code>Graphics</code> object</li>
+  <li>update its new state</li>
+</ul></section><section id="animation-in-theory"><h2>Animation in Theory</h2>
+<ul>
+  <li>Sequence of frames displayed in rapid succession
+    <ul>
+      <li>24 fps $\implies \sim 42$ ms per frame for movies</li>
+      <li>$\sim 60$ fps $\implies \sim 17$ ms per frame modern broadcast</li>
+    </ul>
+  </li>
+  <li>Each frame differs incrementally from previous</li>
+  <li>Gives illusion of motion</li>
+</ul></section><section id="animation-in-code"><h2>Animation in Code</h2>
+<p>Draw/update loop:</p>
+<pre><code class="language-java">        while(true){
+            world.update(1.0 / (double) FPS);
+            this.repaint();
+            try{
+                Thread.sleep(1000/FPS);
+            }
+            catch(InterruptedException e){
+		System.err.println("Thread interrupted.");
+		return;
+	    }
+        }
+</code></pre></section><section id="animating-motion"><h2>Animating Motion</h2>
+<p>A moving object:</p>
+<ul>
+  <li>position</li>
+  <li>velocity (speed + direction)</li>
+  <li>units: pixels / second</li>
+  <li>how to update for next frame?</li>
+</ul>
+<div style="margin-bottom: 8em"></div></section><section id="how-to-represent-bouncing"><h2>How to Represent Bouncing?</h2>
+<div style="margin-bottom: 12em"></div></section><section id="your-task"><h2>Your Task</h2>
+<ol>
+  <li>Complete <code>Pair</code> class
+    <ul>
+      <li>reprsents <em>vector</em> $(x, y)$-coordinates</li>
+      <li>no explicit instructions</li>
+      <li>error messages tell you what is missing</li>
+      <li>remark: multiple constructors possible!</li>
+    </ul>
+  </li>
+  <li>Extensions
+    <ul>
+      <li>disks accelerate due to gravity?</li>
+      <li>disks change color over time?</li>
+      <li>disks interact with each other?</li>
+    </ul>
+  </li>
+</ol></section><section id="assignment-demo"><h2>Assignment Demo</h2>
+<p><a href="/teaching/2021s-cosc-112/labs/03-bouncing-disks/">Download the Code</a></p></section>
+</div></div>
+
+
+	  <script src="/assets/reveal.js-master/dist/reveal.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/math/math.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/zoom/zoom.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/notes/notes.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/search/search.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/markdown/markdown.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/highlight/highlight.js"></script>
+	  <script>
+	    
+
+	    // Also available as an ES module, see:
+	    // https://revealjs.com/initialization/
+	    Reveal.initialize({
+		controls: false,
+		progress: true,
+		center: true,
+		hash: true,
+		transition: 'none',
+		math: {
+		    config: 'TeX-AMS_HTML-full',
+		    TeX: {
+			Macros: {
+			    R: '\\mathbb{R}',
+			    set: [ '\\left\\{#1 \\; ; \\; #2\\right\\}', 2 ]
+			}
+		    }
+		},
+
+
+		// Learn about plugins: https://revealjs.com/plugins/
+		plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath ]
+	    });
+
+	  </script>
+
+	</body>
+</html>
+	  
+
+<!-- <\!-- load the reveal.js css & js (assuming you've put it in assets/)-\-> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/reveal.scss" -->
+<!-- /> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/theme/source/white.scss" -->
+<!-- /> -->
+<!-- <script -->
+<!--   src="/assets/reveal.js-master/js/reveal.js" -->
+<!--   type="text/javascript" -->
+<!-- ></script> -->
+
+<!-- <\!-- configure the presentation, (you can tweak options to suit) -\-> -->
+<!-- <script> -->
+<!--   Reveal.initialize({ -->
+<!--     // Display presentation control arrows -->
+<!--     controls: false, -->
+
+<!--     // Help the user learn the controls by providing hints, for example by -->
+<!--     // bouncing the down arrow when they first encounter a vertical slide -->
+<!--     controlsTutorial: false, -->
+
+<!--     // Determines where controls appear, "edges" or "bottom-right" -->
+<!--     controlsLayout: "bottom-right", -->
+
+<!--     // Visibility rule for backwards navigation arrows; "faded", "hidden" -->
+<!--     // or "visible" -->
+<!--     controlsBackArrows: "faded", -->
+
+<!--     // Display a presentation progress bar -->
+<!--     progress: true, -->
+
+<!--     // Display the page number of the current slide -->
+<!--     slideNumber: false, -->
+
+<!--     // Push each slide change to the browser history -->
+<!--     history: false, -->
+
+<!--     // Enable keyboard shortcuts for navigation -->
+<!--     keyboard: true, -->
+
+<!--     // Enable the slide overview mode -->
+<!--     overview: true -->
+<!--   }); -->
+<!-- </script> -->

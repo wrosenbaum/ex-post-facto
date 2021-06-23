@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta charset="utf-8">
+
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reset.css">
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reveal.css">
+		<link rel="stylesheet" href="/assets/css/condensation.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="/assets/reveal.js-master/plugin/highlight/monokai.css" id="highlight-theme">
+		<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700" rel="stylesheet">
+
+	</head>
+
+	<body>
+
+
+	  <!-- this is where the reveailfy filter gets applied -->
+	  <div class="reveal"><div class="slides">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section id="lab-09-fork-join-pools"><h1>Lab 09: Fork-Join Pools</h1></section><section id="announcements"><h2>Announcements</h2>
+<p>Feedback on final project proposals in next few days!</p></section><section id="overview"><h2>Overview</h2>
+<ol>
+  <li>Divide and Conquer &amp; Recursion</li>
+  <li>Fork-Join Pools</li>
+  <li>Activity: Analyzing Behavior</li>
+</ol></section><section id="divide-and-conquer"><h2>Divide and Conquer</h2>
+<p>Many computation problems can be solved efficiently by:</p>
+<ol>
+  <li>Breaking an instance into two or more smaller instances</li>
+  <li>Solving the smaller instances (maybe recursively)</li>
+  <li>Combining the smaller solutions to solve the original instance</li>
+</ol></section><section id="example-1-searching-unsorted-array"><h2>Example 1: Searching Unsorted Array</h2>
+<ul>
+  <li>Given <code>int[] arr</code> of size <code>N</code>
+</li>
+  <li>Does <code>arr</code> contain <code>1</code>?</li>
+  <li>Idea:
+    <ol>
+      <li>divide <code>arr</code> in half</li>
+      <li>search left half for <code>1</code>
+</li>
+      <li>serach right half for <code>1</code>
+</li>
+      <li>return <code>true</code> if step 1 or 2 succeeds</li>
+    </ol>
+  </li>
+</ul>
+<div style="margin-bottom: 4em"></div></section><section id="example-2-mergesort"><h2>Example 2: MergeSort</h2>
+<ul>
+  <li>Given <code>int[] arr</code> of size <code>N</code>
+</li>
+  <li>Sort <code>arr</code> in increasing order</li>
+  <li>Idea:
+    <ol>
+      <li>divide <code>arr</code> in half</li>
+      <li>sort left half</li>
+      <li>sort right half</li>
+      <li>merge sorted halves</li>
+    </ol>
+  </li>
+</ul>
+<div style="margin-bottom: 6em"></div></section><section id="other-examples"><h2>Other Examples</h2>
+<ul>
+  <li>Other sorting algorithms
+    <ul>
+      <li>QuickSort</li>
+    </ul>
+  </li>
+  <li>Multiplying large numbers</li>
+  <li>Multiplying matrices
+    <ul>
+      <li>Strassen’s algorithm</li>
+    </ul>
+  </li>
+  <li>Computing Fourier transforms</li>
+</ul></section><section id="observation"><h2>Observation</h2>
+<p>Divide-and-conquer often lends itself well to parallelism:</p>
+<ol>
+  <li>Divide instance into smaller instances</li>
+  <li>Solve smaller instances <em>in parallel</em>
+</li>
+  <li>Combine solutions</li>
+</ol>
+<div style="margin-bottom: 8em"></div></section><section id="fork-join-pools"><h2>Fork-Join Pools</h2>
+<p>Idea:</p>
+<ul>
+  <li>A thread pool with efficient support for <em>forking</em>:
+    <ul>
+      <li>divide a task into two or more sub-tasks</li>
+      <li>complete sub-tasks</li>
+      <li>combine solutions (if necessary)</li>
+    </ul>
+  </li>
+  <li>Naturally lends itself to recursion</li>
+</ul>
+<div style="margin-bottom: 8em"></div></section><section id="forkmerge-diagram-merge-sort"><h2>Fork/Merge Diagram: Merge Sort</h2>
+<div style="margin-bottom: 18em"></div></section><section id="creating-a-fork-join-pool"><h2>Creating a Fork-Join Pool</h2>
+<p>Creating a Fork-Join Pool is easy!</p>
+<ul>
+  <li>tasks are <strong>invoked</strong> in FJP</li>
+</ul>
+<pre><code class="language-java">import java.util.concurrent.ForkJoinPool;
+...
+ForkJoinPool pool = new ForkJoinPool(POOL_SIZE);
+...
+pool.invoke(new SomeTask(...));
+</code></pre></section><section id="recursive-actions"><h2>Recursive Actions</h2>
+<p>Tasks without return values = <strong>recursive action</strong></p>
+<ul>
+  <li>extend <code>RecursiveAction</code> class</li>
+  <li>override <code>compute()</code> method</li>
+</ul></section><section id="mergesort-as-recursiveaction"><h2>MergeSort as <code>RecursiveAction</code>
+</h2>
+<pre><code class="language-java">import java.util.concurrent.RecursiveAction;
+
+class MSTask extends RecursiveAction {
+    ...
+    public MSTask (double[] data, int min, int max) {
+        ...
+    }
+	
+    @Override
+    protected void compute () {
+        if (max - min &lt;= 1) {
+            ...
+            return;
+        }
+		
+        int mid = min + (max - min) / 2
+		
+        MTask left = new MTask(data, min, mid);
+        MTask right = new MTask(data, mid, max);
+		
+        left.fork();
+        right.fork(); // or can use right.compute()
+		
+        left.join();
+        right.join(); // leave out if right.compute()
+        
+        merge(data, min, mid, max);
+    }
+	
+    void merge (double[] data, int min, int mid, int max) {
+        ...	
+    }
+}
+</code></pre>
+<p>Invoke with <code>pool.invoke(new MTask(data, 0, data.length))</code></p></section><section id="efficiency"><h2>Efficiency</h2>
+<p>Often Fork-Join pools are not as efficient you’d like them to be</p>
+<p>To deal with this:</p>
+<ul>
+  <li>Use large “base case”
+    <ul>
+      <li>don’t waste multithreading breaking up small tasks</li>
+    </ul>
+  </li>
+  <li>Only use on large instances</li>
+</ul>
+<p>Still FJPs can lead to elegant solutions, readable code</p></section><section id="recursive-task"><h2>Recursive Task</h2>
+<p>What if we want tasks to return a value?</p>
+<ul>
+  <li>Use <code>RecursiveTask&lt;T&gt;</code>!
+    <ul>
+      <li>task returns a value of type <code>T</code>
+</li>
+      <li>similar to <code>RecursiveAction</code> except <code>compute()</code> returns a <code>T</code>
+</li>
+    </ul>
+  </li>
+  <li>
+<code>pool.invoke(someRecursiveTask&lt;T&gt;)</code> now also returns a <code>T</code>
+</li>
+  <li>
+<code>join()</code> method also returns a <code>T</code>
+</li>
+</ul></section><section id="a-simple-example"><h2>A Simple Example</h2>
+<p>Finding the maximum value in an unsorted array</p>
+<ul>
+  <li>What is a task?</li>
+  <li>How to combine results?</li>
+</ul>
+<div style="margin-bottom: 12em"></div></section><section id="maxtask"><h2>MaxTask</h2>
+<pre><code class="language-java">class MaxTask extends RecursiveTask&lt;Double&gt; {
+    public static int PARALLEL_LIMIT = MaxFinder.DATA_SIZE / 1000;
+    
+    double[] data;
+    int min;
+    int max;
+    
+    public MaxTask (double[] data, int min, int max) {
+	this.data = data;
+	this.min = min;
+	this.max = max;
+    }
+
+    @Override
+    protected Double compute () {
+	if (max - min &lt;= PARALLEL_LIMIT) {
+	    return findMax();
+	}
+
+	MaxTask left = new MaxTask(data, min, min + (max - min) / 2);
+	MaxTask right = new MaxTask(data, min + (max - min) / 2, max);
+
+	right.fork();
+
+	double l = left.compute();
+	
+	double r = right.join();
+
+	return Math.max(l, r); 
+    }
+
+    private Double findMax() {
+	double maxValue = Double.MIN_VALUE;
+
+	for (int i = min; i &lt; max; ++i) {
+	    if (maxValue &lt; data[i]) {
+		maxValue = data[i];
+	    }
+	}
+
+	return maxValue;
+    }
+}
+</code></pre></section><section id="the-competition"><h2>The Competition</h2>
+<pre><code class="language-java">    public static double findMax(double[] data) {
+	double max = Double.MIN_VALUE;
+
+	for (int i = 0; i &lt; DATA_SIZE; ++i) {
+	    if (max &lt; data[i]) {
+		max = data[i];
+	    }
+	}
+
+	return max;
+    }
+</code></pre></section><section id="an-activity"><h2>An Activity</h2>
+<p>Compare the run-times of the two methods!</p>
+<ol>
+  <li>Is there a value of <code>DATA_SIZE</code> for which <code>MaxTask</code> is faster?</li>
+  <li>What values of <code>PARALLEL_LIMIT</code> give better performance?</li>
+</ol>
+<p>Disclaimer:</p>
+<ul>
+  <li>everything about Java is optimized to execute code like <code>findMax</code> efficiently</li>
+  <li>fork-join pools are better suited for more complex tasks…
+    <ul>
+      <li>…like sorting</li>
+      <li>you’ll experience this in the next lab assignment!</li>
+    </ul>
+  </li>
+</ul></section><section id="discuss"><h2>Discuss</h2>
+<p>What did you find?</p></section><section id="lab-05-our-last-lab"><h2>Lab 05: Our Last Lab</h2>
+<p>Simple problem:</p>
+<ul>
+  <li>Given a large array of <code>double</code>s, sort it as quickly as possible</li>
+  <li>Use <code>Arrays.sort(...)</code> as a baseline</li>
+</ul>
+<p>Details to follow…</p></section>
+</div></div>
+
+
+	  <script src="/assets/reveal.js-master/dist/reveal.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/math/math.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/zoom/zoom.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/notes/notes.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/search/search.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/markdown/markdown.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/highlight/highlight.js"></script>
+	  <script>
+	    
+
+	    // Also available as an ES module, see:
+	    // https://revealjs.com/initialization/
+	    Reveal.initialize({
+		controls: false,
+		progress: true,
+		center: true,
+		hash: true,
+		transition: 'none',
+		math: {
+		    config: 'TeX-AMS_HTML-full',
+		    TeX: {
+			Macros: {
+			    R: '\\mathbb{R}',
+			    set: [ '\\left\\{#1 \\; ; \\; #2\\right\\}', 2 ]
+			}
+		    }
+		},
+
+
+		// Learn about plugins: https://revealjs.com/plugins/
+		plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath ]
+	    });
+
+	  </script>
+
+	</body>
+</html>
+	  
+
+<!-- <\!-- load the reveal.js css & js (assuming you've put it in assets/)-\-> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/reveal.scss" -->
+<!-- /> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/theme/source/white.scss" -->
+<!-- /> -->
+<!-- <script -->
+<!--   src="/assets/reveal.js-master/js/reveal.js" -->
+<!--   type="text/javascript" -->
+<!-- ></script> -->
+
+<!-- <\!-- configure the presentation, (you can tweak options to suit) -\-> -->
+<!-- <script> -->
+<!--   Reveal.initialize({ -->
+<!--     // Display presentation control arrows -->
+<!--     controls: false, -->
+
+<!--     // Help the user learn the controls by providing hints, for example by -->
+<!--     // bouncing the down arrow when they first encounter a vertical slide -->
+<!--     controlsTutorial: false, -->
+
+<!--     // Determines where controls appear, "edges" or "bottom-right" -->
+<!--     controlsLayout: "bottom-right", -->
+
+<!--     // Visibility rule for backwards navigation arrows; "faded", "hidden" -->
+<!--     // or "visible" -->
+<!--     controlsBackArrows: "faded", -->
+
+<!--     // Display a presentation progress bar -->
+<!--     progress: true, -->
+
+<!--     // Display the page number of the current slide -->
+<!--     slideNumber: false, -->
+
+<!--     // Push each slide change to the browser history -->
+<!--     history: false, -->
+
+<!--     // Enable keyboard shortcuts for navigation -->
+<!--     keyboard: true, -->
+
+<!--     // Enable the slide overview mode -->
+<!--     overview: true -->
+<!--   }); -->
+<!-- </script> -->

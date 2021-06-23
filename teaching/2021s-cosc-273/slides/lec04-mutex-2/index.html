@@ -1,0 +1,844 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta charset="utf-8">
+
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reset.css">
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reveal.css">
+		<link rel="stylesheet" href="/assets/css/condensation.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="/assets/reveal.js-master/plugin/highlight/monokai.css" id="highlight-theme">
+		<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700" rel="stylesheet">
+
+	</head>
+
+	<body>
+
+
+	  <!-- this is where the reveailfy filter gets applied -->
+	  <div class="reveal"><div class="slides">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ## Proof of Mutual Exclusion I -->
+
+<!-- Suppose not...  -->
+
+<!-- - $$A $$ and $$B $$ both in critical section (CS) at same time -->
+
+<!-- ## Proof of Mutual Exclusion II -->
+
+<!-- - Actions of $$A $$: -->
+<!--     + $$(A.1)$$ writes `flag[A] = true` -->
+<!-- 	+ $$(A.2)$$ writes `victim = A` -->
+<!-- 	+ $$(A.3)$$ reads `flag[B]` -->
+<!-- 	+ $$(A.4)$$ reads `victim` -->
+
+<!-- - Actions of $$B $$: -->
+<!--     + $$(B.1)$$ writes `flag[B] = true` -->
+<!--     + $$(B.2)$$ writes `victim = B` -->
+<!-- 	+ $$(B.3)$$ reads `flag[A]` -->
+<!-- 	+ $$(B.4)$$ reads `victim` -->
+
+<!-- ## Proof of Mutual Exclusion III -->
+
+<!-- Suppose $$(B.2) \to (A.2)$$: -->
+
+<!-- - i.e., $$A $$ wrote to `victim` last -->
+
+<!-- - if not, continue argument with roles of $$A $$ and $$B $$ reversed -->
+
+<!-- ## Timelines -->
+
+<!-- <div style="margin-bottom: 18em"></div> -->
+
+<!-- ## Conclusion -->
+
+<!-- The Peterson lock satisfies mutual exclusion -->
+
+<!-- ## Proof of Starvation-Freedom I -->
+
+<!-- Suppose not: -->
+
+<!-- - Some thread runs forever in `lock()` method -->
+<!-- - Assume it is thread $$A $$ -->
+
+<!-- ```java -->
+<!-- 	public void lock () { -->
+<!-- 	   int i = ThreadID.get(); // get my ID, 0 or 1 -->
+<!-- 	   int j = 1 - i;          // other thread's ID -->
+
+<!-- 	   flag[i] = true;         // set my flag -->
+<!-- 	   victim = i;             // set myself to be victim -->
+<!-- 	   while (flag[j] && victim == i) { -->
+<!-- 	       // wait -->
+<!-- 	   } -->
+<!-- 	} -->
+<!-- ``` -->
+
+<!-- - $$A $$ is stuck in `while` loop -->
+
+<!-- ## Proof of Starvation-Freedom II -->
+
+<!-- $$A $$ stuck in: -->
+
+<!-- ```java -->
+<!-- 	   while (flag[B] && victim == A) { -->
+<!-- 	       // wait -->
+<!-- 	   } -->
+<!-- ``` -->
+
+<!-- - If $$B $$ leaves CS, $$B $$ sets `flag[B] = false` -->
+<!-- - If $$B $$ calls `lock()` again, sets `victim = B`  -->
+<!-- - In in either case, $$A $$ eventually breaks out of loop -->
+
+<!-- So -->
+
+<!-- - Must be that $$B $$ also stuck in `lock()` call -->
+
+<!-- ## Proof of Starvation-Freedom III -->
+
+<!-- - Must be that $$B $$ also stuck in `lock()` call -->
+<!-- - But then: -->
+<!--     + `flag[B] && victim == A` is true ($$A $$ in `while` loop) -->
+<!-- 	+ `flag[A] && victim == B` is true ($$B $$ in `while` loop) -->
+<!-- - This is a contradiction! -->
+<!--     + `victim` cannot be both `A` and `B` -->
+
+<!-- ## Conclusion -->
+
+<!-- - Peterson lock satisfies -->
+<!--     + mutual exclusion -->
+<!-- 	+ starvation-freedom -->
+
+<!-- - Therefore -->
+<!--     + Peterson lock also satisfies deadlock-freedom -->
+
+<!-- Nice! -->
+
+<!-- ## For Your Consideration I -->
+
+<!-- How can we deal with more than two threads? -->
+
+<!-- - Can the Peterson lock be generalized to multiple threads? -->
+<!-- - Is there a better way? -->
+
+<!-- ## Some Things to Consider II -->
+
+<!-- - Might want more than one lock -->
+<!--     + e.g., multiple distinct critical sections that *can* be executed concurrently -->
+<!-- 	+ object with two counters, could have one lock for each counter -->
+<!-- 	+ different counters incremented at same time is fine -->
+
+<!-- ## Some Things to Consider III -->
+<!-- Interdependencies between locked objects can cause trouble -->
+
+<!-- - individual locks well-behaved -->
+<!-- - contention between *different* locks still cause deadlock -->
+<!-- - e.g., task requires two locks to be acquired: -->
+<!--      + one thread acquires one lock -->
+<!-- 	 + other thread acquires other lock -->
+<!-- 	 + both waiting on each other to finish -->
+
+<section id="lecture-04-mutual-exclusion-ii"><h1>Lecture 04: Mutual Exclusion II</h1></section><section id="outline"><h2>Outline</h2>
+<ol>
+  <li>Recap of Lecture 03</li>
+  <li>Critical Sections and Locks</li>
+  <li>Interlude: Events and Timing</li>
+  <li>The Peterson Lock</li>
+</ol></section><section id="recap"><h1>Recap</h1></section><section id="last-time"><h2>Last Time</h2>
+<ul>
+  <li>Considered shared backyard problem with Finn and Ru
+    <ul>
+      <li>both dogs cannot be in backyard at same time</li>
+      <li>communication via raised/lowered flags</li>
+    </ul>
+  </li>
+  <li>We learned
+    <ul>
+      <li>achieving mutual exclusion and deadlock-freedom is subtle</li>
+      <li>solution required an <em>asymmetric</em> protocol</li>
+    </ul>
+  </li>
+  <li>Our protocol gave preferential treatment to Finn</li>
+</ul></section><section id="previous-protocol"><h2>Previous Protocol</h2>
+<p>Will’s Protocol:</p>
+<ol>
+  <li>Raise flag</li>
+  <li>When Scott’s flag is lowered, let Finn out</li>
+  <li>When Finn comes in, lower flag</li>
+</ol>
+<p>Scott’s Protocol:</p>
+<ol>
+  <li>Raise flag</li>
+  <li>While Will’s flag is raised: (a) lower flag, (b) wait until Will’s flag is lowered (c) raise flag</li>
+  <li>When Scott’s flag is up and Will’s is down, release Ru</li>
+  <li>When Ru returns, lower flag</li>
+</ol></section><section id="crucial-insights"><h2>Crucial Insights</h2>
+<ul>
+  <li>Obtained mutual exclusion because of <em>flag principle:</em>
+    <ul>
+      <li>both Scott and Will raise flags</li>
+      <li>both look at other’s flag</li>
+      <li>at least one sees other’s flag up</li>
+      <li>at least one doesn’t release dog</li>
+    </ul>
+  </li>
+  <li>Obtained deadlock-freedom by <em>deferment:</em>
+    <ul>
+      <li>if both dogs want to go out, Scott defers to Will</li>
+    </ul>
+  </li>
+</ul></section><section id="protocol-gives-mutual-exclusion-and-deadlock-freedom"><h2>Protocol Gives Mutual Exclusion and Deadlock-freedom…</h2></section><section id="but-could-it-be-better"><h2>…But Could It Be Better?</h2></section><section id="a-stronger-liveness-condition"><h2>A Stronger Liveness Condition</h2>
+<p><strong>Starvation-freedom</strong> If a dog wants to go out, eventually it will be able to go out.</p>
+<p>Does Third Protocol give starvation freedom?</p>
+<div style="margin-bottom: 8em"></div></section><section id="sorry-ruple"><h2>Sorry, Ruple</h2>
+<p>Third protocol is not starvation-free!</p>
+<ul>
+  <li>Finn could go out, come in, go out, come in…</li>
+  <li>Scott only looks at Will’s flag when it is up</li>
+  <li>Ruple never goes out</li>
+</ul>
+<p>Can we achieve starvation-freedom?</p></section><section id="mutual-exclusion-problem"><h2>Mutual Exclusion Problem</h2>
+<ul>
+  <li>safety property (bad things don’t happen)
+    <ul>
+      <li>mutual exclusion</li>
+    </ul>
+  </li>
+  <li>liveness properties (good things eventually happen)
+    <ul>
+      <li>deadlock-freedom</li>
+      <li>starvation-freedom</li>
+    </ul>
+  </li>
+</ul>
+<p>Note: starvation-freedom \(\implies\) deadlock-freedom</p></section><section id="bringing-it-back-to-computers"><h2>Bringing it Back to Computers</h2>
+<p>Multiple threads/processors attempt to:</p>
+<ul>
+  <li>call a method, execute block of code, read/write to a field, …</li>
+</ul>
+<p>Want to ensure:</p>
+<ul>
+  <li>only one thread/processor accesses resource at a time</li>
+  <li>eventually one (or all) threads/processors should get access</li>
+</ul></section><section id="in-java"><h2>In Java</h2>
+<p>Coming back to our <code>Counter</code>:</p>
+<pre><code class="language-java">public class Counter {
+    long count = 0;
+    
+    public long getCount () { return count; }
+    
+    public void increment () {
+        count++;      // this line of code is *critical*
+    }
+    
+    public void reset () { count = 0; }
+}
+</code></pre></section><section id="critical-sections"><h2>Critical Sections</h2>
+<p>A <strong>critical section</strong> of code is a block of code that should be executed sequentially by one thread at a time:</p>
+<ul>
+  <li>no concurrent executions</li>
+  <li>no interleaving of statements with other threads</li>
+</ul>
+<p>For example</p>
+<pre><code class="language-java">public void increment () {
+    // start critical section
+    count++;
+    // end critical section
+}
+</code></pre></section><section id="protecting-critical-sections-with-locks"><h2>Protecting Critical Sections with Locks</h2>
+<p>The <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/locks/Lock.html"><code>Lock</code> interface</a> has two (for now) methods:</p>
+<ul>
+  <li>
+<code>void lock()</code>: when method returns, thread <strong>acquires lock</strong>
+    <ul>
+      <li>thread waits until lock is acquired</li>
+    </ul>
+  </li>
+  <li>
+<code>void unlock()</code>: when method returns, thread <strong>releases lock</strong>
+    <ul>
+      <li>lock is available for another thread to acquire it</li>
+    </ul>
+  </li>
+</ul></section><section id="locks-and-mutual-exclusion"><h2>Locks and Mutual Exclusion</h2>
+<p>A <code>Lock</code> should satisfy safety and liveness:</p>
+<ul>
+  <li>safety
+    <ul>
+      <li>
+<em>mutual exclusion</em> at most one thread holds any lock at any given time</li>
+    </ul>
+  </li>
+  <li>liveness
+    <ul>
+      <li>
+<em>deadlock-freedom</em> if multiple threads try to concurrently acquire a lock, one will eventually acquire it</li>
+      <li>
+<em>starvation-freedom</em> if a thread tries to acquire lock, it will eventually succeed</li>
+    </ul>
+  </li>
+</ul></section><section id="using-locks-1"><h2>Using Locks 1</h2>
+<p>Object instance has a <code>Lock</code> member variable:</p>
+<pre><code class="language-java">public class SomeClass {
+    // an instance of an object implementing Lock
+    private Lock lock = new SomeLockImplementation();
+	
+	...
+}
+</code></pre></section><section id="using-locks-2"><h2>Using Locks 2</h2>
+<p>Surround critical section with a try/catch/finally block</p>
+<pre><code class="language-java">lock.lock();            // lock acquired after this
+try {
+    // critical section
+} finally {
+    lock.unlock();      // lock released after this
+}
+</code></pre>
+<p>The <code>finally</code> block ensures that <code>lock.unlock()</code> is called even if there is an exception or return statement in the critical section!</p></section><section id="a-locked-counter"><h2>A Locked Counter</h2>
+<pre><code class="language-java">public class Counter {
+    long count = 0;
+    Lock lock = new SomeLockImplementation();
+    
+    public long getCount () { return count; }
+    
+    public void increment () {
+        lock.lock();
+        try {
+		
+            count++;
+			
+        } finally {
+		
+            lock.unlock();
+			
+        }
+    }
+    
+    // should probably lock this too...
+    public void reset () { count = 0; }
+}
+</code></pre></section><section id="alright"><h2>Alright</h2>
+<ul>
+  <li>Now we know how to <em>use</em> locks</li>
+  <li>But how can we <em>implement</em> one?</li>
+</ul></section><section id="interlude-events-and-timing"><h1>Interlude: Events and Timing</h1></section><section id="convenient-assumptions-i"><h2>Convenient Assumptions I</h2>
+<ul>
+  <li>Executions of programs/protocols/algorithms consist of discrete <strong>events</strong>
+    <ul>
+      <li>e.g., perform elementary arithmetic, logic, comparison</li>
+      <li>read or write values; send or receive messages</li>
+      <li>call or return from a method/function</li>
+    </ul>
+  </li>
+</ul></section><section id="convenient-assumptions-ii"><h2>Convenient Assumptions II</h2>
+<ul>
+  <li>Events for a <em>single</em> thread/process occur <strong>sequentially</strong>
+    <ul>
+      <li>given any two distinct events, one precedes the other</li>
+    </ul>
+  </li>
+</ul>
+<div style="margin-bottom: 8em"></div></section><section id="convenient-assumptions-iii"><h2>Convenient Assumptions III</h2>
+<ul>
+  <li>Events for different threads/processes can occur <strong>concurrently</strong>
+    <ul>
+      <li>caveat: what if multiple threads concurrently write to same location?</li>
+      <li>only one value written</li>
+      <li>treat written value as latest event</li>
+    </ul>
+  </li>
+  <li>Next week: formally define “linearizability”</li>
+</ul>
+<div style="margin-bottom: 8em"></div></section><section id="timing-of-events"><h2>Timing of Events</h2>
+<p>Wall clock time:</p>
+<ul>
+  <li>Every event \(a\) has an associated time \(t_a\) at which the event occurs
+    <ul>
+      <li>if \(a\) precedes \(b\), then \(t_a &lt; t_b\).</li>
+    </ul>
+  </li>
+  <li>Often \(t_e\) is time an operation completes
+    <ul>
+      <li>if process \(P_1\) writes to a register at time \(t_1\), then any process \(P_2\) reading the register at time \(t_2 \geq t_1\) will read what \(P_1\) wrote.</li>
+    </ul>
+  </li>
+</ul>
+<div style="margin-bottom: 8em"></div></section><section id="ordering-of-events"><h2>Ordering of Events</h2>
+<ul>
+  <li>If event $a$ precedes $b$ (i.e., $t_a &lt; t_b$) write $a \to b$</li>
+  <li>If $a_1 \to a_2$, can associate an <strong>interval</strong> \(I_A = (a_1, a_2)\)</li>
+  <li>Say \(I_A = (a_1, a_2)\) <strong>precedes</strong> \(I_B = (b_1, b_2)\) if \(a_2 \to b_1\)
+    <ul>
+      <li>similarly, \(I_A \to b \iff a_2 \to b\)</li>
+      <li>
+\[a \to I_B \iff a \to b_1\]
+      </li>
+    </ul>
+  </li>
+</ul>
+<div style="margin-bottom: 8em"></div></section><section id="are-these-assumptions-justified"><h2>Are These Assumptions Justified?</h2>
+<p><strong>NO!</strong></p></section><section id="the-real-world"><h2>The Real World</h2>
+<p>Things are not so nice!</p>
+<ul>
+  <li>Even elementary operations do not happen instantaneously!
+    <ul>
+      <li>writing to a register takes some time</li>
+      <li>
+<a href="https://en.wikipedia.org/wiki/Metastability_(electronics)"><strong>metastability</strong></a> can occur</li>
+    </ul>
+  </li>
+  <li>Compilers, operating systems, and hardware make decisions that are out of our control!
+    <ul>
+      <li>these choices often privilege performace over correctness</li>
+    </ul>
+  </li>
+</ul></section><section id="try-to-rely-on-robust-assumptions"><h2>Try to Rely on Robust Assumptions</h2>
+<ul>
+  <li>Our protocols and analysis allow for some wiggle-room
+    <ul>
+      <li>rely on principles like “flag principle”</li>
+    </ul>
+
+    <blockquote>
+      <p>if two processes (1) raise flags then (2) check the other’s flag, then at least one will see the flag raised</p>
+    </blockquote>
+
+    <p>remains true, regardless of precise ordering of events</p>
+
+    <ul>
+      <li>Still need to assume events can be ordered for this to be valid</li>
+    </ul>
+  </li>
+</ul></section><section id="still-though"><h2>Still Though</h2>
+<p><em>We have to work very carefully to ensure that our assumptions are as close to reality as possible!</em></p>
+<ol>
+  <li>Make reasonable, informed assumptions</li>
+  <li>Write code such that the assumptions are most likely to be correct</li>
+</ol>
+<p>When the assumptions <em>are</em> correct, our protocols are guaranteed to work</p></section><section id="going-forward"><h2>Going Forward</h2>
+<p>We will continue to make unjustified assumptions about how computers behave</p>
+<ul>
+  <li>Assumptions will
+    <ol>
+      <li>help us reason about protocol correctness</li>
+      <li>help us appreciate how subtle these problems are, even in an idealized setting</li>
+      <li>allow us to <em>prove</em> correctness of protocols in idealized models of computation</li>
+    </ol>
+  </li>
+  <li>We will see later
+    <ol>
+      <li>how to make our computers come as close as possible to satisfying our assumptions</li>
+      <li>turn theory into practice</li>
+    </ol>
+  </li>
+</ul></section><section id="another-warning"><h2>Another Warning</h2>
+<p>Treat code for the next few lectures as “Java-like pseudo-code”</p>
+<ul>
+  <li>follow Java syntax conventions</li>
+  <li>may not be compilable Java</li>
+</ul></section><section id="the-peterson-lock"><h1>The Peterson Lock</h1></section><section id="yet-another-protocol"><h2>Yet Another Protocol</h2>
+<p>Previous protocol satisfied</p>
+<ul>
+  <li>mutual exclusion</li>
+  <li>deadlock-freedom</li>
+</ul>
+<p>but not</p>
+<ul>
+  <li>starvation freedom</li>
+</ul>
+<p>We want more!</p></section><section id="fresh-idea"><h2>Fresh Idea</h2>
+<ul>
+  <li>
+    <p>Have a shared field that can be written by either process</p>
+  </li>
+  <li>If concurrently written by two threads, then exactly one write operation succeeds
+    <ul>
+      <li>
+<em>which</em> thread’s write succeeds is arbitrary</li>
+    </ul>
+  </li>
+  <li>How can we use shared field to break symmetry?</li>
+</ul>
+<div style="margin-bottom: 8em"></div></section><section id="symmetry-breaking-idea"><h2>Symmetry Breaking Idea</h2>
+<p>Consider:</p>
+<ul>
+  <li>Process \(A\) and \(B\) both write names in same field</li>
+  <li>Processes repeatedly read from field</li>
+  <li>Eventually, they will agree on name written in field</li>
+  <li>That process is <strong>victim</strong>
+    <ul>
+      <li>victim defers to other process</li>
+    </ul>
+  </li>
+</ul>
+<div style="margin-bottom: 8em"></div></section><section id="peterson-lock-2-threads"><h2>Peterson Lock (2 Threads)</h2>
+<p>Fields:</p>
+<ol>
+  <li>flag (boolean) for each thread
+    <ul>
+      <li>indicates intent to acquire lock</li>
+    </ul>
+  </li>
+  <li>value (int) shared between threads
+    <ul>
+      <li>indicates identity of victim</li>
+    </ul>
+  </li>
+</ol>
+<div style="margin-bottom: 8em"></div></section><section id="acquiring-peterson-lock"><h2>Acquiring Peterson Lock</h2>
+<ol>
+  <li>Set my flag to be <code>true</code>
+</li>
+  <li>Set myself to be <code>victim</code>
+</li>
+  <li>While other’s flag is <code>true</code> and I am victim:
+    <ul>
+      <li>wait</li>
+    </ul>
+  </li>
+</ol></section><section id="releasing-peterson-lock"><h2>Releasing Peterson Lock</h2>
+<ol>
+  <li>Set my flag to <code>false</code>
+</li>
+</ol></section><section id="a-bit-more-formally"><h2>A Bit More Formally</h2>
+<p>In Java-ish Pseudocode</p>
+<pre><code class="language-java">class Peterson implements Lock {
+    private boolean[] flag = new boolean[2];
+	private int victim;
+	
+	public void lock () {
+	   int i = ThreadID.get(); // get my ID, 0 or 1
+	   int j = 1 - i;          // other thread's ID
+	   
+	   flag[i] = true;         // set my flag
+	   victim = i;             // set myself to be victim
+	   while (flag[j] &amp;&amp; victim == i) {
+	       // wait
+	   }
+	}
+	
+	public void unlock () {
+	    int i = ThreadID.get();
+		flag[i] = false;
+	}
+}
+</code></pre></section>
+</div></div>
+
+
+	  <script src="/assets/reveal.js-master/dist/reveal.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/math/math.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/zoom/zoom.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/notes/notes.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/search/search.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/markdown/markdown.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/highlight/highlight.js"></script>
+	  <script>
+	    
+
+	    // Also available as an ES module, see:
+	    // https://revealjs.com/initialization/
+	    Reveal.initialize({
+		controls: false,
+		progress: true,
+		center: true,
+		hash: true,
+		transition: 'none',
+		math: {
+		    config: 'TeX-AMS_HTML-full',
+		    TeX: {
+			Macros: {
+			    R: '\\mathbb{R}',
+			    set: [ '\\left\\{#1 \\; ; \\; #2\\right\\}', 2 ]
+			}
+		    }
+		},
+
+
+		// Learn about plugins: https://revealjs.com/plugins/
+		plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath ]
+	    });
+
+	  </script>
+
+	</body>
+</html>
+	  
+
+<!-- <\!-- load the reveal.js css & js (assuming you've put it in assets/)-\-> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/reveal.scss" -->
+<!-- /> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/theme/source/white.scss" -->
+<!-- /> -->
+<!-- <script -->
+<!--   src="/assets/reveal.js-master/js/reveal.js" -->
+<!--   type="text/javascript" -->
+<!-- ></script> -->
+
+<!-- <\!-- configure the presentation, (you can tweak options to suit) -\-> -->
+<!-- <script> -->
+<!--   Reveal.initialize({ -->
+<!--     // Display presentation control arrows -->
+<!--     controls: false, -->
+
+<!--     // Help the user learn the controls by providing hints, for example by -->
+<!--     // bouncing the down arrow when they first encounter a vertical slide -->
+<!--     controlsTutorial: false, -->
+
+<!--     // Determines where controls appear, "edges" or "bottom-right" -->
+<!--     controlsLayout: "bottom-right", -->
+
+<!--     // Visibility rule for backwards navigation arrows; "faded", "hidden" -->
+<!--     // or "visible" -->
+<!--     controlsBackArrows: "faded", -->
+
+<!--     // Display a presentation progress bar -->
+<!--     progress: true, -->
+
+<!--     // Display the page number of the current slide -->
+<!--     slideNumber: false, -->
+
+<!--     // Push each slide change to the browser history -->
+<!--     history: false, -->
+
+<!--     // Enable keyboard shortcuts for navigation -->
+<!--     keyboard: true, -->
+
+<!--     // Enable the slide overview mode -->
+<!--     overview: true -->
+<!--   }); -->
+<!-- </script> -->

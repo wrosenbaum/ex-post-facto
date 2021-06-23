@@ -1,0 +1,754 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta charset="utf-8">
+
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reset.css">
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reveal.css">
+		<link rel="stylesheet" href="/assets/css/condensation.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="/assets/reveal.js-master/plugin/highlight/monokai.css" id="highlight-theme">
+		<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700" rel="stylesheet">
+
+	</head>
+
+	<body>
+
+
+	  <!-- this is where the reveailfy filter gets applied -->
+	  <div class="reveal"><div class="slides">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section id="lecture-23-consensus-1"><h1>Lecture 23: Consensus 1</h1></section><section id="mission-critical-components"><h2>Mission Critical Components</h2>
+<p>Suppose you’re designing an airplane</p>
+<ol>
+  <li>Need computers to control <em>everything</em>
+    <ul>
+      <li>sensors for speed, thrust, flap positions, pitch, roll, yaw</li>
+      <li>must adjust constantly to fly</li>
+    </ul>
+  </li>
+  <li>But computers occasionally (regularly) crash/need restart</li>
+</ol>
+<p>How to design around this issue?</p>
+<div style="margin-bottom: 8em"></div></section><section id="fault-tolerance-through-duplication"><h2>Fault-Tolerance through Duplication?</h2>
+<p>Have multiple duplicate, independent systems</p>
+<ul>
+  <li>systems run in parallel</li>
+  <li>highly unlikely both crash simultaneously
+    <ul>
+      <li>restarts are infrequent</li>
+      <li>restarting one system won’t affect other system</li>
+    </ul>
+  </li>
+</ul>
+<p>The end of our worries?</p>
+<div style="margin-bottom: 8em"></div></section><section id="trouble-ahead"><h2>Trouble Ahead</h2>
+<p>Suppose all systems working normally, but</p>
+<ul>
+  <li>system 1 says increase thrust</li>
+  <li>system 2 says decrease thrust</li>
+  <li>system 3 not responding (restart?)</li>
+</ul>
+<p>What do we do?</p>
+<div style="margin-bottom: 8em"></div></section><section id="the-problem-of-consensus"><h2>The Problem of Consensus</h2>
+<p>Have multiple processes with different inputs</p>
+<ul>
+  <li>For us, binary inputs
+    <ul>
+      <li>
+<code>0</code> = decrease thrust</li>
+      <li>
+<code>1</code> = increase thrust</li>
+    </ul>
+  </li>
+</ul>
+<p>Goal:</p>
+<ul>
+  <li>agree on same output</li>
+</ul></section><section id="more-formally"><h2>More Formally</h2>
+<p>Setup:</p>
+<ul>
+  <li>$n$ processes/threads, $P_1, P_2, \ldots, P_n$</li>
+  <li>processes have unique IDs, $1, 2, \ldots, n$ (like <code>ThreadId.get()</code>)</li>
+  <li>each process $i$ holds input $x_i = 0$ or $1$</li>
+</ul>
+<p>Output:</p>
+<ul>
+  <li>each process $i$ outputs $b_i = 0$ or $1$</li>
+</ul>
+<p>Failure:</p>
+<ul>
+  <li>Some process(es) may crash
+    <ul>
+      <li>failing process may perform some steps before failing</li>
+      <li>cannot distinguish a crashed process from a slow process</li>
+    </ul>
+  </li>
+</ul></section><section id="conditions-for-consensus"><h2>Conditions for Consensus</h2>
+<ul>
+  <li>
+<strong>Agreement</strong>: all processes output the same value</li>
+  <li>
+<strong>Validity</strong>: if all systems have the same input, they all output that value</li>
+  <li>
+<strong>Termination</strong>: all (non-faulty) processes decide on an output and terminate after a finite number of steps</li>
+</ul></section><section id="exercise"><h2>Exercise</h2>
+<p>Devise an algorithm for consensus assuming:</p>
+<ol>
+  <li>Fair scheduler
+    <ul>
+      <li>every process is scheduled eventually</li>
+    </ul>
+  </li>
+  <li>No faulty processes</li>
+</ol>
+<div style="margin-bottom: 12em"></div></section><section id="consensus-with-faults"><h2>Consensus with Faults</h2>
+<p>Suppose some process(es) may crash at any time during an execution…</p>
+<ul>
+  <li>Other processes can’t tell that a process crashes
+    <ul>
+      <li>e.g., cannot distinguish slow process from crashed</li>
+    </ul>
+  </li>
+</ul></section><section id="not-consensus-1"><h2>Not Consensus 1</h2>
+<p>How can we achieve…</p>
+<ul>
+  <li><del><strong>Agreement</strong>: all processes output the same value</del></li>
+  <li>
+<strong>Validity</strong>: if all systems have the same input, they all output that value</li>
+  <li>
+<strong>Termination</strong>: all (non-faulty) processes decide on an output and terminate after a finite number of steps</li>
+</ul>
+<div style="margin-bottom: 8em"></div></section><section id="not-consensus-2"><h2>Not Consensus 2</h2>
+<p>How can we achieve…</p>
+<ul>
+  <li>
+<strong>Agreement</strong>: all processes output the same value</li>
+  <li><del><strong>Validity</strong>: if all systems have the same input, they all output that value</del></li>
+  <li>
+<strong>Termination</strong>: all (non-faulty) processes decide on an output and terminate after a finite number of steps</li>
+</ul>
+<div style="margin-bottom: 8em"></div></section><section id="not-consensus-3"><h2>Not Consensus 3</h2>
+<p>How can we achieve…</p>
+<ul>
+  <li>
+<strong>Agreement</strong>: all processes output the same value</li>
+  <li>
+<strong>Validity</strong>: if all systems have the same input, they all output that value</li>
+  <li><del><strong>Termination</strong>: all (non-faulty) processes decide on an output and terminate after a finite number of steps</del></li>
+</ul>
+<div style="margin-bottom: 8em"></div></section><section id="so"><h2>So</h2>
+<p>Without too much trouble, we can achieve…</p>
+<ul>
+  <li>…consensus without faults</li>
+  <li>…“consensus” without agreement</li>
+  <li>…“consensus” without validity</li>
+  <li>…“consensus” without termination</li>
+</ul>
+<p>What about consensus with faults?</p>
+<div style="margin-bottom: 8em"></div></section><section id="a-remarkable-fact"><h2>A Remarkable Fact</h2>
+<p><strong>Theorem</strong> (FLP, 1985). There is no algorithm that achieves consensus in the presence of even a single faulty process.</p>
+<ul>
+  <li>Proven by Fischer, Lynch, and Paterson in 1985
+    <ul>
+      <li>their version of result for “message passing” model</li>
+      <li>ours is for shared memory</li>
+    </ul>
+  </li>
+  <li>Surprise to the parallel/distributed computing community</li>
+  <li>Among most influential results in CS</li>
+</ul></section><section id="our-plan"><h2>Our Plan</h2>
+<p>Prove version of FLP result:</p>
+<ul>
+  <li>There is no <em>wait-free</em> protocol for consensus for any $n &gt; 1$
+    <ul>
+      <li>wait-free is stronger assumption than termination</li>
+    </ul>
+  </li>
+</ul>
+<p>Before going further</p>
+<ul>
+  <li>Specify computational model</li>
+  <li>Make preliminary observations</li>
+  <li>Outline argument</li>
+</ul></section><section id="computational-model"><h2>Computational Model</h2>
+<ul>
+  <li>Processes have shared memory (registers)</li>
+  <li>Atomic read/write access
+    <ul>
+      <li>behavior like <code>volatile</code> variables in Java</li>
+    </ul>
+  </li>
+  <li>Scheduler decides which process makes a step
+    <ul>
+      <li>assume each step is read/write</li>
+    </ul>
+  </li>
+  <li>Some processes may <strong>crash</strong>
+    <ul>
+      <li>such a process is never scheduled again</li>
+    </ul>
+  </li>
+  <li>Scheduler is otherwise fair: non-crashed processes are scheduled eventually</li>
+</ul></section><section id="algorithms"><h2>Algorithms</h2>
+<p>An <strong>algorithm</strong> $A$ specifies next operation:</p>
+<ul>
+  <li>read value from shared register</li>
+  <li>write value to shared register</li>
+  <li>terminate</li>
+</ul>
+<p>as a function of</p>
+<ul>
+  <li>input ($x_i$)</li>
+  <li>outcomes of previous (read) operations</li>
+</ul>
+<p><em>Next step is uniquely determined by local input and values read in previous steps</em></p></section><section id="example-default-to-0"><h2>Example: Default to <code>0</code>
+</h2>
+<p>Idea: output <code>0</code> unless all processes have input <code>1</code></p>
+<pre><code class="language-java">int in = getLocalInput();
+int i = ThreadId.get();
+
+write(i, in); // write my value to register i
+
+if (in == 0) return 0;
+
+for (int j = 0; j &lt; nProcesses; j++) {
+    // wait until register j has been written	
+    while (read(j) != 0 &amp;&amp; read(j) != 1) { };
+	
+    if (read(j) == 0) return 0;
+}
+
+// all processors have in == 1
+return 1;
+</code></pre></section><section id="executions"><h2>Executions</h2>
+<p>An <strong>execution</strong> $E$ of algorithm $A$ specifies</p>
+<ul>
+  <li>Inputs of all processes</li>
+  <li>Sequence of steps taken by processes
+    <ul>
+      <li>read</li>
+      <li>write</li>
+      <li>terminate</li>
+      <li>crash</li>
+    </ul>
+  </li>
+</ul>
+<p>Executions may be incomplete</p>
+<ul>
+  <li>Not all nodes have terminated/crashed yet
+    <ul>
+      <li>encodes current state/history of execution</li>
+    </ul>
+  </li>
+</ul>
+<p>Executions may be <strong>extended</strong> by scheduling more steps</p></section><section id="example-of-execution-e"><h2>Example of Execution $E$</h2>
+<p><img src="/assets/img/consensus/dz-01.png" alt="" width="100%"></p></section><section id="e-step-01"><h2>$E$ Step 01</h2>
+<p><img src="/assets/img/consensus/dz-02.png" alt="" width="100%"></p></section><section id="e-step-02"><h2>$E$ Step 02</h2>
+<p><img src="/assets/img/consensus/dz-03.png" alt="" width="100%"></p></section><section id="e-step-03"><h2>$E$ Step 03</h2>
+<p><img src="/assets/img/consensus/dz-04.png" alt="" width="100%"></p></section><section id="e-step-04"><h2>$E$ Step 04</h2>
+<p><img src="/assets/img/consensus/dz-05.png" alt="" width="100%"></p></section><section id="e-step-05"><h2>$E$ Step 05</h2>
+<p><img src="/assets/img/consensus/dz-06.png" alt="" width="100%"></p></section><section id="e-step-06"><h2>$E$ Step 06</h2>
+<p><img src="/assets/img/consensus/dz-07.png" alt="" width="100%"></p></section><section id="extending-executions"><h2>Extending Executions</h2>
+<p>In $E$, no process has terminated yet</p>
+<ul>
+  <li>We can consider <strong>extensions</strong> of a given execution</li>
+  <li>Start with $E$, and perform more steps</li>
+</ul></section><section id="e-step-06-1"><h2>$E’$ Step 06</h2>
+<p><img src="/assets/img/consensus/dz-07.png" alt="" width="100%"></p></section><section id="e-step-07"><h2>$E’$ Step 07</h2>
+<p><img src="/assets/img/consensus/dz-08.png" alt="" width="100%"></p></section><section id="e-step-08"><h2>$E’$ Step 08</h2>
+<p><img src="/assets/img/consensus/dz-09.png" alt="" width="100%"></p></section><section id="e-step-09"><h2>$E’$ Step 09</h2>
+<p><img src="/assets/img/consensus/dz-10.png" alt="" width="100%"></p></section><section id="e-step-10"><h2>$E’$ Step 10</h2>
+<p><img src="/assets/img/consensus/dz-11.png" alt="" width="100%"></p></section><section id="note"><h2>Note</h2>
+<p>We can consider many different extensions of $E$</p></section><section id="extension-e-of-e"><h2>Extension $E’$ of $E$</h2>
+<p><img src="/assets/img/consensus/dz-11.png" alt="" width="100%"></p></section><section id="alternate-extension-e"><h2>Alternate extension $E’’$</h2>
+<p><img src="/assets/img/consensus/dz-alt.png" alt="" width="100%"></p></section><section id="indistinguishable-executions"><h2>Indistinguishable Executions</h2>
+<ul>
+  <li>$E$ and $E’$ are executions</li>
+  <li>they are <strong>indistinguishable</strong> at process $P_i$ if in $E$ and $E’$:
+    <ol>
+      <li>$P_i$ has same input</li>
+      <li>sequence of read/write operations performed by $P_i$ are same</li>
+      <li>the sequence of values read and written by $P_i$ are the same</li>
+    </ol>
+  </li>
+</ul></section><section id="e-for-p1"><h2>$E’$ for <code>P1</code>
+</h2>
+<p><img src="/assets/img/consensus/dz-p1.png" alt="" width="100%"></p></section><section id="e-for-p1-1"><h2>$E’’$ for <code>P1</code>
+</h2>
+<p><img src="/assets/img/consensus/dz-p1-alt.png" alt="" width="100%"></p></section><section id="first-important-observation"><h2>First Important Observation</h2>
+<p><strong>Lemma 1.</strong> If executions $E$ and $E’$ are indistinguishable to process $P_i$ then:</p>
+<ol>
+  <li>If $P_i$ has not yet terminated, then $P_i$’s next step will be the same in any extension</li>
+  <li>If $P_i$ has terminated, then $P_i$’s output is the same in $E$ and $E’$</li>
+</ol></section><section id="bivalent-executions"><h2>Bivalent Executions</h2>
+<ul>
+  <li>Consider a (hypothetical) wait-free consensus protocol $A$</li>
+  <li>Let $E$ be an execution of $A$</li>
+</ul>
+<p>We say that $E$ is…</p>
+<ol>
+  <li>
+<strong>$0$-valent</strong> if in every extension of $E$, all processes output $0$</li>
+  <li>
+<strong>$1$-valent</strong> if in every extension of $E$, all processes output $1$</li>
+  <li>
+<strong>bivalent</strong> if there exist
+    <ul>
+      <li>an extension $E’$ of $E$ in which all processes output $0$</li>
+      <li>an extension $E’’$ of $E$ in which all processes output $1$</li>
+    </ul>
+  </li>
+</ol></section><section id="second-important-observation"><h2>Second Important Observation</h2>
+<p><strong>Lemma 2.</strong> Suppose $A$ solves consensus. Then there is a bivalent initial state.</p>
+<ul>
+  <li>Here an <em>initial state</em> is an execution in which no process has yet taken a step
+    <ul>
+      <li>the execution consists of only inputs for each process</li>
+    </ul>
+  </li>
+</ul></section><section id="proof-of-lemma-2"><h2>Proof of Lemma 2</h2>
+<p>Must show: there is a bivalent initial state</p>
+<p>Argument:</p>
+<ul>
+  <li>by contradiction: suppose no bivalent initial state</li>
+  <li>consider sequence of initial states</li>
+  <li>show some are $0$-valent, some are $1$-valent</li>
+  <li>show that some must be bivalent</li>
+</ul></section><section id="e_1-is-0-valent-why"><h2>$E_1$ is $0$-valent (Why?)</h2>
+<p><img src="/assets/img/consensus/univalent-0.png" alt="" width="100%"></p></section><section id="e_5-is-1-valent"><h2>$E_5$ is $1$-valent</h2>
+<p><img src="/assets/img/consensus/univalent-1.png" alt="" width="100%"></p></section><section id="more-initial-states"><h2>More Initial States</h2>
+<p><img src="/assets/img/consensus/bivalent-1.png" alt="" width="100%"></p></section><section id="assume-all-univalent"><h2>Assume: All Univalent</h2>
+<p><img src="/assets/img/consensus/bivalent-2.png" alt="" width="100%"></p></section><section id="adjacent-pair-different-valency"><h2>Adjacent Pair, Different Valency</h2>
+<p><img src="/assets/img/consensus/bivalent-3.png" alt="" width="100%"></p></section><section id="all-extensions-of-e_2-return-0"><h2>All Extensions of $E_2$ Return $0$</h2>
+<p><img src="/assets/img/consensus/bivalent-4.png" alt="" width="100%"></p></section><section id="all-extensions-of-e_3-return-1"><h2>All Extensions of $E_3$ Return $1$</h2>
+<p><img src="/assets/img/consensus/bivalent-5.png" alt="" width="100%"></p></section><section id="e_2-and-e_3-indistinguishable"><h2>$E_2’$ and $E_3’$ Indistinguishable</h2>
+<p><img src="/assets/img/consensus/bivalent-6.png" alt="" width="100%"></p></section><section id="e_2-and-e_3-bivalent"><h2>$E_2$ and $E_3$ Bivalent</h2>
+<p><img src="/assets/img/consensus/bivalent-7.png" alt="" width="100%"></p></section><section id="note-1"><h2>Note</h2>
+<p>Don’t need to assume $P_2$ crashes</p>
+<ul>
+  <li>just assume first step of $P_2$ is scheduled after some other thread outputs</li>
+  <li>this is possible because we assume $A$ is wait-free
+    <ul>
+      <li>some process guaranteed to terminate even if one is not scheduled</li>
+    </ul>
+  </li>
+</ul>
+<p>Mere possibility of a crash together with wait-free assumption implies existence a bivalent initial state</p>
+<ul>
+  <li>same holds if we require only termination with one fault</li>
+</ul></section><section id="next-time"><h2>Next Time</h2>
+<ul>
+  <li>Bivalent initial conditions have <em>critical executions</em>
+</li>
+  <li>Wait-free consensus is impossible!
+    <ul>
+      <li>assuming only read/write registers…</li>
+    </ul>
+  </li>
+</ul></section>
+</div></div>
+
+
+	  <script src="/assets/reveal.js-master/dist/reveal.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/math/math.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/zoom/zoom.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/notes/notes.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/search/search.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/markdown/markdown.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/highlight/highlight.js"></script>
+	  <script>
+	    
+
+	    // Also available as an ES module, see:
+	    // https://revealjs.com/initialization/
+	    Reveal.initialize({
+		controls: false,
+		progress: true,
+		center: true,
+		hash: true,
+		transition: 'none',
+		math: {
+		    config: 'TeX-AMS_HTML-full',
+		    TeX: {
+			Macros: {
+			    R: '\\mathbb{R}',
+			    set: [ '\\left\\{#1 \\; ; \\; #2\\right\\}', 2 ]
+			}
+		    }
+		},
+
+
+		// Learn about plugins: https://revealjs.com/plugins/
+		plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath ]
+	    });
+
+	  </script>
+
+	</body>
+</html>
+	  
+
+<!-- <\!-- load the reveal.js css & js (assuming you've put it in assets/)-\-> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/reveal.scss" -->
+<!-- /> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/theme/source/white.scss" -->
+<!-- /> -->
+<!-- <script -->
+<!--   src="/assets/reveal.js-master/js/reveal.js" -->
+<!--   type="text/javascript" -->
+<!-- ></script> -->
+
+<!-- <\!-- configure the presentation, (you can tweak options to suit) -\-> -->
+<!-- <script> -->
+<!--   Reveal.initialize({ -->
+<!--     // Display presentation control arrows -->
+<!--     controls: false, -->
+
+<!--     // Help the user learn the controls by providing hints, for example by -->
+<!--     // bouncing the down arrow when they first encounter a vertical slide -->
+<!--     controlsTutorial: false, -->
+
+<!--     // Determines where controls appear, "edges" or "bottom-right" -->
+<!--     controlsLayout: "bottom-right", -->
+
+<!--     // Visibility rule for backwards navigation arrows; "faded", "hidden" -->
+<!--     // or "visible" -->
+<!--     controlsBackArrows: "faded", -->
+
+<!--     // Display a presentation progress bar -->
+<!--     progress: true, -->
+
+<!--     // Display the page number of the current slide -->
+<!--     slideNumber: false, -->
+
+<!--     // Push each slide change to the browser history -->
+<!--     history: false, -->
+
+<!--     // Enable keyboard shortcuts for navigation -->
+<!--     keyboard: true, -->
+
+<!--     // Enable the slide overview mode -->
+<!--     overview: true -->
+<!--   }); -->
+<!-- </script> -->

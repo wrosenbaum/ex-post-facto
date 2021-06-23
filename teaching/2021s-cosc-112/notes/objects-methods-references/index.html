@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<title>Will  Rosenbaum | Objects, Methods, and References</title>
+<meta name="description" content="A blog about mathematics, computer science, etc.
+">
+
+<!-- Open Graph -->
+
+
+<!-- Bootstrap & MDB -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" integrity="sha512-MoRNloxbStBcD8z3M/2BmnT+rg4IsMxPkXaGh2zD6LGNNFE80W3onsAhRcMAMrSoyWL9xD7Ert0men7vR8LUZg==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" integrity="sha512-RO38pBRxYH3SoOprtPTD86JFOclM51/XTIdEPh5j8sj4tp8jmQIx26twG52UaLi//hQldfrh7e51WzP9wuP32Q==" crossorigin="anonymous" />
+
+<!-- Fonts & Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"  integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.0/css/academicons.min.css" integrity="sha512-W4yqoT1+8NLkinBLBZko+dFB2ZbHsYLDdr50VElllRcNt2Q4/GSs6u71UHKxB7S6JEMCp5Ve4xjh3eGQl/HRvg==" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+
+
+
+<!-- Code Syntax Highlighting -->
+<link rel="stylesheet" href="https://gitcdn.link/repo/jwarby/jekyll-pygments-themes/master/github.css" />
+
+<!-- Styles -->
+<link rel="shortcut icon" href="/assets/img/favicon.ico">
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<link rel="canonical" href="/teaching/2021s-cosc-112/notes/objects-methods-references/">
+
+<!-- JQuery -->
+<!-- jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+
+
+<!-- Theming-->
+
+  <script src="/assets/js/theme.js"></script>
+  <!-- Load DarkMode JS -->
+<script src="/assets/js/dark_mode.js"></script>
+
+
+
+
+
+
+    
+<!-- MathJax -->
+<script type="text/javascript">
+  window.MathJax = {
+    tex: {
+      tags: 'ams'
+    }
+  };
+</script>
+<script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js"></script>
+<script defer src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+
+  </head>
+
+  <body class="fixed-top-nav ">
+
+    <!-- Header -->
+
+    <header>
+
+    <!-- Nav Bar -->
+    <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top">
+    <div class="container">
+      
+      <a class="navbar-brand title font-weight-lighter" href="https://willrosenbaum.com/">
+       Will   Rosenbaum
+      </a>
+      
+      <!-- Navbar Toggle -->
+      <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar top-bar"></span>
+        <span class="icon-bar middle-bar"></span>
+        <span class="icon-bar bottom-bar"></span>
+      </button>
+      <div class="collapse navbar-collapse text-right" id="navbarNav">
+        <ul class="navbar-nav ml-auto flex-nowrap">
+          <!-- About -->
+          <li class="nav-item ">
+            <a class="nav-link" href="/">
+              about
+              
+            </a>
+          </li>
+          <!-- Other pages -->
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/teaching/">
+                teaching
+                
+              </a>
+          </li>
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/research/">
+                research
+                
+              </a>
+          </li>
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/publications/">
+                publications
+                
+              </a>
+          </li>
+          
+          
+	  
+          <!-- Blog -->
+          <li class="nav-item ">
+            <a class="nav-link" href="/blog/">
+              blog
+              
+            </a>
+          </li>
+          
+
+          
+            <div class = "toggle-container">
+              <a id = "light-toggle">
+                  <i class="fas fa-moon"></i>
+                  <i class="fas fa-sun"></i>
+              </a>
+            </div>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+</header>
+
+
+    <!-- Content -->
+
+    <div class="container mt-5">
+      <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Objects, Methods, and References</h1>
+    <p class="post-description"></p>
+  </header>
+
+  <article>
+    <p>As we saw in class, objects in Java seem to behave quite differently than the <a href="https://docs.oracle.com/javase/tutorial/java/nutsandbolts/datatypes.html">primitive datatypes</a>. Specifically, consider the following simple class <code class="language-plaintext highlighter-rouge">Number</code>:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Number</span> <span class="o">{</span>
+      <span class="kd">public</span> <span class="kt">int</span> <span class="n">value</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>Below are two examples where the behavior of <code class="language-plaintext highlighter-rouge">Number</code>s is perhaps unexpected.</p>
+
+<p><strong>Example 1</strong></p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nc">Number</span> <span class="n">a</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Number</span><span class="o">();</span>
+    <span class="nc">Number</span> <span class="n">b</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Number</span><span class="o">();</span>
+    <span class="n">a</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="mi">10</span><span class="o">;</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">a</span><span class="o">;</span>
+    <span class="n">a</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="mi">20</span><span class="o">;</span>
+</code></pre></div></div>
+
+<p>At the end of the execution, the <code class="language-plaintext highlighter-rouge">a.value</code> is 20, as one would expect. However, <code class="language-plaintext highlighter-rouge">b.value</code> is <em>also</em> 20! This is not the behavior we’d expect from <code class="language-plaintext highlighter-rouge">int</code>s. For example, if we had</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kt">int</span> <span class="n">a</span><span class="o">;</span>
+    <span class="kt">int</span> <span class="n">b</span><span class="o">;</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="mi">10</span><span class="o">;</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">a</span><span class="o">;</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="mi">20</span><span class="o">;</span>
+</code></pre></div></div>
+
+<p>then at the end of the execution, <code class="language-plaintext highlighter-rouge">a</code> would have the value 20, while <code class="language-plaintext highlighter-rouge">b</code> has a value 10 (assigned to in line 4).</p>
+
+<p><strong>Example 2</strong></p>
+
+<p>Consider the method</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">setNumberValue</span><span class="o">(</span><span class="nc">Number</span> <span class="n">num</span><span class="o">,</span> <span class="kt">int</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">num</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">;</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>together with the function call</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nc">Number</span> <span class="n">a</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Number</span><span class="o">();</span>
+    <span class="n">a</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="mi">10</span><span class="o">;</span>
+    <span class="n">setNumberValue</span><span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="mi">20</span><span class="o">);</span>
+</code></pre></div></div>
+<p>Since method calls are pass by reference (see <a href="https://paper.dropbox.com/doc/Scope-and-Passing-By-Value-v1uHJW5Jf2EaXFH711rFX">+Scope and Passing By Value</a>) we might expect that calling <code class="language-plaintext highlighter-rouge">setNumberValue(a, 20)</code> would not change <code class="language-plaintext highlighter-rouge">a.value</code> after line 3 above is executed. But this is not the case! After executing the three lines above, we’d find that <code class="language-plaintext highlighter-rouge">a.value</code> is 20! What is this?</p>
+
+<h2 id="objects-and-their-references">Objects and their references</h2>
+
+<p>The key to understanding the behavior of the two examples above is to understand what is actually happening when we create a new <code class="language-plaintext highlighter-rouge">Number</code> (or any object) using</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nc">Number</span> <span class="n">a</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Number</span><span class="o">();</span>
+</code></pre></div></div>
+
+<p>Calling <code class="language-plaintext highlighter-rouge">new Number()</code> creates a new instance of the <code class="language-plaintext highlighter-rouge">Number</code> class, and returns a <em>reference</em> to the instance created, rather than the instance itself. Here, a <strong>reference</strong> is an address indicating where the actual object instance—in this case a <code class="language-plaintext highlighter-rouge">Number</code>—is stored. Thus, the variable <code class="language-plaintext highlighter-rouge">a</code> does not store the <code class="language-plaintext highlighter-rouge">Number</code> itself, but rather the address of where to find the <code class="language-plaintext highlighter-rouge">Number</code>.</p>
+
+<p>Now let’s revisit the two examples above.</p>
+
+<p><strong>Example 1, revisited.</strong></p>
+
+<p>Let’s go through the following code line-by-line:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nc">Number</span> <span class="n">a</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Number</span><span class="o">();</span>
+    <span class="nc">Number</span> <span class="n">b</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Number</span><span class="o">();</span>
+    <span class="n">a</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="mi">10</span><span class="o">;</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">a</span><span class="o">;</span>
+    <span class="n">a</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="mi">20</span><span class="o">;</span>
+</code></pre></div></div>
+
+<ul>
+  <li>Line 1. Create a new <code class="language-plaintext highlighter-rouge">Number</code> instance, and store a reference to that instance as the variable <code class="language-plaintext highlighter-rouge">a</code></li>
+  <li>Line 2. Create another new <code class="language-plaintext highlighter-rouge">Number</code> instance, and store the reference to that instance as the variable <code class="language-plaintext highlighter-rouge">b</code></li>
+  <li>Line 3. Set the <code class="language-plaintext highlighter-rouge">value</code> field of the <code class="language-plaintext highlighter-rouge">Number</code> referred to by <code class="language-plaintext highlighter-rouge">a</code> to be 10.</li>
+  <li>Line 4. Set the reference stored at <code class="language-plaintext highlighter-rouge">b</code> to the <em>same reference</em> stored at <code class="language-plaintext highlighter-rouge">a</code>. <strong><code class="language-plaintext highlighter-rouge">b</code> and <code class="language-plaintext highlighter-rouge">a</code> now refer to the same instance of <code class="language-plaintext highlighter-rouge">Number</code></strong>.</li>
+  <li>Line 5. Set the <code class="language-plaintext highlighter-rouge">value</code> field of the <code class="language-plaintext highlighter-rouge">Number</code> referred to by <code class="language-plaintext highlighter-rouge">a</code> to be 20.</li>
+</ul>
+
+<p>The unexpected behavior—namely that <code class="language-plaintext highlighter-rouge">b.value</code> is now also 20—happened as a result of Line 4. After executing line 4, <code class="language-plaintext highlighter-rouge">a</code> and <code class="language-plaintext highlighter-rouge">b</code> refer to the same <code class="language-plaintext highlighter-rouge">Number</code> instance created in line 1.</p>
+
+<p><strong>Exercise.</strong> Suppose after line 5 above, we write <code class="language-plaintext highlighter-rouge">b.value = 10</code>. What is <code class="language-plaintext highlighter-rouge">a.value</code> after setting <code class="language-plaintext highlighter-rouge">b.value</code> in this way?</p>
+
+<p><strong>Example 2, revisited.</strong></p>
+
+<p>Consider again:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">setNumberValue</span><span class="o">(</span><span class="nc">Number</span> <span class="n">num</span><span class="o">,</span> <span class="kt">int</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">num</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">;</span>
+    <span class="o">}</span>
+    <span class="o">...</span>
+    <span class="nc">Number</span> <span class="n">a</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Number</span><span class="o">();</span>
+    <span class="n">a</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="mi">10</span><span class="o">;</span>
+    <span class="n">setNumberValue</span><span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="mi">20</span><span class="o">);</span>
+</code></pre></div></div>
+
+<p>Why is <code class="language-plaintext highlighter-rouge">a.value</code> 20 after the final line instead of 10? Again, we need to look closer at what information is being passed to the method <code class="language-plaintext highlighter-rouge">setNumberValue</code>. Going line-by-line again</p>
+
+<ul>
+  <li>Line 5. <code class="language-plaintext highlighter-rouge">a</code> stores a reference to a new <code class="language-plaintext highlighter-rouge">Number</code> instance</li>
+  <li>Line 6. The value of the <code class="language-plaintext highlighter-rouge">Number</code> referenced by <code class="language-plaintext highlighter-rouge">a</code> is set to <code class="language-plaintext highlighter-rouge">10</code>.</li>
+  <li>Line 7. The call to <code class="language-plaintext highlighter-rouge">setNumberValue(a, 20);</code>
+    <ul>
+      <li>Line 1. The value of <code class="language-plaintext highlighter-rouge">a</code>—i.e., the <em>reference</em> is passed to <code class="language-plaintext highlighter-rouge">setNumberValue</code> by value—together with the integer value <code class="language-plaintext highlighter-rouge">20</code>. At the end of Line 1, <code class="language-plaintext highlighter-rouge">num</code> stores the reference to the <code class="language-plaintext highlighter-rouge">Number</code> initialized in line 5.</li>
+      <li>Line 2. The <code class="language-plaintext highlighter-rouge">Number</code> referenced by <code class="language-plaintext highlighter-rouge">num</code> has its <code class="language-plaintext highlighter-rouge">value</code> set to <code class="language-plaintext highlighter-rouge">20</code>.
+  When Line 7 completes, the <code class="language-plaintext highlighter-rouge">Number</code> referenced by <code class="language-plaintext highlighter-rouge">a</code> has <code class="language-plaintext highlighter-rouge">a.value</code> set to 20 (from line 2).</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="references-and-equality-testing">References and equality testing</h2>
+
+<p>The way object references are handled by Java also gives perhaps unexpected results for testing equality of objects. Consider the following code:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nc">Number</span> <span class="n">a</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Number</span><span class="o">();</span>
+    <span class="nc">Number</span> <span class="n">b</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Number</span><span class="o">();</span>
+    <span class="n">a</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="mi">10</span><span class="o">;</span>
+    <span class="n">b</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="mi">10</span><span class="o">;</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">a</span> <span class="o">==</span> <span class="n">b</span><span class="o">)</span> <span class="o">{</span> <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"They're equal!"</span><span class="o">);</span> <span class="o">}</span>
+</code></pre></div></div>
+
+<p>What does it do? Once again, the variables <code class="language-plaintext highlighter-rouge">a</code> and <code class="language-plaintext highlighter-rouge">b</code> store references to <code class="language-plaintext highlighter-rouge">Number</code> instances created in lines 1 and 2, respectively. Since <code class="language-plaintext highlighter-rouge">a</code>  and <code class="language-plaintext highlighter-rouge">b</code> refer to two different <code class="language-plaintext highlighter-rouge">Number</code>s, the values of these references are not the same. Thus <code class="language-plaintext highlighter-rouge">a != b</code>, even though <code class="language-plaintext highlighter-rouge">a.value</code> and <code class="language-plaintext highlighter-rouge">b.value</code> are equal.</p>
+
+<p>If we wanted to test whether or not two <code class="language-plaintext highlighter-rouge">Number</code> instances (or more generally, any object instances) are equal in the sense of storing or representing the same value, then we would need to write a method for <code class="language-plaintext highlighter-rouge">Number</code> to do the check by hand. For example, we could write the following instance method for <code class="language-plaintext highlighter-rouge">Number</code>:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Number</span> <span class="o">{</span>
+      <span class="kd">public</span> <span class="kt">int</span> <span class="n">value</span><span class="o">;</span>
+      <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">equals</span><span class="o">(</span><span class="nc">Number</span> <span class="n">n</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">return</span> <span class="o">(</span><span class="n">value</span> <span class="o">==</span> <span class="n">n</span><span class="o">.</span><span class="na">value</span><span class="o">);</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p>Now we can use the <code class="language-plaintext highlighter-rouge">equals</code> method to test if two <code class="language-plaintext highlighter-rouge">Number</code>s store the same value:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nc">Number</span> <span class="n">a</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Number</span><span class="o">();</span>
+    <span class="nc">Number</span> <span class="n">b</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Number</span><span class="o">();</span>
+    <span class="n">a</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="mi">10</span><span class="o">;</span>
+    <span class="n">b</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="mi">10</span><span class="o">;</span>
+    <span class="k">if</span> <span class="o">(</span><span class="n">a</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">b</span><span class="o">))</span> <span class="o">{</span> <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"They're equal!"</span><span class="o">);</span> <span class="o">}</span>
+</code></pre></div></div>
+
+<p>The code above now prints, <code class="language-plaintext highlighter-rouge">They're equal!</code>.</p>
+
+<h2 id="another-subtlety-of-object-references">Another subtlety of object references</h2>
+
+<p><strong>Example 1, revisited again.</strong> Consider yet again the following code:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nc">Number</span> <span class="n">a</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Number</span><span class="o">();</span>
+    <span class="nc">Number</span> <span class="n">b</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Number</span><span class="o">();</span>
+    <span class="n">a</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="mi">10</span><span class="o">;</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">a</span><span class="o">;</span>
+    <span class="n">a</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="mi">20</span><span class="o">;</span>
+</code></pre></div></div>
+
+<p>There is another potential problem here. In lines 1 and 2, we created two <code class="language-plaintext highlighter-rouge">Number</code> instances. But after line 4, both <code class="language-plaintext highlighter-rouge">a</code> and <code class="language-plaintext highlighter-rouge">b</code> refer to the same instance—the one created in line 1. What happened to the <code class="language-plaintext highlighter-rouge">Number</code> instance created in line 2? Unfortunately, we can no longer access it! Once we overwrite the reference to the second <code class="language-plaintext highlighter-rouge">Number</code> instance in line 4, <em>we have no way of accessing the second</em> <code class="language-plaintext highlighter-rouge">*Number*</code><em>!</em> It is effectively lost to us.</p>
+
+<p>The process of creating a new object, then overwriting or otherwise losing the reference to the object is potentially problematic. Object instances created using the <code class="language-plaintext highlighter-rouge">new</code>  keyword are stored in a part of a program’s memory known as <strong>heap memory</strong>. Objects stored in the heap can, in principle, remain there throughout the entire execution of a program. (This behavior is in contrast to the so-called <strong>stack memory</strong> where local variables’ values are stored only so long as their scope is accessible.) Java employs a process called <strong>garbage collection</strong> to purge the heap memory of objects whose references have been lost, and are therefore inaccessible to the program. This is an incredibly helpful feature of Java!</p>
+
+<h2 id="a-cautionary-tale">A cautionary tale</h2>
+
+<p>Consider the following class storing a pair of <code class="language-plaintext highlighter-rouge">Number</code> objects</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">PairOfNumbers</span> <span class="o">{</span>
+      <span class="kd">private</span> <span class="nc">Number</span> <span class="n">first</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Number</span><span class="o">();</span>
+      <span class="kd">private</span> <span class="nc">Number</span> <span class="n">second</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Number</span><span class="o">();</span>
+    
+      <span class="kd">public</span> <span class="nf">PairOfNumbers</span> <span class="o">(</span><span class="kt">int</span> <span class="n">firstVal</span><span class="o">,</span> <span class="kt">int</span> <span class="n">secondVal</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">first</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="n">firstVal</span><span class="o">;</span>
+        <span class="n">second</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="n">secondVal</span><span class="o">;</span>   
+      <span class="o">}</span>
+      
+      <span class="kd">public</span> <span class="nc">Number</span> <span class="nf">getFirst</span> <span class="o">()</span> <span class="o">{</span><span class="k">return</span> <span class="n">first</span><span class="o">;}</span>
+      <span class="kd">public</span> <span class="nc">Number</span> <span class="nf">getSecond</span> <span class="o">()</span> <span class="o">{</span><span class="k">return</span> <span class="n">second</span><span class="o">;}</span>
+      <span class="kd">public</span> <span class="nc">String</span> <span class="nf">toString</span> <span class="o">()</span> <span class="o">{</span><span class="k">return</span> <span class="o">(</span><span class="s">"("</span> <span class="o">+</span> <span class="n">first</span><span class="o">.</span><span class="na">value</span> <span class="o">+</span> <span class="s">", "</span> <span class="o">+</span> <span class="n">second</span><span class="o">.</span><span class="na">value</span> <span class="o">+</span> <span class="s">")"</span><span class="o">);}</span>
+    <span class="o">}</span>
+</code></pre></div></div>
+
+<p><strong>Question.</strong> What is the result of the following code?</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nc">PairOfNumbers</span> <span class="n">pair</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">PairOfNumbers</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">);</span>
+    <span class="nc">Number</span> <span class="n">num</span> <span class="o">=</span> <span class="n">pair</span><span class="o">.</span><span class="na">getFirst</span><span class="o">();</span>
+    <span class="n">num</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="mi">3</span><span class="o">;</span>
+    <span class="nc">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"pair = "</span> <span class="o">+</span> <span class="n">pair</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+</code></pre></div></div>
+
+<p>Did we change <code class="language-plaintext highlighter-rouge">pair</code>’s private member variables!?!?</p>
+
+<h2 id="why-object-references">Why object references?</h2>
+
+<p>Given the subtlety of dealing with object references, as opposed to dealing with objects directly, why does Java use object references? There are two main reasons:</p>
+
+<ol>
+  <li>Efficiency. If objects were always passed to methods by value (like primitive datatypes), we would need to make a copy of an object instance every time we wanted to pass that object to a method. Since objects can contain a lot of data, the process of copying the object could waste a lot of time and memory.</li>
+  <li>Utility. It may not be obvious now, but having object instances that can persist throughout the execution of a program is incredibly useful. We will see many examples of this throughout the rest of the course.</li>
+</ol>
+
+
+  </article>
+
+</div>
+
+    </div>
+
+    <!-- Footer -->
+
+    
+<footer class="fixed-bottom">
+  <div class="container mt-0">
+    &copy; Copyright 2021 Will  Rosenbaum.
+    
+    
+    
+  </div>
+</footer>
+
+
+
+  </body>
+
+  <!-- Bootsrap & MDB scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.4.4/umd/popper.min.js" integrity="sha512-eUQ9hGdLjBjY3F41CScH3UX+4JDSI9zXeroz7hJ+RteoCaY+GP/LDoM8AO+Pt+DRFw3nXqsjh9Zsts8hnYv8/A==" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha512-M5KW3ztuIICmVIhjSqXe01oV2bpe248gOxqmlcYrEzAvws7Pw3z6BK0iGbrwvdrUQUhi3eXgtxp5I8PDo9YfjQ==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js" integrity="sha512-Mug9KHKmroQFMLm93zGrjhibM2z2Obg9l6qFG2qKjXEXkMp/VDkI4uju9m4QKPjWSwQ6O2qzZEnJDEeCw0Blcw==" crossorigin="anonymous"></script>
+
+  
+<!-- Mansory & imagesLoaded -->
+<script defer src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<script defer src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+<script defer src="/assets/js/mansory.js" type="text/javascript"></script>
+
+
+  
+
+
+<!-- Load Common JS -->
+<script src="/assets/js/common.js"></script>
+
+
+</html>

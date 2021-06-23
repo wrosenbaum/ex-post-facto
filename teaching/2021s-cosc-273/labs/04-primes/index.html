@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<title>Will  Rosenbaum | Lab 04: Primes!</title>
+<meta name="description" content="A blog about mathematics, computer science, etc.
+">
+
+<!-- Open Graph -->
+
+
+<!-- Bootstrap & MDB -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" integrity="sha512-MoRNloxbStBcD8z3M/2BmnT+rg4IsMxPkXaGh2zD6LGNNFE80W3onsAhRcMAMrSoyWL9xD7Ert0men7vR8LUZg==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" integrity="sha512-RO38pBRxYH3SoOprtPTD86JFOclM51/XTIdEPh5j8sj4tp8jmQIx26twG52UaLi//hQldfrh7e51WzP9wuP32Q==" crossorigin="anonymous" />
+
+<!-- Fonts & Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"  integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.0/css/academicons.min.css" integrity="sha512-W4yqoT1+8NLkinBLBZko+dFB2ZbHsYLDdr50VElllRcNt2Q4/GSs6u71UHKxB7S6JEMCp5Ve4xjh3eGQl/HRvg==" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+
+
+
+<!-- Code Syntax Highlighting -->
+<link rel="stylesheet" href="https://gitcdn.link/repo/jwarby/jekyll-pygments-themes/master/github.css" />
+
+<!-- Styles -->
+<link rel="shortcut icon" href="/assets/img/favicon.ico">
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<link rel="canonical" href="/teaching/2021s-cosc-273/labs/04-primes/">
+
+<!-- JQuery -->
+<!-- jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+
+
+<!-- Theming-->
+
+  <script src="/assets/js/theme.js"></script>
+  <!-- Load DarkMode JS -->
+<script src="/assets/js/dark_mode.js"></script>
+
+
+
+
+
+
+    
+<!-- MathJax -->
+<script type="text/javascript">
+  window.MathJax = {
+    tex: {
+      tags: 'ams'
+    }
+  };
+</script>
+<script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js"></script>
+<script defer src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+
+  </head>
+
+  <body class="fixed-top-nav ">
+
+    <!-- Header -->
+
+    <header>
+
+    <!-- Nav Bar -->
+    <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top">
+    <div class="container">
+      
+      <a class="navbar-brand title font-weight-lighter" href="https://willrosenbaum.com/">
+       Will   Rosenbaum
+      </a>
+      
+      <!-- Navbar Toggle -->
+      <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar top-bar"></span>
+        <span class="icon-bar middle-bar"></span>
+        <span class="icon-bar bottom-bar"></span>
+      </button>
+      <div class="collapse navbar-collapse text-right" id="navbarNav">
+        <ul class="navbar-nav ml-auto flex-nowrap">
+          <!-- About -->
+          <li class="nav-item ">
+            <a class="nav-link" href="/">
+              about
+              
+            </a>
+          </li>
+          <!-- Other pages -->
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/teaching/">
+                teaching
+                
+              </a>
+          </li>
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/research/">
+                research
+                
+              </a>
+          </li>
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/publications/">
+                publications
+                
+              </a>
+          </li>
+          
+          
+	  
+          <!-- Blog -->
+          <li class="nav-item ">
+            <a class="nav-link" href="/blog/">
+              blog
+              
+            </a>
+          </li>
+          
+
+          
+            <div class = "toggle-container">
+              <a id = "light-toggle">
+                  <i class="fas fa-moon"></i>
+                  <i class="fas fa-sun"></i>
+              </a>
+            </div>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+</header>
+
+
+    <!-- Content -->
+
+    <div class="container mt-5">
+      <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Lab 04: Primes!</h1>
+    <p class="post-description">generating primes quickly</p>
+  </header>
+
+  <article>
+    <hr />
+
+<p><strong>DUE:</strong> Friday, April 16, 23:59 <a href="https://time.is/Anywhere_on_Earth">AoE</a></p>
+
+<hr />
+
+<h2 id="background">Background</h2>
+
+<p>Recall that a <strong>prime number</strong> is a an integer \(p &gt; 1\) that is not divisible by any number \(d\) strictly between \(1\) and \(p\). For example, the first few prime numbers are \(2, 3, 5, 7, 11, 13, 17, 19, 23, 27, 29,\ldots\). A number \(n &gt; 1\) that is not prime is said to be <strong>composite</strong>. Prime numbers have many applications in computer science, notably in the <a href="https://en.wikipedia.org/wiki/RSA_(cryptosystem)">RSA encryption scheme</a>—currently the most widely used public key encryption scheme.</p>
+
+<h5 id="the-sieve-of-eratosthenes">The Sieve of Eratosthenes</h5>
+
+<p>The problem of computing prime numbers has fascinated mathematicians for millenia. One of the earliest recorded methods for producing prime numbers (and indeed, one of the earliest recorded algorithms for any problem) is the <a href="https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes">Sieve of Eratosthenes</a> (SoE). For any value of \(N\), the SoE produces all of the primes between \(1\) and \(N\). The basic idea is as follows:</p>
+
+<ol>
+  <li>Write all numbers from \(2\) to \(N\) consecutively, and start reading the numbers in order.</li>
+  <li>Whenever a new number is read:
+    <ul>
+      <li>if the number is marked as composite, continue</li>
+      <li>otherwise, if the number is not marked, mark it as prime; then mark all multiples of the number as composite</li>
+    </ul>
+  </li>
+</ol>
+
+<p>For example, we can generate the prime numbers up to 20:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20
+</code></pre></div></div>
+
+<p>In the first iteration of step 2 above, we’ll mark 2 as prime, and mark all of the multiples of 2 to be composite:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20
+PP    cc    cc    cc    cc    cc    cc    cc    cc    cc
+</code></pre></div></div>
+
+<p>In the next iteration, we see the 03 is the next unmarked number, so we mark it as prime, and remove all of its multiples:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20
+PP PP cc    cc    cc cc cc    cc    cc cc cc    cc    cc
+</code></pre></div></div>
+
+<p>Now 5 is the next unmarked number, so we mark it as prime, and mark its multiples as composite:</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20
+PP PP cc PP cc    cc cc cc    cc    cc cc cc    cc    cc
+</code></pre></div></div>
+
+<p>Continuing in this way, we’ll reach the state</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20
+PP PP cc PP cc PP cc cc cc PP cc PP cc cc cc PP cc PP cc
+</code></pre></div></div>
+
+<p>from which we can infer that the primes up to \(20\) are</p>
+
+<div class="language-text highlighter-rouge"><div class="highlight"><pre class="highlight"><code>02 03 05 07 11 13 17 19
+</code></pre></div></div>
+
+<h5 id="an-optimization">An Optimization</h5>
+
+<p>This process can be optimized somewhat. If a number \(n \leq N\) is composite, then it has a divisor that is at most \(\sqrt{N}\). (To see this, suppose \(n = a \cdot b\) with \(a, b &gt; \sqrt{N}\). Then \(a \cdot b &gt; \sqrt{N} \cdot \sqrt{N} = N\). Thus if \(n\) is composite—i.e., \(n = a \cdot b\) for some \(a, b\) satisfying \(1 &lt; a, b &lt; n\) and \(n \leq N\), then we must have either \(a \leq \sqrt{N}\) or \(b \leq \sqrt{N}\).) Therefore, if we have marked numbers with divisors at most \(\sqrt{N}\) as composite and some number \(n &lt; N\) has not been marked as composite, then we can infer that \(n\) is prime.</p>
+
+<h5 id="implementing-the-sieve-of-eratosthenes">Implementing the Sieve of Eratosthenes</h5>
+
+<p>To implement the SoE in Java, we can store which numbers are prime/composite as an array of Boolean values. Specifically, we can create an array <code class="language-plaintext highlighter-rouge">boolean[] isPrime</code>, with the interpretation that <code class="language-plaintext highlighter-rouge">isPrime[i]</code> should be <code class="language-plaintext highlighter-rouge">true</code> if <code class="language-plaintext highlighter-rouge">i</code> is prime, and <code class="language-plaintext highlighter-rouge">false</code> if <code class="language-plaintext highlighter-rouge">i</code> is composite. Using the optimization described above, we can implement the sieve as follows:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="kt">boolean</span><span class="o">[]</span> <span class="n">isPrime</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">boolean</span><span class="o">[</span><span class="no">MAX</span><span class="o">];</span>
+	
+	<span class="c1">// initialize isPrime[i] to true for i &gt;= 2</span>
+	<span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">2</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="no">MAX</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+	    <span class="n">isPrime</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+	<span class="o">}</span>
+
+        <span class="c1">// apply the Sieve of Eratosthenes</span>
+	<span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="no">MAX</span><span class="o">;</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+	    <span class="k">if</span> <span class="o">(</span><span class="n">isPrime</span><span class="o">[</span><span class="n">i</span><span class="o">])</span> <span class="o">{</span>
+
+		<span class="k">if</span> <span class="o">(</span><span class="n">i</span> <span class="o">&lt;</span> <span class="no">ROOT_MAX</span><span class="o">)</span> <span class="o">{</span>
+		    <span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">i</span><span class="o">;</span>
+
+		    <span class="k">while</span> <span class="o">(</span><span class="kc">true</span><span class="o">)</span> <span class="o">{</span>
+			<span class="n">isPrime</span><span class="o">[</span><span class="n">j</span><span class="o">]</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+			<span class="k">if</span> <span class="o">(</span><span class="n">j</span> <span class="o">&gt;=</span> <span class="no">MAX</span> <span class="o">-</span> <span class="n">i</span><span class="o">)</span> <span class="o">{</span>
+			    <span class="k">break</span><span class="o">;</span>
+			<span class="o">}</span>
+			<span class="n">j</span> <span class="o">+=</span> <span class="n">i</span><span class="o">;</span>
+		    <span class="o">}</span>
+		<span class="o">}</span>
+	    <span class="o">}</span>
+	<span class="o">}</span>
+	
+</code></pre></div></div>
+
+<p>When the method above completes, <code class="language-plaintext highlighter-rouge">isPrime</code> will have the property that <code class="language-plaintext highlighter-rouge">isPrime[i]</code> is <code class="language-plaintext highlighter-rouge">true</code> precisely when <code class="language-plaintext highlighter-rouge">i</code> is prime. It is then straightforward to use the array <code class="language-plaintext highlighter-rouge">isPrime</code> to list all of the primes up to <code class="language-plaintext highlighter-rouge">MAX - 1</code>: read through the array and print each index <code class="language-plaintext highlighter-rouge">i</code> with <code class="language-plaintext highlighter-rouge">isPrime[i] == true</code>.</p>
+
+<h2 id="your-task">Your Task</h2>
+
+<p>For this lab you will write a program <code class="language-plaintext highlighter-rouge">ParallelPrimes.java</code> that computes as many primes as possible in one second. Specifically, your program must generate an array <code class="language-plaintext highlighter-rouge">int[] primes</code> that contains as many consecutive primes as possible:</p>
+
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">primes</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="mi">2</span><span class="o">;</span>
+<span class="n">primes</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="mi">3</span><span class="o">;</span>
+<span class="n">primes</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span> <span class="o">=</span> <span class="mi">5</span><span class="o">;</span>
+<span class="o">...</span>
+</code></pre></div></div>
+
+<p>To this end, you should complete an implementation of <code class="language-plaintext highlighter-rouge">ParallelPrimes.java</code> (linked below). The program will give you access to a thread pool for exactly 1 second before terminating all active and pending tasks in the pool. It then compares the generated <code class="language-plaintext highlighter-rouge">int[] primes</code> to an array of known primes and prints the first index at which the two arrays differ.</p>
+
+<p>To get started, download the following files:</p>
+
+<ul>
+  <li><a href="/assets/java/primes/ParallelPrimes.java"><code class="language-plaintext highlighter-rouge">ParallelPrimes.java</code></a></li>
+  <li><a href="/assets/java/primes/Primes.java"><code class="language-plaintext highlighter-rouge">Primes.java</code></a></li>
+</ul>
+
+<p>You should modify <code class="language-plaintext highlighter-rouge">ParallelPrimes.java</code> to perform your multithreaded implementation. You may use <code class="language-plaintext highlighter-rouge">Primes.java</code> as well in your implementation.</p>
+
+<h2 id="grading">Grading</h2>
+
+<p>Your program will be graded on a 6 point scale according to the following criteria:</p>
+
+<ul>
+  <li>
+    <p><strong>Correctness</strong> (2 pts). The program correctly produces primes using multithreading. The individual tasks handle interrupts gracefully and the threads in the thread pool terminate within 50ms of termination (i.e., the entire runtime is at most 1050ms).</p>
+  </li>
+  <li>
+    <p><strong>Performance</strong> (2 pts). The program produces a number of primes comparable to the benchmark program. (The results of sample benchmark runs will be provided soon.)</p>
+  </li>
+  <li>
+    <p><strong>Style &amp; Documentation</strong> (2 pts). Code is well-organized and commented. Submission includes a <code class="language-plaintext highlighter-rouge">README</code> file that describes your program at a high level, and briefly discusses optimizations and tests performed.</p>
+  </li>
+</ul>
+
+<h2 id="suggestions">Suggestions</h2>
+
+<h5 id="optimization-of-soe-and-parallelization">Optimization of SoE and Parallelization</h5>
+
+<p>The optimization of the SoE described above suggests a way to parallelize (some of) our computation. Suppose we’ve already computed all primes up to, say 100, and stored these primes in an array <code class="language-plaintext highlighter-rouge">int[] smallPrimes</code>. Since every composite integer up to 10,000 (= 100 x 100) has a prime factor that is at most 100, the SoE will find all primes up to 10,000 after we remove multiples of the primes in <code class="language-plaintext highlighter-rouge">smallPrimes</code>. Moreover, the tasks of finding primes between 1,000 and 1,999 (say) and finding primes between 2,000 and 2,999 can be done indpendently (given shared access to <code class="language-plaintext highlighter-rouge">smallPrimes</code>). This observation suggests a way of breaking down the problem into tasks: first find “sufficiently many” small primes using the sequential SoE, then use these small primes to find larger primes in parallel.</p>
+
+<h5 id="coordination">Coordination</h5>
+
+<p>Using the SoE to generate an array of primes (as implemented in <code class="language-plaintext highlighter-rouge">Primes.java</code>) consists of two logically distinct steps:</p>
+
+<ol>
+  <li>Compute the array <code class="language-plaintext highlighter-rouge">boolean[] isPrime</code>.</li>
+  <li>Use <code class="language-plaintext highlighter-rouge">isPrimes</code> to compute the actual array <code class="language-plaintext highlighter-rouge">int[] primes</code> of prime numbers.</li>
+</ol>
+
+<p>The first step more computationally intensive, but it can be parallelized as suggested above (at least once some small primes are found). The second step is relatively faster, but it should be done sequentially to ensure that the primes appear in sorted order. This suggests using two distinct types of tasks: one type of task that performs step 1 (which can be parallelized), and another type of task that performs step 2. You might invoke many type-1 tasks, while a single type-2 runs concurrently to write primes.</p>
+
+<p>You may find it useful that <code class="language-plaintext highlighter-rouge">Executor</code>s in Java assign tasks to threads in the order the tasks are added (using the <code class="language-plaintext highlighter-rouge">execute</code> method). This does not guarantee that the first task submitted will be the first task <em>completed.</em> Thus you will need to ensure that the type-2 task waits until it has the “next” block of primes to write. To this end, you may find it helpful to use a concurrent data structure in which completed type-1 tasks can place their output while the type-2 task waits for the appropriate task to be completed. You can find a <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/package-summary.html">complete list of built-in concurrent data structures in the Java API documentation here</a>.</p>
+
+  </article>
+
+</div>
+
+    </div>
+
+    <!-- Footer -->
+
+    
+<footer class="fixed-bottom">
+  <div class="container mt-0">
+    &copy; Copyright 2021 Will  Rosenbaum.
+    
+    
+    
+  </div>
+</footer>
+
+
+
+  </body>
+
+  <!-- Bootsrap & MDB scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.4.4/umd/popper.min.js" integrity="sha512-eUQ9hGdLjBjY3F41CScH3UX+4JDSI9zXeroz7hJ+RteoCaY+GP/LDoM8AO+Pt+DRFw3nXqsjh9Zsts8hnYv8/A==" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha512-M5KW3ztuIICmVIhjSqXe01oV2bpe248gOxqmlcYrEzAvws7Pw3z6BK0iGbrwvdrUQUhi3eXgtxp5I8PDo9YfjQ==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js" integrity="sha512-Mug9KHKmroQFMLm93zGrjhibM2z2Obg9l6qFG2qKjXEXkMp/VDkI4uju9m4QKPjWSwQ6O2qzZEnJDEeCw0Blcw==" crossorigin="anonymous"></script>
+
+  
+<!-- Mansory & imagesLoaded -->
+<script defer src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<script defer src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+<script defer src="/assets/js/mansory.js" type="text/javascript"></script>
+
+
+  
+
+
+<!-- Load Common JS -->
+<script src="/assets/js/common.js"></script>
+
+
+</html>

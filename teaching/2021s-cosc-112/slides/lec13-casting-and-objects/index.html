@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta charset="utf-8">
+
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reset.css">
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reveal.css">
+		<link rel="stylesheet" href="/assets/css/condensation.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="/assets/reveal.js-master/plugin/highlight/monokai.css" id="highlight-theme">
+		<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700" rel="stylesheet">
+
+	</head>
+
+	<body>
+
+
+	  <!-- this is where the reveailfy filter gets applied -->
+	  <div class="reveal"><div class="slides">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ## Why is `Object` Inheritance Good? -->
+
+<!-- *Every* class in Java has methods -->
+
+<!-- -  `boolean equals(Object obj)` -->
+<!-- -  `String toString()` -->
+<!-- -  ... -->
+
+<!-- You can always *assume* these methods are there -->
+
+<!-- ## Example of Usefulness -->
+
+<!-- This following code is *guaranteed* to compile -->
+
+<!-- ```java -->
+<!-- MyClass a = new MyClass(); -->
+<!-- MyClass b = new MyClass(); -->
+
+<!-- if (a.equals(b)) { -->
+<!--     // do something -->
+<!-- } -->
+
+<!-- System.out.println("a = " + a); // prints a.toString() -->
+<!-- ``` -->
+
+<!-- But you might want to override default behavior here! -->
+
+<!-- - default `a.equals(b)` is equivalent to `a == b` -->
+<!-- - default `a.toString()` prints address (not meaningful) -->
+
+<!-- ## Example with `Animal`s -->
+
+<!-- - Implement `equals` method -->
+<!--     + `public boolean equals (Object obj)` -->
+<!--     + when are two `Animal`s equal? -->
+<!-- - Implement `toString` method -->
+<!--     + how to represent an `Animal` in text? -->
+<!-- - Test `toString` with the `ObjectTester` -->
+
+<!-- ## Up Next -->
+
+<!-- Extending our `Zoo` -->
+
+<!-- - `Animal[] zoo = new Animal[size]` requires us to know the size of our zoo in advance -->
+<!-- - What if we don't know the size in advance? -->
+<!-- - What if we want to add/remove animals? -->
+
+<!-- How can we make our `Zoo` more *dynamic*? -->
+
+<!-- <div style="margin-bottom: 8em"></div> -->
+
+<section id="lecture-13-casting-and-objects"><h1>Lecture 13: Casting and Objects</h1></section><section id="overview"><h2>Overview</h2>
+<ol>
+  <li>Casting</li>
+  <li>Hierarchy and the <code>Object</code> class</li>
+  <li>Extending our <code>Zoo</code>
+</li>
+</ol></section><section id="last-time"><h2>Last Time</h2>
+<p>Polymorphism!</p>
+<ul>
+  <li>Instances can identify with with multiple classes:</li>
+</ul>
+<pre><code class="language-java">Animal alice = new Elephant("Alice");
+alice instanceof Animal   // returns true
+alice instanceof Elephant // also returns true
+</code></pre>
+<ul>
+  <li>Can use this behavior to create collections of different types of <code>Animal</code>:</li>
+</ul>
+<pre><code class="language-java">Animal zoo[] = new Animal[2];
+zoo[0] = new Elephant("Alice");
+zoo[1] = new Platypus("Bob");
+</code></pre></section><section id="today-going-farther"><h2>Today: Going Farther</h2>
+<p>We have an array of different <code>Animal</code>s…</p>
+<pre><code class="language-java">Animal zoo[] = new Animal[2];
+zoo[0] = new Elephant("Alice");
+zoo[1] = new Platypus("Bob");
+</code></pre>
+<ul>
+  <li>Different <code>Animals</code> do different things</li>
+  <li>We saw:
+    <ul>
+      <li>calling <code>zoo[0].feed()</code> calls <code>Elephant</code> version of <code>feed</code>
+</li>
+      <li>calling <code>zoo[1].feed()</code> calls <code>Platypus</code> version of <code>feed</code>
+</li>
+    </ul>
+  </li>
+  <li>What about methods particular to <code>Elephant</code> and <code>Platypus</code>?
+    <ul>
+      <li>an <code>Elephant</code> can <code>trumpet()</code>
+</li>
+      <li>a <code>Platypus</code> can <code>sting()</code>
+</li>
+    </ul>
+  </li>
+</ul></section><section id="what-happens"><h2>What Happens…</h2>
+<p>… if we call</p>
+<pre><code>zoo[0].trumpet(); // zoo[0] is an Elephant
+zoo[1].sting();   // zoo[1] is a Platypus
+</code></pre>
+<div style="margin-bottom: 12em"></div></section><section id="we-got-an-error"><h2>We Got an Error!</h2>
+<pre><code class="language-text">Zoo.java:23: error: cannot find symbol
+		zoo[0].trumpet();
+		          ^
+  symbol:   method sting()
+  location: class Animal
+1 error
+</code></pre>
+<p>The reason:</p>
+<ul>
+  <li>
+<code>zoo</code> is declared to be an array of <code>Animal</code>s
+    <ul>
+      <li>
+<code>trumpet()</code> is not declared for <code>Animal</code>
+</li>
+      <li>(<code>feed()</code> is declared in <code>Animal</code>)</li>
+    </ul>
+  </li>
+  <li>even though Java <em>knows</em> <code>zoo[0]</code> is an <code>Elephant</code>, the compiler complains because <code>zoo[0]</code> wasn’t <em>declared</em> as an <code>Elephant</code>.
+    <ul>
+      <li>Java is <em>strongly typed</em>
+</li>
+    </ul>
+  </li>
+</ul></section><section id="an-ethical-dilemma"><h2>An Ethical Dilemma</h2>
+<p>What is the point of having a <code>Zoo</code> if your <code>Elephant</code>s can’t <code>trumpet()</code>?</p></section><section id="recall-casting"><h2>Recall casting</h2>
+<ul>
+  <li>We can convert some primitive data types to others</li>
+  <li>Some conversions are automatic:</li>
+</ul>
+<pre><code class="language-java">int n = 10;
+double d = n; // java thinks this is okay
+</code></pre></section><section id="but"><h2>But…</h2>
+<pre><code class="language-java">    double d = 10.0;
+    int n = d; 
+</code></pre>
+<p>gives</p>
+<pre><code class="language-text">    error: incompatible types: possible lossy conversion from double to int
+</code></pre></section><section id="explicit-casting"><h2>Explicit Casting</h2>
+<p>We can force Java to do the conversion by casting:</p>
+<pre><code class="language-java">    double d = 10.0;
+    int n = (int) d; // truncates d (i.e., removes everything after the decimal)
+</code></pre></section><section id="casting-with-class"><h2>Casting with <code>class</code>
+</h2>
+<ul>
+  <li>We can also cast instances of classes to subclasses</li>
+  <li>The following gives an error since <code>sting</code> is not defined for <code>Animal</code>
+    <pre><code class="language-java">  Animal alice = new Elephant("Alice");
+  alice.trumpet();
+</code></pre>
+  </li>
+  <li>The variable <code>alice</code> is treated as a reference to an <code>Animal</code>, not an <code>Elephant</code>
+</li>
+  <li>We can make a new variable referring to the same instance, but treated as a <code>Elephant</code>:</li>
+</ul>
+<pre><code class="language-java">    Elephant aliceToo = (Elephant) alice; // cast alice a ref to Platypus
+    aliceToo.trumpet(); // this works now!
+</code></pre></section><section id="in-our-zoo"><h2>In Our <code>Zoo</code>
+</h2>
+<p>We can</p>
+<ol>
+  <li>check if <code>Animal</code>s are <code>Elephant</code>s</li>
+  <li>if so, cast the <code>Animal</code> as an <code>Elephant</code>, then have it <code>trumpet()</code>
+</li>
+</ol>
+<pre><code class="language-java">	for (int i = 0; i &lt; animals.length; i++) {
+	    animals[i].feed();
+	    if (animals[i] instanceof Elephant) {
+		Elephant e = (Elephant) animals[i];
+		e.trumpet();
+	    }
+</code></pre></section><section id="a-word-of-caution"><h2>A Word of Caution</h2>
+<p>The Java compiler will let you cast as any sub-class of <code>Animal</code>:</p>
+<pre><code class="language-java">	for (int i = 0; i &lt; animals.length; i++) {
+	    animals[i].feed();
+	    if (animals[i] instanceof Platypus) {
+		Elephant e = (Elephant) animals[i];
+		e.trumpet();
+	    }
+        }
+</code></pre>
+<ul>
+  <li>This code compiles</li>
+  <li>Only get an error when we run the program</li>
+</ul>
+<pre><code class="language-text">Exception in thread "main" java.lang.ClassCastException: class Platypus cannot be cast to class Elephant (Platypus and Elephant are in unnamed module of loader 'app')
+	at Zoo.main(Zoo.java:19)
+</code></pre>
+<ul>
+  <li>The error is <em>logical</em> not <em>syntactic</em>
+</li>
+</ul></section><section id="hierarchy-and-the-object-class"><h1>Hierarchy and the <code>Object</code> class</h1></section><section id="taking-things-a-step-farther"><h2>Taking Things a Step Farther</h2>
+<ul>
+  <li>A class can have at most one <strong>parent</strong> class
+    <ul>
+      <li>cannot have
+        <pre><code class="language-java">  class MyClass extends SomeClass, AnotherClass {...}
+</code></pre>
+      </li>
+      <li><em>no multiple inheritance</em></li>
+      <li>(we’ll return to this later)</li>
+    </ul>
+  </li>
+  <li>But the parent class can itself have many sub-classes</li>
+</ul></section><section id="inheritance-diagrams"><h2>Inheritance Diagrams</h2>
+<p>How to depict relationship between <code>Shape</code>, <code>Circle</code>, <code>Rectangle</code>, <code>Ellipse</code>, <code>Square</code>, <code>Quadrilateral</code>, <code>Triangle</code>?</p>
+<div style="margin-bottom: 18em"></div></section><section id="object-the-mother-of-all-classes"><h2>
+<code>Object</code>: The Mother of all Classes</h2>
+<p>Every class in Java is automatically a subclass of <code>Object</code></p>
+<ul>
+  <li>every class inherits methods from <code>Object</code>:
+    <ul>
+      <li><code>boolean equals(Object obj)</code></li>
+      <li><code>String toString()</code></li>
+      <li>…</li>
+    </ul>
+  </li>
+</ul>
+<p>Why is this good?</p>
+<div style="margin-bottom: 8em"></div></section>
+</div></div>
+
+
+	  <script src="/assets/reveal.js-master/dist/reveal.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/math/math.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/zoom/zoom.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/notes/notes.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/search/search.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/markdown/markdown.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/highlight/highlight.js"></script>
+	  <script>
+	    
+
+	    // Also available as an ES module, see:
+	    // https://revealjs.com/initialization/
+	    Reveal.initialize({
+		controls: false,
+		progress: true,
+		center: true,
+		hash: true,
+		transition: 'none',
+		math: {
+		    config: 'TeX-AMS_HTML-full',
+		    TeX: {
+			Macros: {
+			    R: '\\mathbb{R}',
+			    set: [ '\\left\\{#1 \\; ; \\; #2\\right\\}', 2 ]
+			}
+		    }
+		},
+
+
+		// Learn about plugins: https://revealjs.com/plugins/
+		plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath ]
+	    });
+
+	  </script>
+
+	</body>
+</html>
+	  
+
+<!-- <\!-- load the reveal.js css & js (assuming you've put it in assets/)-\-> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/reveal.scss" -->
+<!-- /> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/theme/source/white.scss" -->
+<!-- /> -->
+<!-- <script -->
+<!--   src="/assets/reveal.js-master/js/reveal.js" -->
+<!--   type="text/javascript" -->
+<!-- ></script> -->
+
+<!-- <\!-- configure the presentation, (you can tweak options to suit) -\-> -->
+<!-- <script> -->
+<!--   Reveal.initialize({ -->
+<!--     // Display presentation control arrows -->
+<!--     controls: false, -->
+
+<!--     // Help the user learn the controls by providing hints, for example by -->
+<!--     // bouncing the down arrow when they first encounter a vertical slide -->
+<!--     controlsTutorial: false, -->
+
+<!--     // Determines where controls appear, "edges" or "bottom-right" -->
+<!--     controlsLayout: "bottom-right", -->
+
+<!--     // Visibility rule for backwards navigation arrows; "faded", "hidden" -->
+<!--     // or "visible" -->
+<!--     controlsBackArrows: "faded", -->
+
+<!--     // Display a presentation progress bar -->
+<!--     progress: true, -->
+
+<!--     // Display the page number of the current slide -->
+<!--     slideNumber: false, -->
+
+<!--     // Push each slide change to the browser history -->
+<!--     history: false, -->
+
+<!--     // Enable keyboard shortcuts for navigation -->
+<!--     keyboard: true, -->
+
+<!--     // Enable the slide overview mode -->
+<!--     overview: true -->
+<!--   }); -->
+<!-- </script> -->

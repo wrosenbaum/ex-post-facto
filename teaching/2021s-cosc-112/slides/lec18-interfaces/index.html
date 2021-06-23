@@ -1,0 +1,627 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta charset="utf-8">
+
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reset.css">
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reveal.css">
+		<link rel="stylesheet" href="/assets/css/condensation.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="/assets/reveal.js-master/plugin/highlight/monokai.css" id="highlight-theme">
+		<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700" rel="stylesheet">
+
+	</head>
+
+	<body>
+
+
+	  <!-- this is where the reveailfy filter gets applied -->
+	  <div class="reveal"><div class="slides">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section id="lecture-18-interfaces"><h1>Lecture 18: Interfaces</h1></section><section id="overview"><h2>Overview</h2>
+<ol>
+  <li>Finishing Up Generics</li>
+  <li>Comparing Items</li>
+  <li>Interfaces</li>
+</ol></section><section id="last-time"><h2>Last Time</h2>
+<p>Made our linked list <strong>generic</strong>:</p>
+<ol>
+  <li>can be used to store <em>any</em> specified type of object</li>
+  <li>each instance only stores one type</li>
+  <li>Java checks that correct types are used</li>
+</ol></section><section id="generic-syntax"><h2>Generic Syntax</h2>
+<p>Declare <code>class</code> with a <em>type</em>, <code>T</code>:</p>
+<pre><code class="language-java">public class GenericList&lt;T&gt; {
+    ...
+}
+</code></pre>
+<p>Inside the class, <code>T</code> can be used like a variable representing the type:</p>
+<pre><code class="language-java">// add an item of type T
+public void add (T item) {
+    ...
+}
+
+// get next item of type T
+public T next () {
+    ...
+}
+</code></pre></section><section id="better-code-with-generics"><h2>Better Code with Generics</h2>
+<p>Now we can use the same <code>GenericList</code> to store any type of object:</p>
+<pre><code class="language-java">GenericList&lt;Animal&gt; zoo = new GenericList&lt;Animal&gt;();
+GenericList&lt;Person&gt; school = new GenericList&lt;Person&gt;();
+GenericList&lt;Integer&gt; numbers = new GenericList&lt;Integer&gt;();
+...
+</code></pre></section><section id="iterating-over-the-list"><h2>Iterating over the List</h2>
+<p>We also implemented methods for <em>iteration:</em></p>
+<ul>
+  <li>
+<code>hasNext()</code> returns <code>true</code> if there is another element in the list</li>
+  <li>
+<code>next()</code> returns the next element in the list</li>
+</ul>
+<p>To access all the elements in the list:</p>
+<pre><code class="language-java">while (zoo.hasNext()) {
+    Animal a = zoo.next();
+	...
+}
+</code></pre></section><section id="adding-items"><h2>Adding Items</h2>
+<pre><code class="language-java">    public void add (T item) {
+	Node nd = new Node(item);
+
+	if (tail != null) {
+	    tail.setNext(nd);
+	    tail = nd;
+	} else {
+	    head = nd;
+	    tail = nd;
+	    iter = nd;
+	}
+    }
+</code></pre>
+<p>When we call <code>list.add(item)</code>, the <code>item</code> is added to the end of the list</p></section><section id="the-order-of-things"><h2>The Order of Things</h2>
+<p>Consider</p>
+<pre><code class="language-java">GenericList&lt;Integer&gt; list = new GenericList&lt;Integer&gt;();
+list.add(4);
+list.add(2);
+list.add(3);
+
+while (list.hasNext()) {
+    System.out.println(list.next());
+}
+</code></pre>
+<p>What does it print?</p>
+<div style="margin-bottom: 8em"></div></section><section id="a-question"><h2>A Question</h2>
+<p>Suppose we wanted to store/print elements in <em>sorted</em> order:</p>
+<pre><code class="language-java">SomeList&lt;Integer&gt; list = new SomeList&lt;Integer&gt;();
+list.insert(4);
+list.insert(2);
+list.insert(3);
+
+while (list.hasNext()) {
+    System.out.println(list.next());
+}
+</code></pre>
+<p>We want to see output:</p>
+<pre><code class="language-text">2
+3
+4
+</code></pre>
+<p>How might we accomplish this?</p>
+<div style="margin-bottom: 6em"></div></section><section id="sorted-list"><h2>Sorted List</h2>
+<p><img src="/assets/img/sorted-list/initial.png" alt="" width="100%"></p></section><section id="how-would-we-insert-5"><h2>How Would We Insert 5?</h2>
+<p><img src="/assets/img/sorted-list/insert-1.png" alt="" width="100%"></p></section><section id="idea"><h2>Idea</h2>
+<p>Use procedure similar to <code>remove</code> method:</p>
+<ul>
+  <li>store <code>prev</code> and <code>curr</code> nodes</li>
+  <li>iterate over list until
+    <ol>
+      <li>
+<code>curr</code> value is at least <code>5</code>
+</li>
+      <li>
+<code>prev</code> value is smaller than <code>5</code>
+</li>
+    </ol>
+  </li>
+  <li>insert node storing value <code>5</code> between <code>prev</code> and <code>curr</code>
+</li>
+</ul></section><section id="insertion-in-pictures"><h2>Insertion in Pictures</h2>
+<p><img src="/assets/img/sorted-list/insert-1.png" alt="" width="100%"></p></section><section id="insertion-in-pictures-1"><h2>Insertion in Pictures</h2>
+<p><img src="/assets/img/sorted-list/insert-2.png" alt="" width="100%"></p></section><section id="insertion-in-pictures-2"><h2>Insertion in Pictures</h2>
+<p><img src="/assets/img/sorted-list/insert-3.png" alt="" width="100%"></p></section><section id="insertion-in-pictures-3"><h2>Insertion in Pictures</h2>
+<p><img src="/assets/img/sorted-list/inserted.png" alt="" width="100%"></p></section><section id="insertion-in-code"><h2>Insertion in Code</h2>
+<p>Special cases:</p>
+<ol>
+  <li>inserted value is smallest
+    <ul>
+      <li>update <code>head</code>
+</li>
+    </ul>
+  </li>
+  <li>inserted value is largest
+    <ul>
+      <li>update <code>tail</code>
+</li>
+    </ul>
+  </li>
+</ol></section><section id="insertion-in-code-1"><h2>Insertion in Code</h2>
+<pre><code class="language-java">    public void insert (T item) {
+
+	Node nd = new Node(item);
+
+        // check if empty
+	if (tail == null) {
+	    head = nd; tail = nd; iter = nd;
+	    return;
+	}
+
+        // check if insert at head
+	if (item &lt;= head.item) {
+	    nd.next = head; head = nd; iter = nd;
+	    return;
+	}
+
+	Node prev = head;
+	Node curr = prev.next;
+
+        // find location to insert item: prev.item &lt; item &lt;= curr.item
+	while (curr != null &amp;&amp; item &gt; curr.item) {
+	    prev = curr;
+	    curr = curr.next;
+	}
+
+        // check if tail insert
+	if (curr == null) {
+	    prev.next = nd; tail = nd;
+	    return;
+	}
+
+	prev.next = nd;
+	nd.next = curr;
+    }
+</code></pre></section><section id="what-is-the-problem"><h2>What is the Problem?</h2>
+<pre><code class="language-java">    public void insert (T item) {
+
+	Node nd = new Node(item);
+
+	if (tail == null) {
+	    head = nd; tail = nd; iter = nd;
+	    return;
+	}
+
+	if (item &lt;= head.item) {
+	    nd.next = head; head = nd; iter = nd;
+	    return;
+	}
+
+	Node prev = head;
+	Node curr = prev.next;
+
+	while (curr != null &amp;&amp; item &gt; curr.item) {
+	    prev = curr;
+	    curr = curr.next;
+	}
+
+	if (curr == null) {
+	    prev.next = nd; tail = nd;
+	    return;
+	}
+
+	prev.next = nd;
+	nd.next = curr;
+    }
+</code></pre></section><section id="requirement"><h2>Requirement</h2>
+<p>In order to store a <em>sorted</em> collection, must be able to <em>compare</em> pairs of elements.</p>
+<ul>
+  <li>compare numbers by value</li>
+  <li>compare <code>String</code>s alphabetically</li>
+  <li>compare <code>Animal</code>s by…
+    <ul>
+      <li>…species?</li>
+      <li>…name?</li>
+      <li>…age?</li>
+    </ul>
+  </li>
+</ul></section><section id="limitation"><h2>Limitation</h2>
+<p>It doesn’t make sense to compare everything!</p>
+<p>Goals:</p>
+<ol>
+  <li>Specify that a particular type of object does support comparisons
+    <ul>
+      <li>need means of signalling that a <code>class</code> supports comparison</li>
+    </ul>
+  </li>
+  <li>Require that only objects that can be compared are stored in a <code>SortedList</code>
+    <ul>
+      <li>otherwise, sorting doesn’t make sense</li>
+    </ul>
+  </li>
+</ol></section><section id="interfaces"><h1>Interfaces</h1></section><section id="what-is-an-interface"><h2>What is an Interface?</h2>
+<p>A way of specifying <em>what</em> a class can/must do</p>
+<ul>
+  <li>specify <em>functionality</em>
+</li>
+  <li>does not specify implementation</li>
+  <li>a class providing required functionality <strong>implements</strong> the interface</li>
+  <li>may be many possible ways to implement an interface</li>
+</ul></section><section id="the-comparable-interface"><h2>The <code>Comparable</code> Interface</h2>
+<p>Java defines the <code>Comparable&lt;T&gt;</code> interface:</p>
+<ul>
+  <li><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Comparable.html"><code>Interface Comparable&lt;T&gt;</code></a></li>
+</ul>
+<p>For a <code>class</code> to be <code>Comparable</code> it must have a method</p>
+<ul>
+  <li><code>public int compareTo(T o)</code></li>
+</ul></section><section id="comparable-semantics"><h2>Comparable Semantics</h2>
+<p>If <code>a</code> and <code>b</code> are <code>Comparable</code> objects:</p>
+<ul>
+  <li>if <code>a.compareTo(b)</code> is less than <code>0</code>, then <code>a</code> is “smaller than” <code>b</code>
+</li>
+  <li>if <code>a.compareTo(b)</code> is greater than <code>0</code>, then <code>a</code> is “larger than” <code>b</code>
+</li>
+  <li>if <code>a.compareTo(b)</code> is <code>0</code> then they are treated as equal</li>
+</ul></section><section id="classes-implementing-comparable"><h2>Classes Implementing <code>Comparable</code>
+</h2>
+<ul>
+  <li>
+<code>Integer</code>, <code>Double</code>, …
+    <ul>
+      <li>compare numerical values as you’d expect</li>
+    </ul>
+  </li>
+  <li>
+<code>String</code>
+    <ul>
+      <li>compare alphabetically</li>
+    </ul>
+  </li>
+</ul></section><section id="making-animals-comparable"><h2>Making <code>Animal</code>s Comparable</h2>
+<p>To implement an interface, must:</p>
+<ol>
+  <li>Declare that class implements the interface:
+    <pre><code class="language-java"> public class Animal implements Comparable&lt;Animal&gt; {
+     ...
+ }
+</code></pre>
+  </li>
+  <li>Implement the methods required by the interface
+    <pre><code class="language-java"> public class Animal implements Comparable&lt;Animal&gt; {
+     ...
+     public int compareTo(Animal a) { ... }
+ }
+</code></pre>
+  </li>
+</ol></section><section id="a-question-1"><h2>A Question</h2>
+<p>How should we compare two <code>Animal</code>s?</p>
+<div style="margin-bottom: 12em"></div></section><section id="lets-implement"><h2>Let’s Implement!</h2></section><section id="back-to-our-sorted-list"><h2>Back to our Sorted List</h2>
+<p>Create a new class <code>SortedList</code></p>
+<ul>
+  <li>stores elements as in our <code>GenericList</code>
+</li>
+  <li>elements in sorted order</li>
+  <li>elements must implement <code>Comparable</code>
+</li>
+</ul>
+<p>A new declaration:</p>
+<pre><code class="language-java">// T a generic type, but must implement the Comparable&lt;T&gt;
+// interface
+
+public class SortedList&lt;T extends Comparable&lt;T&gt;&gt; {
+    ...
+}
+</code></pre></section><section id="implementing-and-testing-sortedlist"><h2>Implementing and Testing <code>SortedList</code>
+</h2></section><section id="why-interfaces"><h2>Why Interfaces?</h2>
+<p>An <code>interface</code> is a <em>contract:</em></p>
+<ol>
+  <li>In order to implement the <code>interface</code>, you must provide certain functionality</li>
+  <li>If you provide that functionality, I can write code that uses the functionality to perform some task
+    <ul>
+      <li>I don’t need to know <em>how</em> you provide functionality</li>
+    </ul>
+  </li>
+</ol>
+<p>Sorting example:</p>
+<ul>
+  <li>We wrote code to store a sorted list of items</li>
+  <li>Works for <em>any</em> class implementing <code>Comparable</code>
+</li>
+  <li>The <code>class</code> determines what is <em>meant</em> by comparison</li>
+</ul></section><section id="good-design"><h2>Good Design</h2>
+<p><em>Separate interface from implementation</em></p>
+<ul>
+  <li>Better encapsulation</li>
+  <li>Explicit functionality of the class</li>
+  <li>Explicit requirements to use existing functionality</li>
+  <li>Can provide different implementations of same interface
+    <ul>
+      <li>sort by species/name? sort by age? by height?</li>
+      <li>different implementations might be appropriate for different contexts</li>
+    </ul>
+  </li>
+</ul></section>
+</div></div>
+
+
+	  <script src="/assets/reveal.js-master/dist/reveal.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/math/math.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/zoom/zoom.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/notes/notes.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/search/search.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/markdown/markdown.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/highlight/highlight.js"></script>
+	  <script>
+	    
+
+	    // Also available as an ES module, see:
+	    // https://revealjs.com/initialization/
+	    Reveal.initialize({
+		controls: false,
+		progress: true,
+		center: true,
+		hash: true,
+		transition: 'none',
+		math: {
+		    config: 'TeX-AMS_HTML-full',
+		    TeX: {
+			Macros: {
+			    R: '\\mathbb{R}',
+			    set: [ '\\left\\{#1 \\; ; \\; #2\\right\\}', 2 ]
+			}
+		    }
+		},
+
+
+		// Learn about plugins: https://revealjs.com/plugins/
+		plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath ]
+	    });
+
+	  </script>
+
+	</body>
+</html>
+	  
+
+<!-- <\!-- load the reveal.js css & js (assuming you've put it in assets/)-\-> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/reveal.scss" -->
+<!-- /> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/theme/source/white.scss" -->
+<!-- /> -->
+<!-- <script -->
+<!--   src="/assets/reveal.js-master/js/reveal.js" -->
+<!--   type="text/javascript" -->
+<!-- ></script> -->
+
+<!-- <\!-- configure the presentation, (you can tweak options to suit) -\-> -->
+<!-- <script> -->
+<!--   Reveal.initialize({ -->
+<!--     // Display presentation control arrows -->
+<!--     controls: false, -->
+
+<!--     // Help the user learn the controls by providing hints, for example by -->
+<!--     // bouncing the down arrow when they first encounter a vertical slide -->
+<!--     controlsTutorial: false, -->
+
+<!--     // Determines where controls appear, "edges" or "bottom-right" -->
+<!--     controlsLayout: "bottom-right", -->
+
+<!--     // Visibility rule for backwards navigation arrows; "faded", "hidden" -->
+<!--     // or "visible" -->
+<!--     controlsBackArrows: "faded", -->
+
+<!--     // Display a presentation progress bar -->
+<!--     progress: true, -->
+
+<!--     // Display the page number of the current slide -->
+<!--     slideNumber: false, -->
+
+<!--     // Push each slide change to the browser history -->
+<!--     history: false, -->
+
+<!--     // Enable keyboard shortcuts for navigation -->
+<!--     keyboard: true, -->
+
+<!--     // Enable the slide overview mode -->
+<!--     overview: true -->
+<!--   }); -->
+<!-- </script> -->

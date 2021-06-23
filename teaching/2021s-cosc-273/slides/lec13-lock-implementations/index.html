@@ -1,0 +1,536 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta charset="utf-8">
+
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reset.css">
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reveal.css">
+		<link rel="stylesheet" href="/assets/css/condensation.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="/assets/reveal.js-master/plugin/highlight/monokai.css" id="highlight-theme">
+		<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700" rel="stylesheet">
+
+	</head>
+
+	<body>
+
+
+	  <!-- this is where the reveailfy filter gets applied -->
+	  <div class="reveal"><div class="slides">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section id="lecture-13-lock-implementations"><h1>Lecture 13: Lock Implementations</h1></section><section id="overview"><h2>Overview</h2>
+<ul>
+  <li>Peterson Lock</li>
+  <li>Test-and-set Lock</li>
+  <li>Test-and-test-and-set Lock</li>
+</ul></section><section id="peterson-lock"><h1>Peterson Lock</h1></section><section id="the-peterson-lock"><h2>The Peterson Lock</h2>
+<pre><code class="language-java">class Peterson implements Lock {
+    private boolean[] flag = new boolean[2];
+    private int victim;
+	
+    public void lock () {
+       int i = ThreadID.get(); // get my ID, 0 or 1
+       int j = 1 - i;          // other thread's ID
+	   
+       flag[i] = true;         // set my flag
+       victim = i;             // set myself to be victim
+       while (flag[j] &amp;&amp; victim == i) {};
+    }
+	
+    public void unlock () {
+        int i = ThreadID.get();
+        flag[i] = false;
+    }
+}
+</code></pre></section><section id="a-challenge"><h2>A Challenge</h2>
+<p>Peterson lock assumes 2 threads, with IDs <code>0</code> and <code>1</code></p>
+<ul>
+  <li>How do we accomplish this?</li>
+</ul>
+<div style="margin-bottom: 8em"></div></section><section id="make-a-thread-subclass"><h2>Make a Thread Subclass</h2>
+<p>Manually set an ID for threads</p>
+<pre><code class="language-java">public class PetersonThread extends Thread {
+    private int id;
+    private LockedCounter ctr;
+    private int numIncrements;
+
+    public PetersonThread (int id, LockedCounter ctr, int numIncrements) {
+	super();
+	this.id = id;
+	this.ctr = ctr;
+	this.numIncrements = numIncrements;
+    }
+
+    public int getPetersonId() {
+	return id;
+    }
+
+    @Override
+    public void run () {
+	for (int i = 0; i &lt; numIncrements; ++i) {
+	    ctr.increment();
+	}
+    }
+}
+</code></pre>
+<p>Next week: A better way</p></section><section id="making-a-petersonlock"><h2>Making a <code>PetersonLock</code>
+</h2>
+<pre><code class="language-java">class PetersonLock {
+    private boolean[] flag = new boolean[2];
+    private int victim;
+
+    public void lock () {
+	int i = ((PetersonThread)Thread.currentThread()).getPetersonId();
+	int j = 1 - i;
+	flag[i] = true;
+	victim = i;
+	while (flag[j] &amp;&amp; victim == i) {};
+    }
+
+    public void unlock () {
+	int i = ((PetersonThread)Thread.currentThread()).getPetersonId();	
+	flag[i] = false;
+    }
+}
+</code></pre></section><section id="and-now-a-locked-counter"><h2>And Now: A Locked Counter</h2>
+<pre><code class="language-java">public class LockedCounter {
+    private int count = 0;
+    PetersonLock lock = new PetersonLock();
+
+    public void increment () {
+	lock.lock();
+	try {
+	    ++count;
+	} finally {
+	    lock.unlock();
+	}
+    }
+
+    public int read () {
+	return count;
+    }
+}
+</code></pre></section><section id="finally-were-ready-to-test-it"><h2>Finally, We’re Ready to Test It!</h2></section><section id="doh"><h2>D’oh!</h2>
+<p>What happened?</p>
+<div style="margin-bottom: 8em"></div></section><section id="memory-consistency"><h2>Memory Consistency!</h2>
+<p><img src="/assets/img/cache-hierarchy/cache-cpu.png" alt="" width="75%"></p></section><section id="volatile-variables"><h2>
+<code>volatile</code> Variables</h2>
+<p>Java can make variables visible between threads:</p>
+<ul>
+  <li>use <code>volatile</code> keyword</li>
+  <li>individual read/write operations to <code>volatile</code> are atomic</li>
+</ul>
+<p>Drawbacks:</p>
+<ul>
+  <li>
+<code>volatile</code> variables are less efficient</li>
+  <li>
+<em>only</em> single read/write operations are atomic
+    <ul>
+      <li>e.g. <code>count++</code> not atomic</li>
+    </ul>
+  </li>
+  <li>only primitive datatypes are visible
+    <ul>
+      <li>if <code>volatile SomeClass...</code>, only the <em>reference</em> is treated as volatile</li>
+    </ul>
+  </li>
+</ul></section><section id="what-variables-should-be-volatile"><h2>What Variables Should be <code>volatile</code>?</h2>
+<ul>
+  <li>In <code>PetersonLock</code>?</li>
+  <li>In <code>LockedCounter</code>?</li>
+</ul></section><section id="petersonlock-again"><h2>
+<code>PetersonLock</code> Again</h2>
+<pre><code class="language-java">class PetersonLock {
+    private boolean[] flag = new boolean[2];
+    private int victim;
+
+    public void lock () {
+	int i = ((PetersonThread)Thread.currentThread()).getPetersonId();
+	int j = 1 - i;
+	flag[i] = true;
+	victim = i;
+	while (flag[j] &amp;&amp; victim == i) {};
+    }
+
+    public void unlock () {
+	int i = ((PetersonThread)Thread.currentThread()).getPetersonId();	
+	flag[i] = false;
+    }
+}
+</code></pre></section><section id="a-problem"><h2>A Problem</h2>
+<p>Only primitive datatypes can be <code>volatile</code></p>
+<ul>
+  <li>
+<code>volatile boolean[] flag</code> makes the <em>reference</em> <code>volatile</code>, not the data itself</li>
+</ul>
+<p>How to fix this?</p>
+<div style="margin-bottom: 8em"></div></section><section id="a-fix"><h2>A Fix</h2>
+<p>Just make 2 <code>boolean</code> variables, <code>flag0</code> and <code>flag1</code></p>
+<ul>
+  <li>Yes, I know this is ugly</li>
+</ul></section><section id="lockedcounter-again"><h2>
+<code>LockedCounter</code> Again</h2>
+<pre><code class="language-java">public class LockedCounter {
+    private int count = 0;
+    PetersonLock lock = new PetersonLock();
+
+    public void increment () {
+	lock.lock();
+	try {
+	    ++count;
+	} finally {
+	    lock.unlock();
+	}
+    }
+
+    public int read () {
+	return count;
+    }
+}
+</code></pre></section><section id="testing-our-counter-again"><h2>Testing Our Counter Again</h2></section><section id="finally"><h2>Finally!!!</h2>
+<p>What have we done?</p>
+<ol>
+  <li>
+<em>Proven</em> correctness of a lock
+    <ul>
+      <li>idealized model of computation</li>
+      <li>atomic read/write operations</li>
+    </ul>
+  </li>
+  <li>Implemented lock
+    <ul>
+      <li>used Java to resemble idealized model</li>
+    </ul>
+  </li>
+  <li>Used lock
+    <ul>
+      <li>saw expected behavior</li>
+    </ul>
+  </li>
+</ol>
+<p>Theory and practice converge!</p></section><section id="limitations"><h2>Limitations</h2>
+<ul>
+  <li>Limitations of <code>PetersonLock</code>
+    <ul>
+      <li>only two threads</li>
+      <li>weird Java gymnastics to deal with thread IDs
+        <ul>
+          <li>(more on this next time)</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Limitations of <code>volatile</code> variables
+    <ul>
+      <li>can ony perform atomic read/write operations</li>
+      <li>only for primitive data-types</li>
+      <li>need at least <code>n</code> registers (variables) for lock with <code>n</code> threads</li>
+    </ul>
+  </li>
+</ul></section><section id="simplicity-through-atomicity"><h2>Simplicity through Atomicity</h2>
+<p>Better locks through atomics:</p>
+<ul>
+  <li>
+<code>AtomicBoolean</code> supports atomic operations</li>
+  <li>For example:
+    <ul>
+      <li><code>ab.getAndSet(boolean newValue)</code></li>
+      <li>sets <code>ab</code>’s value to <code>newValue</code> and returns previous value</li>
+    </ul>
+  </li>
+</ul>
+<p>How could you use a single <code>AtomicBoolean</code> to implement a lock?</p>
+<div style="margin-bottom: 8em"></div></section><section id="the-test-and-set-lock"><h2>The Test-and-set Lock</h2>
+<pre><code class="language-java">public class TASLock {
+    AtomicBoolean isLocked = new AtomicBoolean(false);
+	
+    public void lock () {
+        while (isLocked.getAndSet(true)) {}
+    }
+	
+    public void unlock () {
+        isLocked.set(false);
+    }
+}
+</code></pre></section><section id="advantagesdisadvantages"><h2>Advantages/Disadvantages?</h2>
+<pre><code class="language-java">public class TASLock {
+    AtomicBoolean isLocked = new AtomicBoolean(false);
+	
+    public void lock () {
+        while (isLocked.getAndSet(true)) {}
+    }
+	
+    public void unlock () {
+        isLocked.set(false);
+    }
+}
+</code></pre>
+<div style="margin-bottom: 8em"></div></section><section id="how-does-taslock-perform"><h2>How Does <code>TASLock</code> Perform?</h2>
+<ul>
+  <li>test on laptop</li>
+  <li>test on Remus/Romulus</li>
+</ul></section><section id="a-tweak-ttaslock"><h2>A Tweak: <code>TTASLock</code>
+</h2>
+<p>In <code>TASLock</code>, we do a lot of <code>getAndSet()</code> operations under contention</p>
+<pre><code class="language-java">    public void lock () {
+        while (isLocked.getAndSet(true)) {}
+    }
+</code></pre>
+<p>Since <code>getAndSet</code> is expensive, we could try:</p>
+<ul>
+  <li>only attempt <code>getAndSet</code> if we’ve seen <code>isLocked.get() == false</code>
+</li>
+</ul></section><section id="test-and-test-and-set-lock"><h2>Test-and-test-and-set Lock</h2>
+<pre><code class="language-java">    public void lock () {
+	while (true) {
+	    while (isLocked.get()) {};
+
+	    if (!isLocked.getAndSet(true)) {
+		return;
+	    }
+	}
+    }
+</code></pre>
+<p>How does this affect performance?</p></section><section id="next-time"><h2>Next Time</h2>
+<ul>
+  <li>Knowing when to back off</li>
+  <li>Using queues to lock
+    <ul>
+      <li>thread-local objects</li>
+    </ul>
+  </li>
+</ul></section>
+</div></div>
+
+
+	  <script src="/assets/reveal.js-master/dist/reveal.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/math/math.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/zoom/zoom.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/notes/notes.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/search/search.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/markdown/markdown.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/highlight/highlight.js"></script>
+	  <script>
+	    
+
+	    // Also available as an ES module, see:
+	    // https://revealjs.com/initialization/
+	    Reveal.initialize({
+		controls: false,
+		progress: true,
+		center: true,
+		hash: true,
+		transition: 'none',
+		math: {
+		    config: 'TeX-AMS_HTML-full',
+		    TeX: {
+			Macros: {
+			    R: '\\mathbb{R}',
+			    set: [ '\\left\\{#1 \\; ; \\; #2\\right\\}', 2 ]
+			}
+		    }
+		},
+
+
+		// Learn about plugins: https://revealjs.com/plugins/
+		plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath ]
+	    });
+
+	  </script>
+
+	</body>
+</html>
+	  
+
+<!-- <\!-- load the reveal.js css & js (assuming you've put it in assets/)-\-> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/reveal.scss" -->
+<!-- /> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/theme/source/white.scss" -->
+<!-- /> -->
+<!-- <script -->
+<!--   src="/assets/reveal.js-master/js/reveal.js" -->
+<!--   type="text/javascript" -->
+<!-- ></script> -->
+
+<!-- <\!-- configure the presentation, (you can tweak options to suit) -\-> -->
+<!-- <script> -->
+<!--   Reveal.initialize({ -->
+<!--     // Display presentation control arrows -->
+<!--     controls: false, -->
+
+<!--     // Help the user learn the controls by providing hints, for example by -->
+<!--     // bouncing the down arrow when they first encounter a vertical slide -->
+<!--     controlsTutorial: false, -->
+
+<!--     // Determines where controls appear, "edges" or "bottom-right" -->
+<!--     controlsLayout: "bottom-right", -->
+
+<!--     // Visibility rule for backwards navigation arrows; "faded", "hidden" -->
+<!--     // or "visible" -->
+<!--     controlsBackArrows: "faded", -->
+
+<!--     // Display a presentation progress bar -->
+<!--     progress: true, -->
+
+<!--     // Display the page number of the current slide -->
+<!--     slideNumber: false, -->
+
+<!--     // Push each slide change to the browser history -->
+<!--     history: false, -->
+
+<!--     // Enable keyboard shortcuts for navigation -->
+<!--     keyboard: true, -->
+
+<!--     // Enable the slide overview mode -->
+<!--     overview: true -->
+<!--   }); -->
+<!-- </script> -->

@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-<title>Will  Rosenbaum | ex-post-facto</title>
+<title>Will  Rosenbaum | Generics</title>
 <meta name="description" content="A blog about mathematics, computer science, etc.
 ">
 
@@ -33,7 +33,7 @@
 <link rel="shortcut icon" href="/assets/img/favicon.ico">
 <link rel="stylesheet" href="/assets/css/main.css">
 
-<link rel="canonical" href="/blog/">
+<link rel="canonical" href="/teaching/2021s-cosc-112/notes/generics/">
 
 <!-- JQuery -->
 <!-- jQuery -->
@@ -108,8 +108,6 @@
           
           
           
-          
-          
           <li class="nav-item ">
               <a class="nav-link" href="/teaching/">
                 teaching
@@ -138,7 +136,7 @@
           
 	  
           <!-- Blog -->
-          <li class="nav-item active">
+          <li class="nav-item ">
             <a class="nav-link" href="/blog/">
               blog
               
@@ -167,24 +165,43 @@
     <div class="container mt-5">
       <div class="post">
 
-  <div class="header-bar">
-    <h1>Ex Post Facto Obvious</h1>
-    <h2>a blog about math, computer science, and whatnot</h2>
-  </div>
+  <header class="post-header">
+    <h1 class="post-title">Generics</h1>
+    <p class="post-description">making containers to store any datatype</p>
+  </header>
 
+  <article>
+    <h2 id="zoo-as-a-linked-list"><code class="language-plaintext highlighter-rouge">Zoo</code> as a Linked List</h2>
 
-  <ul class="post-list">
-    
-      <li>
-        <h3><a class="post-title" href="/blog/2021/updates/">New Site, Finally</a></h3>
-        <p class="post-meta">February 7, 2021</p>
-        <p>a long overdue overhaul of my website</p>
-      </li>
-    
-  </ul>
+<p>Previously, we defined an <code class="language-plaintext highlighter-rouge">abstract class Animal</code> and defined a new class <code class="language-plaintext highlighter-rouge">Zoo</code> to contain our <code class="language-plaintext highlighter-rouge">Animal</code>s. In order to make the <code class="language-plaintext highlighter-rouge">Zoo</code> dynamic—i.e., to support operations of adding and removing animals for the <code class="language-plaintext highlighter-rouge">Zoo</code> efficiently—we represented the <code class="language-plaintext highlighter-rouge">Zoo</code> as a <strong>linked list</strong> of <code class="language-plaintext highlighter-rouge">Animal</code>s. Specifically, we defined a <code class="language-plaintext highlighter-rouge">Node</code> class that stored (1) a reference to an <code class="language-plaintext highlighter-rouge">Animal</code>, and (2) a reference to the next <code class="language-plaintext highlighter-rouge">Node</code> in the collection.</p>
 
-  
+<p><img src="/assets/img/linked-list/initial.png" alt="" width="100%" /></p>
 
+<p>Using this representation we were able to store all of the <code class="language-plaintext highlighter-rouge">Animal</code>s in the <code class="language-plaintext highlighter-rouge">Zoo</code> without needing to specify or modify the <code class="language-plaintext highlighter-rouge">Zoo</code>’s capacity in advance.</p>
+
+<p>You can download the full code here:</p>
+
+<ul>
+  <li><a href=""><code class="language-plaintext highlighter-rouge">Zoo.zip</code></a></li>
+</ul>
+
+<h2 id="generalizing-our-list">Generalizing our List</h2>
+
+<p>The linked list structure depicted above can be applied to storing any datatype—not just <code class="language-plaintext highlighter-rouge">Animal</code>s. In keeping with our philosophy of encapsulation, we would like to write a single linked list impelementation that works for every datatype. This way, we do not need to write duplicate code every time we want to make a list storing a different datatype.</p>
+
+<!-- object implementation -->
+
+<h2 id="generic-types">Generic Types</h2>
+
+<h4 id="note-on-primitives">Note on Primitives</h4>
+
+<h2 id="coming-up">Coming Up</h2>
+
+<ul>
+  <li>iterating through our code</li>
+</ul>
+
+  </article>
 
 </div>
 

@@ -1,0 +1,426 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta charset="utf-8">
+
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reset.css">
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reveal.css">
+		<link rel="stylesheet" href="/assets/css/condensation.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="/assets/reveal.js-master/plugin/highlight/monokai.css" id="highlight-theme">
+		<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700" rel="stylesheet">
+
+	</head>
+
+	<body>
+
+
+	  <!-- this is where the reveailfy filter gets applied -->
+	  <div class="reveal"><div class="slides">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section id="lecture-20-stacks-continued"><h1>Lecture 20: Stacks Continued</h1></section><section id="last-time"><h2>Last Time</h2>
+<p>Introduced stack abstract data type</p>
+<pre><code class="language-java">public interface SimpleStack&lt;T&gt; {
+    // push a new item on the top of the stack
+    public void push(T item);
+
+    // return the item currently at the top of the stack
+    public T peek();
+
+    // remove and return the item currently at the top of the stack
+    public T pop();
+
+    // check if the stack is empty
+    public boolean isEmpty();
+}
+</code></pre></section><section id="interpretation-of-stack-operations"><h2>Interpretation of Stack Operations</h2>
+<p><img src="/assets/img/stacks/book-1.png" alt="" width="100%"></p>
+<p>Push <em>Sequential…Algorithms</em> onto stack</p></section><section id="stack-operations"><h2>Stack Operations</h2>
+<p><img src="/assets/img/stacks/book-2.png" alt="" width="100%"></p>
+<p>Push <em>Art of Multiprocessor Programming</em> onto stack</p></section><section id="stack-operations-1"><h2>Stack Operations</h2>
+<p><img src="/assets/img/stacks/book-3.png" alt="" width="100%"></p>
+<p>Push <em>Java Concurrency in Practice</em> onto stack</p></section><section id="stack-operations-2"><h2>Stack Operations</h2>
+<p><img src="/assets/img/stacks/book-3.png" alt="" width="100%"></p>
+<p>Peek returns <em>Java Concurrency in Practice</em></p></section><section id="stack-operations-3"><h2>Stack Operations</h2>
+<p><img src="/assets/img/stacks/book-2.png" alt="" width="100%"></p>
+<p>Pop returns &amp; removes <em>Java Concurrency in Practice</em></p></section><section id="stack-operations-4"><h2>Stack Operations</h2>
+<p><img src="/assets/img/stacks/book-1.png" alt="" width="100%"></p>
+<p>Pop returns &amp; removes <em>Art of Multiprocessor Programming</em></p></section><section id="you-were-asked"><h2>You Were Asked</h2>
+<p>How could you use a linked list to store the contents of a stack?</p>
+<ul>
+  <li>How do you push a new item on the stack?</li>
+  <li>How do you pop an item off the stack?</li>
+</ul>
+<div style="margin-bottom: 12em"></div></section><section id="idea"><h2>Idea</h2>
+<ol>
+  <li>Elements stored in linked list of <code>Node</code>s</li>
+  <li>Store a <code>Node top</code> referring to top of stack</li>
+  <li>Each <code>Node</code>’s <code>next</code> field refers to element below it</li>
+</ol></section><section id="stacklist-illustrated"><h2>
+<code>StackList</code> Illustrated</h2>
+<p><img src="/assets/img/stacks/list-stack.png" alt="" width="100%"></p></section><section id="push-step-1-create-node"><h2>
+<code>push()</code> Step 1: Create Node</h2>
+<p><img src="/assets/img/stacks/list-stack-push-1.png" alt="" width="100%"></p></section><section id="push-step-2-set-next"><h2>
+<code>push()</code> Step 2: Set <code>next</code>
+</h2>
+<p><img src="/assets/img/stacks/list-stack-push-2.png" alt="" width="100%"></p></section><section id="push-step-3-set-head"><h2>
+<code>push()</code> Step 3: Set <code>head</code>
+</h2>
+<p><img src="/assets/img/stacks/list-stack-push-3.png" alt="" width="100%"></p></section><section id="push-complete"><h2>
+<code>push()</code> Complete</h2>
+<p><img src="/assets/img/stacks/list-stack-push-4.png" alt="" width="100%"></p></section><section id="pop"><h2>
+<code>pop()</code>?</h2>
+<p><img src="/assets/img/stacks/list-stack-push-4.png" alt="" width="100%"></p></section><section id="pop-step-1-store-value"><h2>
+<code>pop()</code> Step 1: Store <code>value</code>
+</h2>
+<p><img src="/assets/img/stacks/list-stack-pop-1.png" alt="" width="100%"></p></section><section id="pop-step-2-update-head"><h2>
+<code>pop()</code> Step 2: Update <code>head</code>
+</h2>
+<p><img src="/assets/img/stacks/list-stack-pop-2.png" alt="" width="100%"></p></section><section id="pop-step-3-return-value"><h2>
+<code>pop()</code> Step 3: Return <code>value</code>
+</h2>
+<p><img src="/assets/img/stacks/list-stack-pop-3.png" alt="" width="100%"></p></section><section id="implementing-stacklistt"><h2>Implementing <code>StackList&lt;T&gt;</code>
+</h2>
+<pre><code class="language-java">public class StackList&lt;T&gt; implements SimpleStack&lt;T&gt; {
+    Node top = null;
+    
+    public void push(T item) {...}
+    
+    public T peek() {...}
+    
+    public T pop() {...}
+    
+    public boolean isEmpty() {...}
+
+    class Node {
+	T item;
+	Node next;
+
+	public Node (T item) {
+	    this.item = item;
+	    next = null;
+	}
+    }
+</code></pre></section><section id="a-question"><h2>A Question</h2>
+<p>What is wrong with the following program?</p>
+<pre><code class="language-java">public class HelloWorld {
+    public static void main(String[] args)} {
+        System.out.println("Hello, World!");
+    }
+}
+</code></pre>
+<div style="margin-bottom: 8em"></div></section><section id="application-balanced-expressions"><h2>Application: Balanced Expressions</h2>
+<p>Java uses a lot of brackets:</p>
+<ul>
+  <li>curly braces <code>{ ... }</code>
+</li>
+  <li>parentheses <code>( ... )</code>
+</li>
+  <li>square brackets <code>[ ... ]</code>
+</li>
+</ul>
+<p>If expression are properly bracketed, Java compiler complains!</p></section><section id="an-abstraction"><h2>An Abstraction</h2>
+<p>This expression</p>
+<pre><code class="language-java">public class HelloWorld {
+    public static void main(String[] args)} {
+        System.out.println("Hello, World!");
+    }
+}
+</code></pre>
+<p>but with just the brackets:</p>
+<pre><code class="language-java">{ ( [ ] ) } { ( ) } }
+</code></pre>
+<div style="margin-bottom: 8em"></div></section><section id="question"><h2>Question</h2>
+<p>When is an expression properly bracketed?</p>
+<ul>
+  <li>What makes <code>{ } { { } { { } } } { }</code> okay?</li>
+  <li>What makes <code>{ ( [ ] ) } { ( ) } }</code> not?</li>
+</ul>
+<div style="margin-bottom: 12em"></div></section><section id="balanced-expressions"><h2>Balanced Expressions</h2>
+<p>A bracketed expression is <em>balanced</em> if</p>
+<ol>
+  <li>every opening bracket has a corresponding closing bracket
+    <ul>
+      <li>closing bracket appears after opening bracket</li>
+      <li>one-to-one correspondence between opening and closing</li>
+    </ul>
+  </li>
+  <li>opening-closing pairs are <em>nested</em>
+    <ul>
+      <li>if opening bracket appears between opening-closing pair, then corresponding closing bracket does too</li>
+    </ul>
+  </li>
+</ol>
+<div style="margin-bottom: 2em"></div>
+<pre><code class="language-text">{    {    {    }    }    {    }    {    }    }
+</code></pre>
+<div style="margin-bottom: 2em"></div>
+<pre><code class="language-text">{    {    }    }    }    {    }
+</code></pre></section><section id="how-to-check-for-balance"><h2>How To Check For Balance?</h2>
+<div style="margin-bottom: 4em"></div>
+<pre><code class="language-text">{    {    {    }    }    {    }    {    }    }
+</code></pre>
+<div style="margin-bottom: 8em"></div></section><section id="balance-checking-with-a-stack"><h2>Balance Checking with a Stack</h2>
+<ol>
+  <li>Scan expression from left to right</li>
+  <li>Whenever an open bracket is encountered, push it to the stack</li>
+  <li>When a closing bracket is encountered:
+    <ul>
+      <li>check if it matches top of stack</li>
+      <li>if so, pop the stack</li>
+      <li>if not, or stack is empty, expression is not balanced!</li>
+    </ul>
+  </li>
+  <li>If stack is not empty at end of expression, expression is not balanced!</li>
+</ol></section><section id="implementation"><h2>Implementation</h2></section>
+</div></div>
+
+
+	  <script src="/assets/reveal.js-master/dist/reveal.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/math/math.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/zoom/zoom.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/notes/notes.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/search/search.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/markdown/markdown.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/highlight/highlight.js"></script>
+	  <script>
+	    
+
+	    // Also available as an ES module, see:
+	    // https://revealjs.com/initialization/
+	    Reveal.initialize({
+		controls: false,
+		progress: true,
+		center: true,
+		hash: true,
+		transition: 'none',
+		math: {
+		    config: 'TeX-AMS_HTML-full',
+		    TeX: {
+			Macros: {
+			    R: '\\mathbb{R}',
+			    set: [ '\\left\\{#1 \\; ; \\; #2\\right\\}', 2 ]
+			}
+		    }
+		},
+
+
+		// Learn about plugins: https://revealjs.com/plugins/
+		plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath ]
+	    });
+
+	  </script>
+
+	</body>
+</html>
+	  
+
+<!-- <\!-- load the reveal.js css & js (assuming you've put it in assets/)-\-> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/reveal.scss" -->
+<!-- /> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/theme/source/white.scss" -->
+<!-- /> -->
+<!-- <script -->
+<!--   src="/assets/reveal.js-master/js/reveal.js" -->
+<!--   type="text/javascript" -->
+<!-- ></script> -->
+
+<!-- <\!-- configure the presentation, (you can tweak options to suit) -\-> -->
+<!-- <script> -->
+<!--   Reveal.initialize({ -->
+<!--     // Display presentation control arrows -->
+<!--     controls: false, -->
+
+<!--     // Help the user learn the controls by providing hints, for example by -->
+<!--     // bouncing the down arrow when they first encounter a vertical slide -->
+<!--     controlsTutorial: false, -->
+
+<!--     // Determines where controls appear, "edges" or "bottom-right" -->
+<!--     controlsLayout: "bottom-right", -->
+
+<!--     // Visibility rule for backwards navigation arrows; "faded", "hidden" -->
+<!--     // or "visible" -->
+<!--     controlsBackArrows: "faded", -->
+
+<!--     // Display a presentation progress bar -->
+<!--     progress: true, -->
+
+<!--     // Display the page number of the current slide -->
+<!--     slideNumber: false, -->
+
+<!--     // Push each slide change to the browser history -->
+<!--     history: false, -->
+
+<!--     // Enable keyboard shortcuts for navigation -->
+<!--     keyboard: true, -->
+
+<!--     // Enable the slide overview mode -->
+<!--     overview: true -->
+<!--   }); -->
+<!-- </script> -->

@@ -1,0 +1,687 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta charset="utf-8">
+
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reset.css">
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reveal.css">
+		<link rel="stylesheet" href="/assets/css/condensation.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="/assets/reveal.js-master/plugin/highlight/monokai.css" id="highlight-theme">
+		<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700" rel="stylesheet">
+
+	</head>
+
+	<body>
+
+
+	  <!-- this is where the reveailfy filter gets applied -->
+	  <div class="reveal"><div class="slides">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ## Sequential Consistency is Weak -->
+
+<!-- - Method calls can appear interleaved in *any* order that maintains program order -->
+<!-- - No guarantees for "real time" order -->
+<!--     + (partially) order methods wrt real time -->
+
+<!-- ![](/assets/img/consistency/mult-ops.png){: width="100%"} -->
+
+<!-- ## Sequential Consistency is Nonblocking -->
+
+<!-- Consider concurrent execution: -->
+
+<!-- - Pending method call (invoked, but no response yet) -->
+<!-- - Then: exists a response that can be made immediately that does not violate SC -->
+
+<!-- It is possible to achieve SC without needing to wait for response from other pending methods -->
+
+<!-- - May still be difficult to figure out *which* response will give SC execution -->
+
+<!-- ## A Subtler Issue -->
+
+<!-- Suppose we have a program two queues, `p` and `q` -->
+
+<!-- - Implementation of queue guarantees sequentially consistency -->
+
+<!-- Must an execution of a program with `p` and `q` be sequentially consistent? -->
+
+<!-- <div style="margin-bottom: 8em"></div> -->
+
+<!-- ## An Execution -->
+
+<!-- ![](/assets/img/consistency/compositionality.png){: width="100%"} -->
+
+<!-- <div style="margin-bottom: 12em"></div> -->
+
+<!-- ## Sequentially Consistent for `p` -->
+
+<!-- ![](/assets/img/consistency/compositionality-p.png){: width="100%"} -->
+
+<!-- <div style="margin-bottom: 12em"></div> -->
+
+<!-- ## Sequentially Consistent for `q` -->
+
+<!-- ![](/assets/img/consistency/compositionality-q.png){: width="100%"} -->
+
+<!-- <div style="margin-bottom: 12em"></div> -->
+
+<!-- ## But is Execution SC? -->
+
+<!-- ![](/assets/img/consistency/compositionality.png){: width="100%"} -->
+
+<!-- <div style="margin-bottom: 12em"></div> -->
+
+<!-- ## Sequential Consistency is not Compositional -->
+
+<!-- A property $\mathcal{P}$ is **compositional** if  -->
+
+<!-- - Whenever all objects in system satisfy $\mathcal{P}$, then system satisfies $\mathcal{P}$ -->
+
+<!-- Previous example shows: -->
+
+<!-- - Sequential consistency is *not* compositional -->
+
+<!-- ## Sequential Consistency Is... -->
+
+<!-- - ...Maybe the weakest reasonble guarantee we could expect of a concurrent implementation of an object -->
+<!-- - ...Potentially allows for a lot of parallelism -->
+<!--     + SC is a nonblocking property -->
+<!-- - ...Not compositional -->
+<!--     + a system made of SC components need not be SC! -->
+
+<!-- # Linearizability -->
+
+<!-- ## Weird Thing about SC -->
+
+<!-- SC makes no reference to invocation/response intervals for method calls -->
+
+<!-- - Why bother with time intervals if we ignore them (execept relative order for single threads)? -->
+
+<!-- Another idea: -->
+
+<!-- - Make sure execution is consistent with timing of method calls -->
+<!-- - Consider sequential executions consistent with each method call taking effect at some *instant* during the method call -->
+
+<!-- ## Same Example, Fewer Options -->
+
+<!-- ![](/assets/img/consistency/mult-ops.png){: width="100%"} -->
+
+<!-- Can only change relative order of method calls if they overlap -->
+
+<!-- <div style="margin-bottom: 8em"></div> -->
+
+<!-- ## Linearization Points -->
+
+<!-- A **linearization point** is a point in a method call where method "takes effect" -->
+
+<!-- - all events after linearization point see effect of method call -->
+<!-- - linearization points must be distinct (correspond to some atomic operation) -->
+
+<!-- ## Example of Linearization Points -->
+
+<!-- ![](/assets/img/consistency/linearization-pts.png){: width="100%"} -->
+
+<!-- <div style="margin-bottom: 8em"></div> -->
+
+<!-- ## Equivalent Sequential Execution -->
+
+<!-- ![](/assets/img/consistency/equivalent-seq-exec.png){: width="100%"} -->
+
+<!-- <div style="margin-bottom: 8em"></div> -->
+
+<!-- ## An Alternative Sequential Execution -->
+
+<!-- ![](/assets/img/consistency/alt-seq-exec.png){: width="100%"} -->
+
+<!-- <div style="margin-bottom: 8em"></div> -->
+
+<!-- ## Linearizability -->
+
+<!-- A concurrent execution is **linearizable** if: -->
+
+<!-- - exists a linearization point in each method call such that execution is consistent with sequential execution where method calls occur in order of corresponding linearization points -->
+
+<!-- An implementation of an object is linearizable if: -->
+
+<!-- - it guarantees every execution is linearizable -->
+
+<!-- ## Comparing Linearizability and SC -->
+
+<!-- 1. Does linearizability imply sequential consistency? -->
+<!-- 2. Does sequential consistency imply linearizability? -->
+
+<!-- <div style="margin-bottom: 12em"></div> -->
+
+<!-- ## Linearizability $\implies$ SC -->
+
+<!-- Must show: -->
+
+<!-- 1. Maintains program order -->
+<!-- 2. Satisfies sequential specification -->
+
+<!-- <div style="margin-bottom: 12em"></div> -->
+
+<!-- ## SC $\nRightarrow$ Linearizability -->
+
+<!-- ![](/assets/img/consistency/compositionality-p.png){: width="100%"} -->
+
+<!-- <div style="margin-bottom: 12em"></div> -->
+
+<!-- ## Compositionality -->
+
+<!-- Recall this execution with 2 queues (not sequentially consistent) -->
+
+<!-- ![](/assets/img/consistency/compositionality.png){: width="100%"} -->
+
+<!-- <div style="margin-bottom: 12em"></div> -->
+
+<!-- ## But... -->
+
+<!-- `p` and `q` are not linearizable in this execution! -->
+
+<!-- ![](/assets/img/consistency/compositionality.png){: width="100%"} -->
+
+<!-- <div style="margin-bottom: 12em"></div> -->
+
+<!-- ## Two More Questions -->
+
+<!-- 1. Are linearizable objects compositional? -->
+<!-- 2. Are linearizable executions nonblocking? -->
+
+<section id="lecture-07-concurrent-objects-2"><h1>Lecture 07: Concurrent Objects 2</h1></section><section id="announcements"><h2>Announcements</h2>
+<ol>
+  <li>Quiz 2 posted</li>
+  <li>Homework 2 posted in next couple days</li>
+  <li>Accountability group survey linked to today</li>
+</ol></section><section id="outline"><h2>Outline</h2>
+<ol>
+  <li>Linked Lists, Again</li>
+  <li>Blocking and consistency</li>
+</ol></section><section id="last-time"><h2>Last Time</h2>
+<p>Linked list with concurrent insertions:</p>
+<ul>
+  <li>Lock individual nodes</li>
+  <li>Can perform concurrent insertions when nodes don’t overlap</li>
+</ul></section><section id="concurrent-insertions"><h2>Concurrent Insertions</h2>
+<p><img src="/assets/img/concurrent-objects/InsertBoth.png" alt="" width="100%"></p></section><section id="acquiring-locks"><h2>Acquiring Locks</h2>
+<p><img src="/assets/img/concurrent-objects/BothBlock.png" alt="" width="100%"></p></section><section id="both-insert"><h2>Both Insert</h2>
+<p><img src="/assets/img/concurrent-objects/BothInsert.png" alt="" width="100%"></p></section><section id="both-release"><h2>Both Release</h2>
+<p><img src="/assets/img/concurrent-objects/BothRelease.png" alt="" width="100%"></p></section><section id="what-happens-with-contention"><h2>What Happens with Contention?</h2>
+<p><img src="/assets/img/concurrent-objects/Contention.png" alt="" width="100%"></p></section><section id="red-acquires-locks-blue-waits"><h2>Red Acquires Locks (Blue Waits)</h2>
+<p><img src="/assets/img/concurrent-objects/ContentionRedLock.png" alt="" width="100%"></p></section><section id="red-inserts--releases-locks"><h2>Red Inserts &amp; Releases Locks</h2>
+<p><img src="/assets/img/concurrent-objects/ContentionRedInsert.png" alt="" width="100%"></p></section><section id="blue-finally-acquires-locks"><h2>Blue Finally Acquires Locks</h2>
+<p><img src="/assets/img/concurrent-objects/ContentionBlueLock.png" alt="" width="100%"></p></section><section id="blue-inserts--releases-locks"><h2>Blue Inserts &amp; Releases Locks</h2>
+<p><img src="/assets/img/concurrent-objects/ContentionBlueInsert.png" alt="" width="100%"></p></section><section id="a-slightly-different-scenario"><h2>A Slightly Different Scenario</h2>
+<p><img src="/assets/img/concurrent-objects/CircularList.png" alt="" width="50%"></p></section><section id="question"><h2>Question</h2>
+<p>Are multiple concurrent insertions guaranteed to eventually succeed?</p>
+<p><img src="/assets/img/concurrent-objects/CircularList.png" alt="" width="25%"></p>
+<div style="margin-bottom: 8em"></div></section><section id="blocking-and-consistency"><h1>Blocking and Consistency</h1></section><section id="morals-from-previous-examples"><h2>Morals from Previous Examples</h2>
+<ol>
+  <li>Locking whole object (linked list)
+    <ul>
+      <li>easy to reason about correctness</li>
+      <li>may give poor performance</li>
+    </ul>
+  </li>
+  <li>Locking individual parts
+    <ul>
+      <li>may give better performance</li>
+      <li>more challenging to reason about correctness</li>
+    </ul>
+  </li>
+</ol></section><section id="a-queue"><h2>A Queue</h2>
+<pre><code class="language-java">public class LockedQueue&lt;T&gt; {
+    int head, tail;
+    T[] contents;
+    Lock lock;
+	
+    ...
+	
+    public void enq(T x) {
+        lock.lock();
+        try {
+            items[tail} = x;
+            tail++;
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public T deq() {
+        lock.lock();
+        try {
+            T x = items[head];
+            head++;
+            return x;
+        } finally {
+            lock.unlock();
+        }
+    }
+}
+</code></pre></section><section id="question-1"><h2>Question</h2>
+<p>What makes this queue implementation easy to reason about?</p>
+<div style="margin-bottom: 12em"></div></section><section id="executions-are-essentially-sequential"><h2>Executions are Essentially Sequential!</h2>
+<p>If multiple threads access the queue</p>
+<ul>
+  <li>only one thread actually modifies queue at a time</li>
+  <li>other threads must wait</li>
+  <li>this property is called <strong>blocking</strong>:
+    <ul>
+      <li>some method calls cannot make progress while others perform a task</li>
+    </ul>
+  </li>
+</ul></section><section id="another-question"><h2>Another Question</h2>
+<p>Queues are <em>first-in first-out</em> (FIFO) data structures</p>
+<p>What does FIFO even <em>mean</em> if objects can be enqueued concurrently?</p>
+<div style="margin-bottom: 12em"></div></section><section id="blocking-execution"><h2>Blocking Execution</h2>
+<p>Consider:</p>
+<ul>
+  <li>Two threads A, B concurrently call <code>enq(x)</code>, <code>enq(y)</code>, respectively</li>
+  <li>Then thread A calls <code>deq()</code>
+</li>
+</ul>
+<p>What is expected behavior?</p>
+<div style="margin-bottom: 12em"></div></section><section id="what-happens"><h2>What Happens?</h2>
+<p>Depends on how concurrent operations are resolved!</p>
+<p><img src="/assets/img/consistency/enqueue.png" alt="" width="100%"></p></section><section id="equivalent-sequential-execution"><h2>Equivalent Sequential Execution</h2>
+<p><img src="/assets/img/consistency/sequential.png" alt="" width="100%"></p></section><section id="in-sequential-execution"><h2>In Sequential Execution</h2>
+<p>Method calls are linearly sorted:</p>
+<ul>
+  <li>Method calls:
+    <ul>
+      <li>invocation</li>
+      <li>response</li>
+    </ul>
+  </li>
+  <li>Each call’s response preceeds next call’s invocation</li>
+</ul>
+<div style="margin-bottom: 8em"></div></section><section id="reasoning-about-sequential-executions"><h2>Reasoning About Sequential Executions</h2>
+<ol>
+  <li>Assume object in some state
+    <ul>
+      <li><strong>precondition</strong></li>
+    </ul>
+  </li>
+  <li>Method specifies
+    <ul>
+      <li>
+<strong>postcondition</strong>
+        <ul>
+          <li>return value</li>
+          <li>change of internal state (side effect)</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+<p>Method calls performed sequentially $\implies$ state well defined <em>between</em> method calls.</p>
+<ul>
+  <li>Specifying pre/post-conditions for each method define object’s <strong>sequential specification</strong>
+</li>
+</ul></section><section id="reasoning-about-concurrent-executions"><h2>Reasoning About Concurrent Executions</h2>
+<p>“Correct” behavior no longer well defined!</p>
+<p><img src="/assets/img/consistency/concurrent-exec.png" alt="" width="100%"></p>
+<ul>
+  <li>call to <code>deq()</code> could return either <code>x</code> or <code>y</code>
+    <ul>
+      <li>both reasonable!</li>
+    </ul>
+  </li>
+</ul></section><section id="a-reasonable-goal"><h2>A Reasonable Goal</h2>
+<p>A concurrent execution of a data structure is “correct” if it is consistent with <em>some</em> sequential execution of the data structure.</p>
+<p><img src="/assets/img/consistency/sequential.png" alt="" width="100%"></p>
+<p>Response to each method call in concurrent execution is the same as the sequential execution.</p>
+<ul>
+  <li>What other features of concurrent execution can/should the sequential execution maintain?</li>
+</ul></section><section id="our-goal"><h2>Our Goal</h2>
+<p>Define sensible qualities for how executions should behave:</p>
+<ol>
+  <li>Sequential consistency</li>
+  <li>Linearizability</li>
+</ol>
+<p>These are less rigid requirements than being essentially sequential</p>
+<ul>
+  <li>May allow for less synchronization (locking) between threads</li>
+  <li>Tradeoff: more lenient behavioral guarantees</li>
+</ul></section><section id="sequential-consistency"><h1>Sequential Consistency</h1></section><section id="a-sensible-feature"><h2>A Sensible Feature</h2>
+<p>Consider all method calls made by all threads</p>
+<ul>
+  <li>Each method has precondition, postcondition</li>
+</ul>
+<p>Behavior of execution should be consistent with <em>some</em> sequential execution of the method calls.</p>
+<div style="margin-bottom: 8em"></div></section><section id="is-this-enough"><h2>Is This Enough?</h2>
+<p>Behavior of execution should be consistent with <em>some</em> sequential execution of the method calls.</p>
+<div style="margin-bottom: 12em"></div></section><section id="probably-not"><h2>Probably Not!</h2>
+<p>Queue with multiple threads:</p>
+<ul>
+  <li>thread 1 calls <code>enq(1)</code> then <code>enq(2)</code>
+</li>
+  <li>other threads enqueue stuff, not <code>1</code> or <code>2</code>
+</li>
+  <li>thread 1 calls <code>deq()</code> a bunch of times</li>
+</ul>
+<p>Should have:</p>
+<ul>
+  <li>thread 1 dequeues <code>1</code> before <code>2</code>
+</li>
+</ul></section><section id="another-sensible-feature"><h2>Another Sensible Feature</h2>
+<p>Method calls should appear to take effect in <strong>program order</strong></p>
+<ul>
+  <li>if a single thread calls <code>methodOne()</code> before <code>methodTwo()</code>, then <code>methodOne()</code> should take effect before <code>methodTwo()</code> in sequential execution.</li>
+</ul>
+<div style="margin-bottom: 8em"></div></section><section id="sequential-consistency-1"><h2>Sequential Consistency</h2>
+<p>An execution is <strong>sequentially consistent</strong> if all method calls can be ordered such that:</p>
+<ol>
+  <li>they are consistent with program order</li>
+  <li>they meet object’s sequential specification</li>
+</ol>
+<p>An implementation of an object is sequentially consistent if</p>
+<ol>
+  <li>it guarantees <em>every</em> execution is sequentially consistent</li>
+</ol></section><section id="example"><h2>Example</h2>
+<p>What are possible outcomes of <code>deq()</code> calls in a sequentially consistent execution?</p>
+<p><img src="/assets/img/consistency/mult-ops.png" alt="" width="100%"></p>
+<div style="margin-bottom: 12em"></div></section>
+</div></div>
+
+
+	  <script src="/assets/reveal.js-master/dist/reveal.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/math/math.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/zoom/zoom.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/notes/notes.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/search/search.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/markdown/markdown.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/highlight/highlight.js"></script>
+	  <script>
+	    
+
+	    // Also available as an ES module, see:
+	    // https://revealjs.com/initialization/
+	    Reveal.initialize({
+		controls: false,
+		progress: true,
+		center: true,
+		hash: true,
+		transition: 'none',
+		math: {
+		    config: 'TeX-AMS_HTML-full',
+		    TeX: {
+			Macros: {
+			    R: '\\mathbb{R}',
+			    set: [ '\\left\\{#1 \\; ; \\; #2\\right\\}', 2 ]
+			}
+		    }
+		},
+
+
+		// Learn about plugins: https://revealjs.com/plugins/
+		plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath ]
+	    });
+
+	  </script>
+
+	</body>
+</html>
+	  
+
+<!-- <\!-- load the reveal.js css & js (assuming you've put it in assets/)-\-> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/reveal.scss" -->
+<!-- /> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/theme/source/white.scss" -->
+<!-- /> -->
+<!-- <script -->
+<!--   src="/assets/reveal.js-master/js/reveal.js" -->
+<!--   type="text/javascript" -->
+<!-- ></script> -->
+
+<!-- <\!-- configure the presentation, (you can tweak options to suit) -\-> -->
+<!-- <script> -->
+<!--   Reveal.initialize({ -->
+<!--     // Display presentation control arrows -->
+<!--     controls: false, -->
+
+<!--     // Help the user learn the controls by providing hints, for example by -->
+<!--     // bouncing the down arrow when they first encounter a vertical slide -->
+<!--     controlsTutorial: false, -->
+
+<!--     // Determines where controls appear, "edges" or "bottom-right" -->
+<!--     controlsLayout: "bottom-right", -->
+
+<!--     // Visibility rule for backwards navigation arrows; "faded", "hidden" -->
+<!--     // or "visible" -->
+<!--     controlsBackArrows: "faded", -->
+
+<!--     // Display a presentation progress bar -->
+<!--     progress: true, -->
+
+<!--     // Display the page number of the current slide -->
+<!--     slideNumber: false, -->
+
+<!--     // Push each slide change to the browser history -->
+<!--     history: false, -->
+
+<!--     // Enable keyboard shortcuts for navigation -->
+<!--     keyboard: true, -->
+
+<!--     // Enable the slide overview mode -->
+<!--     overview: true -->
+<!--   }); -->
+<!-- </script> -->

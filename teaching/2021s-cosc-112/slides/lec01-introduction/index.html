@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta charset="utf-8">
+
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reset.css">
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reveal.css">
+		<link rel="stylesheet" href="/assets/css/condensation.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="/assets/reveal.js-master/plugin/highlight/monokai.css" id="highlight-theme">
+		<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700" rel="stylesheet">
+
+	</head>
+
+	<body>
+
+
+	  <!-- this is where the reveailfy filter gets applied -->
+	  <div class="reveal"><div class="slides">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section id="introduction--recursion"><h1>Introduction &amp; Recursion</h1></section><section id="agenda"><h2>Agenda</h2>
+<ol>
+  <li>Course Introduction and Structure</li>
+  <li>Recursion</li>
+</ol></section><section id="course-introduction-and-structure"><h1>Course Introduction and Structure</h1></section><section id="what-do-you-know"><h2>What do you know?</h2>
+<ul>
+  <li>basic data-types and variables <code>int</code>, <code>char</code>, <code>String</code>, <code>boolean</code>
+</li>
+  <li>if-then-else statements</li>
+  <li>iteration (<code>for</code> and <code>while</code> loops)</li>
+  <li>arrays and strings</li>
+  <li>defining and using methods</li>
+</ul></section><section id="what-will-this-course-cover"><h2>What will this course cover</h2>
+<ul>
+  <li>objected oriented design: defining and creating <code>class</code>es, class hierarchy</li>
+  <li>generic programming: interfaces, abstract classes and methods</li>
+  <li>simple data structures: linked lists, stacks, queues</li>
+  <li>recursion, randomization, and other topics</li>
+</ul></section><section id="course-philosophy"><h2>Course philosophy</h2>
+<ul>
+  <li>emphasize general <em>design principles</em>
+</li>
+  <li>generic conceptual tools for how to solve problems
+    <ul>
+      <li>identify small sub-tasks that should be solved</li>
+    </ul>
+  </li>
+  <li>technical tools to code implementations</li>
+  <li>offer greater opportunities for creative expression</li>
+</ul></section><section id="what-will-you-do"><h2>What will you do?</h2>
+<ul>
+  <li>weekly lab assignments (~25%)</li>
+  <li>monthly projects (3 total) (~30%)</li>
+  <li>weekly quizzes (~25%)</li>
+  <li>
+<strong>actively participate</strong> (~20%)
+    <ul>
+      <li>discussion in lecture</li>
+      <li>accountability groups</li>
+    </ul>
+  </li>
+</ul></section><section id="weekly-rhythm"><h2>Weekly Rhythm</h2>
+<ul>
+  <li>Monday: start working on lab/project, attend lab session</li>
+  <li>Tuesday: prepare for lecture: reading, videos, etc.; write some code</li>
+  <li>Wednesday: lecture and debrief</li>
+  <li>Thursday: prepare for lecture; write some code</li>
+  <li>Friday: lecture and debrief; turn in assignment; look at following assignment</li>
+</ul></section><section id="how-will-you-do-it"><h2>How will you do it?</h2>
+<ul>
+  <li>work collaboratively, but don’t share code</li>
+  <li>participate in discussion
+    <ul>
+      <li>Moodle forums</li>
+      <li>Slack channel</li>
+    </ul>
+  </li>
+  <li>interact with posted materials (readings, videos, etc)
+    <ul>
+      <li>assume everything is required, unless marked with <strong>IYI</strong>
+</li>
+    </ul>
+  </li>
+</ul></section><section id="synchronous-meetings"><h1>Synchronous Meetings</h1></section><section id="lecture-format"><h2>Lecture format</h2>
+<ul>
+  <li>not really a lecture
+    <ul>
+      <li>typically short introduction</li>
+    </ul>
+  </li>
+  <li>work in small groups on problems</li>
+  <li>rejoin larger group to discuss solutions</li>
+  <li><strong>you must prepare by engaging with course materials before lecture</strong></li>
+</ul></section><section id="you-might-not-like-the-format-compared-to-lectures"><h2>You might not like the format (compared to lectures)</h2>
+<p><a href="https://www.pnas.org/content/116/39/19251?cid=nwsltrtn&amp;source=ams&amp;sourceId=5078450">Studies indicate</a> you might feel:</p>
+<ul>
+  <li>sessions are disjointed and lacking flow</li>
+  <li>there are frequent interruptions to work</li>
+  <li>concerned errors you make won’t be corrected</li>
+  <li>general feeling of frustration and confusion</li>
+</ul></section><section id="but-this-format-is-effective"><h2>But this format is effective</h2>
+<p><img src="/assets/img/2021s-cosc-112/lec01-introduction/active-learning.png" alt=""></p></section><section id="the-moral"><h2>The moral</h2>
+<p>Learning probably doesn’t feel the way you think it should:</p>
+<blockquote>
+  <p>[W]hen students experienced confusion and increased cognitive effort with active learning, they perceived this disfluency as a signal of poor learning, while in fact the opposite is true.</p>
+</blockquote>
+<p>– <a href="https://www.pnas.org/content/116/39/19251?cid=nwsltrtn&amp;source=ams&amp;sourceId=5078450">Deslauriers et al. 2019</a></p></section><section id="zoom-for-group-discussion"><h2>Zoom for group discussion</h2>
+<ul>
+  <li>you will spend much of the lecture time working in breakout groups on Zoom</li>
+  <li>you will be given a prompt (Google doc)</li>
+  <li>you might be asked to code too</li>
+  <li>you might be asked to share main points of discussion with class</li>
+</ul></section><section id="work-outside-of-class"><h1>Work Outside of Class</h1></section><section id="collaboration"><h2>Collaboration</h2>
+<ul>
+  <li>collaboration is encouraged</li>
+  <li>for work you will submit (labs/projects) <strong>do not share code</strong>
+</li>
+  <li>discuss problems on a conceptual level</li>
+</ul></section><section id="web-resources"><h2>Web Resources</h2>
+<ul>
+  <li>there are many good resources out that help teach concepts, e.g.,
+    <ul>
+      <li><a href="https://docs.oracle.com/javase/tutorial/">Oracle Tutorials</a></li>
+      <li><a href="https://www.w3schools.com/java/default.asp">W3Schools</a></li>
+    </ul>
+  </li>
+  <li>there are many forums where you could find code that solves your problems (e.g., StackOverflow)
+    <ul>
+      <li>often do more harm to your learning</li>
+    </ul>
+  </li>
+</ul>
+<p>no matter what: <strong>always credit your sources</strong> (comments in code)</p></section><section id="getting-help"><h2>Getting Help</h2>
+<ul>
+  <li>lab and lecture sessions</li>
+  <li>Moodle forums and Slack channel</li>
+  <li>evening TA sessions (MW 7–9pm)</li>
+  <li>office hours
+    <ul>
+      <li>drop-in</li>
+      <li>by appointment</li>
+    </ul>
+  </li>
+  <li>email (if other channels are not appropriate)</li>
+  <li>peer tutoring available</li>
+</ul></section><section id="grading--academic-integrity"><h2>Grading &amp; Academic Integrity</h2>
+<p><strong>Course Goals.</strong> For you to acquire skills relevant to your life; to challenge you and support your learning.</p>
+<ul>
+  <li>to do my job, I need to be able to assess your (individual and collective) understanding as clearly as possible</li>
+  <li>assessment is reflected in grades</li>
+  <li>attempting to gain an unfair advantage in grading undermines everyone’s work in the class</li>
+  <li>no long-term benefit to cheating, larger long-term risks
+    <ul>
+      <li>short term risk: failing assignment/course, possible disciplinary action by the college</li>
+    </ul>
+  </li>
+</ul></section><section id="bill--teds-rule"><h2>Bill &amp; Ted’s Rule</h2>
+<blockquote>
+  <p>Be excellent to each other!</p>
+</blockquote></section><section id="remark-on-code"><h2>Remark on Code</h2>
+<p>Code serves two purposes:</p>
+<ol>
+  <li>get the computer to do what you want</li>
+  <li>convey your <em>intent and implementation</em> to someone reading your code
+    <ul>
+      <li>clear organization</li>
+      <li>sensible, consistent naming conventions</li>
+      <li>comments describing functionality, usage, and trickier bits of code</li>
+    </ul>
+  </li>
+</ol></section><section id="lab-extensions"><h2>Lab Extensions</h2>
+<ul>
+  <li>programming is a creative endeavor</li>
+  <li>opportunity to go beyond following instructions</li>
+  <li>solve problems relevant or interesting to you</li>
+  <li>grading is subjective
+    <ul>
+      <li>typically effort and care you put into an assignment are clear</li>
+    </ul>
+  </li>
+</ul></section>
+</div></div>
+
+
+	  <script src="/assets/reveal.js-master/dist/reveal.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/math/math.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/zoom/zoom.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/notes/notes.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/search/search.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/markdown/markdown.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/highlight/highlight.js"></script>
+	  <script>
+	    
+
+	    // Also available as an ES module, see:
+	    // https://revealjs.com/initialization/
+	    Reveal.initialize({
+		controls: false,
+		progress: true,
+		center: true,
+		hash: true,
+		transition: 'none',
+		math: {
+		    config: 'TeX-AMS_HTML-full',
+		    TeX: {
+			Macros: {
+			    R: '\\mathbb{R}',
+			    set: [ '\\left\\{#1 \\; ; \\; #2\\right\\}', 2 ]
+			}
+		    }
+		},
+
+
+		// Learn about plugins: https://revealjs.com/plugins/
+		plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath ]
+	    });
+
+	  </script>
+
+	</body>
+</html>
+	  
+
+<!-- <\!-- load the reveal.js css & js (assuming you've put it in assets/)-\-> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/reveal.scss" -->
+<!-- /> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/theme/source/white.scss" -->
+<!-- /> -->
+<!-- <script -->
+<!--   src="/assets/reveal.js-master/js/reveal.js" -->
+<!--   type="text/javascript" -->
+<!-- ></script> -->
+
+<!-- <\!-- configure the presentation, (you can tweak options to suit) -\-> -->
+<!-- <script> -->
+<!--   Reveal.initialize({ -->
+<!--     // Display presentation control arrows -->
+<!--     controls: false, -->
+
+<!--     // Help the user learn the controls by providing hints, for example by -->
+<!--     // bouncing the down arrow when they first encounter a vertical slide -->
+<!--     controlsTutorial: false, -->
+
+<!--     // Determines where controls appear, "edges" or "bottom-right" -->
+<!--     controlsLayout: "bottom-right", -->
+
+<!--     // Visibility rule for backwards navigation arrows; "faded", "hidden" -->
+<!--     // or "visible" -->
+<!--     controlsBackArrows: "faded", -->
+
+<!--     // Display a presentation progress bar -->
+<!--     progress: true, -->
+
+<!--     // Display the page number of the current slide -->
+<!--     slideNumber: false, -->
+
+<!--     // Push each slide change to the browser history -->
+<!--     history: false, -->
+
+<!--     // Enable keyboard shortcuts for navigation -->
+<!--     keyboard: true, -->
+
+<!--     // Enable the slide overview mode -->
+<!--     overview: true -->
+<!--   }); -->
+<!-- </script> -->

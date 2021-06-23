@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta charset="utf-8">
+
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reset.css">
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reveal.css">
+		<link rel="stylesheet" href="/assets/css/condensation.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="/assets/reveal.js-master/plugin/highlight/monokai.css" id="highlight-theme">
+		<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700" rel="stylesheet">
+
+	</head>
+
+	<body>
+
+
+	  <!-- this is where the reveailfy filter gets applied -->
+	  <div class="reveal"><div class="slides">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section id="multithreaded-performance-and-correctness"><h1>Multithreaded Performance and Correctness</h1></section><section id="today"><h2>Today</h2>
+<ol>
+  <li>Download, run, and modify code.</li>
+  <li>Discuss what you see.</li>
+  <li>Conjecture about what is going on.</li>
+  <li>Conclusions?</li>
+</ol>
+<p><a href="https://docs.google.com/document/d/1D8r9U_WnAMroZ3UbEM2rvOYPfB4o9Kgl4r0dB6BtAP8/edit?usp=sharing">Download worksheet here</a> (Amherst College login required)</p></section><section id="part-i-bad-counter"><h1>Part I: Bad Counter</h1></section><section id="for-your-consideration"><h2>For Your Consideration</h2>
+<p>A simple counter object (<a href="/assets/java/mt-performace-correctness/Counter.java">Counter.java</a>)</p>
+<pre><code class="language-java">public class Counter {
+    long count = 0;
+    
+    public long getCount () { return count; }
+    public void increment () { count++; }
+    public void reset () { count = 0; }
+}
+</code></pre>
+<p>What happens when multiple threads access it concurrently?</p></section><section id="download-the-following-program"><h2>Download the Following Program</h2>
+<ul>
+  <li><a href="/assets/java/mt-performace-correctness/BadCounter.java">BadCounter.java</a></li>
+  <li><a href="/assets/java/mt-performace-correctness/Counter.java">Counter.java</a></li>
+  <li><a href="/assets/java/mt-performace-correctness/ThreadCount.java">ThreadCount.java</a></li>
+</ul></section><section id="questions"><h1>Questions</h1></section><section id="question-1"><h2>Question 1</h2>
+<p>Compile and run the program with <code>NUM_THREADS = 1</code>. How many times is the counter incremented? How long does the program take to run?</p>
+<div style="margin-bottom: 12em"></div></section><section id="question-2"><h2>Question 2</h2>
+<p>Now set <code>NUM_THREADS = 2</code>. What happens when you run the program? Is the behavior what you’d expect?</p>
+<div style="margin-bottom: 12em"></div></section><section id="question-3"><h2>Question 3</h2>
+<p>Try a variety of of values for <code>NUM_THREADS</code>… 2, 4, 10, 100, 1000. Do you notice a pattern in the outputs?</p>
+<div style="margin-bottom: 12em"></div></section><section id="question-4"><h2>Question 4</h2>
+<p>Is this what you’d expect? Can you explain the behavior?</p>
+<div style="margin-bottom: 12em"></div></section><section id="part-ii-slow-samples"><h1>Part II: Slow Samples</h1></section><section id="comparing-random-and-threadlocalrandom"><h2>Comparing <code>Random</code> and <code>ThreadLocalRandom</code>
+</h2>
+<ul>
+  <li>
+    <p><code>java.util.Random</code> is <strong>thread-safe</strong> meaning that multiple threads can access it concurrently without causing issues with program correctness</p>
+  </li>
+  <li>
+    <p><code>java.util.concurrent.ThreadSafeRandom</code> is not thread-safe, but makes a separate random generator for each thread</p>
+  </li>
+</ul>
+<p>Compare the behavior of both!</p></section><section id="download-the-following-program-1"><h2>Download the Following Program</h2>
+<ul>
+  <li><a href="/assets/java/mt-performace-correctness/RandomTester.java">RandomTester.java</a></li>
+  <li><a href="/assets/java/mt-performace-correctness/RandomWorker.java">RandomWorker.java</a></li>
+</ul></section><section id="questions-1"><h1>Questions</h1></section><section id="question-1-1"><h2>Question 1</h2>
+<p>With <code>NUM_THREADS = 1</code>, how long does your program take to execute?</p>
+<div style="margin-bottom: 12em"></div></section><section id="question-2-1"><h2>Question 2</h2>
+<p>Run the program with various values of <code>NUM_THREADS</code> as before. What pattern do you notice?</p>
+<div style="margin-bottom: 12em"></div></section><section id="thread-local-random"><h2>Thread-local Random</h2>
+<p>Modify <code>RandomWorker.java</code> so that it uses a thread local random number generator within the run method instead of the shared <code>Random</code> object. That is, replace the line</p>
+<pre><code class="language-java">r.nextInt();
+</code></pre>
+<p>with</p>
+<pre><code class="language-java">ThreadLocalRandom.current().nextInt();
+</code></pre></section><section id="note"><h2>Note</h2>
+<p>The thread local random number generator creates a separate, independent number generator for each thread, rather than accessing the shared number generator passed to the constructor of the <code>RandomWorker</code> class.</p></section><section id="question-3-1"><h2>Question 3</h2>
+<p>Now run the program with various values of <code>NUM_THREADS</code>. What pattern do you see? Is it a similar pattern to before? How might you explain the difference (if any)?</p>
+<div style="margin-bottom: 12em"></div></section><section id="conclusions"><h1>Conclusions</h1></section><section id="what-did-we-discover"><h2>What Did We Discover?</h2>
+<p>If we’re not careful:</p>
+<ul>
+  <li>get performance/speed without correctness (<code>BadCounter</code>)</li>
+  <li>get correctness without performance (<code>RandomTester</code>)</li>
+</ul>
+<p>Sometimes we can achieve both speed and performance (<code>RandomTester</code> with <code>ThreadLocalRandom</code>)</p></section>
+</div></div>
+
+
+	  <script src="/assets/reveal.js-master/dist/reveal.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/math/math.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/zoom/zoom.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/notes/notes.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/search/search.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/markdown/markdown.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/highlight/highlight.js"></script>
+	  <script>
+	    
+
+	    // Also available as an ES module, see:
+	    // https://revealjs.com/initialization/
+	    Reveal.initialize({
+		controls: false,
+		progress: true,
+		center: true,
+		hash: true,
+		transition: 'none',
+		math: {
+		    config: 'TeX-AMS_HTML-full',
+		    TeX: {
+			Macros: {
+			    R: '\\mathbb{R}',
+			    set: [ '\\left\\{#1 \\; ; \\; #2\\right\\}', 2 ]
+			}
+		    }
+		},
+
+
+		// Learn about plugins: https://revealjs.com/plugins/
+		plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath ]
+	    });
+
+	  </script>
+
+	</body>
+</html>
+	  
+
+<!-- <\!-- load the reveal.js css & js (assuming you've put it in assets/)-\-> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/reveal.scss" -->
+<!-- /> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/theme/source/white.scss" -->
+<!-- /> -->
+<!-- <script -->
+<!--   src="/assets/reveal.js-master/js/reveal.js" -->
+<!--   type="text/javascript" -->
+<!-- ></script> -->
+
+<!-- <\!-- configure the presentation, (you can tweak options to suit) -\-> -->
+<!-- <script> -->
+<!--   Reveal.initialize({ -->
+<!--     // Display presentation control arrows -->
+<!--     controls: false, -->
+
+<!--     // Help the user learn the controls by providing hints, for example by -->
+<!--     // bouncing the down arrow when they first encounter a vertical slide -->
+<!--     controlsTutorial: false, -->
+
+<!--     // Determines where controls appear, "edges" or "bottom-right" -->
+<!--     controlsLayout: "bottom-right", -->
+
+<!--     // Visibility rule for backwards navigation arrows; "faded", "hidden" -->
+<!--     // or "visible" -->
+<!--     controlsBackArrows: "faded", -->
+
+<!--     // Display a presentation progress bar -->
+<!--     progress: true, -->
+
+<!--     // Display the page number of the current slide -->
+<!--     slideNumber: false, -->
+
+<!--     // Push each slide change to the browser history -->
+<!--     history: false, -->
+
+<!--     // Enable keyboard shortcuts for navigation -->
+<!--     keyboard: true, -->
+
+<!--     // Enable the slide overview mode -->
+<!--     overview: true -->
+<!--   }); -->
+<!-- </script> -->

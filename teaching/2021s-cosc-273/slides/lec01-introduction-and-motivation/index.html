@@ -1,0 +1,667 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta charset="utf-8">
+
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reset.css">
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reveal.css">
+		<link rel="stylesheet" href="/assets/css/condensation.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="/assets/reveal.js-master/plugin/highlight/monokai.css" id="highlight-theme">
+		<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700" rel="stylesheet">
+
+	</head>
+
+	<body>
+
+
+	  <!-- this is where the reveailfy filter gets applied -->
+	  <div class="reveal"><div class="slides">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section id="lecture-01-intro-and-motivation"><h1>Lecture 01: Intro and Motivation</h1></section><section id="outline"><h2>Outline</h2>
+<ol>
+  <li><a href="#course-introduction-and-structure">Course Introduction and Structure</a></li>
+  <li><a href="#motivating-questions">Motivating Questions</a></li>
+  <li><a href="#why-parallel-and-distributed-computing">Why Parallel and Distributed Computing?</a></li>
+  <li><a href="#motivating-examples">Motivating Examples</a></li>
+</ol></section><section id="course-introduction-and-structure"><h1>Course Introduction and Structure</h1></section><section id="expected-background-programming"><h2>Expected Background (Programming)</h2>
+<ul>
+  <li>Object Oriented design in Java
+    <ul>
+      <li>classes and inheritance</li>
+      <li>interfaces</li>
+      <li>exception handling</li>
+      <li>generics</li>
+    </ul>
+  </li>
+</ul></section><section id="expected-background-conceptual"><h2>Expected Background (Conceptual)</h2>
+<ul>
+  <li>Basic data structures:
+    <ul>
+      <li>linked lists</li>
+      <li>stacks</li>
+      <li>queues</li>
+      <li>balanced trees</li>
+      <li>(hash tables)</li>
+    </ul>
+  </li>
+  <li>Supported operations, and their complexities</li>
+</ul></section><section id="main-topics-covered"><h2>Main Topics Covered</h2>
+<ul>
+  <li>multithreaded programming in Java</li>
+  <li>mutual exclusion,</li>
+  <li>concurrent objects,</li>
+  <li>locks and contention resolution,</li>
+  <li>blocking synchronization,</li>
+  <li>concurrent data structures,</li>
+  <li>scheduling, work distribution, and barriers,</li>
+  <li>data parallelism (MapReduce and streams).</li>
+</ul>
+<p>(Others as time allows.)</p></section><section id="course-materials"><h2>Course Materials</h2>
+<ul>
+  <li>
+<em>The Art of Multiprocessor Programming</em> (Moodle -&gt; Course Reserves)</li>
+  <li>Notes (posted to Moodle)</li>
+  <li>Recorded lectures</li>
+</ul></section><section id="course-focus"><h2>Course Focus</h2>
+<ul>
+  <li>
+<em>Principles</em> of parallel computing:
+    <ul>
+      <li>conceptual &amp; technical issues that are fundamental to parallel programming</li>
+      <li>indpendent of computing technology</li>
+      <li>want provable guarantees for behavior</li>
+    </ul>
+  </li>
+  <li>We care about <em>performance</em> but…
+    <ul>
+      <li>newest technologies will <em>not</em> be emphasized</li>
+      <li>prefer methods that enhance our understanding of a problem</li>
+    </ul>
+  </li>
+  <li>Compare to
+    <ul>
+      <li>Data Mining (COSC 254)</li>
+      <li>Performance Evaluation (COSC 365)</li>
+    </ul>
+  </li>
+</ul></section><section id="course-structure"><h2>Course Structure</h2>
+<ul>
+  <li>2 Lectures / Week
+    <ul>
+      <li>guided discussion</li>
+      <li>small group discussion</li>
+      <li>emphasize conceptual material</li>
+    </ul>
+  </li>
+  <li>1 Lab / Week
+    <ul>
+      <li>emphasise technical/programming/performance</li>
+      <li>open ended</li>
+    </ul>
+  </li>
+  <li>Accountability groups
+    <ul>
+      <li>meet once a week (you schedule)</li>
+      <li>can be brief meeting</li>
+    </ul>
+  </li>
+</ul></section><section id="evaluation"><h2>Evaluation</h2>
+<ul>
+  <li>Coding/Lab Assignments (bi-weekly, individual): 20%</li>
+  <li>Written/Theoretical Assignments (bi-weekly, small groups) 20%</li>
+  <li>Quizzes (weekly, individual) 20%</li>
+  <li>Participation (everyone!) 10%</li>
+  <li>Final project (small groups) 30%</li>
+</ul></section><section id="motivating-questions"><h1>Motivating Questions</h1></section><section id="main-goals"><h2>Main Goals</h2>
+<ol>
+  <li>Write programs that are <strong>correct</strong>
+    <ul>
+      <li>
+<em>always</em> produce desired output (assuming no hardware errors…)</li>
+    </ul>
+  </li>
+  <li>Write programs that <strong>perform well</strong>
+    <ul>
+      <li>many measures of performance</li>
+      <li>our primary focus: speed and/or throughput</li>
+      <li>other relevant measures:
+        <ul>
+          <li>space/memory</li>
+          <li>communication (minimize)</li>
+          <li>power consumption (minimize)</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol></section><section id="program-correctness"><h2>Program Correctness</h2>
+<p>Goal: Guarantee that a program actually solves the problem you intend.</p>
+<ul>
+  <li>
+    <p>Is your <em>algorithm</em> correct?</p>
+
+    <ul>
+      <li>Can you mathematically prove that your procedure produces the correct output in an idealized model of computation?</li>
+    </ul>
+  </li>
+  <li>
+    <p>Is your <em>implementation</em> correct?</p>
+
+    <ul>
+      <li>Does your code faithfully implement the intended (correct) algorithm under normal operating conditions?</li>
+    </ul>
+  </li>
+</ul></section><section id="program-performance"><h2>Program Performance</h2>
+<ul>
+  <li>Theoretical performance:
+    <ul>
+      <li>How many elementary operations does your algorithm require? (Assume elementary operations have some nominal cost.)</li>
+      <li>How does the number of operations <em>scale</em> with the size of the input?</li>
+    </ul>
+  </li>
+  <li>Practical performance:
+    <ul>
+      <li>How efficient is your program in practice?</li>
+      <li>May vary from machine to machine, or even between executions on the same machine.</li>
+      <li>Difficult to predict from first principles; use heuristics instead.</li>
+    </ul>
+  </li>
+</ul></section><section id="why-parallel-computing"><h1>Why Parallel Computing?</h1></section><section id="history-of-computing-power-moores-law"><h2>History of Computing Power: Moore’s Law</h2>
+<p>Transister density chip doubles every 2 years</p>
+<p><img src="/assets/img/moores-law.jpg" alt="Moore's Law" width="75%"></p>
+<p>Transister density for Intel chips (<a href="https://doi.org/10.1145/3282307">img source</a>).</p></section><section id="but-processor-speed-is-not-increasing"><h2>But Processor <em>Speed</em> Is Not Increasing!</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Year</th>
+      <th>Transistors</th>
+      <th>Clock speed</th>
+      <th>CPU model</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1979</td>
+      <td>30 k</td>
+      <td>5 MHz</td>
+      <td>8088</td>
+    </tr>
+    <tr>
+      <td>1985</td>
+      <td>300 k</td>
+      <td>20 MHz</td>
+      <td>386</td>
+    </tr>
+    <tr>
+      <td>1989</td>
+      <td>1 M</td>
+      <td>20 MHz</td>
+      <td>486</td>
+    </tr>
+    <tr>
+      <td>1995</td>
+      <td>6 M</td>
+      <td>200 MHz</td>
+      <td>Pentium Pro</td>
+    </tr>
+    <tr>
+      <td>2000</td>
+      <td>40 M</td>
+      <td>2 000 MHz</td>
+      <td>Pentium 4</td>
+    </tr>
+    <tr>
+      <td>2005</td>
+      <td>100 M</td>
+      <td>3 000 MHz</td>
+      <td>2-core Pentium D</td>
+    </tr>
+    <tr>
+      <td>2008</td>
+      <td>700 M</td>
+      <td>3 000 MHz</td>
+      <td>8-core Nehalem</td>
+    </tr>
+    <tr>
+      <td>2014</td>
+      <td>6 B</td>
+      <td>2 000 MHz</td>
+      <td>18-core Haswell</td>
+    </tr>
+    <tr>
+      <td>2017</td>
+      <td>20 B</td>
+      <td>3 000 MHz</td>
+      <td>32-core AMD Epyc</td>
+    </tr>
+    <tr>
+      <td>2019</td>
+      <td>40 B</td>
+      <td>3 000 MHz</td>
+      <td>64-core AMD Rome</td>
+    </tr>
+  </tbody>
+</table></section><section id="question"><h2>Question</h2>
+<p>In what sense are computers “faster” now than in 2000?</p>
+<ul>
+  <li>
+<strong>Latency</strong> has not improved (i.e., time to perform a single operation).</li>
+  <li>Yet my current laptop is immeasurably faster than a desktop with a Y2K era Pentium 4 processor.
+    <ul>
+      <li>Why? How?</li>
+    </ul>
+  </li>
+</ul>
+<p><strong>Answer:</strong> Parallelism!</p></section><section id="what-is-parallelism"><h2>What is Parallelism?</h2>
+<p>The ability to perform multiple operations <em>simultaneously</em>.</p>
+<p>Examples:</p>
+<ul>
+  <li>bit-level parallelism (e.g., adding two 32-bit numbers)</li>
+  <li>instruction-level parallelism (multiple elementary instructions at a time)</li>
+  <li>multi-core: independent processors operating at same time on same computer</li>
+  <li>distributed networks: clusters, server farms, internet</li>
+  <li>chefs in a kitchen, ants in a colony, people on earth</li>
+</ul></section><section id="promise-of-parallelism"><h2>Promise of Parallelism</h2>
+<p><em>“Many hands make light work.”</em></p>
+<ul>
+  <li>More processors \(\implies\) more operations per second!</li>
+  <li>Greater throughput!</li>
+  <li>Perform multiple operations at once!</li>
+</ul></section><section id="perils-of-parallelism"><h2>Perils of Parallelism</h2>
+<p>More processors, more problems</p>
+<ul>
+  <li>Some computations need to be done sequentially in order
+    <ul>
+      <li>next step relies on result of current step</li>
+    </ul>
+  </li>
+  <li>Processors must <em>share</em> resources
+    <ul>
+      <li>communication and sychronization are costly</li>
+    </ul>
+  </li>
+  <li>Nondeterminism
+    <ul>
+      <li>different executions give different behavior</li>
+      <li>algorithms must account for all possible executions!</li>
+    </ul>
+  </li>
+</ul></section><section id="concurrent-vs-parallel-vs-distributed"><h2>Concurrent vs Parallel vs Distributed</h2>
+<ul>
+  <li>
+<strong>Concurrent</strong>: multiple processes under way at same time</li>
+  <li>
+<strong>Parallel</strong>: multiple operations performed simultaneously</li>
+  <li>
+<strong>Distributed</strong>: independent processes have indpendent inputs, communicate with each other</li>
+</ul></section><section id="unavoidability-of-parallel--distributed-computing"><h2>Unavoidability of Parallel &amp; Distributed Computing</h2>
+<p>Modern computing is inherently distributed!</p>
+<ul>
+  <li>Different parts of the computer interact
+    <ul>
+      <li>cores within processors</li>
+      <li>processor registers, cache, main memory, IO, etc.</li>
+    </ul>
+  </li>
+  <li>Different computers interact
+    <ul>
+      <li>local computer networks</li>
+      <li>clusters and server farms</li>
+      <li>internet</li>
+    </ul>
+  </li>
+</ul></section><section id="the-power-of-parallelism-i"><h2>The Power of Parallelism I</h2>
+<p><img src="/assets/img/speedup.jpg" alt="Power of Parallelism" width="100%"></p></section><section id="the-power-of-parallelism-ii"><h2>The Power of Parallelism II</h2>
+<p><img src="/assets/img/speedup-annotated.jpg" alt="Power of Parallelism" width="100%"></p></section><section id="historical-notes"><h2>Historical Notes</h2>
+<ul>
+  <li>Explosion of computing power due to parallelism is recent (last 20 years)</li>
+  <li>Theoretical foundations of parallel and distributed systems are older:
+    <ul>
+      <li>
+<a href="https://www.podc.org/">PODC conference</a> since 1982</li>
+      <li>
+<a href="https://spaa.acm.org/">SPAA conference</a> since 1989</li>
+    </ul>
+  </li>
+  <li>My biased view:
+    <ul>
+      <li>theoretical innovation facilitates practical innovation</li>
+      <li>theory and principles of computing maintain their value independent of technological innovation</li>
+    </ul>
+  </li>
+</ul></section><section id="motivating-examples"><h1>Motivating Examples</h1></section><section id="embarrassingly-parallel-problems"><h2>Embarrassingly Parallel Problems</h2>
+<p>We saw in lab: computing \(\pi\) with multiple threads:</p>
+<pre><code class="language-text">n threads | pi estimate | time (ms)
+-----------------------------------
+        1 |     3.14156 |   8674
+        2 |     3.14166 |   4540
+        4 |     3.14166 |   2229
+        8 |     3.14164 |   1675
+-----------------------------------
+</code></pre></section><section id="things-get-weird"><h1>Things Get Weird</h1></section><section id="shared-objects"><h2>Shared Objects</h2>
+<p>Consider a simple counter:</p>
+<pre><code class="language-java">public class Counter {
+    long count = 0;
+    
+    public long getCount () { return count; }
+    public void increment () { count++; }
+    public void reset () { count = 0; }
+}
+</code></pre></section><section id="a-task"><h2>A Task</h2>
+<p>Increment the counter 1 million times.</p></section><section id="an-idea"><h2>An Idea</h2>
+<p>Use multithreading to increment the counter!</p>
+<ul>
+  <li>We can finish quickly, and then take life easy.</li>
+</ul></section><section id="a-thread"><h2>A Thread</h2>
+<p>Define a <code>Runnable</code> object to increment the counter:</p>
+<pre><code class="language-java">public class ThreadCount implements Runnable {
+    private Counter counter;
+    private long times;      // number of times to increment counter
+
+    public ThreadCount (Counter counter, long times) {
+        this.counter = counter;
+        this.times = times;
+    }
+
+    public void run () {
+        for (long i = 0; i &lt; times; i++) {
+            counter.increment();
+        }
+    }
+}
+</code></pre></section><section id="run-several-threads"><h2>Run Several Threads</h2>
+<pre><code class="language-java">public class BadCounter {
+    public static int NUM_THREADS = 4;
+	public static int TIMES = 1_000_000;
+    public static long TIMES_PER_THREAD = TIMES / NUM_THREADS;
+
+    public static void main (String[] args) {
+	Counter counter = new Counter();
+	Thread[] threads = new Thread[NUM_THREADS];
+	for (int i = 0; i &lt; NUM_THREADS; i++) {
+	    threads[i] = new Thread(new ThreadCount(counter, TIMES_PER_THREAD));
+	}
+
+	for (Thread t : threads)
+	    t.start();
+
+	for (Thread t : threads) {
+	    try {
+		t.join();
+	    }
+	    catch (InterruptedException e) {
+	    }
+	}
+
+	System.out.println("Expected final count: " + NUM_THREADS * TIMES_PER_THREAD);
+	System.out.println("Actual final count: " + counter.getCount());
+    }
+}
+</code></pre></section><section id="run-the-code-yourself"><h2>Run the code yourself!</h2>
+<ul>
+  <li><a href="/assets/java/2021s-cosc-273/lec01/Counter.java">Counter.java</a></li>
+  <li><a href="/assets/java/2021s-cosc-273/lec01/ThreadCount.java">ThreadCount.java</a></li>
+  <li><a href="/assets/java/2021s-cosc-273/lec01/BadCounter.java">BadCounter.java</a></li>
+</ul></section><section id="what-happened"><h2>What happened?</h2>
+<ul>
+  <li>What is the final count?</li>
+  <li>Is the behavior what you expected?</li>
+  <li>How can we diagnose the behavior?</li>
+  <li>Does the behavior persist if the number of increment operations is small?</li>
+</ul></section><section id="next-time"><h2>Next Time</h2>
+<p>Theoretical Limitations of Parallelism</p></section>
+</div></div>
+
+
+	  <script src="/assets/reveal.js-master/dist/reveal.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/math/math.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/zoom/zoom.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/notes/notes.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/search/search.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/markdown/markdown.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/highlight/highlight.js"></script>
+	  <script>
+	    
+
+	    // Also available as an ES module, see:
+	    // https://revealjs.com/initialization/
+	    Reveal.initialize({
+		controls: false,
+		progress: true,
+		center: true,
+		hash: true,
+		transition: 'none',
+		math: {
+		    config: 'TeX-AMS_HTML-full',
+		    TeX: {
+			Macros: {
+			    R: '\\mathbb{R}',
+			    set: [ '\\left\\{#1 \\; ; \\; #2\\right\\}', 2 ]
+			}
+		    }
+		},
+
+
+		// Learn about plugins: https://revealjs.com/plugins/
+		plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath ]
+	    });
+
+	  </script>
+
+	</body>
+</html>
+	  
+
+<!-- <\!-- load the reveal.js css & js (assuming you've put it in assets/)-\-> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/reveal.scss" -->
+<!-- /> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/theme/source/white.scss" -->
+<!-- /> -->
+<!-- <script -->
+<!--   src="/assets/reveal.js-master/js/reveal.js" -->
+<!--   type="text/javascript" -->
+<!-- ></script> -->
+
+<!-- <\!-- configure the presentation, (you can tweak options to suit) -\-> -->
+<!-- <script> -->
+<!--   Reveal.initialize({ -->
+<!--     // Display presentation control arrows -->
+<!--     controls: false, -->
+
+<!--     // Help the user learn the controls by providing hints, for example by -->
+<!--     // bouncing the down arrow when they first encounter a vertical slide -->
+<!--     controlsTutorial: false, -->
+
+<!--     // Determines where controls appear, "edges" or "bottom-right" -->
+<!--     controlsLayout: "bottom-right", -->
+
+<!--     // Visibility rule for backwards navigation arrows; "faded", "hidden" -->
+<!--     // or "visible" -->
+<!--     controlsBackArrows: "faded", -->
+
+<!--     // Display a presentation progress bar -->
+<!--     progress: true, -->
+
+<!--     // Display the page number of the current slide -->
+<!--     slideNumber: false, -->
+
+<!--     // Push each slide change to the browser history -->
+<!--     history: false, -->
+
+<!--     // Enable keyboard shortcuts for navigation -->
+<!--     keyboard: true, -->
+
+<!--     // Enable the slide overview mode -->
+<!--     overview: true -->
+<!--   }); -->
+<!-- </script> -->

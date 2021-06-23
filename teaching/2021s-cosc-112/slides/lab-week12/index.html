@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta charset="utf-8">
+
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reset.css">
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reveal.css">
+		<link rel="stylesheet" href="/assets/css/condensation.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="/assets/reveal.js-master/plugin/highlight/monokai.css" id="highlight-theme">
+		<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700" rel="stylesheet">
+
+	</head>
+
+	<body>
+
+
+	  <!-- this is where the reveailfy filter gets applied -->
+	  <div class="reveal"><div class="slides">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section id="project-3-stable-matchings"><h1>Project 3: Stable Matchings</h1></section><section id="overview"><h2>Overview</h2>
+<ol>
+  <li>Stable Marriage Problem</li>
+  <li>Project Description</li>
+  <li>Demo</li>
+</ol></section><section id="stable-marriage-problem"><h2>Stable Marriage Problem</h2>
+<p>Setup:</p>
+<ul>
+  <li>2 sets of <strong>agents</strong>
+    <ul>
+      <li>residents</li>
+      <li>hospitals</li>
+    </ul>
+  </li>
+  <li>want to match residents to hospitals
+    <ul>
+      <li>each resident assigned to one hospital</li>
+      <li>each hospital assigned one resident</li>
+    </ul>
+  </li>
+  <li>agents have <strong>preferences</strong>
+    <ul>
+      <li>residents rank hospitals</li>
+      <li>hospitals rank residents</li>
+    </ul>
+  </li>
+</ul>
+<p>How should we match hospitals and residents?</p></section><section id="background"><h2>Background</h2>
+<p>Problem formalized by Gale &amp; Shapley, 1962</p>
+<ul>
+  <li>Defined a criterion for a “good” matching: <strong>stability</strong>
+</li>
+  <li>Described an algorithm to find a stable matching</li>
+</ul>
+<p>Central problem in economics</p>
+<ul>
+  <li>1,000’s of academic articles</li>
+  <li>4+ books devoted solely to this problem</li>
+  <li>2012 Nobel Prize in Economics (Shapley &amp; Roth)</li>
+</ul>
+<p>And recently: Marriage Pact</p></section><section id="input"><h2>Input</h2>
+<ul>
+  <li>A set $H$ of hospitals</li>
+  <li>A set $R$ of residents</li>
+  <li>For each hospital $h$:
+    <ul>
+      <li>a ranked list of all residents</li>
+    </ul>
+  </li>
+  <li>For each resident $r$
+    <ul>
+      <li>a ranked list of all hospitals</li>
+    </ul>
+  </li>
+</ul>
+<p>Example:</p>
+<pre><code class="language-text">    hospitals
+    A B
+    residents
+    a b
+    preferences
+    a: A B
+    b: A B
+    A: a b
+    B: a b
+</code></pre></section><section id="output"><h2>Output</h2>
+<pre><code class="language-text">    hospitals
+    A B
+    residents
+    a b
+    preferences
+    a: A B
+    b: A B
+    A: a b
+    B: a b
+</code></pre>
+<p>Goal: find a matching where no hospital-resident pair has an incentive to deviate</p></section><section id="blocking-pairs"><h2>Blocking Pairs</h2>
+<pre><code class="language-text">    hospitals
+    A B
+    residents
+    a b
+    preferences
+    a: A B
+    b: A B
+    A: a b
+    B: a b
+</code></pre>
+<p>Consider matching <code>(a, B), (b, A)</code></p>
+<div style="margin-bottom: 8em"></div>
+<p>The pair <code>(a, A)</code> is a <strong>blocking pair</strong>.</p></section><section id="stability"><h2>Stability</h2>
+<p>A matching without blocking pairs is <strong>stable</strong>.</p>
+<pre><code class="language-text">    hospitals
+    A B
+    residents
+    a b
+    preferences
+    a: A B
+    b: A B
+    A: a b
+    B: a b
+</code></pre>
+<p>Consider matching <code>(a, A), (b, B)</code></p>
+<div style="margin-bottom: 8em"></div></section><section id="an-algorithm-mcvitie--wilson"><h2>An Algorithm (McVitie &amp; Wilson)</h2>
+<ol>
+  <li>Residents arrive one at a time</li>
+  <li>When a resident arrives, proposes to first choice hospital</li>
+  <li>When a hospital receives a proposal:
+    <ul>
+      <li>if no other proposals yet, provisially accept</li>
+      <li>otherwise compare proposals
+        <ul>
+          <li>provisionally accept preferred proposal</li>
+          <li>
+<em>refuse</em> less preferred proposal</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>When a resident receives refusal
+    <ul>
+      <li>propose to next choice hospital</li>
+    </ul>
+  </li>
+</ol>
+<p>Continue until all residents arrive</p></section><section id="algorithm-example"><h2>Algorithm Example</h2></section><section id="project-3"><h2>Project 3</h2>
+<p>Implement McVitie &amp; Wilson algorithm to find stable matchings!</p>
+<ul>
+  <li>Provided with examples/tests</li>
+</ul></section><section id="program-demo"><h2>Program Demo</h2></section>
+</div></div>
+
+
+	  <script src="/assets/reveal.js-master/dist/reveal.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/math/math.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/zoom/zoom.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/notes/notes.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/search/search.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/markdown/markdown.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/highlight/highlight.js"></script>
+	  <script>
+	    
+
+	    // Also available as an ES module, see:
+	    // https://revealjs.com/initialization/
+	    Reveal.initialize({
+		controls: false,
+		progress: true,
+		center: true,
+		hash: true,
+		transition: 'none',
+		math: {
+		    config: 'TeX-AMS_HTML-full',
+		    TeX: {
+			Macros: {
+			    R: '\\mathbb{R}',
+			    set: [ '\\left\\{#1 \\; ; \\; #2\\right\\}', 2 ]
+			}
+		    }
+		},
+
+
+		// Learn about plugins: https://revealjs.com/plugins/
+		plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath ]
+	    });
+
+	  </script>
+
+	</body>
+</html>
+	  
+
+<!-- <\!-- load the reveal.js css & js (assuming you've put it in assets/)-\-> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/reveal.scss" -->
+<!-- /> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/theme/source/white.scss" -->
+<!-- /> -->
+<!-- <script -->
+<!--   src="/assets/reveal.js-master/js/reveal.js" -->
+<!--   type="text/javascript" -->
+<!-- ></script> -->
+
+<!-- <\!-- configure the presentation, (you can tweak options to suit) -\-> -->
+<!-- <script> -->
+<!--   Reveal.initialize({ -->
+<!--     // Display presentation control arrows -->
+<!--     controls: false, -->
+
+<!--     // Help the user learn the controls by providing hints, for example by -->
+<!--     // bouncing the down arrow when they first encounter a vertical slide -->
+<!--     controlsTutorial: false, -->
+
+<!--     // Determines where controls appear, "edges" or "bottom-right" -->
+<!--     controlsLayout: "bottom-right", -->
+
+<!--     // Visibility rule for backwards navigation arrows; "faded", "hidden" -->
+<!--     // or "visible" -->
+<!--     controlsBackArrows: "faded", -->
+
+<!--     // Display a presentation progress bar -->
+<!--     progress: true, -->
+
+<!--     // Display the page number of the current slide -->
+<!--     slideNumber: false, -->
+
+<!--     // Push each slide change to the browser history -->
+<!--     history: false, -->
+
+<!--     // Enable keyboard shortcuts for navigation -->
+<!--     keyboard: true, -->
+
+<!--     // Enable the slide overview mode -->
+<!--     overview: true -->
+<!--   }); -->
+<!-- </script> -->

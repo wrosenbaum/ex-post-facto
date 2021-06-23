@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta charset="utf-8">
+
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reset.css">
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reveal.css">
+		<link rel="stylesheet" href="/assets/css/condensation.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="/assets/reveal.js-master/plugin/highlight/monokai.css" id="highlight-theme">
+		<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700" rel="stylesheet">
+
+	</head>
+
+	<body>
+
+
+	  <!-- this is where the reveailfy filter gets applied -->
+	  <div class="reveal"><div class="slides">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section id="lab-week-06-exceptions"><h1>Lab Week 06: Exceptions</h1></section><section id="plan"><h2>Plan</h2>
+<ol>
+  <li>Exceptions</li>
+  <li>Input Stream</li>
+  <li>Starting Lab 04: Exceptions</li>
+</ol></section><section id="exceptions"><h1>Exceptions</h1></section><section id="a-problem-you-brought-up"><h2>A Problem You Brought Up</h2>
+<pre><code class="language-java">    public class Fraction {
+        private int num;
+        private int den;
+        
+        Fraction (int num, int den) {
+            this.num = num;
+            this.den = den;
+            reduce();
+        }
+    }
+</code></pre>
+<p>What stops us from calling <code>new Fraction(1, 0)</code>?</p></section><section id="nothing-stops-us"><h2>Nothing Stops Us!</h2>
+<p>Unique problem:</p>
+<ul>
+  <li>Nothing <em>formally</em> wrong with <code>new Fraction(1, 0)</code>
+    <ul>
+      <li>valid Java syntax, no error</li>
+    </ul>
+  </li>
+  <li>Problem is with semantics
+    <ul>
+      <li>$1 / 0$ is not a well defined fraction</li>
+      <li>not a programming error, but a logical error</li>
+    </ul>
+  </li>
+</ul></section><section id="enter-exceptions"><h2>Enter Exceptions</h2>
+<p>Exceptions give a way of:</p>
+<ol>
+  <li>Signaling that a method could introduce undesireable behavior</li>
+  <li>Detecting that undesireable behavior occurred</li>
+  <li>Handling the undesireable behavior
+    <ul>
+      <li>make the method caller deal with it!</li>
+    </ul>
+  </li>
+</ol></section><section id="declaring-methods-that-throw-exceptions"><h2>Declaring Methods that Throw Exceptions</h2>
+<pre><code class="language-java">        Fraction (int num, int den) throws ArithmeticException {
+            if (den == 0) {
+                throw new ArithmeticException("division by zero");
+            }
+            this.num = num;
+            this.den = den;
+            reduce();
+        }
+</code></pre>
+<p>When <code>throw ...</code> is executed, method call halts</p>
+<ul>
+  <li>like <code>return</code> statement, but nothing returned; no <code>Fraction</code> created</li>
+</ul></section><section id="what-happens"><h2>What happens</h2>
+<ul>
+  <li>Now <code>new Fraction(1, 0)</code> throws the exception</li>
+  <li>This is good because we see that there was an error</li>
+</ul></section><section id="catching-exceptions"><h2>Catching Exceptions</h2>
+<p>When an exception is <em>thrown</em> it can be <em>caught</em></p>
+<ul>
+  <li>Catching exceptions allows us to handle bad behavior without crashing the program</li>
+</ul>
+<pre><code class="language-java">Fraction f;
+try {
+    // some code that could throw an exception
+    f = newFraction(getNum(), getDen());
+} catch (ArithmeticException e) {
+    // code to be executed if exception is thrown
+    System.out.println(e);
+    System.out.println("Using default value of 0/1");
+    f = newFraction(0, 1);
+}
+</code></pre>
+<ul>
+  <li>This is a <strong><code>try-catch</code> block</strong>
+</li>
+</ul></section><section id="input-streams"><h1>Input Streams</h1></section><section id="how-does-your-computer-read-keyboard-input"><h2>How Does Your Computer Read (Keyboard) Input?</h2>
+<ul>
+  <li>1 character at a time</li>
+  <li>With each keystroke, it decides what to do next
+    <ul>
+      <li>print a letter on the screen?</li>
+      <li>wait for another keystroke (e.g., shift key)?</li>
+    </ul>
+  </li>
+</ul></section><section id="accessing-individual-characters"><h2>Accessing Individual Characters</h2>
+<ul>
+  <li>Use <code>InputStream in</code>
+    <ul>
+      <li>in particular <code>System.in</code>
+</li>
+    </ul>
+  </li>
+  <li>
+<code>in.read()</code> returns one character at a time from terminal input
+    <ul>
+      <li>returns an <code>int</code>
+</li>
+      <li>
+<code>0</code> through <code>255</code> represents <code>char</code>
+</li>
+      <li>
+<code>-1</code> represents end of stream</li>
+      <li>throws <code>IOException</code> if something goes wrong</li>
+    </ul>
+  </li>
+</ul></section><section id="lab-04-exceptions"><h1>Lab 04: Exceptions</h1></section><section id="terminal-input"><h2>Terminal Input</h2>
+<ul>
+  <li>Just a sequence (stream) of <em>characters</em>
+</li>
+  <li>Sometimes might represent an integer:
+    <ul>
+      <li>
+<code>123</code>, <code>-23</code> represent numbers</li>
+      <li>
+<code>Mammoth</code>, <code>12a3</code> don’t represent numbers</li>
+    </ul>
+  </li>
+</ul>
+<div style="margin-bottom: 6em"></div></section><section id="your-task"><h2>Your Task</h2>
+<p>Write a program that</p>
+<ol>
+  <li>Parses integers from input stream
+    <ul>
+      <li>stream may contain many values separated by whitespace</li>
+      <li>e.g., <code>1 yes 2 no -321</code>
+</li>
+    </ul>
+  </li>
+  <li>Returns values of valid integers as <code>int</code>
+</li>
+  <li>Throws an exception if value is not an integer</li>
+</ol></section><section id="program-demo"><h2>Program Demo</h2></section><section id="how"><h2>How?</h2>
+<ul>
+  <li>Use <code>in.read()</code> to get individual characters</li>
+  <li>Each time a character is read, decide what to do
+    <ul>
+      <li>update <code>int</code> value?</li>
+      <li>return value?</li>
+      <li>throw exception?</li>
+      <li>???</li>
+    </ul>
+  </li>
+</ul>
+<div style="margin-bottom: 8em"></div></section><section id="suggestion"><h2>Suggestion</h2>
+<p>Implement solution with no exception handling first</p>
+<ul>
+  <li>Assume all input consists of valid numbers</li>
+  <li>Once this solution works, modify it to handle exceptions</li>
+</ul></section>
+</div></div>
+
+
+	  <script src="/assets/reveal.js-master/dist/reveal.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/math/math.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/zoom/zoom.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/notes/notes.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/search/search.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/markdown/markdown.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/highlight/highlight.js"></script>
+	  <script>
+	    
+
+	    // Also available as an ES module, see:
+	    // https://revealjs.com/initialization/
+	    Reveal.initialize({
+		controls: false,
+		progress: true,
+		center: true,
+		hash: true,
+		transition: 'none',
+		math: {
+		    config: 'TeX-AMS_HTML-full',
+		    TeX: {
+			Macros: {
+			    R: '\\mathbb{R}',
+			    set: [ '\\left\\{#1 \\; ; \\; #2\\right\\}', 2 ]
+			}
+		    }
+		},
+
+
+		// Learn about plugins: https://revealjs.com/plugins/
+		plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath ]
+	    });
+
+	  </script>
+
+	</body>
+</html>
+	  
+
+<!-- <\!-- load the reveal.js css & js (assuming you've put it in assets/)-\-> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/reveal.scss" -->
+<!-- /> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/theme/source/white.scss" -->
+<!-- /> -->
+<!-- <script -->
+<!--   src="/assets/reveal.js-master/js/reveal.js" -->
+<!--   type="text/javascript" -->
+<!-- ></script> -->
+
+<!-- <\!-- configure the presentation, (you can tweak options to suit) -\-> -->
+<!-- <script> -->
+<!--   Reveal.initialize({ -->
+<!--     // Display presentation control arrows -->
+<!--     controls: false, -->
+
+<!--     // Help the user learn the controls by providing hints, for example by -->
+<!--     // bouncing the down arrow when they first encounter a vertical slide -->
+<!--     controlsTutorial: false, -->
+
+<!--     // Determines where controls appear, "edges" or "bottom-right" -->
+<!--     controlsLayout: "bottom-right", -->
+
+<!--     // Visibility rule for backwards navigation arrows; "faded", "hidden" -->
+<!--     // or "visible" -->
+<!--     controlsBackArrows: "faded", -->
+
+<!--     // Display a presentation progress bar -->
+<!--     progress: true, -->
+
+<!--     // Display the page number of the current slide -->
+<!--     slideNumber: false, -->
+
+<!--     // Push each slide change to the browser history -->
+<!--     history: false, -->
+
+<!--     // Enable keyboard shortcuts for navigation -->
+<!--     keyboard: true, -->
+
+<!--     // Enable the slide overview mode -->
+<!--     overview: true -->
+<!--   }); -->
+<!-- </script> -->

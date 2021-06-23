@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+<title>Will  Rosenbaum | Partially Ordered Sets and Scheduling</title>
+<meta name="description" content="A blog about mathematics, computer science, etc.
+">
+
+<!-- Open Graph -->
+
+
+<!-- Bootstrap & MDB -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" integrity="sha512-MoRNloxbStBcD8z3M/2BmnT+rg4IsMxPkXaGh2zD6LGNNFE80W3onsAhRcMAMrSoyWL9xD7Ert0men7vR8LUZg==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/css/mdb.min.css" integrity="sha512-RO38pBRxYH3SoOprtPTD86JFOclM51/XTIdEPh5j8sj4tp8jmQIx26twG52UaLi//hQldfrh7e51WzP9wuP32Q==" crossorigin="anonymous" />
+
+<!-- Fonts & Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"  integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.9.0/css/academicons.min.css" integrity="sha512-W4yqoT1+8NLkinBLBZko+dFB2ZbHsYLDdr50VElllRcNt2Q4/GSs6u71UHKxB7S6JEMCp5Ve4xjh3eGQl/HRvg==" crossorigin="anonymous">
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Roboto+Slab:100,300,400,500,700|Material+Icons">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+
+
+
+<!-- Code Syntax Highlighting -->
+<link rel="stylesheet" href="https://gitcdn.link/repo/jwarby/jekyll-pygments-themes/master/github.css" />
+
+<!-- Styles -->
+<link rel="shortcut icon" href="/assets/img/favicon.ico">
+<link rel="stylesheet" href="/assets/css/main.css">
+
+<link rel="canonical" href="/teaching/2021s-cosc-273/notes/posets-and-scheduling/">
+
+<!-- JQuery -->
+<!-- jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+
+
+<!-- Theming-->
+
+  <script src="/assets/js/theme.js"></script>
+  <!-- Load DarkMode JS -->
+<script src="/assets/js/dark_mode.js"></script>
+
+
+
+
+
+
+    
+<!-- MathJax -->
+<script type="text/javascript">
+  window.MathJax = {
+    tex: {
+      tags: 'ams'
+    }
+  };
+</script>
+<script defer type="text/javascript" id="MathJax-script" src="https://cdn.jsdelivr.net/npm/mathjax@3.1.2/es5/tex-mml-chtml.js"></script>
+<script defer src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+
+
+  </head>
+
+  <body class="fixed-top-nav ">
+
+    <!-- Header -->
+
+    <header>
+
+    <!-- Nav Bar -->
+    <nav id="navbar" class="navbar navbar-light navbar-expand-sm fixed-top">
+    <div class="container">
+      
+      <a class="navbar-brand title font-weight-lighter" href="https://willrosenbaum.com/">
+       Will   Rosenbaum
+      </a>
+      
+      <!-- Navbar Toggle -->
+      <button class="navbar-toggler collapsed ml-auto" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar top-bar"></span>
+        <span class="icon-bar middle-bar"></span>
+        <span class="icon-bar bottom-bar"></span>
+      </button>
+      <div class="collapse navbar-collapse text-right" id="navbarNav">
+        <ul class="navbar-nav ml-auto flex-nowrap">
+          <!-- About -->
+          <li class="nav-item ">
+            <a class="nav-link" href="/">
+              about
+              
+            </a>
+          </li>
+          <!-- Other pages -->
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/teaching/">
+                teaching
+                
+              </a>
+          </li>
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/research/">
+                research
+                
+              </a>
+          </li>
+          
+          
+          
+          <li class="nav-item ">
+              <a class="nav-link" href="/publications/">
+                publications
+                
+              </a>
+          </li>
+          
+          
+	  
+          <!-- Blog -->
+          <li class="nav-item ">
+            <a class="nav-link" href="/blog/">
+              blog
+              
+            </a>
+          </li>
+          
+
+          
+            <div class = "toggle-container">
+              <a id = "light-toggle">
+                  <i class="fas fa-moon"></i>
+                  <i class="fas fa-sun"></i>
+              </a>
+            </div>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+</header>
+
+
+    <!-- Content -->
+
+    <div class="container mt-5">
+      <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Partially Ordered Sets and Scheduling</h1>
+    <p class="post-description">We introduce the notion of a partially ordered set and a general scheduling problem.</p>
+  </header>
+
+  <article>
+    <h2 id="introduction">Introduction</h2>
+
+<p>In discussing Amdahl’s law (<a href="/teaching/2021s-cosc-273/slides/lec02-limitations-of-parallelism/#/computational-limits-of-parallelism">Lecture 02</a>), we assumed that a computational task consisted of many elementary operations, some of which had to be computed sequentially, while others could be computed in parallel. Amdahl’s law then gives a quantitative measure of the <strong>speedup</strong>, \(S\)—i.e., how much faster the task can be performed by using \(n\) parallel processors:</p>
+
+\[S = \frac{1}{1 - p + \frac{p}{n}}\]
+
+<p>Here, \(p\) is the proportion of operations that can be performed in parallel.</p>
+
+<p>While Amdahl’s law gives a valuable heuristic for how much we might expect parallelism to speed up a computation, it is not typically the case that we can classify operations simply as “parallel” or “sequential.” Instead, a task might consist of several sub-tasks, some of which need to be completed before others are started.</p>
+
+<hr />
+
+<p><strong>Example</strong> (getting dressed). Consider the task of getting dressed. Depending on the particulars of what I intend to wear, this task can be decomposed into several sub-tasks, such as:</p>
+
+<ul>
+  <li>put on underwear</li>
+  <li>put on shirt</li>
+  <li>put on left sock</li>
+  <li>put on right sock</li>
+  <li>put on pants</li>
+  <li>put on left shoe</li>
+  <li>put on right shoe</li>
+  <li>put on sweater</li>
+</ul>
+
+<p>Some of these tasks need to be performed in a particular order—e.g., I must put on my left sock before putting on my left shoe. For others, however, the order is not important. For example, I can put on my left sock before or after putting on my shirt. The following diagram indicates the relationships between the sub-tasks: there is an arrow from one task to another whenever the former task must be completed before the latter.</p>
+
+<p><img src="/assets/img/posets-and-scheduling/clothes-poset.svg" alt="" width="75%" /></p>
+
+<p>(Icons created by by <a href="https://thenounproject.com/laurinkraan/collection/clothes-and-accessories/">Laurin Kraan</a>)</p>
+
+<hr />
+
+<p>In what follows, we will describe a mathematical object—a <em>partially ordered set</em>, a.k.a. <em>poset</em>—that gives a way of formalizing relationships between elements as in the previous example. Using this formalism we will describe the general problem of scheduling tasks for optimal latency.</p>
+
+<h2 id="partially-ordered-sets">Partially Ordered Sets</h2>
+
+<p>A <strong>partially ordered set</strong> (or <strong>poset</strong>) consists of a set \(X\) of elements together with a binary relation \(\prec\) satisfying the following properties:</p>
+
+<ul>
+  <li><em>transitivity:</em> if \(x \prec y\) and \(y \prec z\), then \(x \prec z\)</li>
+  <li><em>anti-symmetry:</em> if \(x \prec y\), then \(y \nprec x\) (i.e., it is not the case that \(x \prec y\) and \(y \prec x\))</li>
+</ul>
+
+<p>In a poset, it may be the case that two elements \(x\) and \(y\) satisfy \(x \nprec y\) and \(y \nprec x\). We call such elements <strong>incomparable</strong>. Otherwise, if either \(x \prec y\) or \(y \prec x\), we say \(x\) and \(y\) are <strong>comparable</strong>.</p>
+
+<p><strong>Examples.</strong> Here are a few examples of posets:</p>
+
+<ol>
+  <li>
+    <p>The natural numbers \(\mathbf{N} = \{0, 1, 2, \ldots\}\) together with the standard \(&lt;\) relation are a poset. Note since every distinct pair of numbers \(x\) and \(y\) satisfy either \(x &lt; y\) or \(y &lt; x\), the relation \(&lt;\) is said to be a <strong>total order</strong> on the natural numbers.</p>
+  </li>
+  <li>
+    <p>Clothing items form a poset, where the \(\prec\) relation indicates if one item must be put on before another. Using our previous clothing items:</p>
+
+\[X = \{\text{underwear}, \text{shirt}, \text{L sock}, \text{R sock}, \text{pants}, \ldots\}.\]
+
+    <p>For the precedence relationship, we have, for example</p>
+
+\[\text{underwear} \prec \text{pants} \prec \text{L shoe}.\]
+
+    <p>We also have \(\text{L sock} \prec \text{L shoe}\). The elements \(\text{L sock}\) and \(\text{pants}\) are incomparable: either one can be put on before the other.</p>
+  </li>
+  <li>
+    <p>Intervals of time. Suppose \(t_0\) and \(t_1\) are distinct times with \(t_0 &lt; t_1\)—i.e., \(t_0\) occurs before \(t_1\). Then we denote the interval \(T = [t_0, t_1]\) which consists of all times between \(t_0\) and \(t_1\). We can define a precedence relation \(\prec\) on the set of <em>intervals</em> of time as follows. If \(T = [t_0, t_1]\) and \(S = [s_0, s_1]\), then</p>
+
+    <p>\(T \prec S \iff t_1 \leq s_0\).</p>
+
+    <p>That is, \(T\) precedes \(S\) if and only if the interval \(T\) ends no later than \(S\) begins. In this poset, intervals of time are comparable if and only if they do not overlap (except possibly at one endpoint). If two intervals do overlap, then they are said to be <strong>concurrent</strong>. That is, two intervals of time are concurrent if and only if they are incomparable under the relation \(\prec\) defined above.</p>
+
+    <p>We will frequently use the notation \(\to\) to denote precedence of time intervals with respect to the \(\prec\) defined above. That is, we will write \(T \to S\) to indicate that \(T\) ends before \(S\) begins.</p>
+  </li>
+</ol>
+
+<p>Given two elements \(x\) and \(y\) in \(X\), we say that \(y\) <strong>covers</strong> \(x\)  if \(x \prec y\) and there is no element \(z\) satisfying \(x \prec z \prec y\). That is, there is no element “between” \(x\) and \(y\) in the poset. In our clothing example, \(\text{sweater }\) covers \(\text{shirt }\) because there is no item of clothing that must be put on between a shirt and a sweater. However, \(\text{L shoe}\) does not cover \(\text{underwear}\), because \(\text{pants}\) should be put on after \(\text{underwear}\) and before \(\text{L shoe}\).</p>
+
+<p>Often, we can represent posets in a visually appealing way by drawing all of its elements as well as arrows from each \(x\) to \(y\) whenever \(y\) covers \(x\). Such a diagram is called a <strong>Hasse diagram</strong>. At the beginning of this note, we have drawn the Hasse diagram for the “getting dressed” poset.</p>
+
+<p>If \(x \prec y\), then there may not be an arrow directly from \(x\) to \(y\) in the Hasse diagram. However, there will be a directed path—i.e., a sequence of arrows—going from \(x\) to \(y\). On the other hand, if \(x\) and \(y\) are incomparable, then there is neither a directed path from \(x\) to \(y\) nor a directed path from \(y\) to \(x\).</p>
+
+<p>Note that because of the anti-symmetry property of posets, a Hasse diagram does not contain cycles (sequences of arrows \(x_0 \to x_1 \to \cdots \to x_k \to x_0\) that return to their starting points). Indeed, if we had such a cycle containing an element \(x\), say, then we’d have \(x \prec x\), which is not allowed by the anti-symmetry property of posets.</p>
+
+<h2 id="scheduling-for-optimal-latency">Scheduling for Optimal Latency</h2>
+
+<p>Using the formalism of posets, we can now define the problem of computing an optimal schedule for parallel computation. Assume that some task \(T\) can be decomposed into sub-tasks \(T = \{T_1, T_2, \ldots, T_n\}\). In general, we can encode the relationships between the various \(T_i\) as a poset, where \(T_i \prec T_j\) if (sub)task \(T_i\) needs to be performed before \(T_j\). Finally, each task \(T_i\) has an associated <strong>weight</strong> \(w_i\), which indicates the amount of time it takes a single processor to perform \(T_i\).</p>
+
+<p>To complete the task \(T\), we must complete all of the sub-tasks \(T_1, T_2, \ldots, T_n\). As computer scientists, our goal is to complete all of the tasks as quickly as possible. Moreover, we may have multiple processors that can perform some tasks in parallel. The only limitation is that if \(T_i \prec T_j\), then \(T_i\) must be completed (by some processor) before task \(T_j\) can be begun (possibly by another processor). However, if \(T_i\) and \(T_j\) are incomparable, then they can be performed in parallel (by two different machines).</p>
+
+<p>Given \(k\) processors \(P_1, P_2, \ldots, P_k\) a <strong>schedule</strong> for \(T\) assigns each sub-task \(T_i\) a processor \(P_j\) as well as a time \(t_i\) at which \(P_j\) should start task \(T_i\). Observe that if a processor starts \(T_i\) at times \(t_i\), then the task will complete at time \(t_i + w_i\), where \(w_i\) is the weight of \(T_i\). A schedule is <strong>feasible</strong> if:</p>
+
+<ol>
+  <li>
+    <p>no single processor is performing multiple tasks at the same time (i.e., if a processor is assigned \(T_i\) at time \(t_i\) and \(T_j\) at time \(t_j &gt; t_i\), then \(t_j \geq t_i + w_i\)), and</p>
+  </li>
+  <li>
+    <p>for every pair of tasks \(T_i\) and \(T_j\) with \(T_i \prec T_j\), \(T_j\) is scheduled to start after (or at the same time) \(T_i\) completes (i.e., \(t_j \geq t_i + w_i\)).</p>
+  </li>
+</ol>
+
+<p>The <strong>latency</strong> of a schedule is the total time between when the first task is scheduled to when the last task completes. Our goal is to find a schedule with the smallest latency.</p>
+
+<hr />
+
+<p><strong>Example.</strong> Suppose a task \(T\) is comprised of 5 sub-tasks, \(T_1, T_2, T_3, T_4, T_5\) with the precedence relation below:</p>
+
+<p><img src="/assets/img/posets-and-scheduling/generic-poset.svg" alt="" width="50%" /></p>
+
+<p>That is, \(T_1\) must be performed before \(T_2, T_3\), and \(T_4\) (which can be performed in any order), and all other tasks must be performed before \(T_5\). Suppose the weights of the tasks are \(w_1 = w_2 = w_5 = 1\), \(w_3 = 2\) and \(w_4 = 3\). That is, \(w_1\) takes one second (say) to perform, etc.</p>
+
+<p>If we have a single processor, the best we can do is schedule all tasks sequentially, making sure that all of a task’s preceding tasks are performed before scheduling a task. For example, we could schedule:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>time  </th>
+      <th>\(P_1\) (task latency)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>\(T_1\) (1)</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>\(T_2\) (1)</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>\(T_3\) (2)</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>\(T_4\) (3)</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>\(T_5\) (1)</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td>complete</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Clearly, we can’t do better than latency 8 with a single processor.  If we have two processors, the problem becomes more interesting, because we have choices to make. No matter what, \(T_1\) has to complete before any processor starts \(T_2, T_3\) or \(T_4\). But then we have to choose which to schedule next. For example, we can schedule:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>time  </th>
+      <th>\(P_1\)  </th>
+      <th>\(P_2\)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>\(T_1\) (1)</td>
+      <td>(idle)</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>\(T_2\) (1)</td>
+      <td>\(T_3\) (2)</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>\(T_4\) (3)</td>
+      <td>\(\vdots\)</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>\(\vdots\)</td>
+      <td>(idle)</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>\(T_5\) (1)</td>
+      <td>(idle)</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>complete  </td>
+      <td>complete</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>It turns out we can do better! Notice that in the previous schedule \(T_2\) and \(T_3\) to both start at time 1, while \(T_4\) (which has the largest weight/latency) doesn’t start until after \(P_1\) completes \(T_2\). However, by starting \(T_4\) immediately after \(T_1\) completes, we get:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>time  </th>
+      <th>\(P_1\)  </th>
+      <th>\(P_2\)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>0</td>
+      <td>\(T_1\) (1)</td>
+      <td>(idle)</td>
+    </tr>
+    <tr>
+      <td>1</td>
+      <td>\(T_4\) (3)</td>
+      <td>\(T_2\) (1)</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>\(\vdots\)</td>
+      <td>\(T_3\) (2)</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>\(T_5\)</td>
+      <td>(idle)</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>complete  </td>
+      <td>complete</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>This is the best possible schedule—even adding more processors cannot improve the latency. (To see this, observe that we have \(T_1 \prec T_4 \prec T_5\), so these tasks must be performed sequentially. Since \(w_1 = w_5 = 1\) and \(w_4 = 3\), performing these tasks sequentially has latency \(w_1 + w_4 + w_5 = 5\), which is what the schedule above achieves.)</p>
+
+<hr />
+
+<p>In general, there are many ways to schedule a given set of tasks on parallel machines, and different schedules may have vastly different latencies. Unfortunately, there is no known efficient algorithm for finding the best (i.e., lowest latency) schedule. In fact, this problem is known to be <a href="https://en.wikipedia.org/wiki/NP-hardness">NP-hard</a>. Thus, under a <a href="https://en.wikipedia.org/wiki/P_versus_NP_problem">widely-believed conjecture</a>, there is no efficient procedure for finding an optimal-latency schedule. Even if we restrict to relatively simple scenarios—e.g., all tasks have the same latency, or there are only two processors and all tasks have latency either 1 or 2—the problem of finding an optimal schedule remains intractable.</p>
+
+<p>Another difficulty in scheduling processes is that we might not know the latency of an individual sub-task in advance. That is, we might not know how long a task takes to complete until we’ve completed it. In this situation, the best we can do is construct a schedule <strong>greedily</strong>. That is, whenever a process is idle, it checks if there is a task that can be performed (all of its preceding tasks have been completed) but is not being performed by another processor; if so, it begins one such task. More formally, a schedule is a <strong>greedy schedule</strong> if for all times \(t\), each processor is either performing a task at time \(t\), or there are no available tasks (every incomplete task is either in the process of being performed, or one of its preceding tasks has not been completed).</p>
+
+<hr />
+
+<p><strong>Example.</strong> Both of the 2-processor schedules for the previous example are greedy schedules. However, the second schedule has smaller latency. Thus, different greedy schedules may have different latencies.</p>
+
+<hr />
+
+<p><strong>Exercise.</strong> Consider again the first example with putting on clothes. Suppose the tasks have the following latencies:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th><strong>task</strong>  </th>
+      <th><strong>latency</strong> (s)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>underwear</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <td>pants</td>
+      <td>30</td>
+    </tr>
+    <tr>
+      <td>each sock</td>
+      <td>15</td>
+    </tr>
+    <tr>
+      <td>each shoe</td>
+      <td>30</td>
+    </tr>
+    <tr>
+      <td>shirt</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <td>sweater</td>
+      <td>10</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>What is the minimum latency achievable for getting dressed with 1 processor? With 2 processors? With 3 processors?</p>
+
+<p>Suppose we perform the getting dressed tasks greedily with 2 processors. What is the worst-case latency among all <em>greedy</em> schedules?</p>
+
+<hr />
+
+
+  </article>
+
+</div>
+
+    </div>
+
+    <!-- Footer -->
+
+    
+<footer class="fixed-bottom">
+  <div class="container mt-0">
+    &copy; Copyright 2021 Will  Rosenbaum.
+    
+    
+    
+  </div>
+</footer>
+
+
+
+  </body>
+
+  <!-- Bootsrap & MDB scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.4.4/umd/popper.min.js" integrity="sha512-eUQ9hGdLjBjY3F41CScH3UX+4JDSI9zXeroz7hJ+RteoCaY+GP/LDoM8AO+Pt+DRFw3nXqsjh9Zsts8hnYv8/A==" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha512-M5KW3ztuIICmVIhjSqXe01oV2bpe248gOxqmlcYrEzAvws7Pw3z6BK0iGbrwvdrUQUhi3eXgtxp5I8PDo9YfjQ==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.1/js/mdb.min.js" integrity="sha512-Mug9KHKmroQFMLm93zGrjhibM2z2Obg9l6qFG2qKjXEXkMp/VDkI4uju9m4QKPjWSwQ6O2qzZEnJDEeCw0Blcw==" crossorigin="anonymous"></script>
+
+  
+<!-- Mansory & imagesLoaded -->
+<script defer src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<script defer src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+<script defer src="/assets/js/mansory.js" type="text/javascript"></script>
+
+
+  
+
+
+<!-- Load Common JS -->
+<script src="/assets/js/common.js"></script>
+
+
+</html>

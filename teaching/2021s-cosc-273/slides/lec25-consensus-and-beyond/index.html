@@ -1,0 +1,485 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta charset="utf-8">
+
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reset.css">
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reveal.css">
+		<link rel="stylesheet" href="/assets/css/condensation.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="/assets/reveal.js-master/plugin/highlight/monokai.css" id="highlight-theme">
+		<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700" rel="stylesheet">
+
+	</head>
+
+	<body>
+
+
+	  <!-- this is where the reveailfy filter gets applied -->
+	  <div class="reveal"><div class="slides">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section id="lecture-25-consensus--beyond"><h1>Lecture 25: Consensus &amp; Beyond</h1></section><section id="reminders"><h2>Reminders</h2>
+<p>Final Project:</p>
+<ul>
+  <li>Short video due today</li>
+  <li>Final submission next Friday, May 28, 5pm Eastern</li>
+</ul>
+<p>All submissions to Google drive folder</p></section><section id="last-time"><h2>Last Time</h2>
+<p>Consensus</p>
+<ul>
+  <li>$n$ processes, each with private input</li>
+  <li>some processes may crash</li>
+  <li>must produce output satisfying following properties
+    <ul>
+      <li>
+<strong>Agreement</strong>: all processes output the same value</li>
+      <li>
+<strong>Validity</strong>: if all systems have the same input, they all output that value</li>
+      <li>
+<strong>Termination</strong>: all (non-faulty) processes decide on an output and terminate after a finite number of steps</li>
+    </ul>
+  </li>
+</ul></section><section id="our-goal"><h2>Our Goal</h2>
+<p><strong>Theorem</strong> (FLP, 1985). There is no algorithm that achieves consensus in the presence of even a single faulty process.</p>
+<ul>
+  <li>Assumes atomic read/write shared memory</li>
+  <li>Special case: there is no <em>wait-free</em> protocol for consensus for any $n &gt; 1$
+    <ul>
+      <li>wait-free is stronger assumption than termination</li>
+    </ul>
+  </li>
+  <li>Consider <em>binary consensus</em> all inputs 0/1</li>
+</ul></section><section id="also-last-time"><h2>Also Last Time</h2>
+<p><strong>Lemma 2.</strong> Suppose $A$ solves consensus. Then there is a bivalent initial state.</p>
+<ul>
+  <li>Recall a <em>bivalent</em> execution (or initial state) is an execution from which the output could be 0 or 1 (depending or scheduler)</li>
+</ul>
+<p><strong>Lemma 3.</strong> Every consensus protocol has a critical execution.</p>
+<ul>
+  <li>$E$ is a <em>critical execution</em> if it is bivalent, but every extension of $E$ is univalent
+    <ul>
+      <li>any process taking a single step from $E$ determines the output</li>
+    </ul>
+  </li>
+</ul>
+<p>These properties hold for all consensus protocols</p></section><section id="today"><h2>Today</h2>
+<p>Finish the proof of FLP</p></section><section id="outline-of-proof-of-flp"><h2>Outline of Proof of FLP</h2>
+<p>Assume only 2 processes, $P_0$ and $P_1$</p>
+<ol>
+  <li>Start from a critical execution $E$
+    <ul>
+      <li>$E$ is bivalent, but any extension is univalent</li>
+    </ul>
+  </li>
+  <li>Consider all possibilities for next step:
+    <ul>
+      <li>both threads <code>read</code> for next step</li>
+      <li>one thread <code>read</code>s, the other <code>write</code>s</li>
+      <li>both threads <code>write</code>
+</li>
+    </ul>
+  </li>
+  <li>Show that in any case, we contradict either criticality of <code>E</code> or correctness of protocol</li>
+</ol></section><section id="assumptions"><h2>Assumptions</h2>
+<p>Without loss of generality:</p>
+<ol>
+  <li>There are two processes $P_0$ and $P_1$</li>
+  <li>$E$ is a critical state
+    <ul>
+      <li>if $P_0$ has next step, resulting execution is $0$-valent</li>
+      <li>if $P_1$ has next step, resulting execution is $1$-valent</li>
+    </ul>
+  </li>
+</ol></section><section id="case-1-readread"><h2>Case 1: <code>read</code>/<code>read</code>
+</h2>
+<p>Assumption: next operations for both $P_0$ and $P_1$ are <code>read</code></p>
+<ul>
+  <li>Start from critical state $E$
+    <ul>
+      <li>if $P_0$ steps next, output is <code>0</code>
+</li>
+      <li>if $P_1$ steps next, output is <code>1</code>
+</li>
+    </ul>
+  </li>
+</ul></section><section id="readread"><h2>
+<code>read</code>/<code>read</code>
+</h2>
+<p><img src="/assets/img/consensus/critical.png" alt="" width="100%"></p></section><section id="readread-next-step"><h2>
+<code>read</code>/<code>read</code> Next Step</h2>
+<p><img src="/assets/img/consensus/read-read-1.png" alt="" width="100%"></p></section><section id="readread-problem"><h2>
+<code>read</code>/<code>read</code> Problem</h2>
+<p><img src="/assets/img/consensus/read-read-2.png" alt="" width="100%"></p></section><section id="case-2-readwrite"><h2>Case 2: <code>read</code>/<code>write</code>
+</h2>
+<p>Assumption:</p>
+<ul>
+  <li>$P_0$’s next step is <code>read</code>
+</li>
+  <li>
+    <p>$P_1$’s next step is <code>write</code></p>
+  </li>
+  <li>Start from critical state $E$
+    <ul>
+      <li>if $P_0$’s <code>read</code> step is next, output is <code>0</code>
+</li>
+      <li>if $P_1$’s <code>write</code> step is next, output is <code>1</code>
+</li>
+    </ul>
+  </li>
+</ul></section><section id="readwrite-setup"><h2>
+<code>read</code>/<code>write</code> Setup</h2>
+<p><img src="/assets/img/consensus/read-write-1.png" alt="" width="100%"></p></section><section id="readwrite-next-step"><h2>
+<code>read</code>/<code>write</code> Next Step</h2>
+<p><img src="/assets/img/consensus/read-write-2.png" alt="" width="100%"></p></section><section id="readwrite-indistinguishable"><h2>
+<code>read</code>/<code>write</code> Indistinguishable</h2>
+<p><img src="/assets/img/consensus/read-write-3.png" alt="" width="100%"></p></section><section id="readwrite-p_0-crashes"><h2>
+<code>read</code>/<code>write</code> $P_0$ Crashes</h2>
+<p><img src="/assets/img/consensus/read-write-3.png" alt="" width="100%"></p></section><section id="case-3-writewrite"><h2>Case 3: <code>write</code>/<code>write</code>
+</h2>
+<p>Assumption: next operation for both $P_0$ and $P_1$ is <code>write</code></p>
+<p>Subcases:</p>
+<ul>
+  <li>Sub-case a: write to different registers</li>
+  <li>Sub-case b: write to same register</li>
+</ul></section><section id="writewrite-different-registers"><h2>
+<code>write</code>/<code>write</code> Different Registers</h2>
+<p><img src="/assets/img/consensus/diff-write-write-1.png" alt="" width="100%"></p></section><section id="writewrite-next-step"><h2>
+<code>write</code>/<code>write</code> Next Step</h2>
+<p><img src="/assets/img/consensus/diff-write-write-2.png" alt="" width="100%"></p></section><section id="writewrite-indistinguishable"><h2>
+<code>write</code>/<code>write</code> Indistinguishable</h2>
+<p><img src="/assets/img/consensus/diff-write-write-3.png" alt="" width="100%"></p></section><section id="writewrite-same-register"><h2>
+<code>write</code>/<code>write</code> Same Register</h2>
+<p><img src="/assets/img/consensus/same-write-write-1.png" alt="" width="100%"></p></section><section id="writewrite-next-step-1"><h2>
+<code>write</code>/<code>write</code> Next Step</h2>
+<p><img src="/assets/img/consensus/same-write-write-2.png" alt="" width="100%"></p></section><section id="writewrite-indistinguishable-1"><h2>
+<code>write</code>/<code>write</code> Indistinguishable</h2>
+<p><img src="/assets/img/consensus/same-write-write-3.png" alt="" width="100%"></p></section><section id="conclusion"><h2>Conclusion</h2>
+<p>In general:</p>
+<ul>
+  <li>Indistinguishable executions produce same output</li>
+</ul>
+<p>Assuming a wait-free consensus protocol using only read/write registers:</p>
+<ol>
+  <li>Showed there is a bivalent initial state</li>
+  <li>Showed there is a critical execution</li>
+  <li>Given a critical execution
+    <ul>
+      <li>found indistinguishable states that must give different outputs</li>
+      <li>this is a contradiction!</li>
+    </ul>
+  </li>
+</ol>
+<p><strong>Remark.</strong> 1 and 2 hold for all protocols; 3 assumes <em>only</em> read/write registers</p></section><section id="consensus-is-impossible"><h2>Consensus is Impossible?</h2>
+<p>Well not quite!</p>
+<ul>
+  <li>We just proved impossibility in our computational model!
+    <ul>
+      <li>atomic read/write registers</li>
+      <li>wait-free (or faults)</li>
+      <li>nasty scheduler!</li>
+    </ul>
+  </li>
+</ul></section><section id="does-the-model-reflect-reality"><h2>Does the Model Reflect Reality?</h2>
+<ul>
+  <li>we have stronger primitives!
+    <ul>
+      <li><code>compareAndSet</code></li>
+      <li>…</li>
+    </ul>
+  </li>
+  <li>we might have better schedulers
+    <ul>
+      <li>round-robin/synchronous</li>
+    </ul>
+  </li>
+  <li>faults could be <em>worse</em>
+    <ul>
+      <li>Byzantine faults</li>
+    </ul>
+  </li>
+</ul></section><section id="implications"><h2>Implications</h2>
+<ol>
+  <li>Atomic read/write registers are insufficient to solve fundamental tasks in parallel computing
+    <ul>
+      <li>this drives the development of hardware primitives (e.g. CAS)</li>
+    </ul>
+  </li>
+  <li>We can quantify the computational power of primitive operations
+    <ul>
+      <li>read/write registers have <em>consensus number</em> 1</li>
+      <li>FIFO queues have consensus number 2
+        <ul>
+          <li>given a wait-free queue, 2 threads can solve consensus (How?)</li>
+          <li>$\implies$ cannot implement concurrent queues with read/write registers</li>
+        </ul>
+      </li>
+      <li>Can use <code>compareAndSet</code> to achieve consensus (How?)</li>
+    </ul>
+  </li>
+</ol></section><section id="coda"><h1>Coda</h1></section><section id="four-morals"><h2>Four Morals</h2>
+<ol>
+  <li>Parallelism is powerful</li>
+  <li>Communication is expensive
+    <ul>
+      <li>cache locality and performance</li>
+    </ul>
+  </li>
+  <li>Synchronization is subtle
+    <ul>
+      <li>locks</li>
+      <li>concurrent data structures</li>
+      <li>impossibility (FLP)</li>
+    </ul>
+  </li>
+  <li>Theory meets practice
+    <ul>
+      <li>cannot reason about correctness/performance without understanding hardware</li>
+      <li>hardare design informed by theory (e.g. atomics)</li>
+    </ul>
+  </li>
+</ol></section><section id="thank-you"><h1>Thank You!</h1></section>
+</div></div>
+
+
+	  <script src="/assets/reveal.js-master/dist/reveal.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/math/math.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/zoom/zoom.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/notes/notes.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/search/search.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/markdown/markdown.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/highlight/highlight.js"></script>
+	  <script>
+	    
+
+	    // Also available as an ES module, see:
+	    // https://revealjs.com/initialization/
+	    Reveal.initialize({
+		controls: false,
+		progress: true,
+		center: true,
+		hash: true,
+		transition: 'none',
+		math: {
+		    config: 'TeX-AMS_HTML-full',
+		    TeX: {
+			Macros: {
+			    R: '\\mathbb{R}',
+			    set: [ '\\left\\{#1 \\; ; \\; #2\\right\\}', 2 ]
+			}
+		    }
+		},
+
+
+		// Learn about plugins: https://revealjs.com/plugins/
+		plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath ]
+	    });
+
+	  </script>
+
+	</body>
+</html>
+	  
+
+<!-- <\!-- load the reveal.js css & js (assuming you've put it in assets/)-\-> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/reveal.scss" -->
+<!-- /> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/theme/source/white.scss" -->
+<!-- /> -->
+<!-- <script -->
+<!--   src="/assets/reveal.js-master/js/reveal.js" -->
+<!--   type="text/javascript" -->
+<!-- ></script> -->
+
+<!-- <\!-- configure the presentation, (you can tweak options to suit) -\-> -->
+<!-- <script> -->
+<!--   Reveal.initialize({ -->
+<!--     // Display presentation control arrows -->
+<!--     controls: false, -->
+
+<!--     // Help the user learn the controls by providing hints, for example by -->
+<!--     // bouncing the down arrow when they first encounter a vertical slide -->
+<!--     controlsTutorial: false, -->
+
+<!--     // Determines where controls appear, "edges" or "bottom-right" -->
+<!--     controlsLayout: "bottom-right", -->
+
+<!--     // Visibility rule for backwards navigation arrows; "faded", "hidden" -->
+<!--     // or "visible" -->
+<!--     controlsBackArrows: "faded", -->
+
+<!--     // Display a presentation progress bar -->
+<!--     progress: true, -->
+
+<!--     // Display the page number of the current slide -->
+<!--     slideNumber: false, -->
+
+<!--     // Push each slide change to the browser history -->
+<!--     history: false, -->
+
+<!--     // Enable keyboard shortcuts for navigation -->
+<!--     keyboard: true, -->
+
+<!--     // Enable the slide overview mode -->
+<!--     overview: true -->
+<!--   }); -->
+<!-- </script> -->

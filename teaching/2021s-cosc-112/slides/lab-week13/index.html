@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+	<head>
+
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta charset="utf-8">
+
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reset.css">
+		<link rel="stylesheet" href="/assets/reveal.js-master/dist/reveal.css">
+		<link rel="stylesheet" href="/assets/css/condensation.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="/assets/reveal.js-master/plugin/highlight/monokai.css" id="highlight-theme">
+		<link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:400,400i,700" rel="stylesheet">
+
+	</head>
+
+	<body>
+
+
+	  <!-- this is where the reveailfy filter gets applied -->
+	  <div class="reveal"><div class="slides">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<section id="lab-week-13-stable-matchings"><h1>Lab Week 13: Stable Matchings</h1></section><section id="announcements"><h2>Announcements</h2>
+<ul>
+  <li>Two short quizzes posted this week
+    <ul>
+      <li>one on stacks</li>
+      <li>one on stable matchings</li>
+      <li>can be completed any time before end of classes</li>
+    </ul>
+  </li>
+  <li>Accountability group survey posted tomorrow</li>
+</ul></section><section id="today"><h2>Today</h2>
+<ol>
+  <li>Project Hints and Suggestions</li>
+  <li>Time to Work</li>
+</ol></section><section id="agentjava"><h2><code>Agent.java</code></h2>
+<p>Representation of an agent</p>
+<ul>
+  <li>preferences stored in <code>ArrayList&lt;Agent&gt; prefList</code>
+    <ul>
+      <li>first element is most preferred <code>Agent</code>, etc</li>
+    </ul>
+  </li>
+  <li>current match stored as <code>Agent curMatch</code>
+    <ul>
+      <li>
+<code>curMatch = null</code> indicates agent is not matched</li>
+    </ul>
+  </li>
+  <li>
+<code>curIndex</code> is index of <code>curMatch</code> in <code>prefList</code>
+    <ul>
+      <li>initially <code>curIndex = -1</code>
+</li>
+    </ul>
+  </li>
+</ul></section><section id="agent-instance-methods"><h2>
+<code>Agent</code> Instance Methods</h2>
+<ul>
+  <li>
+<code>boolean prefers(Agent a, Agent b)</code> returns <code>true</code> if this agent prefers <code>a</code> to <code>b</code>
+    <ul>
+      <li>all agents prefer being matched with <code>prefList</code> agent to not being matched (i.e., <code>curMatch == null</code>) to being matching with agent not in <code>prefList</code>
+</li>
+      <li>
+<code>null</code> parameter indicates not being matched</li>
+    </ul>
+  </li>
+  <li>
+    <p><code>void proposal(Agent a)</code> this agent <strong>receives</strong> proposal from <code>Agent a</code></p>
+  </li>
+  <li>
+<code>void refusal()</code> this agent was refused by <code>curMatch</code>
+    <ul>
+      <li>if <code>curMatch</code> is last in <code>prefList</code>, unmatch and return</li>
+      <li>otherwise, set <code>curMatch</code> to next in <code>prefList</code>, and propose</li>
+    </ul>
+  </li>
+</ul></section><section id="sminstance"><h2><code>SMInstance</code></h2>
+<ul>
+  <li>Stores:
+    <ul>
+      <li><code>ArrayList&lt;Agent&gt; hospitals</code></li>
+      <li><code>ArrayList&lt;Agent&gt; residents</code></li>
+    </ul>
+  </li>
+  <li>Matching is <em>implicit</em> in <code>hospitals</code>/<code>residents</code>
+    <ul>
+      <li>matching consists of pairs <code>(r, h)</code> where:
+        <ol>
+          <li><code>h = r.curMatch</code></li>
+          <li><code>r = h.curMatch</code></li>
+        </ol>
+      </li>
+      <li>
+<code>Matching</code> a class for dealing with matchings
+        <ul>
+          <li>stores an <code>ArrayList</code> of <code>Pair&lt;Agent&gt;</code>s</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul></section><section id="sminstance-methods"><h2>
+<code>SMInstance</code> Methods</h2>
+<ul>
+  <li>
+<code>void computeStableMatching()</code> use the McVitie &amp; Wilson algorithm to compute a stable matching
+    <ul>
+      <li>matching is implicit in state values of <code>curMatch</code>
+</li>
+      <li>hint: make sure each resident <code>r</code> sets <code>curMatch</code> before making <em>first</em> proposal
+        <ul>
+          <li>which method actually sets a <em>proposer’s</em> match?</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>
+<code>Matching getMatching()</code> return a <code>Matching</code> consisting of pairs <code>(r, h)</code> where <code>r = h.curMatch</code> and <code>h = r.curMatch</code>
+</li>
+  <li><code>void setMatching(Matching m)</code></li>
+  <li><code>Pair&lt;Agent&gt; getBlockingPair()</code></li>
+  <li><code>boolean isStable()</code></li>
+</ul></section><section id="general-advice"><h2>General Advice</h2>
+<ul>
+  <li>Start with <code>Agent</code> class</li>
+  <li>Use <code>AgentTester</code> to test each method</li>
+  <li>No method should require too much code</li>
+  <li>Use print statements to help debug!</li>
+</ul></section>
+</div></div>
+
+
+	  <script src="/assets/reveal.js-master/dist/reveal.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/math/math.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/zoom/zoom.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/notes/notes.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/search/search.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/markdown/markdown.js"></script>
+	  <script src="/assets/reveal.js-master/plugin/highlight/highlight.js"></script>
+	  <script>
+	    
+
+	    // Also available as an ES module, see:
+	    // https://revealjs.com/initialization/
+	    Reveal.initialize({
+		controls: false,
+		progress: true,
+		center: true,
+		hash: true,
+		transition: 'none',
+		math: {
+		    config: 'TeX-AMS_HTML-full',
+		    TeX: {
+			Macros: {
+			    R: '\\mathbb{R}',
+			    set: [ '\\left\\{#1 \\; ; \\; #2\\right\\}', 2 ]
+			}
+		    }
+		},
+
+
+		// Learn about plugins: https://revealjs.com/plugins/
+		plugins: [ RevealZoom, RevealNotes, RevealSearch, RevealMarkdown, RevealHighlight, RevealMath ]
+	    });
+
+	  </script>
+
+	</body>
+</html>
+	  
+
+<!-- <\!-- load the reveal.js css & js (assuming you've put it in assets/)-\-> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/reveal.scss" -->
+<!-- /> -->
+<!-- <link -->
+<!--   rel="stylesheet" -->
+<!--   href="/assets/reveal.js-master/css/theme/source/white.scss" -->
+<!-- /> -->
+<!-- <script -->
+<!--   src="/assets/reveal.js-master/js/reveal.js" -->
+<!--   type="text/javascript" -->
+<!-- ></script> -->
+
+<!-- <\!-- configure the presentation, (you can tweak options to suit) -\-> -->
+<!-- <script> -->
+<!--   Reveal.initialize({ -->
+<!--     // Display presentation control arrows -->
+<!--     controls: false, -->
+
+<!--     // Help the user learn the controls by providing hints, for example by -->
+<!--     // bouncing the down arrow when they first encounter a vertical slide -->
+<!--     controlsTutorial: false, -->
+
+<!--     // Determines where controls appear, "edges" or "bottom-right" -->
+<!--     controlsLayout: "bottom-right", -->
+
+<!--     // Visibility rule for backwards navigation arrows; "faded", "hidden" -->
+<!--     // or "visible" -->
+<!--     controlsBackArrows: "faded", -->
+
+<!--     // Display a presentation progress bar -->
+<!--     progress: true, -->
+
+<!--     // Display the page number of the current slide -->
+<!--     slideNumber: false, -->
+
+<!--     // Push each slide change to the browser history -->
+<!--     history: false, -->
+
+<!--     // Enable keyboard shortcuts for navigation -->
+<!--     keyboard: true, -->
+
+<!--     // Enable the slide overview mode -->
+<!--     overview: true -->
+<!--   }); -->
+<!-- </script> -->
